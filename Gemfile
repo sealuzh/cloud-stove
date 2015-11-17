@@ -4,6 +4,8 @@ ruby File.read(File.dirname(__FILE__) + '/.ruby-version').chomp!
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.4'
+# Use Haml for templates
+gem 'haml-rails', '~> 0.9'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Bootstrap, https://github.com/twbs/bootstrap-sass#a-ruby-on-rails
@@ -46,5 +48,11 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  
+  gem 'guard'
+  gem 'guard-minitest'
+  gem 'guard-bundler'
+  gem 'terminal-notifier-guard'
+  gem 'guard-livereload', '~> 2.4', require: false
 end
 
