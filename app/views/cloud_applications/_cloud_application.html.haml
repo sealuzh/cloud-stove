@@ -1,0 +1,15 @@
+.application
+  %h3.name= cloud_application.name
+  .components= render cloud_application.components
+  .slos
+    Service Level Objectives:
+    .slo
+      Response time #{content_tag :code, "<#{rand(30)/10.0}s"} for #{content_tag :code, "#{100-rand(15)}%"} of all requests at #{content_tag :code, "#{rand(600) * 100}"} users/#{[ 'day', 'hour', 'minute' ].sample}.
+    .slo
+      
+  %p
+  .actions
+    = link_to 'Show details', nil, class: 'btn btn-link'
+    = link_to 'Find optimal deployments', nil, class: 'btn btn-success'
+    = link_to 'Monitor deployment', nil, class: 'btn btn-primary'
+    = link_to 'Delete', nil, class: 'btn btn-danger'
