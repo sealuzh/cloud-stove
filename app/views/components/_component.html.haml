@@ -1,7 +1,7 @@
 .component
-  .type Type: #{component.ctype}
+  .type Type: #{component.component_type}
   .name Name: #{component.name}
-  - if component.cattributes['dependencies']
-    %pre= component.cattributes['dependencies'].map { |d| d['name'] }.to_json
+  - if component.more_attributes['dependencies']
+    %pre= component.more_attributes['dependencies'].map { |d| d['name'] }.to_json
   - else
-    = debug component.cattributes
+    = debug component.more_attributes

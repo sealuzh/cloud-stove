@@ -1,3 +1,3 @@
-class CloudApplication < ActiveRecord::Base
+class CloudApplication < Base
   has_many :components
 end

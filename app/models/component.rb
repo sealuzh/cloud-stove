@@ -1,4 +1,3 @@
-class Component < ActiveRecord::Base
+class Component < Base
   belongs_to :cloud_application
-  serialize :cattributes, JSON
 end

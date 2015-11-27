@@ -15,14 +15,15 @@ ActiveRecord::Schema.define(version: 20151112121239) do
 
   create_table "cloud_applications", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.text     "more_attributes"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "components", force: :cascade do |t|
     t.string   "name"
-    t.string   "ctype"
-    t.text     "cattributes"
+    t.string   "component_type"
+    t.text     "more_attributes"
     t.integer  "cloud_application_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
