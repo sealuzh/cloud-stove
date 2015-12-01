@@ -1,7 +1,7 @@
 class GoogleUpdater < ProviderUpdater
   def perform
-    uri = URI('http://cloudpricingcalculator.appspot.com/static/data/pricelist.json')
-    http = Net::HTTP.new(uri.host, uri.port)
+    uri = URI('https://cloudpricingcalculator.appspot.com/static/data/pricelist.json')
+    http = Net::HTTP.new(uri.host, uri.port, use_ssl: uri.scheme == 'https')
     response = http.get(uri.request_uri) 
     # Raise error if response is not 2xx, see http://ruby-doc.org/stdlib-2.1.2/libdoc/net/http/rdoc/Net/HTTPResponse.html#method-i-value
     response.value
