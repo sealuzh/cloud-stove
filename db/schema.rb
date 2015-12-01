@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112121239) do
+ActiveRecord::Schema.define(version: 20151130091706) do
 
   create_table "cloud_applications", force: :cascade do |t|
     t.string   "name"
@@ -28,5 +28,24 @@ ActiveRecord::Schema.define(version: 20151112121239) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
+
+  add_index "components", ["cloud_application_id"], name: "index_components_on_cloud_application_id"
+
+  create_table "providers", force: :cascade do |t|
+    t.string   "name"
+    t.text     "more_attributes"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "resources", force: :cascade do |t|
+    t.string   "name"
+    t.text     "more_attributes"
+    t.integer  "provider_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
 
 end

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   
   resources :cloud_applications, path: 'apps'
   resources :components
+  resources :providers
+  resources :resources
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
