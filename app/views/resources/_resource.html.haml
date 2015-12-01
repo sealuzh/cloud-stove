@@ -1,6 +1,6 @@
-.resource
-  .title= resource.name
-  %code.price $#{resource.price_per_month}/month
+.resource.row
+  .col-sm-2.title= resource.name
+  %code.col-sm-2.text-right.price $#{number_with_precision(resource.price_per_month, precision: 3)}/month
   - if resource.is_compute?
     - cores = resource.ma['cores']
     - if cores == 'shared'
@@ -9,5 +9,5 @@
     - else
       %span.cores= pluralize cores, 'core'
     %span.mem #{resource.ma['mem_gb']}GB RAM
-    %code.cores_per_price $#{(resource.price_per_month / BigDecimal.new(cores)).round(3)}/core
-    %code.mem_per_price $#{(resource.price_per_month / BigDecimal.new(resource.ma['mem_gb'])).round(3)}/GB RAM
+    %code.col-sm-2.text-right.cores_per_price $#{number_with_precision(resource.price_per_month / BigDecimal.new(cores), precision: 3)}/core
+    %code.col-sm-2.text-right.mem_per_price $#{number_with_precision(resource.price_per_month / BigDecimal.new(resource.ma['mem_gb']), precision: 3)}/GB RAM
