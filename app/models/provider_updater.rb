@@ -1,7 +1,13 @@
 class ProviderUpdater  
+  class Error < StandardError; end
+  
   def self.providers
     load_providers
     descendants
+  end
+  
+  def self.update_providers
+    providers.map(&:perform)
   end
   
   def self.perform

@@ -2,6 +2,6 @@ class Provider < Base
   has_many :resources
   
   def self.update_providers
-    ProviderUpdater.providers.map(&:perform)
+    ProviderUpdater.update_providers
   end
 end
