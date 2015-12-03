@@ -9,11 +9,9 @@ class GoogleUpdater < ProviderUpdater
     pricelist = JSON.parse(response.body)
     
     provider = Provider.find_or_create_by(name: 'Google')
-    if pricelist['version'] != (provider.more_attributes['pricelist']['version'] rescue false)
-      logger.info "Storing new price list #{pricelist['version']}."
-      provider.more_attributes['pricelist'] = pricelist
-      provider.save!
-    end
+    provider.more_attributes['pricelist'] = pricelist
+    provider.more_attributes['sla'] = extract_sla('https://cloud.google.com/compute/sla')
+    provider.save!
     
     gce_prefix = 'cp-computeengine-vmimage-'
     preemptible_postfix = '-preemptible'

@@ -32,6 +32,10 @@ class AtlanticNetUpdater < ProviderUpdater
     
     provider = Provider.find_or_create_by(name: 'Atlantic.net')
     provider.more_attributes['pricelist'] = pricelist
+    provider.more_attributes['sla'] = {
+      uri: 'https://www.atlantic.net/service-policies/cloud-service-level-agreement/'
+      availability: '1'
+    }
     provider.save!
     
     pricelist.each_pair do |key, instance_type|

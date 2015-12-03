@@ -28,6 +28,9 @@ class RackspaceUpdater < ProviderUpdater
 
     provider = Provider.find_or_create_by(name: 'Rackspace')
     provider.more_attributes['pricelist'] = pricelist
+    provider.more_attributes['sla'] = {
+      uri: 'https://www.rackspace.com/information/legal/cloud/sla'
+    }
     provider.save!
     
     pricelist.each_pair do |resource_id, data|

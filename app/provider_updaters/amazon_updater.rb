@@ -18,6 +18,7 @@ class AmazonUpdater < ProviderUpdater
     pricelist = JSON.parse(result)
     provider = Provider.find_or_create_by(name: 'Amazon')
     provider.more_attributes['pricelist'] = pricelist
+    provider.more_attributes['sla'] = extract_sla('https://aws.amazon.com/ec2/sla/')
     provider.save!
     
     # For now, get all instance types from first region (should be us-east-1)
