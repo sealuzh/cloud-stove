@@ -5,7 +5,7 @@
     - cores = resource.ma['cores']
     - if cores == 'shared'
       - cores = 1
-      %span.cores 1 shared CPU
+      %span.cores 1 shared core
     - else
       %span.cores= pluralize cores, 'core'
     %span.mem #{resource.ma['mem_gb']}GB RAM
