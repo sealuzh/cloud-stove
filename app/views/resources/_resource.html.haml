@@ -1,5 +1,5 @@
 .resource.row
-  .col-sm-2.title= resource.name
+  .col-sm-3.title= resource.name
   %code.col-sm-2.text-right.price.text-default.bg-default $#{number_with_precision(resource.price_per_month, precision: 3)}/month
   - if resource.is_compute?
     - cores = resource.ma['cores']
