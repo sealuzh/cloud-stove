@@ -14,7 +14,7 @@
         - provider = Provider.offset(rand(Provider.count)).first
         - num_instances = rand(5) + 1
         - resource = provider.resources.offset(rand(provider.resources.count)).first
-        #{content_tag :code, "$#{num_instances * resource.price_per_month}/month"} with #{content_tag :code, num_instances} #{content_tag :code, resource.name } #{'instance'.pluralize(num_instances)} from #{provider.name}.
+        #{content_tag :code, "#{format_price(num_instances * resource.price_per_month)}/month"} with #{content_tag :code, num_instances} #{content_tag :code, resource.name } #{'instance'.pluralize(num_instances)} from #{provider.name}.
         = link_to "Show details"
   %p
   .actions
