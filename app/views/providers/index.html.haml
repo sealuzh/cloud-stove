@@ -1,4 +1,6 @@
 %h1 Providers
-%p All supported providers and the resources they offer in one place.
+%p 
+  All supported providers and the resources they offer in one place.
+  = link_to "Update Provider Data", update_all_providers_path, method: :put, data: { confirm: 'Updating provider data will take some time. Are you sure you want this?' }
 
 = render @providers
