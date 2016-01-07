@@ -1,0 +1,7 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  more_attributes: '{ "metric": "availability", "relation": ">=", "value": "0.995" }'
+  
+two:
+  more_attributes: '{ "metric": "response_time", "relation": "<=", "value": "2.5" }'
