@@ -54,5 +54,6 @@ group :development do
   gem 'guard-bundler'
   gem 'terminal-notifier-guard'
   gem 'guard-livereload', '~> 2.4', require: false
+  gem 'rails-footnotes', '~> 4.0'
 end
 
