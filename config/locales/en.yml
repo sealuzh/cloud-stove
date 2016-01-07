@@ -21,3 +21,9 @@
 
 en:
   hello: "Hello world"
+  slos:
+    metrics:
+      availability: "availability"
+      response_time: "response time"
+      costs: "costs"
+      value_format: "%{currency}%{value}%{unit}%{interval}"

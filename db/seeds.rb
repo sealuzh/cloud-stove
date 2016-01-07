@@ -9,8 +9,8 @@ rails_app = CloudApplication.find_or_create_by(name: 'A Rails app with PostgreSQ
 rails_app.components.find_or_create_by(component_type: 'frontend') do |c|
   c.name = 'Rails'
   c.more_attributes = {
-    lang: :ruby, framework: 'Ruby on Rails', 
-    dependencies: Bundler.locked_gems.dependencies 
+    lang: :ruby, framework: 'Ruby on Rails',
+    dependencies: Bundler.locked_gems.dependencies
   }
 end
 rails_app.components.find_or_create_by(component_type: 'database') do |c|
@@ -23,3 +23,33 @@ end
 spring_app = CloudApplication.find_or_create_by(name: 'A Spring Boot app with CouchDB')
 
 nodejs_app = CloudApplication.find_or_create_by(name: 'A NodeJS app with Cassandra')
+
+slos = [
+  {
+    metric: 'availability',
+    relation: '>=',
+    value: '.995'
+  },
+  {
+    metric: 'response_time',
+    relation: '<=',
+    value: '2',
+    unit: 's',
+    qualifier: {
+      # TODO: for 93% of all requests at 13900 users/day
+    }
+  },
+  {
+    metric: 'costs',
+    relation: '<=',
+    value: '250',
+    currency: '$',
+    interval: '/month'
+  }
+]
+
+slos.each_with_index do |attrs, i|
+  slo = Slo.find_or_create_by(id: i + 1)
+  slo.more_attributes = attrs
+  slo.save!
+end
