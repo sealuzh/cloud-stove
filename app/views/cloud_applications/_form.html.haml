@@ -1,0 +1,10 @@
+= form_for @cloud_application do |f|
+  - if @cloud_application.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@cloud_application.errors.count, "error")} prohibited this cloud_application from being saved:"
+      %ul
+        - @cloud_application.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

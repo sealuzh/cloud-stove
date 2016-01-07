@@ -1,0 +1,11 @@
+%h1= @cloud_application.name
+
+= render @cloud_application
+
+%p
+.actions
+  = link_to 'Show details', @cloud_application, class: 'btn btn-link'
+  = link_to 'Edit', edit_cloud_application_path(@cloud_application), class: 'btn btn-primary'
+  = link_to 'Find optimal deployments', nil, class: 'btn btn-success'
+  = link_to 'Monitor deployment', nil, class: 'btn btn-primary'
+  = link_to 'Destroy', @cloud_application, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
