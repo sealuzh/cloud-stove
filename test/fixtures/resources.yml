@@ -2,10 +2,8 @@
 
 one:
   name: MyString
-  more_attributes: MyText
   provider_id: 
 
 two:
   name: MyString
-  more_attributes: MyText
   provider_id: 

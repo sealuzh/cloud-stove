@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  more_attributes: MyText
+  # more_attributes: "{}"
 
 two:
   name: MyString
-  more_attributes: MyText
+  # more_attributes: "{}"
