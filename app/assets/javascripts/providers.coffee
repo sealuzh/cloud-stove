@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-jQuery ($) ->
+$(document).on 'page:change', ->
   Array::numericSort = () -> this.sort (a, b) -> a - b
   
   ppcs = $.map($('[data-ppc]'), (v) ->
@@ -13,10 +13,13 @@ jQuery ($) ->
     parseFloat($(v).data('ppgb'))
   ).numericSort()
   
+  ppms = $.map($('[data-ppm]'), (v) ->
+    parseFloat($(v).data('ppm'))
+  ).numericSort()
+  
   class_for = (value, array) ->
     position = array.indexOf value
     size = array.length
-    console.log "Value #{value} is on pos #{position}/#{size}"
     modifier = switch
       when position < size * 1 / 5 then 'success'
       when position < size * 2 / 5 then 'info'
@@ -34,4 +37,9 @@ jQuery ($) ->
     e = $(element)
     value = parseFloat e.data('ppgb')
     e.addClass class_for(value, ppgbs)
+
+  $('[data-ppm]').each (idx, element) ->
+    e = $(element)
+    value = parseFloat e.data('ppm')
+    e.addClass class_for(value, ppms)
 
