@@ -21,7 +21,21 @@ build:
     # Read more about steps on our dev center:
     # http://devcenter.wercker.com/docs/steps/index.html
     steps:
+        - script:
+            name: Bundle config
+            code: |
+              # Workaround for Nokogiri build failure,
+              # see: https://github.com/sparklemotion/nokogiri/issues/1370
+              bundle config build.nokogiri --use-system-libraries
         - bundle-install
+        - script:
+            name: Set up db
+            code: bundle exec rake db:schema:load RAILS_ENV=test
+        
+        - script:
+            name: Seed db
+            code: bundle exec rake db:seed RAILS_ENV=test
+        
         - script:
             name: test
             code: bundle exec rake test
