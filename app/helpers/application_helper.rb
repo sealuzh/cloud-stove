@@ -6,7 +6,7 @@ module ApplicationHelper
   def markdown(text)
     @renderer ||= Redcarpet::Render::HTML.new(safe_links_only: true)
     @markdown ||= Redcarpet::Markdown.new(@renderer, autolink: true, tables: true)
-    @markdown.render(text).html_safe
+    @markdown.render(text || "").html_safe
   end
   
   # Adapted from https://github.com/railscasts/196-nested-model-form-revised/blob/master/questionnaire-after/app/helpers/application_helper.rb
