@@ -1,5 +1,7 @@
 == README
 
+{<img src="https://app.wercker.com/status/b08c91369210358a613023e743954dcb/s" alt="wercker status">}[https://app.wercker.com/project/bykey/b08c91369210358a613023e743954dcb]
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
