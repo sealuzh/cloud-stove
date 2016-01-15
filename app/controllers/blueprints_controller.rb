@@ -24,7 +24,8 @@ class BlueprintsController < ApplicationController
   # POST /blueprints
   # POST /blueprints.json
   def create
-    @blueprint = Blueprint.new(blueprint_params)
+    @blueprint = Blueprint.new
+    @blueprint.update_attributes(blueprint_params)
 
     respond_to do |format|
       if @blueprint.save
