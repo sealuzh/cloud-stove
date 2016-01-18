@@ -67,3 +67,6 @@ group :development do
   # gem 'memory_profiler'
 end
 
+gem 'rails_12factor', group: :production
+# Use PostgreSQL as the database for production
+gem 'pg', group: :production
