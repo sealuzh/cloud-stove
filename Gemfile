@@ -6,8 +6,6 @@ ruby File.read(File.dirname(__FILE__) + '/.ruby-version').chomp!
 gem 'rails', '~> 4.2.4'
 # Use Haml for templates
 gem 'haml-rails', '~> 0.9'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
 # Use Bootstrap, https://github.com/twbs/bootstrap-sass#a-ruby-on-rails
 gem 'bootstrap-sass', '~> 3.3.5'
 # Use SCSS for stylesheets
@@ -44,6 +42,8 @@ gem 'passenger'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  # Use sqlite3 as the database for Active Record
+  gem 'sqlite3'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end
