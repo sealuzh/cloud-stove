@@ -3,7 +3,7 @@ require 'open-uri'
 class RackspaceUpdater < ProviderUpdater
   def perform
     # Rackspace does not have a pricing API so we need to scrape their website.
-    uri = URI('http://www.rackspace.com/cloud/public-pricing')
+    uri = URI('https://www.rackspace.com/cloud/public-pricing')
     doc = Nokogiri::HTML(open(uri))
     
     pricelist = {}
