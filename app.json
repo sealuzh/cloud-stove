@@ -1,0 +1,24 @@
+{
+  "name": "cloud-stove",
+  "description": "The Cloud Stove. Finely crafted cloud application deployments."
+  "scripts": {
+    "postdeploy": "bin/setup"
+  },
+  "env": {
+    "RAILS_ENV": "production",
+    "DIGITALOCEAN_TOKEN": {
+      "required": true
+    },
+    "ANC_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "ANC_PRIVATE_KEY": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "generator": "secret"
+    }
+  },
+  "success_url": "/",
+  "addons": [ "heroku-postgresql:hobby-dev" ]
+}
