@@ -40,6 +40,7 @@ GEM
     autoprefixer-rails (6.1.2)
       execjs
       json
+    benchmark-ips (2.3.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.6)
@@ -132,11 +133,13 @@ GEM
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    passenger (5.0.21)
+      rack
+      rake (>= 0.8.1)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    puma (2.15.3)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -222,6 +225,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  benchmark-ips
   bootstrap-sass (~> 3.3.5)
   byebug
   coffee-rails (~> 4.1.0)
@@ -232,7 +236,7 @@ DEPENDENCIES
   haml-rails (~> 0.9)
   jbuilder (~> 2.0)
   jquery-rails
-  puma
+  passenger
   rails (~> 4.2.4)
   rails-footnotes (~> 4.0)
   redcarpet
@@ -247,4 +251,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

@@ -35,7 +35,10 @@ gem 'redcarpet'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Puma as the app server
-gem 'puma'
+# gem 'puma'
+
+# Use passenger as the app server
+gem 'passenger'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -58,5 +61,9 @@ group :development do
   gem 'terminal-notifier-guard'
   gem 'guard-livereload', '~> 2.4', require: false
   gem 'rails-footnotes', '~> 4.0'
+  gem 'benchmark-ips'
+  # gem 'rack-mini-profiler'
+  # gem 'flamegraph'
+  # gem 'memory_profiler'
 end
 
