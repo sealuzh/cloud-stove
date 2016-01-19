@@ -1,6 +1,6 @@
 {
   "name": "cloud-stove",
-  "description": "The Cloud Stove. Finely crafted cloud application deployments."
+  "description": "The Cloud Stove. Finely crafted cloud application deployments.",
   "scripts": {
     "postdeploy": "bin/setup"
   },
