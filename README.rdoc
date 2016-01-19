@@ -1,6 +1,50 @@
-== README
+= The Cloud Stove
 
 {<img src="https://app.wercker.com/status/b08c91369210358a613023e743954dcb/s" alt="wercker status">}[https://app.wercker.com/project/bykey/b08c91369210358a613023e743954dcb]
+
+The Cloud Stove gives users deployment recommendations for their cloud
+applications. Application instances are derived from generic blueprints and
+enriched with the specific characteristics and requirements of the application
+to be deployed. Blueprints are generic application scaffolds that represent
+different application architectures to capture relevant differences in overall
+deployment strategies. Deployment recommendations are created by optimizing the
+use of available provider offerings with respect to the captured application
+specifications and requirements.
+
+== Contributing to the Cloud Stove
+
+=== Setting Up a Development Environment
+
+* Clone the Cloud Stove repository
+    git clone git@github.com:inz/cloudstove.git
+
+* Install an appropriate Ruby version (the currently required version is
+  specified in {.ruby-version}[.ruby-version]). Install Ruby using
+  {rbenv}[http://rbenv.org] or {RVM}[https://rvm.io].
+  
+  If you're using rbenv, run 
+  <code>rbenv install $(cat cloudstove/.ruby-version)</code>.
+  
+  For RVM, run <code>rvm install $(cat cloudstove/.ruby-version)</code>.
+  
+* Set up dependencies and database
+    cd cloudstove
+    bin/setup
+
+=== Making Changes
+
+* Create a topic branch for your changes.
+    git checkout -b <my-awesome-feature>
+
+* Make your change. Add tests for your change. Make the tests pass:
+    bundle exec rake test
+
+* Push your topic branch and submit a pull request. 
+
+You should also periodically push your topic branches during development. That
+way, there will always be a reasonably current backup of your work in the
+upstream repository, and the whole team can get a feel on what others are
+working on.
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
