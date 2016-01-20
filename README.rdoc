@@ -1,30 +1,79 @@
-== README
+= The Cloud Stove
 
 {<img src="https://app.wercker.com/status/b08c91369210358a613023e743954dcb/s" alt="wercker status">}[https://app.wercker.com/project/bykey/b08c91369210358a613023e743954dcb]
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The Cloud Stove gives users deployment recommendations for their cloud
+applications. Application instances are derived from generic blueprints and
+enriched with the specific characteristics and requirements of the application
+to be deployed. Blueprints are generic application scaffolds that represent
+different application architectures to capture relevant differences in overall
+deployment strategies. Deployment recommendations are created by optimizing the
+use of available provider offerings with respect to the captured application
+specifications and requirements.
 
-Things you may want to cover:
+== Contributing to the Cloud Stove
 
-* Ruby version
+=== Setting Up a Development Environment
 
-* System dependencies
+* Clone the Cloud Stove repository
+    git clone git@github.com:inz/cloudstove.git
 
-* Configuration
+* Install an appropriate Ruby version (the currently required version is
+  specified in {.ruby-version}[link:.ruby-version]). Install Ruby using
+  {rbenv}[http://rbenv.org] or {RVM}[https://rvm.io].
+  
+  If you're using rbenv, run 
+  <code>rbenv install $(cat cloudstove/.ruby-version)</code>.
+  
+  For RVM, run <code>rvm install $(cat cloudstove/.ruby-version)</code>.
+  
+* Set up dependencies and database
+    cd cloudstove
+    bin/setup
 
-* Database creation
+=== Making Changes
 
-* Database initialization
+* Create a topic branch for your changes.
+    git checkout -b <my-awesome-feature>
 
-* How to run the test suite
+* Make your change. Add tests for your change. Make the tests pass:
+    bundle exec rake test
 
-* Services (job queues, cache servers, search engines, etc.)
+* Push your topic branch and submit a pull request.
 
-* Deployment instructions
+You should also periodically push your topic branches during development. That
+way, there will always be a reasonably current backup of your work in the
+upstream repository, and the whole team can get a feel on what others are
+working on.
 
-* ...
+For more details, see the {contribution guide}[link:CONTRIBUTING.md]
+
+== CI & Deployment
+
+Every push to the GitHub repository will initiate a CI build on
+{wercker}[https://app.wercker.com/applications/5696592e29aa0a563912fe58].
+The current status of our CI builds is shown below.
+
+{<img src="https://app.wercker.com/status/b08c91369210358a613023e743954dcb/m" alt="wercker status">}[https://app.wercker.com/project/bykey/b08c91369210358a613023e743954dcb]
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Successful CI builds are then deployed to a 
+{Heroku pipeline}[https://dashboard.heroku.com/pipelines/1296b077-f98d-4095-8352-09b35444cc15]
+with a staging application at https://fathomless-escarpment-2251-eu.herokuapp.com.
+To inspect and modify the staging app's configuration use the 
+{application dashboard}[https://dashboard.heroku.com/apps/fathomless-escarpment-2251-eu/].
+
+== Communication & Organization
+
+Planning and development of the Cloud Stove is coordinated on Trello:
+
+* The {Cloud Stove Organization}[https://trello.com/thestove]
+* {Cloud Stove Roadmap}[https://trello.com/b/JO3lR0c0/cloud-stove-roadmap]
+* {Cloud Stove Development}[https://trello.com/b/UC8jBtDg/cloud-stove-development]
+
+Daily communication and coordination happens on Slack:
+
+* in <code>#cloud-stove</code> on https://cloudguysseal.slack.com
+
+If you don't have access to any of the resources mentioned above, get in touch
+with {Christian}[mailto:christian@thestove.io].
