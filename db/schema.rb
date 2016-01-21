@@ -11,63 +11,63 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217133125) do
+ActiveRecord::Schema.define(version: 20160121125810) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
-    t.text     "more_attributes"
+    t.text     "more_attributes",      default: "{}", null: false
     t.integer  "cloud_application_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
   add_index "application_deployment_recommendations", ["cloud_application_id"], name: "index_app_dep_rec_on_cloud_app_id"
 
   create_table "blueprints", force: :cascade do |t|
     t.string   "name"
-    t.text     "more_attributes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.text     "more_attributes", default: "{}", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "cloud_applications", force: :cascade do |t|
     t.string   "name"
-    t.text     "more_attributes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.text     "more_attributes", default: "{}", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "components", force: :cascade do |t|
     t.string   "name"
     t.string   "component_type"
-    t.text     "more_attributes"
-    t.integer  "cloud_application_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.text     "more_attributes", default: "{}", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "blueprint_id"
   end
 
-  add_index "components", ["cloud_application_id"], name: "index_components_on_cloud_application_id"
+  add_index "components", ["blueprint_id"], name: "index_components_on_blueprint_id"
 
   create_table "providers", force: :cascade do |t|
     t.string   "name"
-    t.text     "more_attributes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.text     "more_attributes", default: "{}", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "resources", force: :cascade do |t|
     t.string   "name"
-    t.text     "more_attributes"
+    t.text     "more_attributes", default: "{}", null: false
     t.integer  "provider_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
 
   create_table "slos", force: :cascade do |t|
-    t.text     "more_attributes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.text     "more_attributes", default: "{}", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
 end
