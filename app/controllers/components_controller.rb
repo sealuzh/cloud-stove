@@ -55,7 +55,7 @@ class ComponentsController < ApplicationController
   # DELETE /component/1
   # DELETE /component/1.json
   def destroy
-    @blueprint.destroy
+    @component.destroy
     respond_to do |format|
       format.html { redirect_to components_url, notice: 'Component was successfully destroyed.' }
       format.json { head :no_content }
