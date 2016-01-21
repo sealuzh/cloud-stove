@@ -1,0 +1,10 @@
+%fieldset
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :body
+    = f.text_area :body, rows: 10, class: 'form-control monospace md'
+  .form-group
+    = f.check_box :_destroy
+    = f.label :_destroy, "Remove Deployment"
