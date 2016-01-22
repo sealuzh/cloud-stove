@@ -2,10 +2,9 @@
 
 one:
   name: MyString
-  component_type: 
-  more_attributes:
+  component_type: MyType
 
 two:
   name: MyString
-  component_type: 
-  more_attributes:
+  component_type: MyType
+

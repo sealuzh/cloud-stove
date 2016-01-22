@@ -1,0 +1,18 @@
+%h1= @component.name
+
+%h2= @component.component_type
+
+%p#notice= notice
+
+= markdown(@component.body)
+
+- unless @component.deployments.empty?
+  %h2 Typical Deployment Strategies
+  - @component.deployments.each do |deployment|
+    .deployment
+      %h3= deployment.name
+      = markdown(deployment.body)
+
+= link_to 'Edit', edit_component_path(@component)
+\|
+= link_to 'Back', component_path
