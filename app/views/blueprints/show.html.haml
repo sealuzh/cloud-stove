@@ -10,7 +10,7 @@
     .deployment
       %h3= component.name
       %b= component.component_type
-      markdown(component.body)
+      = markdown(component.body)
       - unless component.deployments.empty?
         - component.deployments.each do |deployment|
           deployment.name
