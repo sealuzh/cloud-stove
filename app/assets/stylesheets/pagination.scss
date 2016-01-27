@@ -1,0 +1,9 @@
+.page-entries-info {
+  @extend .text-xs-center;
+}
+
+nav.paginator { @extend .text-xs-center; }
+
+.page-item.disabled span.page-link:hover {
+    cursor: default;
+}

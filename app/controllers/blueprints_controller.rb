@@ -4,7 +4,7 @@ class BlueprintsController < ApplicationController
   # GET /blueprints
   # GET /blueprints.json
   def index
-    @blueprints = Blueprint.all
+    @blueprints = Blueprint.page(params[:page])
   end
 
   # GET /blueprints/1

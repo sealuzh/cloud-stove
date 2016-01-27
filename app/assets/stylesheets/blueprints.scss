@@ -2,6 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.blueprint {
+  @extend .card;
+  @extend .card-block;
+  
+  .name {
+    @extend .card-title;
+  }
+}
+
 .monospace {
   font-family: $font-family-monospace;
 }
