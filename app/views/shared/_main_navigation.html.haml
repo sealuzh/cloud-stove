@@ -9,9 +9,9 @@
       = link_to root_path, class: 'navbar-brand hidden-xs-down' do
         The Stove
       .nav.navbar-nav
-        = link_to t('.blueprints'), blueprints_path, class: 'nav-item nav-link'
-        = link_to t('.cloud_applications'), cloud_applications_path, class: 'nav-item nav-link'
-        = link_to t('.providers'), providers_path, class: 'nav-item nav-link'
+        = nav_link t('.blueprints'), blueprints_path
+        = nav_link t('.cloud_applications'), cloud_applications_path
+        = nav_link t('.providers'), providers_path
       .navbar-right
         .nav.navbar-nav
           .btn-group

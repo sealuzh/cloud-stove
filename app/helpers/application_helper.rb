@@ -11,6 +11,12 @@ module ApplicationHelper
     end
   end
   
+  def nav_link(title, url)
+    classes = [ 'nav-item', 'nav-link' ]
+    classes << 'active' if current_page?(url)
+    link_to(title, url, class: classes.join(' '))
+  end
+  
   def format_price(price, precision: 2)
     number_to_currency(price, precision: precision)
   end
