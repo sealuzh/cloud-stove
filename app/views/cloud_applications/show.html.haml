@@ -5,7 +5,7 @@
 %p
   %b Blueprint
   = if !@cloud_application.blueprint.nil?
-    =@cloud_application.blueprint.name
+    = link_to(@cloud_application.blueprint.name, @cloud_application.blueprint)
 
 %p
   %b Body
