@@ -1,25 +1,26 @@
 .application
   - if show_name ||= false
     %h3.name= link_to cloud_application.name, cloud_application
-  .slos
-    %h4 Service Level Objectives:
-    .slo
-      Response time #{content_tag :code, "<#{rand(30)/10.0}s"} for #{content_tag :code, "#{100-rand(15)}%"} of all requests at #{content_tag :code, "#{rand(600) * 100}"} users/#{[ 'day', 'hour', 'minute' ].sample}.
-    -#
-      .slo
-        Availability #{content_tag :code, ">=#{100-rand(1000)/100.0}%"}.
-    - 2.times do
-      .slo
-        - slo = Slo.offset(rand(Slo.count)).first
-        = slo.human_metric.humanize
-        %code #{slo.ma['relation']}#{slo.human_value}
-  .recommendations
-    %h4 Deployment Recommendations
-    - (2 + rand(4)).times do |nrec|
-      .recommendation
-        - provider = Provider.offset(rand(Provider.count)).first
-        - num_instances = rand(5) + 1
-        - resource = provider.resources.offset(rand(provider.resources.count)).first
-        - next unless resource
-        #{content_tag :code, "#{format_price(num_instances * resource.price_per_month)}/month"} with #{content_tag :code, num_instances} #{content_tag :code, resource.name } #{'instance'.pluralize(num_instances)} from #{provider.name}.
-        = link_to "Show details", providers_path
+
+  -#.slos
+  -#  %h4 Service Level Objectives:
+  -#  .slo
+  -#    Response time #{content_tag :code, "<#{rand(30)/10.0}s"} for #{content_tag :code, "#{100-rand(15)}%"} of all requests at #{content_tag :code, "#{rand(600) * 100}"} users/#{[ 'day', 'hour', 'minute' ].sample}.
+  -#  -#
+  -#    .slo
+  -#      Availability #{content_tag :code, ">=#{100-rand(1000)/100.0}%"}.
+  -#  - 2.times do
+  -#    .slo
+  -#      - slo = Slo.offset(rand(Slo.count)).first
+  -#      = slo.human_metric.humanize
+  -#      %code #{slo.ma['relation']}#{slo.human_value}
+  -#.recommendations
+  -#  %h4 Deployment Recommendations
+  -#  - (2 + rand(4)).times do |nrec|
+  -#    .recommendation
+  -#      - provider = Provider.offset(rand(Provider.count)).first
+  -#      - num_instances = rand(5) + 1
+  -#      - resource = provider.resources.offset(rand(provider.resources.count)).first
+  -#      - next unless resource
+  -#      #{content_tag :code, "#{format_price(num_instances * resource.price_per_month)}/month"} with #{content_tag :code, num_instances} #{content_tag :code, resource.name } #{'instance'.pluralize(num_instances)} from #{provider.name}.
+  -#      = link_to "Show details", providers_path

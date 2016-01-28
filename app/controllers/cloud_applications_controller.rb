@@ -15,10 +15,12 @@ class CloudApplicationsController < ApplicationController
   # GET /cloud_applications/new
   def new
     @cloud_application = CloudApplication.new
+    @blueprints = Blueprint.all
   end
 
   # GET /cloud_applications/1/edit
   def edit
+    @blueprints = Blueprint.all
   end
 
   # POST /cloud_applications
@@ -69,6 +71,8 @@ class CloudApplicationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cloud_application_params
-      params[:cloud_application]
+      params.require(:cloud_application).permit(:name, :body, :blueprint_id,
+        concrete_components_attributes: [:id, :name, :body, :component, :_destroy]
+      )
     end
 end

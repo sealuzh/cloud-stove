@@ -6,5 +6,21 @@
         - @cloud_application.errors.full_messages.each do |msg|
           %li= msg
 
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :blueprint
+    %br
+    = f.select :blueprint_id do
+      = @blueprints.each do |blueprint|
+        = content_tag(:option, blueprint.name, value: blueprint.id )
+  .form-group
+    = f.label :body
+    = f.text_area :body, rows: 25, class: 'form-control monospace md'
+  = f.fields_for :concrete_components do |builder|
+    = render 'concrete_component_fields', f: builder
+  .form-group
+    = link_to_add_fields "Add Component", f, :concrete_components, ConcreteComponent
   .actions
     = f.submit 'Save'

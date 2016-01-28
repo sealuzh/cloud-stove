@@ -1,0 +1,2 @@
+class ConcreteComponentsController < ApplicationController
+end

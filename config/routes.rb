@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   resources :cloud_applications, path: 'apps' do
     resources :application_deploymen_recommendations, path: 'deployment_recommendations'
+    resources :concrete_components
   end
   resources :components
   resources :providers do
