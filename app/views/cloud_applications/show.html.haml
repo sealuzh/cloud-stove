@@ -4,7 +4,8 @@
 
 %p
   %b Blueprint
-  =@cloud_application.blueprint.name
+  = if !@cloud_application.blueprint.nil?
+    =@cloud_application.blueprint.name
 
 %p
   %b Body
