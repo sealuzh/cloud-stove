@@ -6,6 +6,13 @@
   background-color: $gray-lightest;
 }
 
+.main-nav .nav-link.active {
+  border-bottom: 0.25rem solid $brand-primary;
+  // .navbar-nav .nav-link padding-bottom: 0.425rem
+  // 0.425 - 0.25 (for the border) = 0.175
+  padding-bottom: 0.175rem;
+}
+
 .navbar-right {
   @extend .pull-xs-right;
   
