@@ -10,6 +10,10 @@
   .form-group
     = f.label :body
     = f.text_area :body, rows: 10, class: 'form-control monospace md'
+  = f.fields_for :deployments do |builder|
+    = render 'deployment_fields', f: builder
+  .form-group
+    = link_to_add_fields "Add Deployment", f, :deployments, Component::Deployment
   .form-group
     = f.check_box :_destroy
     = f.label :_destroy, "Remove Component"

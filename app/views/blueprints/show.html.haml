@@ -1,21 +1,20 @@
 %h1= @blueprint.name
 
-%p#notice= notice
-
 = markdown(@blueprint.body)
 
 - unless @blueprint.components.empty?
   %h2 Typical Components and Deployments
   - @blueprint.components.each do |component|
-    .deployment
+    .component
       %h3= component.name
       %b= component.component_type
       = markdown(component.body)
-      - unless component.deployments.empty?
-        - component.deployments.each do |deployment|
-          deployment.name
+      - component.deployments.each do |deployment|
+        .deployment
+          = deployment.name
           = markdown(deployment.body)
 
-= link_to 'Edit', edit_blueprint_path(@blueprint)
-\|
-= link_to 'Back', blueprints_path
+.actions
+  = link_to 'Edit', edit_blueprint_path(@blueprint), class: 'btn btn-primary'
+  = link_to 'Destroy', @blueprint, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
+  = link_to 'Back', blueprints_path, class: 'btn btn-link'

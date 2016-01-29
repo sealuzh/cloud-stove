@@ -2,8 +2,6 @@
 
 %h2= @component.component_type
 
-%p#notice= notice
-
 = markdown(@component.body)
 
 - unless @component.deployments.empty?
@@ -13,6 +11,7 @@
       %h3= deployment.name
       = markdown(deployment.body)
 
-= link_to 'Edit', edit_component_path(@component)
-\|
-= link_to 'Back', component_path
+.actions
+  = link_to 'Edit', edit_component_path(@component), class: 'btn btn-primary'
+  = link_to 'Destroy', @component, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
+  = link_to 'Back', component_path
