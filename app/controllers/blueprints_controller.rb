@@ -71,7 +71,9 @@ class BlueprintsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def blueprint_params
       params.require(:blueprint).permit(:name, :body, 
-        components_attributes: [:id, :name, :body, :component_type, :_destroy]
+        components_attributes: [ :id, :name, :body, :component_type, :_destroy,
+          deployments_attributes: [ :id, :name, :body ]
+        ]
       )
     end
 end

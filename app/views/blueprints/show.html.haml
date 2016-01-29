@@ -7,13 +7,13 @@
 - unless @blueprint.components.empty?
   %h2 Typical Components and Deployments
   - @blueprint.components.each do |component|
-    .deployment
+    .component
       %h3= component.name
       %b= component.component_type
       = markdown(component.body)
-      - unless component.deployments.empty?
-        - component.deployments.each do |deployment|
-          deployment.name
+      - component.deployments.each do |deployment|
+        .deployment
+          = deployment.name
           = markdown(deployment.body)
 
 = link_to 'Edit', edit_blueprint_path(@blueprint)
