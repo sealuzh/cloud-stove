@@ -1,5 +1,7 @@
 class Slo < Base
-  
+
+  belongs_to :concrete_component
+
   def human_metric
     I18n.t(ma['metric'], scope: 'slos.metrics')
   end
