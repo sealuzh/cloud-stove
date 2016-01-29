@@ -13,7 +13,7 @@ module ApplicationHelper
   
   def nav_link(title, url)
     classes = [ 'nav-item', 'nav-link' ]
-    classes << 'active' if current_page?(url)
+    classes << 'active' if request.env['PATH_INFO'].start_with?(url)
     link_to(title, url, class: classes.join(' '))
   end
   
