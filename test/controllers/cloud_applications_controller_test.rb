@@ -18,7 +18,7 @@ class CloudApplicationsControllerTest < ActionController::TestCase
 
   test "should create cloud_application" do
     assert_difference('CloudApplication.count') do
-      post :create, cloud_application: {  }
+      post :create, cloud_application: { name: "Test"  }
     end
 
     assert_redirected_to cloud_application_path(assigns(:cloud_application))
@@ -35,7 +35,7 @@ class CloudApplicationsControllerTest < ActionController::TestCase
   end
 
   test "should update cloud_application" do
-    patch :update, id: @cloud_application, cloud_application: {  }
+    patch :update, id: @cloud_application, cloud_application: { name: "Test" }
     assert_redirected_to cloud_application_path(assigns(:cloud_application))
   end
 
