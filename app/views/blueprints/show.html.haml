@@ -1,7 +1,5 @@
 %h1= @blueprint.name
 
-%p#notice= notice
-
 = markdown(@blueprint.body)
 
 - unless @blueprint.components.empty?
@@ -16,6 +14,7 @@
           = deployment.name
           = markdown(deployment.body)
 
-= link_to 'Edit', edit_blueprint_path(@blueprint)
-\|
-= link_to 'Back', blueprints_path
+.actions
+  = link_to 'Edit', edit_blueprint_path(@blueprint), class: 'btn btn-primary'
+  = link_to 'Destroy', @blueprint, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
+  = link_to 'Back', blueprints_path, class: 'btn btn-link'

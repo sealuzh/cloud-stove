@@ -1,27 +1,23 @@
 %h1= @cloud_application.name
 
-%p#notice= notice
-
 %p
-  %b Blueprint
-  = if !@cloud_application.blueprint.nil?
+  %b Blueprint:
+  - if !@cloud_application.blueprint.nil?
     = link_to(@cloud_application.blueprint.name, @cloud_application.blueprint)
 
-%p
-  %b Body
-  = markdown(@cloud_application.body)
+= markdown(@cloud_application.body)
 
-%p
-  %b Components
-  %ul
-    -@cloud_application.concrete_components.each do |component|
-      %li= component.name
+%h3 Components
+%ul
+  - @cloud_application.concrete_components.each do |component|
+    %li= component.name
 
 %br
 %p
 .actions
-  = link_to 'Show details', @cloud_application, class: 'btn btn-link'
+  -#= link_to 'Show details', @cloud_application, class: 'btn btn-link'
   = link_to 'Edit', edit_cloud_application_path(@cloud_application), class: 'btn btn-primary'
-  = link_to 'Find optimal deployments', nil, class: 'btn btn-success'
-  = link_to 'Monitor deployment', nil, class: 'btn btn-primary'
+  -#= link_to 'Find optimal deployments', nil, class: 'btn btn-success'
+  -#= link_to 'Monitor deployment', nil, class: 'btn btn-primary'
   = link_to 'Destroy', @cloud_application, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
+  = link_to 'Back', cloud_applications_path, class: 'btn btn-link'
