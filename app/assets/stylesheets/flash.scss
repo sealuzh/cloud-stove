@@ -1,0 +1,11 @@
+@each $key in notice, alert {
+  .flash-#{$key} { 
+    @extend .alert; 
+    a {
+      @extend .alert-link;
+    }
+  }
+}
+
+.flash-notice { @extend .alert-info; }
+.flash-alert { @extend .alert-danger; }

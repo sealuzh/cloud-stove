@@ -13,5 +13,8 @@
   %body
     = render 'shared/main_navigation'
     = yield(:page_head)
-    .main-container= yield
+    .main-container
+      - flash.each do |key, value|
+        = content_tag :div, value, class: "flash-#{key}"
+      = yield
     = render 'shared/footer'
