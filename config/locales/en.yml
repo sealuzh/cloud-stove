@@ -22,6 +22,10 @@
 en:
   app_name: "The Cloud Stove"
   shared:
+    main_navigation:
+      blueprints: "Blueprints"
+      cloud_applications: "Applications"
+      providers: "Providers"
     footer:
       about: "About"
       faq: "FAQ"
