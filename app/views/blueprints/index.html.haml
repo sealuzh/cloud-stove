@@ -1,8 +1,10 @@
-%h1= t '.title'
+%h1
+  = t '.title'
+  = link_to t('.new'), new_blueprint_path, class: 'btn btn-success pull-right'
 
 = render @blueprints, show_name: true
 
 = paginate @blueprints
 .page-entries-info= page_entries_info @blueprints
 
-= link_to t('.new_blueprint'), new_blueprint_path, class: 'btn btn-primary'
+= link_to t('.new'), new_blueprint_path, class: 'btn btn-success'

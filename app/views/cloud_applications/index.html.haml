@@ -1,8 +1,10 @@
-%h1 My Applications
+%h1
+  = t('.title')
+  = link_to t('.new'), new_blueprint_path, class: 'btn btn-success pull-right'
 
 = render @cloud_applications, show_name: true
 
 = paginate @cloud_applications
 .page-entries-info= page_entries_info @cloud_applications
 
-= link_to 'New Application', new_cloud_application_path, class: 'btn btn-primary'
+= link_to t('.new'), new_cloud_application_path, class: 'btn btn-success'

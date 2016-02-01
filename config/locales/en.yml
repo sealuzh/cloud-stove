@@ -34,6 +34,11 @@ en:
   blueprints:
     index:
       title: "Application Blueprints"
+      new: "New Blueprint"
+  cloud_applications:
+    index:
+      title: "My Applications"
+      new: "New Application"
   slos:
     metrics:
       availability: "availability"
