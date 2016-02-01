@@ -9,6 +9,28 @@
   .name {
     @extend .card-title;
   }
+  
+  .body {
+    position: relative;
+    max-height: 4em;
+    overflow: hidden;
+    margin-bottom: -$card-spacer-x/3;
+    
+    // adapted from http://stackoverflow.com/a/9205190/1498084
+    &::before {
+      @include background-image(linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1)));
+      content: "\00a0";
+      @include size(100%);
+      position: absolute;
+    }
+    
+    @for $i from 1 through 6 {
+      h#{$i} { font-size: 1rem; }
+    }
+    
+    ul { @extend .list-inline; }
+    li { @extend .list-inline-item; }
+  }
 }
 
 .monospace {

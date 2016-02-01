@@ -1,5 +1,4 @@
 .blueprint
   - if show_name ||= false
     %h3.name= link_to blueprint.name, blueprint
-  %p.body
-    Insert short description of the blueprint here
+  .body= markdown(body_excerpt(blueprint))
