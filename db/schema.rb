@@ -80,12 +80,12 @@ ActiveRecord::Schema.define(version: 20160128154316) do
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
 
   create_table "slos", force: :cascade do |t|
-    t.text     "more_attributes",        default: "{}", null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.integer  "concrete_components_id"
+    t.text     "more_attributes",       default: "{}", null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "concrete_component_id"
   end
 
-  add_index "slos", ["concrete_components_id"], name: "index_slos_on_concrete_components_id"
+  add_index "slos", ["concrete_component_id"], name: "index_slos_on_concrete_component_id"
 
 end
