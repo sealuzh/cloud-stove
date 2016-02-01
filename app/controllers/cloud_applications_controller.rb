@@ -5,7 +5,7 @@ class CloudApplicationsController < ApplicationController
   # GET /cloud_applications
   # GET /cloud_applications.json
   def index
-    @cloud_applications = CloudApplication.all
+    @cloud_applications = CloudApplication.page(params[:page])
   end
 
   # GET /cloud_applications/1

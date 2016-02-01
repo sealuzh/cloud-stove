@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   
   resources :blueprints, concerns: :paginatable
 
-  resources :cloud_applications, path: 'apps' do
+  resources :cloud_applications, path: 'apps', concerns: :paginatable do
     resources :application_deploymen_recommendations, path: 'deployment_recommendations'
     resources :concrete_components
   end

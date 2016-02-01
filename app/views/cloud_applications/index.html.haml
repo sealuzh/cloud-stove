@@ -2,4 +2,7 @@
 
 = render @cloud_applications, show_name: true
 
+= paginate @cloud_applications
+.page-entries-info= page_entries_info @cloud_applications
+
 = link_to 'New Application', new_cloud_application_path, class: 'btn btn-primary'
