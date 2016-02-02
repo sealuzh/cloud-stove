@@ -24,3 +24,7 @@
   margin: 2rem auto;
 }
 
+html.turbolinks-progress-bar::before {
+  background-color: $brand-primary !important;
+  height: 1px !important;
+}
