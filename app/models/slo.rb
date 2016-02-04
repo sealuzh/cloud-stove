@@ -5,7 +5,11 @@ class Slo < Base
 
 
   def more_attributes=(attribute)
-    write_attribute(:more_attributes, ActiveSupport::JSON.decode(attribute))
+    if attribute.is_a?(Hash)
+      write_attribute(:more_attributes, attribute)
+    else
+      write_attribute(:more_attributes, ActiveSupport::JSON.decode(attribute))
+    end
   end
 
   def more_attributes
