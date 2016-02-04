@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  more_attributes: 
+  component_id: 
+
+two:
+  more_attributes: 
+  component_id: 
