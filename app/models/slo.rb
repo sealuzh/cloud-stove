@@ -4,6 +4,10 @@ class Slo < Base
   belongs_to :concrete_component
 
 
+  def more_attributes=(attribute)
+    write_attribute(:more_attributes, ActiveSupport::JSON.decode(attribute))
+  end
+
   def more_attributes
     read_attribute(:more_attributes).to_json
   end
