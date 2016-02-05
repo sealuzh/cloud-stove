@@ -1,0 +1,63 @@
+// from basehold.it
+@mixin baseline-grid($bl-line-height: $font-size-root * $line-height) {
+    position: relative;
+
+    &:after {
+        position: absolute;
+        width: auto;
+        height: auto;
+        z-index: 9999;
+        content: '';
+        display: block;
+        pointer-events: none;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: url(http://basehold.it/image.php?height=#{$bl-line-height}) repeat top left;
+    }
+
+    &:active:after {
+        display: none;
+    }
+}
+
+.main-container {
+  @include baseline-grid;
+}
+
+// ensure that element heights are generally a multiple of base line-height
+$base-line-height-px: $font-size-root * $line-height;
+$base-line-height: $font-size-base * $line-height;
+
+.main-container {
+  h2:not(:first-child) {
+    // total height of h2: 3 base line height
+    $h2-margin-bottom: $headings-margin-bottom;
+    margin-bottom: $h2-margin-bottom;
+    $margin-top: 3 * $base-line-height -
+                  $font-size-h2 * $headings-line-height -
+                  $h2-margin-bottom;
+    margin-top: $margin-top;
+  }
+  
+  h3:not(:first-child) {
+    $h3-margin-bottom: 0.8rem;
+    margin-bottom: $h3-margin-bottom;
+    margin-top: 3 * $base-line-height -
+                $font-size-h3 * $headings-line-height -
+                $h3-margin-bottom;
+  }
+
+  h4:not(:first-child) {
+    $h4-margin-bottom: $headings-margin-bottom;
+    margin-bottom: $h4-margin-bottom;
+    margin-top: 2 * $base-line-height -
+                $font-size-h4 * $headings-line-height -
+                $h4-margin-bottom;
+  }
+}
+
+//.lead {
+//  line-height: 2 * $base-line-height;
+//}
