@@ -4,6 +4,23 @@ class Base < ActiveRecord::Base
   serialize :more_attributes, JSON
   after_initialize { |r| r.more_attributes ||= {} }
   alias_attribute :ma, :more_attributes
+
+  validates_each :more_attributes do |record, attr, value|
+    begin
+      ActiveSupport::JSON.decode(value) unless value.is_a?(Hash)
+    rescue JSON::ParserError => e
+      record.errors.add(attr, 'must be a valid JSON Hash')
+    end
+  end
+  
+  before_save :serialize_more_attributes
+
+  private
+  def serialize_more_attributes
+    if attributes[:more_attributes] && !attributes[:more_attributes].is_a?(Hash)
+      attributes[:more_attributes] = ActiveSupport::JSON.decode(attributes[:more_attributes])
+    end
+  end
   
   class << self
     # Adapted from activesupport/lib/active_support/core_ext/module/attribute_accessors.rb

@@ -1,5 +1,6 @@
 class CloudApplicationsController < ApplicationController
-  before_action :set_cloud_application, only: [:show, :edit, :update, :destroy]
+  before_action :set_cloud_application, only: [ :show, :edit, :update, :destroy ]
+  before_action :fetch_blueprints, only: [ :new, :edit, :update ]
 
   # GET /cloud_applications
   # GET /cloud_applications.json
@@ -15,12 +16,10 @@ class CloudApplicationsController < ApplicationController
   # GET /cloud_applications/new
   def new
     @cloud_application = CloudApplication.new
-    @blueprints = Blueprint.all
   end
 
   # GET /cloud_applications/1/edit
   def edit
-    @blueprints = Blueprint.all
   end
 
   # POST /cloud_applications
@@ -33,6 +32,7 @@ class CloudApplicationsController < ApplicationController
         format.html { redirect_to @cloud_application, notice: 'Cloud application was successfully created.' }
         format.json { render :show, status: :created, location: @cloud_application }
       else
+        @blueprints = Blueprint.all
         format.html { render :new }
         format.json { render json: @cloud_application.errors, status: :unprocessable_entity }
       end
@@ -47,6 +47,7 @@ class CloudApplicationsController < ApplicationController
         format.html { redirect_to @cloud_application, notice: 'Cloud application was successfully updated.' }
         format.json { render :show, status: :ok, location: @cloud_application }
       else
+        @blueprints = Blueprint.all
         format.html { render :edit }
         format.json { render json: @cloud_application.errors, status: :unprocessable_entity }
       end
@@ -68,11 +69,15 @@ class CloudApplicationsController < ApplicationController
     def set_cloud_application
       @cloud_application = CloudApplication.find(params[:id])
     end
+    
+    def fetch_blueprints
+      @blueprints = Blueprint.all
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cloud_application_params
       params.require(:cloud_application).permit(:name, :body, :blueprint_id,
-        concrete_components_attributes: [:id, :name, :body, :component, :_destroy]
+        concrete_components_attributes: [:id, :name, :body, :component, :_destroy, slos_attributes: [:id, :more_attributes, :_destroy]]
       )
     end
 end

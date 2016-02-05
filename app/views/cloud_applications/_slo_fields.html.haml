@@ -1,0 +1,8 @@
+%fieldset
+  %h4 Service Level Objective (SLO)
+  .form-group
+    = f.label "Attributes"
+    = f.text_area :more_attributes, rows: 10,  class: 'form-control monospace md'
+  .form-group
+    = f.check_box :_destroy
+    = f.label :_destroy, "Remove SLO"
