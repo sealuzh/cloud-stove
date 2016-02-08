@@ -22,9 +22,11 @@
     }
 }
 
-.main-container {
+<% if Rails.env.development? %>
+body.with-baseline-grid {
   @include baseline-grid;
 }
+<% end %>
 
 // ensure that element heights are generally a multiple of base line-height
 $base-line-height-px: $font-size-root * $line-height;
