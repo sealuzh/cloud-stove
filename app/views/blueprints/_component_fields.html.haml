@@ -11,7 +11,7 @@
     = f.label :body
     = f.text_area :body, rows: 10, class: 'form-control monospace md'
 
-- if f.object.new_record?
+- if f.object.deployment_rule.nil?
   = sub_form f, :deployment_rule, DeploymentRule
 - else
   .form-group
