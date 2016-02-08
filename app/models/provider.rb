@@ -12,6 +12,6 @@ class Provider < Base
   end
 
   def self.update_providers
-    ProviderUpdater.update_providers
+    UpdateProvidersJob.perform_later
   end
 end

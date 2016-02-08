@@ -55,6 +55,9 @@ gem 'kaminari'
 # Use passenger as the app server
 gem 'passenger'
 
+# Use delayed_job for background jobs
+gem 'delayed_job_active_record'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
