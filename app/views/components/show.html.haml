@@ -1,6 +1,9 @@
 %h1= @component.name
 
-%h2= @component.component_type
+%h2
+  = @component.component_type
+  - if blueprint = @component.blueprint
+    %small (#{link_to(blueprint.name, blueprint)})
 
 = markdown(@component.body)
 
