@@ -11,7 +11,7 @@
       %b= component.component_type
       = markdown(component.body)
       %b Deployment rule
-      %code= component.deployment_rule.try(:more_attributes).to_s
+      %code= component.deployment_rule.try(:more_attributes).to_json
     %hr
 
 .actions

@@ -5,7 +5,7 @@
 = markdown(@component.body)
 
 %b Deployment rule
-= markdown("`" + @component.deployment_rule.more_attributes.to_s + "`")
+%code= @component.deployment_rule.try(:more_attributes).to_json
 
 .actions
   = link_to 'Edit', edit_component_path(@component), class: 'btn btn-primary'

@@ -2,5 +2,5 @@
   %h4 Deployment-Rule
   .form-group
     = f.label "Rules"
-    = f.text_area :more_attributes, rows: 10,  class: 'form-control monospace md'
+    = f.text_area :more_attributes, value: f.object.more_attributes.to_json, rows: 10,  class: 'form-control monospace md'
 
