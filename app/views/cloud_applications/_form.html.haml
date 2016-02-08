@@ -23,4 +23,5 @@
   .form-group
     = link_to_add_fields "Add Component", f, :concrete_components, ConcreteComponent
   .actions
-    = f.submit 'Save'
+    = f.submit t('save'), class: 'btn btn-success'
+    = link_to t('cancel'), @cloud_application, class: 'btn btn-link'

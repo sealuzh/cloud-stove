@@ -61,6 +61,7 @@ guard 'livereload' do
     jpg: :jpg,
     jpeg: :jpeg,
     # less: :less, # uncomment if you want LESS stylesheets done in browser
+    svg: :svg,
   }
 
   rails_view_exts = %w(erb haml slim)
@@ -85,4 +86,17 @@ guard 'livereload' do
   watch(%r{app/views/.+\.(#{rails_view_exts * '|'})$})
   watch(%r{app/helpers/.+\.rb})
   watch(%r{config/locales/.+\.yml})
+end
+
+guard 'pow' do
+  watch('.powrc')
+  watch('.powenv')
+  watch('.rvmrc')
+  watch('.ruby-version')
+  watch('Gemfile')
+  watch('Gemfile.lock')
+  watch('config/application.rb')
+  watch('config/environment.rb')
+  watch(%r{^config/environments/.*\.rb$})
+  watch(%r{^config/initializers/.*\.rb$})
 end

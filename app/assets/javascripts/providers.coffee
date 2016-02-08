@@ -26,7 +26,10 @@ $(document).on 'page:change', ->
       when position < size * 3 / 5 then 'default'
       when position < size * 4 / 5 then 'warning'
       else 'danger'
-    [ 'bg', 'text' ].map((x) -> x + "-#{modifier}").join(' ')
+    [ 
+      # 'bg',
+      'text'
+    ].map((x) -> x + "-#{modifier}").join(' ')
   
   $('[data-ppc]').each (idx, element) ->
     e = $(element)

@@ -1,14 +1,20 @@
 !!!
-%html
+%html{lang: I18n.locale}
   %head
-    %title= content_for(:title) ? yield(:title) : 'The Cloud Stove'
+    %meta{charset: 'utf-8'}
+    %meta{name: 'viewport',
+      content: 'width=device-width, initial-scale=1, shrink-to-fit=no'}
+    %meta{'http-equiv': 'x-ua-compatible', content: 'ie=edge'}
+    %title= page_title
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
     = yield(:head)
   %body
-    .container= yield
-    %footer
-      %p
-    - if defined?(Footnotes) && Footnotes.enabled
-      #footnotes_holder
+    = render 'shared/main_navigation'
+    = yield(:page_head)
+    .main-container
+      - flash.each do |key, value|
+        = content_tag :div, value, class: "flash-#{key}"
+      = yield
+    = render 'shared/footer'

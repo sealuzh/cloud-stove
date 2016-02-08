@@ -15,6 +15,7 @@
   = f.fields_for :components do |builder|
     = render 'component_fields', f: builder
   .form-group
-    = link_to_add_fields "Add Component", f, :components, Component
+    = link_to_add_fields t('.add_component'), f, :components, Component
   .form-group
-    = f.submit 'Save', class: 'btn btn-success'
+    = f.submit t('save'), class: 'btn btn-success'
+    = link_to t('cancel'), @blueprint, class: 'btn btn-link'

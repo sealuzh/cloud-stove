@@ -1,6 +1,7 @@
 .application
   - if show_name ||= false
     %h3.name= link_to cloud_application.name, cloud_application
+    .body= body_excerpt(cloud_application)
 
   -#.slos
   -#  %h4 Service Level Objectives:

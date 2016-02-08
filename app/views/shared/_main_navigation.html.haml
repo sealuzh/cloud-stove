@@ -1,0 +1,25 @@
+%nav.main-nav.navbar-full
+  .container
+    %button.navbar-toggler.hidden-sm-up{type: 'button', data: { toggle: 'collapse', target: '#exMainNavbar'}}
+      = icon('navicon')
+      Cloud Stove
+    #exMainNavbar.collapse.navbar-toggleable-xs
+      = link_to root_path, class: 'pull-left hidden-xs-down', style: 'width: 2.275rem; height: 2.275rem; padding: .3rem 0;' do
+        = inline_svg 'flame.svg', width: '100%', height: '100%'
+      = link_to root_path, class: 'navbar-brand hidden-xs-down' do
+        The Stove
+      .nav.navbar-nav
+        = nav_link t('.blueprints'), blueprints_path
+        = nav_link t('.cloud_applications'), cloud_applications_path
+        = nav_link t('.providers'), providers_path
+      .navbar-right
+        .nav.navbar-nav
+          .btn-group
+            %button.btn.btn-link.nav-link.dropdown-toggle{data: { toggle: 'dropdown' }}
+              -# = icon 'user'
+              %span.hidden-sm-down Arthur Dent
+              = image_tag "//www.gravatar.com/avatar/#{Digest::MD5.hexdigest('inzinger@gmail.com')}", class: 'avatar'
+            .dropdown-menu.dropdown-menu-right
+              = link_to icon('user', t('.my_account')), root_path, class: 'dropdown-item'
+              .dropdown-divider
+              = link_to icon('sign-out', t('.logout')), root_path, class: 'dropdown-item'

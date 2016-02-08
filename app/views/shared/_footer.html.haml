@@ -1,0 +1,17 @@
+%footer.cs-footer
+  .container
+    2016, The Cloud Stove.
+    - if defined?(Footnotes) && Footnotes.enabled
+      = link_to(t('.toggle_debug_info'), '#footnotes_holder',
+          data: { toggle: :collapse } )
+    - if Rails.env.development?
+      \|
+      = link_to(t('.toggle_grid'), "javascript:$('body')[0].classList.toggle('with-baseline-grid');")
+    .pull-xs-right
+      = link_to(t('.about'), nil, class: 'btn btn-sm btn-link')
+      = link_to(t('.faq'), nil, class: 'btn btn-sm btn-link')
+      = link_to(t('.help'), nil, class: 'btn btn-sm btn-link')
+      = link_to(t('.pricing'), nil, class: 'btn btn-sm btn-link')
+    
+- if defined?(Footnotes) && Footnotes.enabled
+  #footnotes_holder.collapse

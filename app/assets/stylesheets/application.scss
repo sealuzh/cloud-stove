@@ -1,7 +1,31 @@
-@import "bootstrap-sprockets";
+@import "bourbon";
+// Import custom Bootstrap variables
+@import "bootstrap/custom";
+// Import Bootstrap
 @import "bootstrap";
+
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+@import "type";
+@import "main_navigation";
+@import "flash";
+@import "footer";
+@import "pagination";
+
+@import "welcome";
 @import "blueprints";
 @import "cloud_applications";
 @import "components";
 @import "providers";
 @import "resources";
+
+.main-container {
+  @extend .container;
+  margin-top: 1.5rem;
+}
+
+html.turbolinks-progress-bar::before {
+  background-color: $brand-primary !important;
+  height: 1px !important;
+}

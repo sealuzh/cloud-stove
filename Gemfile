@@ -6,10 +6,12 @@ ruby File.read(File.dirname(__FILE__) + '/.ruby-version').chomp!
 gem 'rails', '~> 4.2.4'
 # Use Haml for templates
 gem 'haml-rails', '~> 0.9'
-# Use Bootstrap, https://github.com/twbs/bootstrap-sass#a-ruby-on-rails
-gem 'bootstrap-sass', '~> 3.3.5'
+# Use Bootstrap, https://github.com/twbs/bootstrap-rubygem#a-ruby-on-rails
+gem 'bootstrap', '~> 4.0.0.alpha3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+# Use bourbon for Sass mixins
+gem 'bourbon'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -28,6 +30,20 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Markdown parser for pretty text
 gem 'redcarpet'
+
+# FontAwesome for icons
+gem 'font-awesome-sass', '~> 4.5.0'
+
+# Tether for bootstrap tooltips and popovers
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
+
+# Inline SVGs
+gem 'inline_svg'
+
+# Use kaminari for pagination
+gem 'kaminari'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -58,7 +74,9 @@ group :development do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-bundler'
+  gem 'guard-pow', require: false
   gem 'terminal-notifier-guard'
+  gem 'rack-livereload'
   gem 'guard-livereload', '~> 2.4', require: false
   gem 'rails-footnotes', '~> 4.0'
   gem 'benchmark-ips'

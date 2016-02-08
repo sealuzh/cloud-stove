@@ -14,7 +14,7 @@ defined?(Footnotes) && Footnotes.setup do |f|
   # f.prefix = 'mvim://open?url=file://%s&line=%d&column=%d'
 
   # Disable style :
-  # f.no_style = true
+  f.no_style = true
 
   # Lock notes to top right :
   # f.lock_top_right = true

@@ -1,0 +1,86 @@
+footer.cs-footer {
+  margin-top: 3rem;
+  padding: 4rem 0;
+  
+  @extend .text-muted;
+  font-size: 87.5%;
+  
+  border-top: 1px solid $gray-lighter;
+  background-color: $gray-lightest;
+}
+
+<% if defined?(Footnotes) && Footnotes.enabled %>
+#footnotes_debug {
+  font-size: 11px;
+  table {
+    font-family: Consolas, monaco, monospace;
+  }
+  font-weight: normal;
+  margin: 2em 0 1em 0;
+  text-align: center;
+  color: #444;
+  line-height: 16px;
+
+  th, #footnotes_debug td {
+    color: #444;
+    line-height: 18px;
+  }
+
+  a {
+    font-weight: inherit;
+    text-decoration: none;
+    line-height: 18px;
+  }
+
+  table {
+    @extend .table-striped;
+    text-align: left;
+    width: 100%;
+
+    td {
+      padding: 5px;
+      //border-bottom: 1px solid #eee;
+    }
+
+    td strong {
+      color: #9b1b1b;
+    }
+
+//    th {
+//      padding: 5px;
+//      border-bottom: 1px solid #ccc;
+//    }
+//
+//    tr:nth-child(2n) td {
+//      background: #eee;
+//    }
+//
+//    tr:nth-child(2n + 1) td {
+//      background: #fff;
+//    }
+  }
+
+  tbody {
+    text-align: left;
+  }
+
+  .name_values td {
+    vertical-align: top;
+  }
+
+  legend {
+  }
+
+  fieldset {
+    text-align: left;
+    //border-bottom: 1px solid #aaa;
+    padding: 0.5em 1em 1em 1em;
+    margin: 1em 2em;
+    color: #444;
+  }
+
+  #toggle_footnotes {
+    display: none;
+  }
+}
+<% end %>

@@ -1,5 +1,10 @@
-%h1 Listing blueprints
+%h1.clearfix
+  = t '.title'
+  = link_to t('.new'), new_blueprint_path, class: 'btn btn-success pull-right'
 
 = render @blueprints, show_name: true
 
-= link_to 'New Blueprint', new_blueprint_path, class: 'btn btn-primary'
+= paginate @blueprints
+.page-entries-info= page_entries_info @blueprints
+
+= link_to t('.new'), new_blueprint_path, class: 'btn btn-success'

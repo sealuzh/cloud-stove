@@ -1,0 +1,19 @@
+nav.paginator { @extend .text-xs-center; }
+
+.pagination {
+  margin: 1.5rem auto;
+  margin-bottom: 0.5rem;
+}
+
+.page-link {
+  padding: 0.6875rem 0.85rem;
+}
+
+.page-item.disabled span.page-link:hover {
+    cursor: default;
+}
+
+.page-entries-info {
+  @extend .text-xs-center;
+  margin-bottom: 1rem;
+}

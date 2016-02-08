@@ -1,0 +1,85 @@
+// from basehold.it
+@mixin baseline-grid($bl-line-height: $font-size-root * $line-height) {
+    position: relative;
+
+    &:after {
+        position: absolute;
+        width: auto;
+        height: auto;
+        z-index: 9999;
+        content: '';
+        display: block;
+        pointer-events: none;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: url(http://basehold.it/image.php?height=#{$bl-line-height}&r=127&g=127&b=127&a=0.3) repeat top left;
+    }
+
+    &:active:after {
+        display: none;
+    }
+}
+
+<% if Rails.env.development? %>
+body.with-baseline-grid {
+  @include baseline-grid($font-size-root * $line-height / 2);
+}
+<% end %>
+
+// Ensure that element heights are generally a multiple of base line-height
+// Alternatively, you can also use base-line-height/2.
+$base-line-height-px: $font-size-root * $line-height;
+$base-line-height: $font-size-base * $line-height;
+
+.main-container {
+  h1 {
+    // total height of h1: 3 base line height
+    $h1-line-height: 1.2;
+    line-height: $h1-line-height;
+    margin-bottom: 3 * $base-line-height -
+                    $font-size-h1 * $h1-line-height;
+  }
+  
+  h2 {
+    // total height of h2: 3 base line height
+    $h2-line-height: $headings-line-height;
+    line-height: $h2-line-height;
+    margin-bottom: 2 * $base-line-height -
+                    $font-size-h2 * $h2-line-height;
+  }
+  
+  h3 {
+    $h3-line-height: $headings-line-height;
+    line-height: $h3-line-height;
+    margin-bottom: 2 * $base-line-height -
+                    $font-size-h3 * $h3-line-height;
+  }
+
+  h4 {
+    $h4-line-height: $headings-line-height;
+    line-height: $h4-line-height;
+    margin-bottom: 2 * $base-line-height -
+                    $font-size-h4 * $headings-line-height;
+  }
+  
+  .btn {
+    margin-bottom: 0.625rem;
+  }
+  
+  p, ul, ol, dl {
+    margin-bottom: $base-line-height;
+  }
+}
+
+
+//.lead {
+//  line-height: 1 * $base-line-height;
+//}
+
+<% if Rails.env.development? %>
+  .translation_missing {
+    border: 1px dashed red;
+  }
+<% end %>

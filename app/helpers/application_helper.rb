@@ -1,4 +1,22 @@
 module ApplicationHelper
+  def page_title
+    if content_for(:title)
+      yield(:title)
+    else
+      page_scope = [ controller_path.tr('/', '.'), action_name ].join('.')
+      [ 
+        I18n.t('.title', scope: page_scope, default: ''), 
+        I18n.t('app_name')
+      ].reject(&:blank?).join(" • ")
+    end
+  end
+  
+  def nav_link(title, url)
+    classes = [ 'nav-item', 'nav-link' ]
+    classes << 'active' if request.env['PATH_INFO'].start_with?(url)
+    link_to(title, url, class: classes.join(' '))
+  end
+  
   def format_price(price, precision: 2)
     number_to_currency(price, precision: precision)
   end

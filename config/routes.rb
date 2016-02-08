@@ -3,9 +3,13 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
   
-  resources :blueprints
+  concern :paginatable do
+    get '(page/:page)', action: :index, on: :collection, as: ''
+  end
+  
+  resources :blueprints, concerns: :paginatable
 
-  resources :cloud_applications, path: 'apps' do
+  resources :cloud_applications, path: 'apps', concerns: :paginatable do
     resources :application_deploymen_recommendations, path: 'deployment_recommendations'
     resources :concrete_components
   end
