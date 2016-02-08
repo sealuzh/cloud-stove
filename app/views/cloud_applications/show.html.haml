@@ -8,11 +8,19 @@
 = markdown(@cloud_application.body)
 
 %h3 Components
-%ul
-  - @cloud_application.concrete_components.each do |component|
-    %li= component.name
+- @cloud_application.concrete_components.each do |component|
+  .component
+    %h3
+      = component.name
+      - if component.component
+        %small
+          (#{link_to(component.component.name, component.component)})
+    = markdown(component.body)
+    %h4= t('.slos')
+    - component.slos.each do |slo|
+      %p
+        %code= slo.more_attributes.to_json
 
-%br
 %p
 .actions
   -#= link_to 'Show details', @cloud_application, class: 'btn btn-link'

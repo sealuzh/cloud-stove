@@ -77,3 +77,9 @@ $base-line-height: $font-size-base * $line-height;
 //.lead {
 //  line-height: 1 * $base-line-height;
 //}
+
+<% if Rails.env.development? %>
+  .translation_missing {
+    border: 1px dashed red;
+  }
+<% end %>

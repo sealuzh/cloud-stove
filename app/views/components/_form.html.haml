@@ -24,4 +24,5 @@
       = render 'deployment_rule_fields', f: builder
 
   .form-group
-    = f.submit 'Save', class: 'btn btn-success'
+    = f.submit t('save'), class: 'btn btn-success'
+    = link_to t('cancel'), @component, class: 'btn btn-link'

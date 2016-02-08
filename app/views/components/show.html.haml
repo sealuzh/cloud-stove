@@ -5,9 +5,10 @@
 = markdown(@component.body)
 
 %b Deployment rule
-%code= @component.deployment_rule.try(:more_attributes).to_json
+%p
+  %code= @component.deployment_rule.try(:more_attributes).to_json
 
 .actions
-  = link_to 'Edit', edit_component_path(@component), class: 'btn btn-primary'
+  = link_to 'Edit', edit_component_path(@component), class: 'btn btn-warning'
   = link_to 'Destroy', @component, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
-  = link_to 'Back', components_path
+  = link_to 'Back', components_path, class: 'btn btn-link'

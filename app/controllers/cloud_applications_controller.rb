@@ -77,7 +77,7 @@ class CloudApplicationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def cloud_application_params
       params.require(:cloud_application).permit(:name, :body, :blueprint_id,
-        concrete_components_attributes: [:id, :name, :body, :component, :_destroy, slos_attributes: [:id, :more_attributes, :_destroy]]
+        concrete_components_attributes: [:id, :name, :body, :component_id, :_destroy, slos_attributes: [:id, :more_attributes, :_destroy]]
       )
     end
 end

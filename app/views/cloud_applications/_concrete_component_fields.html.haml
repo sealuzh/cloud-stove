@@ -5,6 +5,12 @@
   .form-group
     = f.label :name
     = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :component
+    %br
+    = f.select :component_id do
+      = Component.all.each do |component|
+        = content_tag(:option, "#{component.name} (#{component.try(:blueprint).try(:name)})", value: component.id )
 
   .form-group
     = f.label :body
@@ -16,4 +22,4 @@
     = link_to_add_fields "Add SLO", f, :slos, Slo
   .form-group
     = f.check_box :_destroy
-    = f.label :_destroy, "Remove Component"
+    = f.label :_destroy, t('.remove_component')

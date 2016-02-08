@@ -21,6 +21,10 @@
 
 en:
   app_name: "The Cloud Stove"
+  back: "Back"
+  save: "Save"
+  edit: "Edit"
+  cancel: "Cancel"
   shared:
     main_navigation:
       blueprints: "Blueprints"
@@ -31,14 +35,30 @@ en:
       faq: "FAQ"
       help: "Help"
       pricing: "Pricing"
+      toggle_debug_info: "Toggle Debug Info"
+      toggle_grid: "Toggle Grid"
   blueprints:
     index:
       title: "Application Blueprints"
       new: "New Blueprint"
+    form:
+      add_component: "Add Component"
+    component_fields:
+      remove_component: "Remove Component"
+    deployment_rule_fields:
+      name: "Rules"
   cloud_applications:
     index:
       title: "My Applications"
       new: "New Application"
+    show:
+      slos: "Target SLOs"
+    edit:
+      title: "Edit Application"
+    concrete_component_fields:
+      remove_component: "Remove Component"
+    slo_fields:
+      remove_slo: "Remove SLO"
   slos:
     metrics:
       availability: "availability"
