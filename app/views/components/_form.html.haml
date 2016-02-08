@@ -15,9 +15,13 @@
   .form-group
     = f.label :body
     = f.text_area :body, rows: 25, class: 'form-control monospace md'
-  = f.fields_for :deployments do |builder|
-    = render 'deployment_fields', f: builder
-  .form-group
-    = link_to_add_fields "Add Deployment", f, :deployments, Component::Deployment
+
+  - if f.object.deployment_rule.nil?
+    = sub_form f, :deployment_rule, DeploymentRule
+  - else
+    .form-group
+    = f.fields_for :deployment_rule do |builder|
+      = render 'deployment_rule_fields', f: builder
+
   .form-group
     = f.submit 'Save', class: 'btn btn-success'

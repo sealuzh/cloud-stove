@@ -72,7 +72,7 @@ class BlueprintsController < ApplicationController
     def blueprint_params
       params.require(:blueprint).permit(:name, :body, 
         components_attributes: [ :id, :name, :body, :component_type, :_destroy,
-          deployments_attributes: [ :id, :name, :body ]
+          deployment_rule_attributes: [ :id, :more_attributes ]
         ]
       )
     end

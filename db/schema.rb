@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128154316) do
+ActiveRecord::Schema.define(version: 20160204135224) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -61,6 +61,15 @@ ActiveRecord::Schema.define(version: 20160128154316) do
 
   add_index "concrete_components", ["cloud_application_id"], name: "index_concrete_components_on_cloud_application_id"
   add_index "concrete_components", ["component_id"], name: "index_concrete_components_on_component_id"
+
+  create_table "deployment_rules", force: :cascade do |t|
+    t.text     "more_attributes"
+    t.integer  "component_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "deployment_rules", ["component_id"], name: "index_deployment_rules_on_component_id"
 
   create_table "providers", force: :cascade do |t|
     t.string   "name"

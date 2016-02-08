@@ -1,8 +1,6 @@
 %fieldset
-  %h4 Service Level Objective (SLO)
+  %h4 Deployment-Rule
   .form-group
-    = f.label "Attributes"
+    = f.label "Rules"
     = f.text_area :more_attributes, value: f.object.more_attributes.to_json, rows: 10,  class: 'form-control monospace md'
-  .form-group
-    = f.check_box :_destroy
-    = f.label :_destroy, "Remove SLO"
+

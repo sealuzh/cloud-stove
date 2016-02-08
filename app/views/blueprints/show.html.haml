@@ -3,16 +3,16 @@
 = markdown(@blueprint.body)
 
 - unless @blueprint.components.empty?
-  %h2 Typical Components and Deployments
+  %h4 Components:
   - @blueprint.components.each do |component|
+    %hr
     .component
       %h3= component.name
       %b= component.component_type
       = markdown(component.body)
-      - component.deployments.each do |deployment|
-        .deployment
-          = deployment.name
-          = markdown(deployment.body)
+      %b Deployment rule
+      %code= component.deployment_rule.try(:more_attributes).to_json
+    %hr
 
 .actions
   = link_to 'Edit', edit_blueprint_path(@blueprint), class: 'btn btn-primary'

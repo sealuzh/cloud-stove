@@ -4,12 +4,8 @@
 
 = markdown(@component.body)
 
-- unless @component.deployments.empty?
-  %h2 Typical Deployment Strategies
-  - @component.deployments.each do |deployment|
-    .deployment
-      %h3= deployment.name
-      = markdown(deployment.body)
+%b Deployment rule
+%code= @component.deployment_rule.try(:more_attributes).to_json
 
 .actions
   = link_to 'Edit', edit_component_path(@component), class: 'btn btn-primary'
