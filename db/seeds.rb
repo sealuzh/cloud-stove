@@ -110,19 +110,23 @@ def load_seed(file_name, context = binding)
   YAML.load(ERB.new(File.read(file_path)).result(context))
 end
 
+bp_multitier = load_seed('blueprint_multitier')
 
 # TODO: Add second blueprint
 
 # Create Blueprints
 [
+  bp_multitier,
 ].prepare_hashes.each do |bp_attributes|
   create_blueprint(bp_attributes)
 end
 
+ai_rails_app = load_seed('application_instance_rails_app.yml', binding)
 
 # TODO: Add more application instances
 
 [
+  ai_rails_app,
 ].prepare_hashes.each do |app_instance_attributes|
   create_application_instance(app_instance_attributes)
 end

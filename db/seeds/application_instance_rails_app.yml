@@ -1,0 +1,50 @@
+---
+blueprint_id: <%= Blueprint.find_by!(name: bp_multitier['name']).id %>
+name: Rails Application with PostgreSQL Backend
+body: |
+  A traditional wep application, let's say a web shop with
+
+  * Rails as the application server
+    * Devise for authentication of authors and editors
+    * Pundit for authorization
+  * PostgreSQL as database
+    * Products are indexed on
+      * name
+      * categories
+concrete_components:
+- component_type: application-server
+  name: Rails App
+  body: |
+    Specific things about the Rails app.
+  slo_sets:
+  - availability:
+      "$gte": '0.995'
+    costs:
+      "$lte": '200'
+      currency: "$"
+      interval: month
+    response_time:
+      "$lte": '2'
+      unit: second
+      "$where": "... (qualifier)"
+- component_type: database
+  name: PostgreSQL
+  body: |
+    Specific things about this db.
+  slo_sets:
+  - availability:
+      "$gte": '0.995'
+- component_type: load-balancer
+  name: Load Balancer
+  body: |
+    Specific things about the load balancer.
+  slo_sets:
+  - availability:
+      "$gte": '0.9995'
+- component_type: cdn
+  name: CDN
+  body: |
+    Specific things about the CDN.
+  slo_sets:
+  - availability:
+      "$gte": '0.9995'
