@@ -29,3 +29,7 @@ html.turbolinks-progress-bar::before {
   background-color: $brand-primary !important;
   height: 1px !important;
 }
+
+blockquote {
+  @extend .blockquote;
+}

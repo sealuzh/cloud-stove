@@ -3,11 +3,11 @@
 = markdown(@blueprint.body)
 
 - unless @blueprint.components.empty?
-  %h4 Components:
+  %h3 Components:
   - @blueprint.components.each do |component|
     %hr
-    .component
-      %h3= component.name
+    %section.component
+      %h1= component.name
       %b= component.component_type
       = markdown(component.body)
       %b Deployment rule
