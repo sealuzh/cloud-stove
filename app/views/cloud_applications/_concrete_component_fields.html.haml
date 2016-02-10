@@ -10,7 +10,7 @@
     %br
     = f.select :component_id do
       = Component.all.each do |component|
-        = content_tag(:option, "#{component.name} (#{component.try(:blueprint).try(:name)})", value: component.id )
+        = content_tag(:option, "#{component.name} (#{component.try(:blueprint).try(:name)})", value: component.id, selected: f.object.component_id == component.id)
 
   .form-group
     = f.label :body
