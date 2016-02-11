@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160204135224) do
+ActiveRecord::Schema.define(version: 20160211224629) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -88,13 +88,13 @@ ActiveRecord::Schema.define(version: 20160204135224) do
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
 
-  create_table "slos", force: :cascade do |t|
+  create_table "slo_sets", force: :cascade do |t|
     t.text     "more_attributes",       default: "{}", null: false
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.integer  "concrete_component_id"
   end
 
-  add_index "slos", ["concrete_component_id"], name: "index_slos_on_concrete_component_id"
+  add_index "slo_sets", ["concrete_component_id"], name: "index_slo_sets_on_concrete_component_id"
 
 end

@@ -1,4 +1,4 @@
-class Slo < Base
+class SloSet < Base
 
   attr_accessor :_destroy
   belongs_to :concrete_component
