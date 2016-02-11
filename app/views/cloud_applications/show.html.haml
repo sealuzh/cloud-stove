@@ -18,8 +18,9 @@
     = markdown(component.body)
     %h2= t('.slos')
     - component.slo_sets.each do |slo_set|
-      %p
-        %code= slo_set.more_attributes.to_json
+      %ul
+        - slo_set.humanize.each do |slo|
+          %li= slo.capitalize
 
 %p
 .actions
