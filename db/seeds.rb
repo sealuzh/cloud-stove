@@ -135,5 +135,15 @@ ai_media_transcoding = load_seed('application_instance_media_transcoding', bindi
   create_application_instance(app_instance_attributes)
 end
 
-# TODO: For now, also add deployment recommendation
+# Update provider resources if we don't have any
+if Provider.count.zero?
+  # Reset log indent
+  Base.base_stack_depth = nil
+  # Execute the update job inline. We need the resources to create
+  # deployment recommendations in the next step.
+  Rails.application.config.active_job.queue_adapter = :inline
+  UpdateResourcesJob.perform_later rescue nil
+end
 
+# TODO: For now, also add deployment recommendations.
+#       Deployment recommendations map slo sets to resources.
