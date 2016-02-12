@@ -16,10 +16,10 @@
     = f.label :body
     = f.text_area :body, rows: 10, class: 'form-control monospace md'
 
-  = f.fields_for :slos do |builder|
-    = render 'slo_fields', f: builder
+  = f.fields_for :slo_sets do |builder|
+    = render 'slo_set_fields', f: builder
   .form-group
-    = link_to_add_fields "Add SLO", f, :slos, Slo
+    = link_to_add_fields "Add SLO Set", f, :slo_sets, SloSet
   .form-group
     = f.check_box :_destroy
     = f.label :_destroy, t('.remove_component')

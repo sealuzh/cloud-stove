@@ -17,9 +17,9 @@
           (#{link_to(component.component.name, component.component)})
     = markdown(component.body)
     %h4= t('.slos')
-    - component.slos.each do |slo|
+    - component.slo_sets.each do |slo_set|
       %p
-        %code= slo.more_attributes.to_json
+        %code= slo_set.more_attributes.to_json
 
 %p
 .actions

@@ -24,7 +24,7 @@ spring_app = CloudApplication.find_or_create_by(name: 'A Spring Boot app with Co
 
 nodejs_app = CloudApplication.find_or_create_by(name: 'A NodeJS app with Cassandra')
 
-slos = [
+slo_sets = [
   {
     metric: 'availability',
     relation: '>=',
@@ -48,8 +48,8 @@ slos = [
   }
 ]
 
-slos.each_with_index do |attrs, i|
-  slo = Slo.find_or_create_by(id: i + 1)
-  slo.more_attributes = attrs
-  slo.save!
+slo_sets.each_with_index do |attrs, i|
+  slo_set = SloSet.find_or_create_by(id: i + 1)
+  slo_set.more_attributes = attrs
+  slo_set.save!
 end
