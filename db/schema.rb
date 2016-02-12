@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211224629) do
+ActiveRecord::Schema.define(version: 20160212104657) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -61,6 +61,23 @@ ActiveRecord::Schema.define(version: 20160211224629) do
 
   add_index "concrete_components", ["cloud_application_id"], name: "index_concrete_components_on_cloud_application_id"
   add_index "concrete_components", ["component_id"], name: "index_concrete_components_on_component_id"
+
+  create_table "deployment_recommendations", force: :cascade do |t|
+    t.text     "more_attributes"
+    t.integer  "slo_set_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"
+
+  create_table "deployment_recommendations_resources", id: false, force: :cascade do |t|
+    t.integer "deployment_recommendation_id"
+    t.integer "resource_id"
+  end
+
+  add_index "deployment_recommendations_resources", ["deployment_recommendation_id"], name: "deployment_rec_index"
+  add_index "deployment_recommendations_resources", ["resource_id"], name: "resource_index"
 
   create_table "deployment_rules", force: :cascade do |t|
     t.text     "more_attributes"
