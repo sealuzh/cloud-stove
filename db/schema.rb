@@ -71,14 +71,6 @@ ActiveRecord::Schema.define(version: 20160212104657) do
 
   add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"
 
-  create_table "deployment_recommendations_resources", id: false, force: :cascade do |t|
-    t.integer "deployment_recommendation_id"
-    t.integer "resource_id"
-  end
-
-  add_index "deployment_recommendations_resources", ["deployment_recommendation_id"], name: "deployment_rec_index"
-  add_index "deployment_recommendations_resources", ["resource_id"], name: "resource_index"
-
   create_table "deployment_rules", force: :cascade do |t|
     t.text     "more_attributes"
     t.integer  "component_id"

@@ -1,6 +1,7 @@
 class DeploymentRecommendation < ActiveRecord::Base
-  has_and_belongs_to_many :resources
   belongs_to :slo_set
+  ma_accessor :resource
+  ma_accessor :num_instances
 
 
   def self.compute_recommendation(slo_sets)
