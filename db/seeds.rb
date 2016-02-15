@@ -111,12 +111,14 @@ def load_seed(file_name, context = binding)
 end
 
 bp_multitier = load_seed('blueprint_multitier')
+bp_batch = load_seed('blueprint_batch_processing')
 
 # TODO: Add second blueprint
 
 # Create Blueprints
 [
   bp_multitier,
+  bp_batch,
 ].prepare_hashes.each do |bp_attributes|
   create_blueprint(bp_attributes)
 end
