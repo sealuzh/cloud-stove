@@ -65,3 +65,14 @@ en:
       response_time: "response time"
       costs: "costs"
       value_format: "%{currency}%{value}%{unit}%{interval}"
+    operators:
+      lt: '<'
+      lte: '≤'
+      eq: '='
+      neq: '≠'
+      gt: '>'
+      gte: '≥'
+      in: 'in'
+      where: 'where'
+    qualifiers:
+      per: 'per'
