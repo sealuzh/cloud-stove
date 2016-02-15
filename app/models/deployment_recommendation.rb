@@ -4,6 +4,8 @@ class DeploymentRecommendation < Base
   ma_accessor :resource_name
   ma_accessor :resource
   ma_accessor :num_instances
+  ma_accessor :total_cost
+  ma_accessor :achieved_availability
 
 
   def self.compute_recommendation(slo_set)
@@ -18,20 +20,23 @@ class DeploymentRecommendation < Base
     Provider.all.each do |provider|
 
       n = self.number_of_instances(wanted_availability, provider.availability)
+      achieved_availability = self.compute_availability(n, provider.availability)
 
       provider.resources.all.each do |resource|
 
-        # check if current resource fulfills cost restrictions
-        if (cost_interval == 'month' && (resource.price_per_month * n) <= cost_value) ||
-            (cost_interval == 'hour' && (resource.price_per_hour * n) <= cost_value)
+        total_cost = total_cost(n,resource,cost_interval)
 
-          deployment_recommendation = DeploymentRecommendation.new
-          deployment_recommendation.provider = provider.name
-          deployment_recommendation.resource_name = resource.name
-          deployment_recommendation.resource = resource.more_attributes
-          deployment_recommendation.num_instances = n
-          deployment_recommendation.slo_set = slo_set
-          deployment_recommendation.save!
+        if total_cost <= cost_value
+
+          DeploymentRecommendation.create(
+              provider: provider.name,
+              resource_name: resource.name,
+              resource: resource.more_attributes,
+              num_instances: n,
+              slo_set: slo_set,
+              total_cost: total_cost,
+              achieved_availability: achieved_availability
+          )
 
         end
 
@@ -42,6 +47,21 @@ class DeploymentRecommendation < Base
   end
 
   private
+
+    def self.total_cost(num_instances, resource, cost_interval)
+      if cost_interval == 'month'
+        resource.price_per_month * num_instances
+      elsif cost_interval == 'hour'
+        resource.price_per_hour * num_instances
+      end
+    end
+
+
+    def self.compute_availability(num_instances, resource_availability)
+      1 - ((1 - resource_availability) ** num_instances)
+    end
+
+
     # Compute how many instances are necessary to reach wanted_availability
     # if each instance has an SLA of instance_availability
     def self.number_of_instances(wanted_availability,instance_availability)
