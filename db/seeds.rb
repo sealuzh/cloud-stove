@@ -123,12 +123,14 @@ bp_batch = load_seed('blueprint_batch_processing')
   create_blueprint(bp_attributes)
 end
 
-ai_rails_app = load_seed('application_instance_rails_app.yml', binding)
+ai_rails_app = load_seed('application_instance_rails_app', binding)
+ai_media_transcoding = load_seed('application_instance_media_transcoding', binding)
 
 # TODO: Add more application instances
 
 [
   ai_rails_app,
+  ai_media_transcoding,
 ].prepare_hashes.each do |app_instance_attributes|
   create_application_instance(app_instance_attributes)
 end
