@@ -21,7 +21,10 @@ module ApplicationHelper
     number_to_currency(price, precision: precision)
   end
 
+  # Render Markdown for body copy.
   def markdown(text)
+    # Body copy headings should never be h1
+    text.gsub!(/^#/, '##') if text
     @renderer ||= Redcarpet::Render::HTML.new(safe_links_only: true)
     @markdown ||= Redcarpet::Markdown.new(@renderer, autolink: true, tables: true)
     @markdown.render(text || "").html_safe
