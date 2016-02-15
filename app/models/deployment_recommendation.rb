@@ -1,12 +1,41 @@
-class DeploymentRecommendation < ActiveRecord::Base
+class DeploymentRecommendation < Base
   belongs_to :slo_set
+  ma_accessor :provider
+  ma_accessor :resource_name
   ma_accessor :resource
   ma_accessor :num_instances
 
 
-  def self.compute_recommendation(slo_sets)
+  def self.compute_recommendation(slo_set)
+
+    # assuming the data structure of SloSet as in
+    # https://github.com/inz/cloud-stove/pull/14#issuecomment-183431312
+
+    wanted_availability = slo_set.availability['$gte'].to_f
+    cost_value = slo_set.costs['$lte'].to_f
+    cost_interval = slo_set.costs['interval']
 
     Provider.all.each do |provider|
+
+      n = self.number_of_instances(wanted_availability, provider.availability)
+
+      provider.resources.all.each do |resource|
+
+        # check if current resource fulfills cost restrictions
+        if (cost_interval == 'month' && (resource.price_per_month * n) <= cost_value) ||
+            (cost_interval == 'hour' && (resource.price_per_hour * n) <= cost_value)
+
+          deployment_recommendation = DeploymentRecommendation.new
+          deployment_recommendation.provider = provider.name
+          deployment_recommendation.resource_name = resource.name
+          deployment_recommendation.resource = resource.more_attributes
+          deployment_recommendation.num_instances = n
+          deployment_recommendation.slo_set = slo_set
+          deployment_recommendation.save!
+
+        end
+
+      end
 
     end
 
@@ -38,6 +67,8 @@ class DeploymentRecommendation < ActiveRecord::Base
         x = 1 - wanted_availability
         y = 1 - instance_availability
         Math.log(x,y).ceil
+      else
+        1
       end
     end
 end
