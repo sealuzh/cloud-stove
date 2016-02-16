@@ -45,4 +45,6 @@ $(document).on 'page:change', ->
     e = $(element)
     value = parseFloat e.data('ppm')
     e.addClass class_for(value, ppms)
+  
+  $('time.timeago').timeago();
 
