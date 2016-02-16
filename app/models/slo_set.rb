@@ -9,7 +9,7 @@ class SloSet < Base
 
   attr_accessor :_destroy
   belongs_to :concrete_component
-  has_one :deployment_recommendation
+  has_many :deployment_recommendations
   ma_accessor :availability
   ma_accessor :costs
 
