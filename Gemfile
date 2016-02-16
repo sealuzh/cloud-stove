@@ -37,6 +37,7 @@ gem 'font-awesome-sass', '~> 4.5.0'
 # Tether for bootstrap tooltips and popovers
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
+  gem 'rails-assets-jquery-timeago'
 end
 
 # Inline SVGs

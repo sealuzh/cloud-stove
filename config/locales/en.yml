@@ -59,6 +59,9 @@ en:
       remove_component: "Remove Component"
     slo_fields:
       remove_slo: "Remove SLO"
+  providers:
+    provider:
+      last_updated: "Updated"
   slos:
     metrics:
       availability: "availability"
