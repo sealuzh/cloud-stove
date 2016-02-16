@@ -28,15 +28,15 @@ class DeploymentRecommendation < Base
 
         if total_cost <= cost_value
 
-          DeploymentRecommendation.create(
-              provider: provider.name,
-              resource_name: resource.name,
-              resource: resource.more_attributes,
-              num_instances: n,
-              slo_set: slo_set,
-              total_cost: total_cost,
-              achieved_availability: achieved_availability
-          )
+          deployment_recommendation = DeploymentRecommendation.new
+          deployment_recommendation.provider = provider.name
+          deployment_recommendation.resource_name = resource.name
+          deployment_recommendation.resource = resource.more_attributes
+          deployment_recommendation.num_instances = n
+          deployment_recommendation.slo_set = slo_set
+          deployment_recommendation.total_cost = total_cost
+          deployment_recommendation.achieved_availability = achieved_availability
+          deployment_recommendation.save
 
         end
 
