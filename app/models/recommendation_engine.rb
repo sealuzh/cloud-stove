@@ -2,7 +2,7 @@ class RecommendationEngine
 
   def compute_recommendation(slo_set)
 
-    wanted_availability = slo_set.availability['$gte'].to_f
+    wanted_availability = slo_set.availability['$gte'].to_d
 
     Provider.all.each do |provider|
 
@@ -44,7 +44,7 @@ class RecommendationEngine
 
       total_cost = total_cost(num_instances, resource, slo_set.costs['interval'])
 
-      if total_cost <= slo_set.costs['$lte'].to_f
+      if total_cost <= slo_set.costs['$lte'].to_d
         return true, total_cost
       else
         return false, total_cost
@@ -66,7 +66,7 @@ class RecommendationEngine
   # Computes the total availability that is achieved with num_instances
   # each having an availability of resource_availability
   def compute_availability(num_instances, resource_availability)
-    1 - ((1 - resource_availability) ** num_instances)
+    (1 - ((1 - resource_availability) ** num_instances)).to_d
   end
 
 

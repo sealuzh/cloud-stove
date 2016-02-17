@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212104657) do
+ActiveRecord::Schema.define(version: 20160217125416) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20160212104657) do
     t.integer  "slo_set_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.decimal  "total_cost"
   end
 
   add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"

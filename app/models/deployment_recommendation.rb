@@ -4,7 +4,6 @@ class DeploymentRecommendation < Base
   ma_accessor :resource_name
   ma_accessor :resource
   ma_accessor :num_instances
-  ma_accessor :total_cost
   ma_accessor :achieved_availability
 
 

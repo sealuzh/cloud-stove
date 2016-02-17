@@ -5,7 +5,7 @@ class Provider < Base
   # if there is none, assume 0.95
   def availability
     if more_attributes['sla'] && more_attributes['sla']['availability']
-      Float(more_attributes['sla']['availability'].to_s)
+      BigDecimal(more_attributes['sla']['availability'].to_s)
     else
       0.95
     end
