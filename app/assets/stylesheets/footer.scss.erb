@@ -7,6 +7,20 @@ footer.cs-footer {
   
   border-top: 1px solid $gray-lighter;
   background-color: $gray-lightest;
+  
+  ul {
+    @extend .pull-sm-right;
+    @extend .list-inline;
+    
+    li {
+      @extend .list-inline-item;
+      padding-right: 1em;
+      
+      &:last-child {
+        padding-right: 0em;
+      }
+    }
+  }
 }
 
 <% if defined?(Footnotes) && Footnotes.enabled %>
