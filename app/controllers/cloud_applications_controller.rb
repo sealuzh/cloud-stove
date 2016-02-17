@@ -1,5 +1,5 @@
 class CloudApplicationsController < ApplicationController
-  before_action :set_cloud_application, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_cloud_application, only: [ :show, :edit, :update, :destroy, :recommendations ]
   before_action :fetch_blueprints, only: [ :new, :edit, :update ]
 
   # GET /cloud_applications
@@ -62,6 +62,16 @@ class CloudApplicationsController < ApplicationController
       format.html { redirect_to cloud_applications_url, notice: 'Cloud application was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # GET /cloud_applications/:id/recommendations
+  def recommendations
+    @cloud_application.concrete_components.each do |component|
+      component.slo_sets.each do |slo_set|
+        DeploymentRecommendation.compute_recommendation(slo_set)
+      end
+    end
+    redirect_to @cloud_application
   end
 
   private

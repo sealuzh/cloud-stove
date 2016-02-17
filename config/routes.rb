@@ -9,17 +9,15 @@ Rails.application.routes.draw do
   
   resources :blueprints, concerns: :paginatable
 
-  get 'deployment_recommendations/generate/:slo_set_id' => 'deployment_recommendations#generate'
-
   resources :cloud_applications, path: 'apps', concerns: :paginatable do
     resources :concrete_components
+    member do
+      get 'recommendations'
+    end
   end
   resources :components
   resources :providers do
     put :update_all, on: :collection
-  end
-  resource :deployment_recommendations do
-    put :compute_recommendations, on: :collection
   end
   resources :resources
 

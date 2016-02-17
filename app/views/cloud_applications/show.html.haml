@@ -26,14 +26,15 @@
             - slo_set.humanize.each do |slo|
               %li= slo.capitalize
         .col-md-6
-          Deployment recommendation
           - deployment = slo_set.deployment_recommendations.order("total_cost ASC").first
-          %ul
-            %li= "Provider:  #{deployment.provider}"
-            %li= "Resource:  #{deployment.resource_name}"
-            %li= "Number of instances:  #{deployment.num_instances}"
-            %li= "Total costs:  #{deployment.total_cost}"
-            %li= "Provided availability:  #{deployment.achieved_availability}"
+          - unless deployment.nil?
+            Deployment recommendation
+            %ul
+              %li= "Provider:  #{deployment.provider}"
+              %li= "Resource:  #{deployment.resource_name}"
+              %li= "Number of instances:  #{deployment.num_instances}"
+              %li= "Total costs:  #{deployment.total_cost}"
+              %li= "Provided availability:  #{deployment.achieved_availability}"
 
 
 
@@ -43,7 +44,7 @@
 .actions
   -#= link_to 'Show details', @cloud_application, class: 'btn btn-link'
   = link_to 'Edit', edit_cloud_application_path(@cloud_application), class: 'btn btn-warning'
-  -#= link_to 'Find optimal deployments', nil, class: 'btn btn-success'
+  = link_to 'Find optimal deployments', recommendations_cloud_application_path(@cloud_application), method: :get, data: { confirm: 'Computing recommendations will take some time. Are you sure you want this?' }, class: 'btn btn-success'
   -#= link_to 'Monitor deployment', nil, class: 'btn btn-primary'
   = link_to 'Destroy', @cloud_application, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
   = link_to 'Back', cloud_applications_path, class: 'btn btn-link'

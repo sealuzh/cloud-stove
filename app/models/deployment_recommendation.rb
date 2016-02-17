@@ -1,5 +1,5 @@
 class DeploymentRecommendation < Base
-  belongs_to :slo_set
+  belongs_to :slo_set, autosave: true
   ma_accessor :provider
   ma_accessor :resource_name
   ma_accessor :resource
