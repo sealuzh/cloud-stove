@@ -13,8 +13,11 @@
       %h1= component.name
       %b= component.component_type
       = markdown(component.body)
-      %b Deployment rule
-      %code= component.deployment_rule.try(:more_attributes).to_json
+      %h3 Deployment rule
+      / 
+        %p
+          %code= component.deployment_rule.try(:more_attributes).to_json
+      = nested_list_from_hash(component.deployment_rule.try(:more_attributes), css_class: 'deployment_rule')
 
 .actions
   = link_to 'Edit', edit_blueprint_path(@blueprint), class: 'btn btn-warning'
