@@ -9,6 +9,7 @@
 
 %h3 Components
 - @cloud_application.concrete_components.each do |component|
+  %hr
   %section.component
     %h1
       = component.name
@@ -16,11 +17,27 @@
         %small
           (#{link_to(component.component.name, component.component)})
     = markdown(component.body)
-    %h2= t('.slos')
+    %h4 Target SLO's and Deployments
     - component.slo_sets.each do |slo_set|
-      %ul
-        - slo_set.humanize.each do |slo|
-          %li= slo.capitalize
+      .row
+        .col-md-6
+          SLOs
+          %ul
+            - slo_set.humanize.each do |slo|
+              %li= slo.capitalize
+        .col-md-6
+          Deployment recommendation
+          - deployment = slo_set.deployment_recommendations.order("total_cost ASC").first
+          %ul
+            %li= "Provider:  #{deployment.provider}"
+            %li= "Resource:  #{deployment.resource_name}"
+            %li= "Number of instances:  #{deployment.num_instances}"
+            %li= "Total costs:  #{deployment.total_cost}"
+            %li= "Provided availability:  #{deployment.achieved_availability}"
+
+
+
+
 
 %p
 .actions
