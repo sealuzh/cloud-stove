@@ -32,7 +32,7 @@ class CloudApplicationsController < ApplicationController
         format.html { redirect_to @cloud_application, notice: 'Cloud application was successfully created.' }
         format.json { render :show, status: :created, location: @cloud_application }
       else
-        @blueprints = Blueprint.all
+        fetch_blueprints
         format.html { render :new }
         format.json { render json: @cloud_application.errors, status: :unprocessable_entity }
       end
@@ -47,7 +47,7 @@ class CloudApplicationsController < ApplicationController
         format.html { redirect_to @cloud_application, notice: 'Cloud application was successfully updated.' }
         format.json { render :show, status: :ok, location: @cloud_application }
       else
-        @blueprints = Blueprint.all
+        fetch_blueprints
         format.html { render :edit }
         format.json { render json: @cloud_application.errors, status: :unprocessable_entity }
       end
