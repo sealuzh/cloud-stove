@@ -1,5 +1,10 @@
 %footer.cs-footer
   .container
+    %ul
+      %li= link_to(t('.about'), nil)
+      %li= link_to(t('.faq'), nil)
+      %li= link_to(t('.help'), nil)
+      %li= link_to(t('.pricing'), nil)
     2016, The Cloud Stove.
     - if defined?(Footnotes) && Footnotes.enabled
       = link_to(t('.toggle_debug_info'), '#footnotes_holder',
@@ -7,11 +12,6 @@
     - if Rails.env.development?
       \|
       = link_to(t('.toggle_grid'), "javascript:$('body')[0].classList.toggle('with-baseline-grid');")
-    .pull-xs-right
-      = link_to(t('.about'), nil, class: 'btn btn-sm btn-link')
-      = link_to(t('.faq'), nil, class: 'btn btn-sm btn-link')
-      = link_to(t('.help'), nil, class: 'btn btn-sm btn-link')
-      = link_to(t('.pricing'), nil, class: 'btn btn-sm btn-link')
     
 - if defined?(Footnotes) && Footnotes.enabled
   #footnotes_holder.collapse

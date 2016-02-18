@@ -7,10 +7,13 @@
 
 = markdown(@cloud_application.body)
 
-%h3 Components
+%h2 Components
+%ul
+  - @cloud_application.concrete_components.each do |component|
+    %li= link_to component.name, "#concrete_component_#{component.id}"
 - @cloud_application.concrete_components.each do |component|
   %hr
-  %section.component
+  %section[component]
     %h1
       = component.name
       - if component.component
@@ -30,11 +33,15 @@
           - unless deployment.nil?
             Deployment recommendation
             %ul
-              %li= "Provider:  #{deployment.provider}"
-              %li= "Resource:  #{deployment.resource_name}"
-              %li= "Number of instances:  #{deployment.num_instances}"
-              %li= "Total costs:  #{deployment.total_cost}"
-              %li= "Provided availability:  #{deployment.achieved_availability}"
+              - if deployment.resource['type'] == 'compute'
+                %li= pluralize(deployment.num_instances, "#{deployment.provider} #{deployment.resource_name} instance")
+                  
+              - else
+                %li Provider: #{deployment.provider}
+                %li Resource: #{deployment.resource_name}
+                %li Number of instances:  #{deployment.num_instances}
+              %li Total costs:  #{number_to_currency deployment.total_cost}
+              %li Expected availability:  #{deployment.achieved_availability}
 
 
 

@@ -8,8 +8,7 @@
 = markdown(@component.body)
 
 %b Deployment rule
-%p
-  %code= @component.deployment_rule.try(:more_attributes).to_json
+= nested_list_from_hash(@component.deployment_rule.try(:more_attributes), css_class: 'deployment_rule')
 
 .actions
   = link_to 'Edit', edit_component_path(@component), class: 'btn btn-warning'
