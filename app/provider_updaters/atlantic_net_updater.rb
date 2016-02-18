@@ -11,7 +11,7 @@ class AtlanticNetUpdater < ProviderUpdater
     rndguid = SecureRandom.uuid
     signature = OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), private_key, "#{timestamp}#{rndguid}")
     platform = 'linux'
-    
+
     request = Net::HTTP::Post.new(uri)
     request.set_form_data(
       'Version' => version,
@@ -24,12 +24,12 @@ class AtlanticNetUpdater < ProviderUpdater
     )
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
     response.value
-    
+
     response_json = JSON.parse(response.body)
     raise ProviderUpdater::Error.new(response_json['error']) if response_json['error']
-    
+
     pricelist = response_json['describe-planresponse']['plans']
-    
+
     provider = Provider.find_or_create_by(name: 'Atlantic.net')
     provider.more_attributes['pricelist'] = pricelist
     provider.more_attributes['sla'] = {
@@ -37,11 +37,11 @@ class AtlanticNetUpdater < ProviderUpdater
       availability: '1'
     }
     provider.save!
-    
+
     pricelist.each_pair do |key, instance_type|
       resource_id = instance_type['plan_name']
       resource = provider.resources.find_or_create_by(name: resource_id)
-      
+
       resource.more_attributes['type'] = 'compute'
       resource.more_attributes['cores'] = instance_type['num_cpu']
       resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['ram'].to_s) / 1024

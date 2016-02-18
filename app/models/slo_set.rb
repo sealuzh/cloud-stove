@@ -9,6 +9,10 @@ class SloSet < Base
 
   attr_accessor :_destroy
   belongs_to :concrete_component
+  has_many :deployment_recommendations, autosave: true
+  ma_accessor :availability
+  ma_accessor :costs
+
 
   def humanize
     humanized = more_attributes.map do |slo_attributes|
