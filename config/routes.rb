@@ -7,9 +7,13 @@ Rails.application.routes.draw do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
   
-  resources :blueprints, concerns: :paginatable
+  concern :copyable do
+    get 'copy/:copy', action: :new, on: :collection, as: :copy
+  end
+  
+  resources :blueprints, concerns: [ :paginatable, :copyable ]
 
-  resources :cloud_applications, path: 'apps', concerns: :paginatable do
+  resources :cloud_applications, path: 'apps', concerns: [ :paginatable, :copyable ] do
     resources :concrete_components
     member do
       get 'recommendations'

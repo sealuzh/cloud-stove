@@ -14,7 +14,11 @@ class BlueprintsController < ApplicationController
 
   # GET /blueprints/new
   def new
-    @blueprint = Blueprint.new
+    @blueprint = if params[:copy]
+      Blueprint.find(params[:copy]).deep_dup
+    else
+      Blueprint.new
+    end
   end
 
   # GET /blueprints/1/edit

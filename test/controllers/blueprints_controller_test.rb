@@ -16,6 +16,12 @@ class BlueprintsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should allow new from existing" do
+    get :new, copy: @blueprint.id
+    assert_response :success
+    assert_routing copy_blueprints_path(copy: @blueprint.id), { controller: 'blueprints', action: 'new', copy: @blueprint.id.to_s }
+  end
+
   test "should create blueprint" do
     assert_difference('Blueprint.count') do
       post :create, blueprint: { more_attributes: @blueprint.more_attributes, name: @blueprint.name }

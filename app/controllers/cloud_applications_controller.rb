@@ -15,7 +15,11 @@ class CloudApplicationsController < ApplicationController
 
   # GET /cloud_applications/new
   def new
-    @cloud_application = CloudApplication.new
+    @cloud_application = if params[:copy]
+      CloudApplication.find(params[:copy]).deep_dup
+    else
+      CloudApplication.new
+    end
   end
 
   # GET /cloud_applications/1/edit
