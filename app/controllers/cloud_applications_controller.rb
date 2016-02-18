@@ -66,9 +66,14 @@ class CloudApplicationsController < ApplicationController
 
   # GET /cloud_applications/:id/recommendations
   def recommendations
+    # TODO: Move generating deployment recommendations to background job
     @cloud_application.concrete_components.each do |component|
       component.slo_sets.each do |slo_set|
-        DeploymentRecommendation.compute_recommendation(slo_set)
+        slo_set.transaction do
+          # Remove existing deployment recommendations before generating new ones
+          slo_set.deployment_recommendations.delete_all
+          DeploymentRecommendation.compute_recommendation(slo_set)
+        end
       end
     end
     redirect_to @cloud_application
