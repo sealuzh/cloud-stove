@@ -51,6 +51,7 @@
 .actions
   -#= link_to 'Show details', @cloud_application, class: 'btn btn-link'
   = link_to 'Edit', edit_cloud_application_path(@cloud_application), class: 'btn btn-warning'
+  = link_to 'Copy', copy_cloud_applications_path(copy: @cloud_application), class: 'btn btn-success'
   = link_to 'Find optimal deployments', recommendations_cloud_application_path(@cloud_application), method: :get, data: { confirm: 'Computing recommendations will take some time. Are you sure you want this?' }, class: 'btn btn-success'
   -#= link_to 'Monitor deployment', nil, class: 'btn btn-primary'
   = link_to 'Destroy', @cloud_application, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
