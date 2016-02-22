@@ -9,4 +9,15 @@ class CloudApplication < Base
     deep_copy.concrete_components = self.concrete_components.map(&:deep_dup)
     deep_copy
   end
+
+  def provider_costs
+    provider_costs = {}
+    Provider.all.each do |provider|
+      cost_sum = 0
+      concrete_components.all.map{|c| cost_sum = c.slo_sets.first.deployment_recommendations.where(provider:provider.name).order('total_cost ASC').first.total_cost}
+      provider_costs[provider.name] = cost_sum
+    end
+    provider_costs
+  end
+  
 end
