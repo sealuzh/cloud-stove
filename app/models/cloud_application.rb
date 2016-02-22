@@ -19,5 +19,5 @@ class CloudApplication < Base
     end
     provider_costs
   end
-  
+
 end
