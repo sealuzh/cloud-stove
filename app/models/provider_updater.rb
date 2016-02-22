@@ -1,4 +1,6 @@
-class ProviderUpdater  
+class ProviderUpdater < ActiveJob::Base
+  queue_as :default
+  
   class Error < StandardError; end
   
   def self.providers
@@ -7,13 +9,9 @@ class ProviderUpdater
   end
   
   def self.update_providers
-    providers.map(&:perform)
+    providers.map(&:perform_later)
   end
-  
-  def self.perform
-    new().perform
-  end
-  
+    
   private
   def self.load_providers
     Dir[Rails.root + 'app/provider_updaters/*.rb'].each do |updater|

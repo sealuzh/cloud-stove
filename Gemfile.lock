@@ -62,6 +62,11 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.0)
     debug_inspector (0.0.2)
+    delayed_job (4.1.1)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.1.0)
+      activerecord (>= 3.0, < 5)
+      delayed_job (>= 3.0, < 5)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -259,6 +264,7 @@ DEPENDENCIES
   bourbon
   byebug
   coffee-rails (~> 4.1.0)
+  delayed_job_active_record
   font-awesome-sass (~> 4.5.0)
   guard
   guard-bundler

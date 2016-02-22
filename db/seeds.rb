@@ -142,7 +142,7 @@ if Provider.count.zero?
   # Execute the update job inline. We need the resources to create
   # deployment recommendations in the next step.
   Rails.application.config.active_job.queue_adapter = :inline
-  UpdateResourcesJob.perform_later rescue nil
+  UpdateProvidersJob.perform_later rescue nil
 end
 
 # TODO: For now, also add deployment recommendations.
