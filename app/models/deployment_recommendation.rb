@@ -12,4 +12,9 @@ class DeploymentRecommendation < Base
     engine.compute_recommendation(slo_set)
   end
 
+  def self.compute_recommendations(cloud_application)
+    engine = RecommendationEngine.new
+    engine.compute_recommendations(cloud_application)
+  end
+
 end

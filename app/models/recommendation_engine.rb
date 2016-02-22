@@ -1,5 +1,16 @@
 class RecommendationEngine
 
+
+  # TODO: Add consistency guarantees across concreteComponents
+  def compute_recommendations(cloud_application)
+    cloud_application.concrete_components.each do |component|
+      component.slo_sets.each do |slo_set|
+        compute_recommendation(slo_set)
+      end
+    end
+  end
+
+
   def compute_recommendation(slo_set)
 
     wanted_availability = slo_set.availability['$gte'].to_d
@@ -35,6 +46,8 @@ class RecommendationEngine
     end
 
   end
+
+  ## Private helper functions
 
   private
 
