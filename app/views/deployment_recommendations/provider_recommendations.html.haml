@@ -7,3 +7,8 @@
         %li.entry= pluralize(r[1].num_instances ,"#{r[1].provider} #{r[1].resource_name} instance")
         %li.entry= "Availability: #{r[1].achieved_availability}"
         %li.entry= "Cost: #{number_to_currency r[1].total_cost} per #{r[1].cost_interval}"
+
+
+%p
+.actions
+  = link_to 'Back', @cloud_application, class: 'btn btn-link'

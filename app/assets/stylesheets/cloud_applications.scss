@@ -7,3 +7,9 @@
     @extend .c-select;
   }
 }
+
+
+.concrete-component {
+  border-radius: 10px;
+  background: $gray-lighter;
+}
