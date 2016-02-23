@@ -7,13 +7,15 @@
 
 = markdown(@cloud_application.body)
 
-%p
-  %b Total Costs:
-  %ul
-    - @cloud_application.provider_costs.each do |provider, cost|
-      %li
-        = link_to provider ,provider_recommendations_cloud_application_path(@cloud_application.id, provider)
-        = number_to_currency cost
+- provider_costs = @cloud_application.provider_costs
+- unless provider_costs.nil?
+  %p
+    %b Total Costs:
+    %ul
+      - provider_costs.each do |provider, cost|
+        %li
+          = link_to provider ,provider_recommendations_cloud_application_path(@cloud_application.id, provider)
+          = number_to_currency cost
 
 %h2 Components
 %ul

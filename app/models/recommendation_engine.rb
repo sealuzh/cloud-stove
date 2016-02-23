@@ -25,7 +25,7 @@ class RecommendationEngine
       # save all recommendations that fulfill the rest of the Slos
       provider.resources.all.each do |resource|
 
-        fulfills_cost, total_cost = cost_filer(n,resource,slo_set)
+        fulfills_cost, total_cost, cost_interval = cost_filer(n,resource,slo_set)
         if !fulfills_cost
           next
         end
@@ -37,6 +37,7 @@ class RecommendationEngine
         deployment_recommendation.num_instances = n
         deployment_recommendation.slo_set = slo_set
         deployment_recommendation.total_cost = total_cost
+        deployment_recommendation.cost_interval = cost_interval
         deployment_recommendation.achieved_availability = achieved_availability
         deployment_recommendation.save
 
@@ -55,24 +56,25 @@ class RecommendationEngine
     # if there is a cost slo in the set, compute the total cost and compare it
     if slo_set.costs
 
-      total_cost = total_cost(num_instances, resource, slo_set.costs['interval'])
+      total_cost, cost_interval = total_cost(num_instances, resource, slo_set.costs['interval'])
 
       if total_cost <= slo_set.costs['$lte'].to_d
-        return true, total_cost
+        return true, total_cost, cost_interval
       else
-        return false, total_cost
+        return false, total_cost, cost_interval
       end
 
     else #if there is no cost slo, assume cost slo fulfilled and return total cost
-      return true, total_cost(num_instances,resource)
+      cost, cost_interval = total_cost(num_instances,resource)
+      return true, cost, cost_interval
     end
   end
 
   def total_cost(num_instances, resource, cost_interval = 'month')
     if cost_interval == 'month'
-      resource.price_per_month * num_instances
+      return resource.price_per_month * num_instances, 'month'
     elsif cost_interval == 'hour'
-      resource.price_per_hour * num_instances
+      return resource.price_per_hour * num_instances, 'hour'
     end
   end
 

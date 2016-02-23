@@ -4,8 +4,6 @@
     .col-md-6
       %h4= "#{r[0]}"
       %ul.recommendations
-        %li.entry= "Provider: #{r[1].provider}"
-        %li.entry= "Resource type: #{r[1].resource_name}"
-        %li.entry= "Number of instances: #{r[1].num_instances}"
-        %li.entry= "Achieved availability: #{r[1].achieved_availability}"
-        %li.entry= "Component cost: #{r[1].total_cost}"
+        %li.entry= pluralize(r[1].num_instances ,"#{r[1].provider} #{r[1].resource_name} instance")
+        %li.entry= "Availability: #{r[1].achieved_availability}"
+        %li.entry= "Cost: #{number_to_currency r[1].total_cost} per #{r[1].cost_interval}"

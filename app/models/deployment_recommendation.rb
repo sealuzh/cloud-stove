@@ -4,6 +4,7 @@ class DeploymentRecommendation < Base
   ma_accessor :resource
   ma_accessor :num_instances
   ma_accessor :achieved_availability
+  ma_accessor :cost_interval
 
 
   def self.compute_recommendation(slo_set)

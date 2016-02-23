@@ -18,6 +18,9 @@ class CloudApplication < Base
       provider_costs[provider.name] = cost_sum
     end
     provider_costs
+
+  rescue
+    return NIL
   end
 
 end
