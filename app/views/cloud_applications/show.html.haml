@@ -2,7 +2,8 @@
 .row
   .col-lg-6
     %p
-      %b Blueprint:
+      %h5
+        %b Blueprint:
       - if !@cloud_application.blueprint.nil?
         = link_to(@cloud_application.blueprint.name, @cloud_application.blueprint)
         = markdown(@cloud_application.body)
@@ -11,7 +12,8 @@
     - provider_costs = @cloud_application.provider_costs
     - unless provider_costs.nil?
       %p
-        %b Total Costs:
+        %h5
+          %b Deployment Costs:
         %ul
           - provider_costs.each do |provider, cost|
             %li
