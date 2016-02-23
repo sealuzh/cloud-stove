@@ -1,9 +1,11 @@
 %h1= "#{@provider_recommendations[0][1].provider} Recommendations for #{@cloud_application.name}"
--@provider_recommendations.each do |r|
-  %h4= "Component: #{r[0]}"
-  %ul
-    %li= "Provider: #{r[1].provider}"
-    %li= "Resource type: #{r[1].resource_name}"
-    %li= "Number of instances: #{r[1].num_instances}"
-    %li= "Achieved availability: #{r[1].achieved_availability}"
-    %li= "Component cost: #{r[1].total_cost}"
+.row
+  -@provider_recommendations.each do |r|
+    .col-md-6
+      %h4= "#{r[0]}"
+      %ul.recommendations
+        %li.entry= "Provider: #{r[1].provider}"
+        %li.entry= "Resource type: #{r[1].resource_name}"
+        %li.entry= "Number of instances: #{r[1].num_instances}"
+        %li.entry= "Achieved availability: #{r[1].achieved_availability}"
+        %li.entry= "Component cost: #{r[1].total_cost}"
