@@ -1,5 +1,7 @@
 # Making Changes
 
+* Pick a story from the backlog in the [Development Board](https://trello.com/b/UC8jBtDg/cloud-stove-development) and assign yourself to it
+
 * Create a topic branch for your changes.
   
   ```
@@ -12,7 +14,9 @@
   bundle exec rake test
   ```
 
-* Push your topic branch and [submit a pull request](https://github.com/inz/cloud-stove/compare). 
+* Make sure that your code always has appropriate test coverage.
+
+* Push your topic branch and [submit a pull request](https://github.com/inz/cloud-stove/compare). To keep our project history clean, always rebase your changes onto master.
 
 You should also periodically push your topic branches during development. That
 way, there will always be a reasonably current backup of your work in the
