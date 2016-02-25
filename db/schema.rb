@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222214553) do
+ActiveRecord::Schema.define(version: 20160225131631) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -62,26 +62,6 @@ ActiveRecord::Schema.define(version: 20160222214553) do
   add_index "concrete_components", ["cloud_application_id"], name: "index_concrete_components_on_cloud_application_id"
   add_index "concrete_components", ["component_id"], name: "index_concrete_components_on_component_id"
 
-  create_table "deployment_recommendations", force: :cascade do |t|
-    t.text     "more_attributes"
-    t.integer  "slo_set_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.decimal  "total_cost"
-    t.string   "provider"
-  end
-
-  add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"
-
-  create_table "deployment_rules", force: :cascade do |t|
-    t.text     "more_attributes"
-    t.integer  "component_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  add_index "deployment_rules", ["component_id"], name: "index_deployment_rules_on_component_id"
-
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
@@ -97,6 +77,27 @@ ActiveRecord::Schema.define(version: 20160222214553) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "deployment_recommendations", force: :cascade do |t|
+    t.text     "more_attributes"
+    t.integer  "slo_set_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.decimal  "total_cost"
+    t.string   "provider"
+    t.decimal  "provider_id"
+  end
+
+  add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"
+
+  create_table "deployment_rules", force: :cascade do |t|
+    t.text     "more_attributes"
+    t.integer  "component_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "deployment_rules", ["component_id"], name: "index_deployment_rules_on_component_id"
 
   create_table "providers", force: :cascade do |t|
     t.string   "name"

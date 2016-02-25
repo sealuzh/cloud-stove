@@ -32,6 +32,7 @@ class RecommendationEngine
 
         deployment_recommendation = DeploymentRecommendation.new
         deployment_recommendation.provider = provider.name
+        deployment_recommendation.provider_id = provider.id
         deployment_recommendation.resource_name = resource.name
         deployment_recommendation.resource = resource.more_attributes
         deployment_recommendation.num_instances = n
