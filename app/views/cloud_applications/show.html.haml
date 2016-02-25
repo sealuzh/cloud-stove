@@ -17,7 +17,7 @@
         %ul
           - provider_costs.each do |hash|
             %li
-              = link_to hash['provider_name'] ,provider_recommendations_cloud_application_path(@cloud_application.id, hash['provider_name'])
+              = link_to hash['provider_name'] ,provider_recommendations_cloud_application_path(@cloud_application.id, hash['provider_id'])
               = number_to_currency hash['cost']
 
 %h2 Components
