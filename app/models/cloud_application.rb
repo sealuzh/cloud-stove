@@ -45,10 +45,10 @@ class CloudApplication < Base
           (
           SELECT id FROM slo_sets WHERE slo_sets.concrete_component_id = c.id LIMIT 1
           )
-        )
+        ) AS slo_cost
 
       GROUP BY slo_set_id, component_id, provider_id, provider_name
-      )
+      ) AS min_cost
 
     GROUP BY provider_id, provider_name"
   end
