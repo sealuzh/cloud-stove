@@ -19,7 +19,7 @@ class BlueprintsControllerTest < ActionController::TestCase
   test "should allow new from existing" do
     get :new, copy: @blueprint.id
     assert_response :success
-    assert_routing copy_blueprints_path(copy: @blueprint.id), { controller: 'blueprints', action: 'new', copy: @blueprint.id.to_s }
+    assert_routing copy_blueprints_path(@blueprint.id), { controller: 'blueprints', action: 'new', copy: @blueprint.id.to_s }
   end
 
   test "should create blueprint" do

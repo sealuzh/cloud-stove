@@ -19,7 +19,7 @@ class CloudApplicationsControllerTest < ActionController::TestCase
   test "should get new for copy" do
     get :new, copy: @cloud_application.id
     assert_response :success
-    assert_routing copy_cloud_applications_path(copy: @cloud_application.id), { controller: 'cloud_applications', action: 'new', copy: @cloud_application.id.to_s }
+    assert_routing copy_cloud_applications_path(@cloud_application.id), { controller: 'cloud_applications', action: 'new', copy: @cloud_application.id.to_s }
   end
 
   test "should create cloud_application" do
