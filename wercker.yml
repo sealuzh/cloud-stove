@@ -6,8 +6,10 @@
 box: ruby:2.2.4
 # You can also use services such as databases. Read more on our dev center:
 # http://devcenter.wercker.com/docs/services/index.html
-# services:
-    # - postgres
+services:
+    - id: postgres
+      env:
+        POSTGRES_PASSWORD: itssosecreticantbelieveit!!1!1
     # http://devcenter.wercker.com/docs/services/postgresql.html
 
     # - mongodb
@@ -28,6 +30,7 @@ build:
               # see: https://github.com/sparklemotion/nokogiri/issues/1370
               bundle config build.nokogiri --use-system-libraries
         - bundle-install
+        - rails-database-yml
         - script:
             name: Set up db
             code: bundle exec rake db:schema:load RAILS_ENV=test
