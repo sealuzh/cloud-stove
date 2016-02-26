@@ -70,8 +70,7 @@ class CloudApplicationsController < ApplicationController
 
   # GET /cloud_applications/:id/recommendations
   def recommendations
-    # TODO: Move generating deployment recommendations to background job
-    DeploymentRecommendation.compute_recommendations(@cloud_application)
+    ComputeRecommendationsJob.perform_later(@cloud_application)
     redirect_to @cloud_application
   end
 

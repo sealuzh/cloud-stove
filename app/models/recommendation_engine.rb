@@ -1,7 +1,6 @@
 class RecommendationEngine
 
 
-  # TODO: Add consistency guarantees across concreteComponents
   def compute_recommendations(cloud_application)
     cloud_application.concrete_components.each do |component|
       component.slo_sets.each do |slo_set|

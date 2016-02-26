@@ -7,14 +7,17 @@ class DeploymentRecommendation < Base
   ma_accessor :cost_interval
 
 
-  def self.compute_recommendation(slo_set)
-    engine = RecommendationEngine.new
-    engine.compute_recommendation(slo_set)
-  end
-
-  def self.compute_recommendations(cloud_application)
+  def self.compute_for_application(cloud_application)
     engine = RecommendationEngine.new
     engine.compute_recommendations(cloud_application)
+  end
+
+  def self.delete_for_application(cloud_application)
+    cloud_application.concrete_components.all.each do |component|
+      component.slo_sets.all.each do |slo_set|
+        DeploymentRecommendation.where(slo_set_id:slo_set.id).delete_all
+      end
+    end
   end
 
 end
