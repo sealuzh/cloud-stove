@@ -16,19 +16,19 @@ specifications and requirements.
 === Setting Up a Development Environment
 
 * Clone the Cloud Stove repository
-    git clone git@github.com:inz/cloudstove.git
+    git clone git@github.com:inz/cloud-stove.git
 
 * Install an appropriate Ruby version (the currently required version is
   specified in {.ruby-version}[link:.ruby-version]). Install Ruby using
   {rbenv}[http://rbenv.org] or {RVM}[https://rvm.io].
   
   If you're using rbenv, run 
-  <code>rbenv install $(cat cloudstove/.ruby-version)</code>.
+  <code>rbenv install $(cat cloud-stove/.ruby-version)</code>.
   
-  For RVM, run <code>rvm install $(cat cloudstove/.ruby-version)</code>.
+  For RVM, run <code>rvm install $(cat cloud-stove/.ruby-version)</code>.
   
 * Set up dependencies and database
-    cd cloudstove
+    cd cloud-stove
     bin/setup
 
 === Making Changes
