@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20160225131631) do
     t.datetime "updated_at",      null: false
     t.decimal  "total_cost"
     t.string   "provider"
-    t.decimal  "provider_id"
+    t.integer  "provider_id"
   end
 
   add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"
