@@ -1,0 +1,10 @@
+// Place all the styles related to the DeploymentRecommendations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+ul.recommendations {
+  border-radius: 13px;
+  background: $gray-lighter;
+  display: block;
+  border: 2px solid stove-dark-red;
+}

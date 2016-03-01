@@ -3,9 +3,29 @@
 one:
   name: MyString
   more_attributes: MyText
-  component_id: 
+  component:
 
 two:
   name: MyString
   more_attributes: MyText
-  component_id: 
+
+
+
+component_one:
+  id: 1
+  name: WebRick Application Server
+  component: app_server
+  cloud_application: test_application
+
+component_two:
+  id: 2
+  name: SQLite database
+  component: database
+  cloud_application: test_application
+
+component_three:
+  id: 3
+  name: NginX load balancer
+  component: load_balancer
+  cloud_application: test_application
+

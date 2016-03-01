@@ -3,8 +3,10 @@ class Base < ActiveRecord::Base
 
   serialize :more_attributes, JSON
   after_initialize do |r|
-    r.more_attributes ||= {}
-    serialize_more_attributes(r) rescue true
+    if has_attribute?(:more_attributes)
+      r.more_attributes ||= {}
+      serialize_more_attributes(r) rescue true
+    end
   end
   alias_attribute :ma, :more_attributes
 

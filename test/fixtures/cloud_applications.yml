@@ -6,7 +6,14 @@
 #
 one:
   name: App One
-  blueprint_id: 5
+  blueprint: one
+
 
 two:
   name: App Two
+
+
+test_application:
+  id: 1
+  name: Chilli Sauce Web Shop
+  blueprint: one

@@ -9,3 +9,19 @@ two:
   name: MyString
   component_type: MyType
 
+
+
+app_server:
+  name: Application Server
+  component_type: app_server
+
+database:
+  name: Database
+  component_type: database
+
+
+load_balancer:
+  name: Load Balancer
+  component_type: load_balancer
+
+

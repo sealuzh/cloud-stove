@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :concrete_components
     member do
       get 'recommendations'
+      get 'provider_recommendations/:provider_id', :controller => 'deployment_recommendations', :action => 'provider_recommendations', as: :provider_recommendations
     end
   end
   resources :components
