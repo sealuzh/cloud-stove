@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class UpdateProvidersJobTest < ActiveJob::TestCase
+
   test 'provider update scheduling' do
     assert_enqueued_with(job: UpdateProvidersJob) do
       Provider.update_providers
@@ -16,4 +17,6 @@ class UpdateProvidersJobTest < ActiveJob::TestCase
       assert_includes(enqueued_jobs, updater)
     end
   end
+
+
 end
