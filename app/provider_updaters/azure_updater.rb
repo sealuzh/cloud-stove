@@ -11,13 +11,15 @@ class AzureUpdater < ProviderUpdater
     pricelist_entries = pricelist_div.css("table > tbody > tr")
 
     pricelist_entries.each do |tr|
+      logger.info tr.to_s
       cells = tr.css('td')
       # Pricing table rows have 5 cells:
       # instance id, cores, ram, disk sizes, price
       next if cells.count < 5
 
       resource_id = cells.first.text.gsub(/\s/, '')
-      price_per_hour = cells[4].css('[data-condition-region="us-east"] .price-data').attribute('data-amount').to_s
+      amounts = JSON.load(cells[4].css('>span.price-data').attribute('data-amount').to_s)
+      price_per_hour = amounts["default"]
 
       pricelist[resource_id] = {
         'type' => 'compute',
