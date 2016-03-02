@@ -1,5 +1,6 @@
 class DeploymentRecommendation < Base
   belongs_to :slo_set, autosave: true
+  belongs_to :application_deployment_recommendation, autosave: true
   ma_accessor :resource_name
   ma_accessor :resource
   ma_accessor :num_instances
@@ -18,6 +19,7 @@ class DeploymentRecommendation < Base
         DeploymentRecommendation.where(slo_set_id:slo_set.id).delete_all
       end
     end
+    ApplicationDeploymentRecommendation.where(cloud_application_id: cloud_application.id).delete_all
   end
 
 end
