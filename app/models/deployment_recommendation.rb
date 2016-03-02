@@ -1,5 +1,6 @@
 class DeploymentRecommendation < Base
   belongs_to :slo_set, autosave: true
+  belongs_to :application_deployment_recommendation, autosave: true
   ma_accessor :resource_name
   ma_accessor :resource
   ma_accessor :num_instances

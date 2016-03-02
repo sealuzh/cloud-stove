@@ -11,13 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225131631) do
+ActiveRecord::Schema.define(version: 20160302124529) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
     t.integer  "cloud_application_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.decimal  "total_cost"
+    t.integer  "provider_id"
+    t.string   "provider_name"
   end
 
   add_index "application_deployment_recommendations", ["cloud_application_id"], name: "index_app_dep_rec_on_cloud_app_id"
@@ -81,11 +84,12 @@ ActiveRecord::Schema.define(version: 20160225131631) do
   create_table "deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes"
     t.integer  "slo_set_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.decimal  "total_cost"
     t.string   "provider"
     t.integer  "provider_id"
+    t.integer  "application_deployment_recommendation_id"
   end
 
   add_index "deployment_recommendations", ["slo_set_id"], name: "index_deployment_recommendations_on_slo_set_id"
