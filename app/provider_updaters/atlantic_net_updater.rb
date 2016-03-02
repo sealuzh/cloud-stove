@@ -5,6 +5,11 @@ class AtlanticNetUpdater < ProviderUpdater
     uri = URI('https://cloudapi.atlantic.net/?Action=describe-plan')
     access_key_id = ENV['ANC_ACCESS_KEY_ID']
     private_key = ENV['ANC_PRIVATE_KEY']
+
+    if access_key_id.nil? || private_key.nil?
+      raise ArgumentError, "#{self.class.to_s} requires ANC_ACCESS_KEY_ID and ANC_PRIVATE_KEY to be set."
+    end
+
     version = '2010-12-30'
     format = 'json'
     timestamp = Time.now.to_i
