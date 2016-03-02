@@ -4,16 +4,12 @@ class RecommendationEngine
   def compute_recommendations(cloud_application)
 
     ActiveRecord::Base.transaction do
-      application_recommendations = []
       cloud_application.concrete_components.each do |component|
-        component_recommendations = []
         component.slo_sets.each do |slo_set|
-          component_recommendations <<  compute_recommendation(slo_set)
+         compute_recommendation(slo_set)
         end
-        application_recommendations << component_recommendations
       end
     end
-
 
     ActiveRecord::Base.transaction do
       Provider.all.each do |provider|
@@ -34,13 +30,10 @@ class RecommendationEngine
       end
     end
 
-
   end
 
 
   def compute_recommendation(slo_set)
-
-    recommendations = []
 
     wanted_availability = slo_set.availability['$gte'].to_d
 
@@ -71,13 +64,9 @@ class RecommendationEngine
         deployment_recommendation.achieved_availability = achieved_availability
         deployment_recommendation.save
 
-        recommendations << deployment_recommendation
-
       end
 
     end
-
-    return recommendations
 
   end
 
