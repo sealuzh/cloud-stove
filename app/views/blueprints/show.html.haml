@@ -22,5 +22,6 @@
 .actions
   = link_to 'Edit', edit_blueprint_path(@blueprint), class: 'btn btn-warning'
   = link_to 'Copy', copy_blueprints_path(@blueprint), class: 'btn btn-success'
+  = link_to t('.new_application_instance'), new_cloud_application_path(blueprint: @blueprint), class: 'btn btn-success'
   = link_to 'Destroy', @blueprint, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
   = link_to 'Back', blueprints_path, class: 'btn btn-link'

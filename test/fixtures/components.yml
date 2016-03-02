@@ -9,19 +9,23 @@ two:
   name: MyString
   component_type: MyType
 
-
-
 app_server:
   name: Application Server
   component_type: app_server
+  blueprint: multitier_app
 
 database:
   name: Database
   component_type: database
+  blueprint: multitier_app
 
 
 load_balancer:
   name: Load Balancer
   component_type: load_balancer
+  blueprint: multitier_app
 
-
+cdn:
+  name: CDN
+  component_type: cdn
+  blueprint: multitier_app

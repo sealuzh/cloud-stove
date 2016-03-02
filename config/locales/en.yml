@@ -41,6 +41,8 @@ en:
     index:
       title: "Application Blueprints"
       new: "New Blueprint"
+    show:
+      new_application_instance: "New Application Instance"
     form:
       add_component: "Add Component"
     component_fields:

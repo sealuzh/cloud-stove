@@ -17,6 +17,8 @@ class CloudApplicationsController < ApplicationController
   def new
     @cloud_application = if params[:copy]
       CloudApplication.find(params[:copy]).deep_dup
+    elsif params[:blueprint]
+      CloudApplication.new_from_blueprint(params[:blueprint])
     else
       CloudApplication.new
     end

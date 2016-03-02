@@ -17,9 +17,17 @@ class CloudApplicationsControllerTest < ActionController::TestCase
   end
 
   test "should get new for copy" do
-    get :new, copy: @cloud_application.id
+    get :new, copy: @cloud_application
     assert_response :success
-    assert_routing copy_cloud_applications_path(@cloud_application.id), { controller: 'cloud_applications', action: 'new', copy: @cloud_application.id.to_s }
+    assert_not_nil assigns(:cloud_application)
+    assert_routing copy_cloud_applications_path(@cloud_application), { controller: 'cloud_applications', action: 'new', copy: @cloud_application.to_param }
+  end
+
+  test "should get new for instance from blueprint" do
+    blueprint = blueprints(:multitier_app)
+    get :new, blueprint: blueprint.id
+    assert_response :success
+    assert_not_nil @controller.params[:blueprint]
   end
 
   test "should create cloud_application" do
