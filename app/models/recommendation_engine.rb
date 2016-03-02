@@ -2,15 +2,45 @@ class RecommendationEngine
 
 
   def compute_recommendations(cloud_application)
-    cloud_application.concrete_components.each do |component|
-      component.slo_sets.each do |slo_set|
-        compute_recommendation(slo_set)
+
+    ActiveRecord::Base.transaction do
+      application_recommendations = []
+      cloud_application.concrete_components.each do |component|
+        component_recommendations = []
+        component.slo_sets.each do |slo_set|
+          component_recommendations <<  compute_recommendation(slo_set)
+        end
+        application_recommendations << component_recommendations
       end
     end
+
+
+    ActiveRecord::Base.transaction do
+      Provider.all.each do |provider|
+        application_recommendation = ApplicationDeploymentRecommendation.create
+        application_recommendation.provider_name = provider.name
+        application_recommendation.provider_id = provider.id
+        application_recommendation.cloud_application_id = cloud_application.id
+
+        cost_sum = 0
+        cloud_application.concrete_components.all.each do |c|
+          recommendation = c.slo_sets.first.deployment_recommendations.where(provider_id:provider.id).order('total_cost ASC').first
+          cost_sum += recommendation.total_cost
+          recommendation.application_deployment_recommendation_id = application_recommendation.id
+        end
+
+        application_recommendation.total_cost = cost_sum
+        application_recommendation.save
+      end
+    end
+
+
   end
 
 
   def compute_recommendation(slo_set)
+
+    recommendations = []
 
     wanted_availability = slo_set.availability['$gte'].to_d
 
@@ -41,10 +71,13 @@ class RecommendationEngine
         deployment_recommendation.achieved_availability = achieved_availability
         deployment_recommendation.save
 
+        recommendations << deployment_recommendation
 
       end
 
     end
+
+    return recommendations
 
   end
 

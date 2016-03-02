@@ -10,15 +10,15 @@
 
   .col-lg-6
     - provider_costs = @cloud_application.provider_costs
-    - unless provider_costs.nil?
+    - unless provider_costs.blank?
       %p
         %h5
           %b Deployment Costs:
         %ul
           - provider_costs.each do |hash|
             %li
-              = link_to hash['provider_name'] ,provider_recommendations_cloud_application_path(@cloud_application.id, hash['provider_id'])
-              = number_to_currency hash['cost']
+              = link_to hash[:provider_name] ,provider_recommendations_cloud_application_path(id: @cloud_application.id,provider_id: hash[:provider_id])
+              = number_to_currency hash[:cost]
 
 %h2 Components
 %ul

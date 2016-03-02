@@ -19,6 +19,7 @@ class DeploymentRecommendation < Base
         DeploymentRecommendation.where(slo_set_id:slo_set.id).delete_all
       end
     end
+    ApplicationDeploymentRecommendation.where(cloud_application_id: cloud_application.id).delete_all
   end
 
 end
