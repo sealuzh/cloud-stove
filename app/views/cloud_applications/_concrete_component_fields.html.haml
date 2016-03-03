@@ -8,9 +8,9 @@
   .form-group
     = f.label :component
     %br
-    = f.select :component_id do
-      = Component.all.each do |component|
-        = content_tag(:option, "#{component.name} (#{component.try(:blueprint).try(:name)})", value: component.id, selected: f.object.component_id == component.id)
+    = f.select :component_id, nil, {}, class: 'component' do
+      - Component.all.each do |component|
+        = content_tag(:option, "#{component.name} (#{component.try(:blueprint).try(:name)})", value: component.id, selected: f.object.component_id == component.id, data: { blueprint_id: component.blueprint_id })
 
   .form-group
     = f.label :body

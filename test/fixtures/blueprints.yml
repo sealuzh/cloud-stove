@@ -6,4 +6,10 @@ one:
 two:
   name: MyString
 
+multitier_app:
+  name: Multitier Application
+  more_attributes: |
+    <%= {
+      body: 'Lots of information about this application type.'
+    }.to_json %>
 
