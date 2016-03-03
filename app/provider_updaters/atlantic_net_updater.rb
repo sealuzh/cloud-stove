@@ -25,7 +25,6 @@ class AtlanticNetUpdater < ProviderUpdater
       'Timestamp' => timestamp,
       'Rndguid' => rndguid,
       'Signature' => Base64.strict_encode64(signature),
-      'platform' => platform
     )
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
     response.value
@@ -44,6 +43,7 @@ class AtlanticNetUpdater < ProviderUpdater
     provider.save!
 
     pricelist.each_pair do |key, instance_type|
+      next unless instance_type['platform'] == platform
       resource_id = instance_type['plan_name']
       resource = provider.resources.find_or_create_by(name: resource_id)
 
