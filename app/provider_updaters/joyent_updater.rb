@@ -1,6 +1,6 @@
 class JoyentUpdater < ProviderUpdater
   def perform
-    uri = URI("https://www.joyent.com/assets/js/pricing.json")
+    uri = URI('https://www.joyent.com/assets/js/pricing.json')
     
     pricelist = JSON.load(open(uri))
     
