@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20160309101013) do
     t.integer  "provider_id"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.string   "type"
+    t.string   "resource_type"
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
