@@ -12,9 +12,7 @@ class AmazonUpdater < ProviderUpdater
       response = make_request('https://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js')
       pricelist = parse_callback(response.body)
 
-      ## TODO: Add correct pricelist to provider for each resource type
-      # provider.more_attributes['priceliststorage'] = pricelist
-      provider.more_attributes['pricelist-compute'] = pricelist
+      provider.more_attributes['pricelist'][:compute] = pricelist
       provider.save!
 
       # For now, get all instance types from first region (should be us-east-1)
@@ -44,9 +42,7 @@ class AmazonUpdater < ProviderUpdater
       response = make_request('http://a0.awsstatic.com/pricing/1/s3/pricing-storage-s3.min.js')
       pricelist = parse_callback(response.body)
 
-      ## TODO: Add correct pricelist to provider for each resource type
-      # provider.more_attributes['priceliststorage'] = pricelist
-
+      provider.more_attributes['pricelist'][:storage] = pricelist
       region = pricelist['config']['regions'].first
 
       region['tiers'].first['storageTypes'].each do |storageType|
@@ -67,10 +63,13 @@ class AmazonUpdater < ProviderUpdater
       provider = Provider.find_or_create_by(name: 'Amazon')
 
       sla_hash = {}
-      sla_hash[:sla_compute] = extract_sla('https://aws.amazon.com/ec2/sla/')
-      sla_hash[:sla_storage] = extract_sla('https://aws.amazon.com/s3/sla/');
+      sla_hash[:compute] = extract_sla('https://aws.amazon.com/ec2/sla/')
+      sla_hash[:storage] = extract_sla('https://aws.amazon.com/s3/sla/');
+
+      pricelist_hash = {}
 
       provider.more_attributes['sla'] = sla_hash;
+      provider.more_attributes['pricelist'] = pricelist_hash
       provider.save!
       provider
     end
