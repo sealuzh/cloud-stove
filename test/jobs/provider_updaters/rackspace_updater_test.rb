@@ -13,7 +13,8 @@ class RackspaceUpdaterTest < ActiveJob::TestCase
 
     provider = Provider.find_by(name: 'Rackspace')
     assert_not_nil provider
-    assert_not_empty provider.resources
+    assert_not_empty provider.resources.where(resource_type: 'compute')
+    assert_not_empty provider.resources.where(resource_type: 'storage')
   end
 
 end
