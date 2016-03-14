@@ -18,3 +18,6 @@
 
 # Ignore .idea directory (Rubymine)
 /.idea
+
+# Ignore simplecov coverage report
+/coverage/

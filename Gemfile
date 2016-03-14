@@ -70,6 +70,7 @@ group :development, :test do
   gem 'webmock'
 
   gem 'minitest-reporters'
+  gem 'simplecov', :require => false
 end
 
 group :development do
