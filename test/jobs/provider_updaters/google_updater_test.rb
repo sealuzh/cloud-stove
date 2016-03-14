@@ -19,7 +19,8 @@ class GoogleUpdaterTest < ActiveJob::TestCase
 
     provider = Provider.find_by(name: 'Google')
     assert_not_nil provider
-    assert_not_empty provider.resources
+    assert_not_empty provider.resources.where(resource_type: 'storage')
+    assert_not_empty provider.resources.where(resource_type: 'compute')
   end
 
 end
