@@ -68,6 +68,8 @@ group :development, :test do
   gem 'byebug'
   gem 'quiet_assets'
   gem 'webmock'
+
+  gem 'minitest-reporters'
 end
 
 group :development do
