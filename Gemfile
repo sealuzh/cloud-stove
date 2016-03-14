@@ -71,6 +71,9 @@ group :development, :test do
 
   gem 'minitest-reporters'
   gem 'simplecov', :require => false
+
+  # Acceptance test framework for web applications: https://github.com/jnicklas/capybara
+  gem 'capybara'
 end
 
 group :development do

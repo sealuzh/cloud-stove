@@ -12,6 +12,12 @@ Minitest::Reporters.use!(
     ENV,
     Minitest.backtrace_filter)
 
+require 'capybara/rails'
+class ActionDispatch::IntegrationTest
+  # Make the Capybara DSL available in all integration tests
+  include Capybara::DSL
+end
+
 class ActiveSupport::TestCase
   self.use_transactional_fixtures = true
 
