@@ -74,6 +74,10 @@ group :development, :test do
 
   # Acceptance test framework for web applications: https://github.com/jnicklas/capybara
   gem 'capybara'
+  # Support headless UI tests; Requires PhantomJS: http://phantomjs.org/
+  gem 'poltergeist'
+  # Different DB cleaning strategy is required for Javascript UI tests running in a separate thread
+  gem 'database_cleaner'
 end
 
 group :development do

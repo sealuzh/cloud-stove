@@ -6,6 +6,20 @@ class GeneralStoriesTest < ActionDispatch::IntegrationTest
     assert page.has_content?('Finely crafted Cloud Application Deployments')
   end
 
+  test 'create new application blueprint' do
+    bp = Blueprint.new(name: 'bp1', body: 'body1')
+
+    visit blueprints_path
+    first(:link, 'New Blueprint').click
+    fill_in('Name', with: bp.name)
+    fill_in('Body', with: bp.body)
+    click_link 'Add Component'
+    click_button 'Save'
+
+    assert page.has_content?('Blueprint was successfully created.')
+    assert page.has_content?(bp.name)
+  end
+
   test "get application list" do
     get cloud_applications_path
     assert_response :success
