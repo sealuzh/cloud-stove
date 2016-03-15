@@ -78,6 +78,8 @@ group :development, :test do
   gem 'poltergeist'
   # Different DB cleaning strategy is required for Javascript UI tests running in a separate thread
   gem 'database_cleaner'
+  # Fixtures replacement for integration tests
+  gem 'factory_girl_rails'
 end
 
 group :development do

@@ -6,25 +6,10 @@ class GeneralStoriesTest < ActionDispatch::IntegrationTest
     assert page.has_content?('Finely crafted Cloud Application Deployments')
   end
 
-  test 'create new application blueprint' do
-    c1 = Component.new(name: 'Application Server',
-      component_type: 'application-server',
-      body: '# Introduction
-      Explained at [Wikipedia][1]
-
-      [1]: https://en.wikipedia.org/wiki/Application_server',
-      deployment_rule: DeploymentRule.new(more_attributes: '{"when x users":"then y servers"}'))
-    c2 = Component.new(name: 'Database Server',
-      component_type: 'database',
-      body: '# Performance Considerations
-      Typically Disk I/O, RAM bound (CPU not as important)',
-      deployment_rule: DeploymentRule.new(more_attributes: '{"when x connections":"then y threads"}'))
-    bp = Blueprint.new(name: 'Multitier Architecture', body:
-      '# Basic Properties
-      - Web Frontend
-      - Application Server
-      - Database Backend',
-      components: [c1,c2])
+  test 'create new blueprint' do
+    c1 = build_stubbed(:app_component)
+    c2 = build_stubbed(:db_component)
+    bp = build_stubbed(:mt_blueprint)
 
     visit blueprints_path
     assert page.has_content?('No blueprints found')
@@ -56,6 +41,13 @@ class GeneralStoriesTest < ActionDispatch::IntegrationTest
 
   def component_fieldset(n)
     (n*2) - 1
+  end
+
+  test 'list blueprints' do
+    n = 5
+    create_list(:blueprint, n)
+    visit blueprints_path
+    assert page.has_content?("Displaying all #{n} blueprints")
   end
 
   test "get application list" do

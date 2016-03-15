@@ -11,10 +11,12 @@ Minitest::Reporters.use!(
     Minitest::Reporters::ProgressReporter.new,
     ENV,
     Minitest.backtrace_filter)
+FactoryGirl.lint
 
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
+  include FactoryGirl::Syntax::Methods
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
 
