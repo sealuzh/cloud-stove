@@ -56,9 +56,6 @@ class JoyentUpdater < ProviderUpdater
       storage_div.css('table').css('thead').css('tr').css('th').each_with_index do |resource_name, index|
         next if (index==0)
 
-        puts "RESOURCE_NAME: #{resource_name.text}"
-
-
         resource = provider.resources.find_or_create_by(name: resource_name.text)
         resource.resource_type = 'storage'
         resource.more_attributes['price_per_month_gb'] = storage_div.css('table').css('tbody').css('tr')[0].css('td')[index].text.delete('^0-9.').to_d
