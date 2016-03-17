@@ -9,7 +9,7 @@ require 'database_cleaner'
 
 require 'minitest/reporters'
 Minitest::Reporters.use!(
-    Minitest::Reporters::ProgressReporter.new(color: true),
+    Minitest::Reporters::DefaultReporter.new(color: true),
     ENV,
     Minitest.backtrace_filter)
 
