@@ -22,3 +22,22 @@ You should also periodically push your topic branches during development. That
 way, there will always be a reasonably current backup of your work in the
 upstream repository, and the whole team can get a feel on what others are
 working on.
+
+## Tips and Tricks
+
+* Continuous test execution and live reload:
+
+  ```
+  bundle exec guard
+  ```
+
+  * Automatically runs affected tests on file edit. Type `all` to manually run all tests.
+  * Automatically reloads a page on asset modification via the following browser plugin: http://livereload.com/extensions/
+
+* Save a snapshot of the page and open it in a browser for inspection:
+
+  ```
+  save_and_open_page
+  ```
+
+  * Use anywhere within an integration test.
