@@ -49,19 +49,4 @@ class GeneralStoriesTest < ActionDispatch::IntegrationTest
     visit blueprints_path
     assert page.has_content?("Displaying all #{n} blueprints")
   end
-
-  test "get application list" do
-    get cloud_applications_path
-    assert_response :success
-  end
-
-  test "get blueprints list" do
-    get blueprints_path
-    assert_response :success
-  end
-
-  test "get providers overview" do
-    get providers_path
-    assert_response :success
-  end
 end
