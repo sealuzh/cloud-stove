@@ -7,11 +7,13 @@ FactoryGirl.define do
   factory :blueprint do
     sequence(:name) { |n| "Blueprint#{n}"}
     sequence(:body) { |n| "# Blueprint body#{n} with lots of info about this app type." }
+
+    #blueprint_with_components
     transient do
-      component_count 3
+      components_count 1
     end
-    after(:create) do |component, evaluator|
-      create_list(:component, evaluator.component_count)
+    after(:create) do |blueprint, evaluator|
+      create_list(:component, evaluator.components_count, blueprint: blueprint)
     end
   end
 
