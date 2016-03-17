@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CloudApplicationTest < ActiveSupport::TestCase
   test "should create new app instance from blueprint" do
-    blueprint = blueprints(:multitier_app)
+    blueprint = create(:blueprint)
     cloud_application = CloudApplication.new_from_blueprint(blueprint)
     assert_kind_of CloudApplication, cloud_application
 

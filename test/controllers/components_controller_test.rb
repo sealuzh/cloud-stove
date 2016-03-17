@@ -3,7 +3,7 @@ require 'test_helper'
 class ComponentsControllerTest < ActionController::TestCase
 
   setup do
-    @component = components(:one)
+    @component = create(:component)
   end
 
   test "should get index" do

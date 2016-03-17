@@ -5,67 +5,71 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/minitest'
+require 'database_cleaner'
 
 require 'minitest/reporters'
 Minitest::Reporters.use!(
-    Minitest::Reporters::ProgressReporter.new,
+    Minitest::Reporters::ProgressReporter.new(color: true),
     ENV,
     Minitest.backtrace_filter)
-FactoryGirl.lint
 
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
-  include FactoryGirl::Syntax::Methods
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
 
-  # Transactional fixtures do not work for Javascript-enabled
-  # UI tests running in a separate thread
-  self.use_transactional_fixtures = false
-  # Do not load fixtures because this would be slow in combination
-  # with the deletion/truncation DB cleaning strategy
-  fixtures
-
+  # Use the PhantomJS headless WebKit browser
   Capybara.javascript_driver = :poltergeist
-  # Transaction cannot be used due to Poltergeist running in a separate thread
-  # Deletion is often faster than truncation on Postgres
-  DatabaseCleaner.strategy = :deletion
+end
+
+class ActiveSupport::TestCase
+  # Consistently use FactoryGirl instead of fixtures
+  include FactoryGirl::Syntax::Methods
+  self.use_transactional_fixtures = false
 
   setup do
+    if is_integration_test?
+      setup_integration_test
+    else
+      setup_general_test
+    end
+    DatabaseCleaner.start
+  end
+
+  teardown do
+    WebMock.disable!
+    DatabaseCleaner.clean
+  end
+
+  def is_integration_test?
+    self.is_a? ActionDispatch::IntegrationTest
+  end
+
+  def setup_integration_test
     WebMock.disable!
     # Prohibit external connections but allow requests to localhost
     # Allows for local stubbing and ignoring external requests
     # by redirecting them to localhost. See:
     # https://robots.thoughtbot.com/using-capybara-to-test-javascript-that-makes-http
     WebMock.disable_net_connect!(allow_localhost: true)
+    Rails.logger.warn 'WebMock is disabled. External services are blocked. Local services are allowed.'
+
     Capybara.current_driver = Capybara.javascript_driver
-    DatabaseCleaner.start
+    # Transaction cannot be used due to Poltergeist running in a separate thread
+    # Deletion and truncation performed roughly the same
+    DatabaseCleaner.strategy = :deletion
   end
 
-  teardown do
-    DatabaseCleaner.clean
-  end
-end
-
-class ActiveSupport::TestCase
-  self.use_transactional_fixtures = true
-
-  setup do
+  def setup_general_test
     if ENV['ENABLE_NET_CONNECT']
       Rails.logger.warn 'WebMock is disabled. External services will be used.'
     else
       WebMock.enable!
       Rails.logger.info 'WebMock is active. No external services will be used.'
     end
+    DatabaseCleaner.strategy = :transaction
   end
-
-  teardown do
-    WebMock.disable!
-  end
-
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  fixtures :all
 
   # Read web request response stub from file in `test/stubs` directory
   #

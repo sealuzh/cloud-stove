@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BlueprintsControllerTest < ActionController::TestCase
   setup do
-    @blueprint = blueprints(:one)
+    @blueprint = create(:blueprint)
   end
 
   test "should get index" do

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CloudApplicationsControllerTest < ActionController::TestCase
   setup do
-    @cloud_application = cloud_applications(:one)
+    @cloud_application = create(:cloud_application)
   end
 
   test "should get index" do
@@ -24,7 +24,7 @@ class CloudApplicationsControllerTest < ActionController::TestCase
   end
 
   test "should get new for instance from blueprint" do
-    blueprint = blueprints(:multitier_app)
+    blueprint = create(:mt_blueprint)
     get :new, blueprint: blueprint.id
     assert_response :success
     assert_not_nil @controller.params[:blueprint]
