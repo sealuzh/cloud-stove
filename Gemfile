@@ -70,7 +70,7 @@ group :development, :test do
   gem 'webmock'
 
   gem 'minitest-reporters'
-  gem 'simplecov', :require => false
+  gem 'simplecov', require: false
 
   # Acceptance test framework for web applications: https://github.com/jnicklas/capybara
   gem 'capybara'
