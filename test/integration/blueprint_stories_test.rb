@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class BlueprintStoriesTest < ActionDispatch::IntegrationTest
+  test 'list blueprints' do
+    n = 5
+    create_list(:blueprint, n)
+    visit blueprints_path
+    assert page.has_content?("Displaying all #{n} blueprints")
+  end
+
   test 'create new blueprint' do
     c1 = build_stubbed(:app_component)
     c2 = build_stubbed(:db_component)
@@ -38,10 +45,31 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     (n*2) - 1
   end
 
-  test 'list blueprints' do
-    n = 5
-    create_list(:blueprint, n)
-    visit blueprints_path
-    assert page.has_content?("Displaying all #{n} blueprints")
+  test 'edit blueprint' do
+    bp = create(:blueprint, components_count: 2)
+    num_components = bp.components.count
+    bp.name = 'Renamed Blueprint'
+
+    visit blueprint_path(bp)
+    click_link 'Edit'
+
+    fill_in 'blueprint_name', with: bp.name
+    check 'blueprint_components_attributes_1__destroy'
+    click_button 'Save'
+
+    new_bp = Blueprint.find(bp.id)
+    assert new_bp.components.count == (num_components - 1)
+    assert page.has_content?(bp.name)
+  end
+
+  test 'destroy blueprint' do
+    bp = create(:blueprint)
+
+    visit blueprint_path(bp)
+    click_link 'Destroy'
+    page.accept_alert
+
+    assert_raises(ActiveRecord::RecordNotFound) { bp.reload }
+    assert page.has_content? 'Blueprint was successfully destroyed.'
   end
 end
