@@ -2,7 +2,7 @@
   %h2= provider.name
   .resources
     -# %h3 Available Resources
-    = render provider.resources
+    = render provider.resources.compute
   %small.text-muted
     = t('.last_updated')
     = time_tag(provider.updated_at, class: 'timeago')

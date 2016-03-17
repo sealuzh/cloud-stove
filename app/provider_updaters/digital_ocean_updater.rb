@@ -17,7 +17,7 @@ class DigitalOceanUpdater < ProviderUpdater
       resource_id = instance_type['slug']
       resource = provider.resources.find_or_create_by(name: resource_id)
       
-      resource.more_attributes['type'] = 'compute'
+      resource.resource_type = 'compute'
       resource.more_attributes['cores'] = instance_type['vcpus']
       resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['memory']) / 1024
       resource.more_attributes['price_per_hour'] = instance_type['price_hourly']

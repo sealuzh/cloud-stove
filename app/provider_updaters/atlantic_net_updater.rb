@@ -47,7 +47,7 @@ class AtlanticNetUpdater < ProviderUpdater
       resource_id = instance_type['plan_name']
       resource = provider.resources.find_or_create_by(name: resource_id)
 
-      resource.more_attributes['type'] = 'compute'
+      resource.resource_type = 'compute'
       resource.more_attributes['cores'] = instance_type['num_cpu']
       resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['ram'].to_s) / 1024
       resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
