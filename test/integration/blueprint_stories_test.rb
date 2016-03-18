@@ -5,7 +5,7 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     n = 5
     create_list(:blueprint, n)
     visit blueprints_path
-    assert page.has_content?("Displaying all #{n} blueprints")
+    assert page.has_content? "Displaying all #{n} blueprints"
   end
 
   test 'create new blueprint' do
@@ -14,30 +14,30 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     bp = build_stubbed(:mt_blueprint)
 
     visit blueprints_path
-    assert page.has_content?('No blueprints found')
+    assert page.has_content? 'No blueprints found'
 
     first(:link, 'New Blueprint').click
-    fill_in('Name', with: bp.name)
-    fill_in('Body', with: bp.body)
+    fill_in 'Name', with: bp.name
+    fill_in 'Body', with: bp.body
 
     add_component(c1, 1)
     add_component(c2, 2)
     click_button 'Save'
 
-    assert page.has_content?('Blueprint was successfully created.')
-    assert page.has_content?(bp.name)
-    assert page.has_content?(c1.name)
+    assert page.has_content? 'Blueprint was successfully created.'
+    assert page.has_content? bp.name
+    assert page.has_content? c1.name
     # Check Markdown rendering of title header
     assert page.has_xpath?('//section[@class="component"]/h2[text()="Introduction"]')
-    assert page.has_content?(c2.name)
+    assert page.has_content? c2.name
   end
 
   def add_component(component, n)
     click_link 'Add Component'
     within(:xpath, "//form/div[3]/fieldset[#{component_fieldset(n)}]") do
-      fill_in('Name', with: component.name)
-      fill_in('Component type', with: component.component_type)
-      fill_in('Body', with: component.body)
+      fill_in 'Name', with: component.name
+      fill_in 'Component type', with: component.component_type
+      fill_in 'Body', with: component.body
     end
   end
 
@@ -58,8 +58,8 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     click_button 'Save'
 
     new_bp = Blueprint.find(bp.id)
-    assert new_bp.components.count == (num_components - 1)
-    assert page.has_content?(bp.name)
+    assert_equal (num_components - 1), new_bp.components.count
+    assert page.has_content? bp.name
   end
 
   test 'destroy blueprint' do
@@ -82,14 +82,14 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     click_link 'Copy'
 
     check 'blueprint_components_attributes_1__destroy'
-    fill_in('Name', with: new_name, match: :first)
+    fill_in 'Name', with: new_name, match: :first
     click_button 'Save'
 
     assert page.has_content? 'Blueprint was successfully created.'
     assert page.has_content? new_name
     new_bp = Blueprint.find_by_name new_name
-    new_bp.components.count == 1
+    assert_equal 1, new_bp.components.count
     # Updating the new blueprint must not affect the old one
-    assert bp.components.count == 2
+    assert_equal 2, bp.components.count
   end
 end
