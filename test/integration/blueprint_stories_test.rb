@@ -54,7 +54,7 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     click_link 'Edit'
 
     fill_in 'blueprint_name', with: bp.name
-    check 'blueprint_components_attributes_1__destroy'
+    check 'blueprint_components_attributes_0__destroy'
     click_button 'Save'
 
     new_bp = Blueprint.find(bp.id)
@@ -71,5 +71,25 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
 
     assert_raises(ActiveRecord::RecordNotFound) { bp.reload }
     assert page.has_content? 'Blueprint was successfully destroyed.'
+  end
+
+  test 'copy blueprint' do
+    bp = create(:blueprint, components_count: 2)
+    new_component = build_stubbed(:component)
+    new_name = 'Cloned blueprint'
+
+    visit blueprint_path(bp)
+    click_link 'Copy'
+
+    check 'blueprint_components_attributes_1__destroy'
+    fill_in('Name', with: new_name, match: :first)
+    click_button 'Save'
+
+    assert page.has_content? 'Blueprint was successfully created.'
+    assert page.has_content? new_name
+    new_bp = Blueprint.find_by_name new_name
+    new_bp.components.count == 1
+    # Updating the new blueprint must not affect the old one
+    assert bp.components.count == 2
   end
 end
