@@ -99,6 +99,7 @@ FactoryGirl.define do
 
   factory :resource do
     sequence(:name) { |n| "Resource#{n}"}
+    resource_type 'compute'
   end
 
   factory :slo_set do
