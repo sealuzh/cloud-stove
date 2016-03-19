@@ -1,9 +1,4 @@
 FactoryGirl.define do
-  factory :cloud_application do
-    sequence(:name) { |n| "CloudApplication#{n}"}
-    blueprint
-  end
-
   factory :blueprint do
     sequence(:name) { |n| "Blueprint#{n}"}
     sequence(:body) { |n| "# Blueprint body#{n} with lots of info about this app type." }
@@ -23,7 +18,7 @@ FactoryGirl.define do
       - Web Frontend
       - Application Server
       - Database Backend'
-    components { |c| [c.association(:component), c.association(:db_component)] }
+    components { |c| [c.association(:app_component), c.association(:db_component)] }
   end
 
   factory :component do
@@ -31,57 +26,35 @@ FactoryGirl.define do
     component_type 'application-server'
     sequence(:body) { |n| "# Component body#{n} with info about single component" }
     deployment_rule
-  end
 
-  factory :app_component, class: Component do
-    name 'Application Server'
-    component_type 'application-server'
-    body '# Introduction
+    factory :app_component do
+      name 'Application Server'
+      component_type 'application-server'
+      body '# Introduction
       Explained at [Wikipedia][1]
 
       [1]: https://en.wikipedia.org/wiki/Application_server'
-    deployment_rule
-  end
+      deployment_rule
+    end
 
-  factory :db_component, class: Component do
-    name 'Database Server'
-    component_type 'database'
-    body '# Performance Considerations
+    factory :db_component do
+      name 'Database Server'
+      component_type 'database'
+      body '# Performance Considerations
       Typically Disk I/O, RAM bound (CPU not as important)'
-    deployment_rule
-  end
-
-  factory :lb_component, class: Component do
-    name 'Load Balancer'
-    component_type 'load-balancer'
-    association :blueprint, factory: :mt_blueprint
-  end
-
-  factory :cdn_component, class: Component do
-    name 'CDN'
-    component_type 'cdn'
-    association :blueprint, factory: :mt_blueprint
-  end
-
-  factory :concrete_component do
-    sequence(:name) { |n| "ConcreteComponent#{n}"}
-
-    trait :webrick do
-      name 'WebRick Application Server'
-      association component: :app_component
-      cloud_application
+      deployment_rule
     end
 
-    trait :sqlite do
-      name 'SQLite Database'
-      association component: :db_component
-      cloud_application
+    factory :lb_component do
+      name 'Load Balancer'
+      component_type 'load-balancer'
+      association :blueprint, factory: :mt_blueprint
     end
 
-    trait :nginx do
-      name 'NginX Load Balancer'
-      association component: :lb_component
-      cloud_application
+    factory :cdn_component do
+      name 'CDN'
+      component_type 'cdn'
+      association :blueprint, factory: :mt_blueprint
     end
   end
 
@@ -89,17 +62,33 @@ FactoryGirl.define do
     more_attributes '{"when x users":"then y servers"}'
   end
 
-  factory :deployment_recommendation do
-    # This model initially had no columns defined.
+  factory :cloud_application do
+    sequence(:name) { |n| "Cloud application#{n}"}
+    blueprint
   end
 
-  factory :provider do
-    sequence(:name) { |n| "Provider#{n}"}
-  end
+  factory :concrete_component do
+    sequence(:name) { |n| "ConcreteComponent#{n}"}
 
-  factory :resource do
-    sequence(:name) { |n| "Resource#{n}"}
-    resource_type 'compute'
+    trait :webrick do
+      name 'WebRick Application Server'
+      association :component, factory: :app_component
+    end
+
+    trait :postgres do
+      name 'PostgreSQL Database'
+      association :component, factory: :db_component
+    end
+
+    trait :sqlite do
+      name 'SQLite Database'
+      association :component, factory: :db_component
+    end
+
+    trait :nginx do
+      name 'NginX Load Balancer'
+      association :component, factory: :lb_component
+    end
   end
 
   factory :slo_set do
@@ -120,5 +109,18 @@ FactoryGirl.define do
       more_attributes '{"availability":{"$gte":"0.999"},"costs":{"$lte":"200","currency":"$","interval":"month"}}'
       concrete_component :nginx
     end
+  end
+
+  factory :provider do
+    sequence(:name) { |n| "Provider#{n}"}
+  end
+
+  factory :resource do
+    sequence(:name) { |n| "Resource#{n}"}
+    resource_type 'compute'
+  end
+
+  factory :deployment_recommendation do
+    # This model initially had no columns defined.
   end
 end
