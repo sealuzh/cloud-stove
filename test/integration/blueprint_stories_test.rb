@@ -48,18 +48,18 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
   test 'edit blueprint' do
     bp = create(:blueprint, components_count: 2)
     num_components = bp.components.count
-    bp.name = 'Renamed Blueprint'
+    new_name = 'Renamed Blueprint'
 
     visit blueprint_path(bp)
     click_link 'Edit'
-
-    fill_in 'blueprint_name', with: bp.name
+    fill_in 'blueprint_name', with: new_name
     check 'blueprint_components_attributes_0__destroy'
     click_button 'Save'
 
     new_bp = Blueprint.find(bp.id)
     assert_equal (num_components - 1), new_bp.components.count
-    assert page.has_content? bp.name
+    assert page.has_content? 'Blueprint was successfully updated.'
+    assert page.has_content? new_name
   end
 
   test 'destroy blueprint' do
