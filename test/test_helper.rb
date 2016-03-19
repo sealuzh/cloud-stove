@@ -12,6 +12,9 @@ Minitest::Reporters.use!(
     ENV,
     Minitest.backtrace_filter)
 
+# Clean the database from any prior trash (e.g., caused by failing/interrupted tests)
+DatabaseCleaner.clean_with :deletion
+
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
