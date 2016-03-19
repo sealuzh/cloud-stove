@@ -21,3 +21,9 @@
 
 # Ignore simplecov coverage report
 /coverage/
+
+# Ignore wercker build files
+/_builds/
+/_cache/
+/_projects/
+/_steps/
