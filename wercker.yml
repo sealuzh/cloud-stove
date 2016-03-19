@@ -48,11 +48,6 @@ build:
         - script:
             name: Set up db
             code: bundle exec rake db:schema:load RAILS_ENV=test
-        
-        - script:
-            name: Seed db
-            code: bundle exec rake db:seed RAILS_ENV=test
-        
         - script:
             name: test
             code: bundle exec rake test
