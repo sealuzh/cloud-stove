@@ -41,3 +41,13 @@ working on.
   ```
 
   * Use anywhere within an integration test.
+
+* Test Wercker CI build locally
+
+  ```
+  wercker build
+  ```
+
+  * Requires wercker CLI: http://wercker.com/cli/
+  * Use `--attach-on-error` to debug failing builds
+  * Use `--docker-local` to use locally cached containers
