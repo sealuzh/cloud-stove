@@ -65,6 +65,28 @@ FactoryGirl.define do
   factory :cloud_application do
     sequence(:name) { |n| "Cloud application#{n}"}
     blueprint
+
+    # cloud_application_with_concrete_components
+    transient do
+      concrete_components_count 1
+    end
+    after(:create) do |cloud_app, evaluator|
+      create_list(:concrete_component, evaluator.concrete_components_count, cloud_application: cloud_app)
+    end
+  end
+
+  factory :rails_cloud_application, class: CloudApplication do
+    name 'Rails Application'
+    body  'A traditional wep application, let\'s say a web shop with
+      * Rails as the application server
+      * PostgreSQL as database'
+
+    after(:create) do |rails_cloud_app|
+      cc = [create(:concrete_component, :webrick, cloud_application: rails_cloud_app),
+            create(:concrete_component, :postgres, cloud_application: rails_cloud_app)]
+      rails_cloud_app.concrete_components = cc
+      rails_cloud_app.save
+    end
   end
 
   factory :concrete_component do
@@ -72,11 +94,13 @@ FactoryGirl.define do
 
     trait :webrick do
       name 'WebRick Application Server'
+      body 'Specific things about the Rails app.'
       association :component, factory: :app_component
     end
 
     trait :postgres do
       name 'PostgreSQL Database'
+      body 'Specific things about this postgres db.'
       association :component, factory: :db_component
     end
 
