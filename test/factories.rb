@@ -1,3 +1,4 @@
+require_relative 'helpers/factory_girl'
 FactoryGirl.define do
   factory :blueprint do
     sequence(:name) { |n| "Blueprint#{n}"}
