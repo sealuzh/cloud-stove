@@ -23,6 +23,30 @@ class ActionDispatch::IntegrationTest
 
   # Use the PhantomJS headless WebKit browser
   Capybara.javascript_driver = :poltergeist
+
+  # Side-load assets from concurrently running app server
+  # when using `save_and_open_page`
+  Capybara.asset_host = 'http://localhost:3000'
+
+  # Saving a page to public (for debugging) allows to serve it authentical (with assets) via `rails s`
+  def show_page
+    file = capybara_file
+    dest = Rails.root.join('public', 'capybara', file)
+    save_page dest
+    url = "http://localhost:3000/capybara/#{file}"
+    puts "File saved to: #{dest}
+          Accessible via: #{url}"
+    # Uncomment this if you want to immediately open the file
+    # system("open #{url}")
+  end
+
+  private
+
+  # Analogous to Capybara: https://github.com/jnicklas/capybara/blob/07e777742532ba4a0e4957f3241fc4fb6a903e86/lib/capybara/session.rb#L724
+  def capybara_file
+    timestamp = Time.new.strftime("%Y%m%d%H%M%S")
+    "capybara-#{timestamp}#{rand(10**10)}.html"
+  end
 end
 
 class ActiveSupport::TestCase

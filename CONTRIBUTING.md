@@ -34,13 +34,11 @@ working on.
   * Automatically runs affected tests on file edit. Type `all` to manually run all tests.
   * Automatically reloads a page on asset modification via the following browser plugin: http://livereload.com/extensions/
 
-* Save a snapshot of the page and open it in a browser for inspection:
+* Save a snapshot of the page during an integration test:
 
   ```
-  save_and_open_page
+  show_page
   ```
-
-  * Use anywhere within an integration test.
 
 * Test Wercker CI build locally
 

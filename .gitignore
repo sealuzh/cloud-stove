@@ -27,3 +27,6 @@
 /_cache/
 /_projects/
 /_steps/
+
+# Ignore Capybara page savings from IT debugging
+/public/capybara

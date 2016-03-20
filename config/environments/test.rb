@@ -12,6 +12,10 @@ Rails.application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = false
 
+  # Serve assets for JS-enabled tests and enable debug mode
+  config.assets.enabled = true
+  config.assets.debug = true
+
   # Configure static file server for tests with Cache-Control for performance.
   config.serve_static_files   = true
   config.static_cache_control = 'public, max-age=3600'
@@ -41,5 +45,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Custom Cloud Stove config
-  config.x.gravatar_host = 'localhost'
+  config.x.gravatar_host = 'localhost:3000'
 end
