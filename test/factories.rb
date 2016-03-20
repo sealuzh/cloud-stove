@@ -139,9 +139,29 @@ FactoryGirl.define do
   factory :provider do
     sequence(:name) { |n| "Provider#{n}"}
 
-    factory :aws_provider do
+    factory :amazon_provider do
       name 'Amazon'
       more_attributes FactoryHelpers::hash_from_json('provider-amazon.json')
+    end
+
+    factory :azure_provider do
+      name 'Microsoft Azure'
+      more_attributes FactoryHelpers::hash_from_json('provider-azure.json')
+    end
+
+    factory :google_provider do
+      name 'Google'
+      more_attributes FactoryHelpers::hash_from_json('provider-google.json')
+    end
+
+    factory :joyent_provider do
+      name 'Joyent'
+      more_attributes FactoryHelpers::hash_from_json('provider-joyent.json')
+    end
+
+    factory :rackspace_provider do
+      name 'Rackspace'
+      more_attributes FactoryHelpers::hash_from_json('provider-rackspace.json')
     end
   end
 

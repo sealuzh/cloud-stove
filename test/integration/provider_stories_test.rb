@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ProviderStoriesTest < ActionDispatch::IntegrationTest
   test 'listing providers' do
-    aws = create(:aws_provider)
+    amazon = create(:amazon_provider)
 
     visit providers_path
     assert page.has_content? 'Amazon'

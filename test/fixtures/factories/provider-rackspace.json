@@ -1,0 +1,166 @@
+{
+  "pricelist": {
+    "compute": {
+      "General1-1": {
+        "type": "compute",
+        "mem_gb": "1.0",
+        "cores": "1",
+        "price_per_hour": "0.037",
+        "price_per_month": "27.0",
+        "bandwidth_mbps": "200.0"
+      },
+      "General1-2": {
+        "type": "compute",
+        "mem_gb": "2.0",
+        "cores": "2",
+        "price_per_hour": "0.074",
+        "price_per_month": "54.0",
+        "bandwidth_mbps": "400.0"
+      },
+      "General1-4": {
+        "type": "compute",
+        "mem_gb": "4.0",
+        "cores": "4",
+        "price_per_hour": "0.148",
+        "price_per_month": "108.0",
+        "bandwidth_mbps": "800.0"
+      },
+      "General1-8": {
+        "type": "compute",
+        "mem_gb": "8.0",
+        "cores": "8",
+        "price_per_hour": "0.296",
+        "price_per_month": "216.0",
+        "bandwidth_mbps": "1600.0"
+      },
+      "Compute1-4": {
+        "type": "compute",
+        "mem_gb": "3.75",
+        "cores": "2",
+        "price_per_hour": "0.099",
+        "price_per_month": "72.0",
+        "bandwidth_mbps": "312.5"
+      },
+      "Compute1-8": {
+        "type": "compute",
+        "mem_gb": "7.5",
+        "cores": "4",
+        "price_per_hour": "0.198",
+        "price_per_month": "145.0",
+        "bandwidth_mbps": "625.0"
+      },
+      "Compute1-15": {
+        "type": "compute",
+        "mem_gb": "15.0",
+        "cores": "8",
+        "price_per_hour": "0.395",
+        "price_per_month": "289.0",
+        "bandwidth_mbps": "1250.0"
+      },
+      "Compute1-30": {
+        "type": "compute",
+        "mem_gb": "30.0",
+        "cores": "16",
+        "price_per_hour": "0.79",
+        "price_per_month": "577.0",
+        "bandwidth_mbps": "2500.0"
+      },
+      "Compute1-60": {
+        "type": "compute",
+        "mem_gb": "60.0",
+        "cores": "32",
+        "price_per_hour": "1.58",
+        "price_per_month": "1153.0",
+        "bandwidth_mbps": "5000.0"
+      },
+      "I/O1-15": {
+        "type": "compute",
+        "mem_gb": "15.0",
+        "cores": "4",
+        "price_per_hour": "0.555",
+        "price_per_month": "405.0",
+        "bandwidth_mbps": "1250.0"
+      },
+      "I/O1-30": {
+        "type": "compute",
+        "mem_gb": "30.0",
+        "cores": "8",
+        "price_per_hour": "1.11",
+        "price_per_month": "811.0",
+        "bandwidth_mbps": "2500.0"
+      },
+      "I/O1-60": {
+        "type": "compute",
+        "mem_gb": "60.0",
+        "cores": "16",
+        "price_per_hour": "2.22",
+        "price_per_month": "1621.0",
+        "bandwidth_mbps": "5000.0"
+      },
+      "I/O1-90": {
+        "type": "compute",
+        "mem_gb": "90.0",
+        "cores": "24",
+        "price_per_hour": "3.33",
+        "price_per_month": "2431.0",
+        "bandwidth_mbps": "7500.0"
+      },
+      "I/O1-120": {
+        "type": "compute",
+        "mem_gb": "120.0",
+        "cores": "32",
+        "price_per_hour": "4.44",
+        "price_per_month": "3241.0",
+        "bandwidth_mbps": "10000.0"
+      },
+      "Memory1-15": {
+        "type": "compute",
+        "mem_gb": "15.0",
+        "cores": "2",
+        "price_per_hour": "0.218",
+        "price_per_month": "159.0",
+        "bandwidth_mbps": "625.0"
+      },
+      "Memory1-30": {
+        "type": "compute",
+        "mem_gb": "30.0",
+        "cores": "4",
+        "price_per_hour": "0.435",
+        "price_per_month": "318.0",
+        "bandwidth_mbps": "1250.0"
+      },
+      "Memory1-60": {
+        "type": "compute",
+        "mem_gb": "60.0",
+        "cores": "8",
+        "price_per_hour": "0.87",
+        "price_per_month": "636.0",
+        "bandwidth_mbps": "2500.0"
+      },
+      "Memory1-120": {
+        "type": "compute",
+        "mem_gb": "120.0",
+        "cores": "16",
+        "price_per_hour": "1.74",
+        "price_per_month": "1270.0",
+        "bandwidth_mbps": "5000.0"
+      },
+      "Memory1-240": {
+        "type": "compute",
+        "mem_gb": "240.0",
+        "cores": "32",
+        "price_per_hour": "3.48",
+        "price_per_month": "2540.0",
+        "bandwidth_mbps": "10000.0"
+      }
+    },
+    "storage": {
+      "type": "storage",
+      "price_per_hour_gb": "0.000137",
+      "price_per_month_gb": "0.1"
+    }
+  },
+  "sla": {
+    "uri": "https://www.rackspace.com/information/legal/cloud/sla"
+  }
+}
