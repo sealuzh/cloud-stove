@@ -22,4 +22,31 @@ class CloudApplicationStoriesTest < ActionDispatch::IntegrationTest
     assert page.has_content? webrick.name
     assert page.has_content? postgres.name
   end
+
+  test 'find deployment recommendations' do
+    amazon = create(:amazon_provider)
+    google = create(:google_provider)
+    cloud_app = create(:rails_cloud_application)
+
+    visit cloud_application_path cloud_app
+    assert_equal 0, Delayed::Job.count
+    click_link 'Find optimal deployments'
+    page.accept_alert
+
+    assert_equal 1, Delayed::Job.count
+    assert_equal 0, ApplicationDeploymentRecommendation.count
+    Delayed::Job.first.invoke_job # NOTE: does not remove it. Would require `job.destroy`
+    assert_equal 2, ApplicationDeploymentRecommendation.count
+    reload_page page
+
+    assert page.has_content? 'Deployment Costs:'
+    assert page.has_content? amazon.name
+    assert page.has_content? google.name
+    # TODO: Activate when deployment recommendations are fixed
+    # assert page.has_no_content? '$0.00', 'Deployment costs must be > 0'
+
+    click_link amazon.name
+    assert page.has_content? cloud_app.concrete_components.first.name
+    assert page.has_content? cloud_app.concrete_components.last.name
+  end
 end
