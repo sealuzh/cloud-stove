@@ -81,10 +81,14 @@ FactoryGirl.define do
     body  'A traditional wep application, let\'s say a web shop with
       * Rails as the application server
       * PostgreSQL as database'
+    association :blueprint, factory: :mt_blueprint
 
     after(:create) do |rails_cloud_app|
-      cc = [create(:concrete_component, :webrick, cloud_application: rails_cloud_app),
-            create(:concrete_component, :postgres, cloud_application: rails_cloud_app)]
+      # Ensure that the back-references are set correctly (i.e., components refer to the same blueprint)
+      app_component = rails_cloud_app.blueprint.components.where(name: build_stubbed(:app_component).name).first
+      db_component = rails_cloud_app.blueprint.components.where(name: build_stubbed(:db_component).name).first
+      cc = [create(:concrete_component, :webrick, component: app_component, cloud_application: rails_cloud_app),
+            create(:concrete_component, :postgres, component: db_component, cloud_application: rails_cloud_app)]
       rails_cloud_app.concrete_components = cc
       rails_cloud_app.save
     end
