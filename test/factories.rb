@@ -138,6 +138,11 @@ FactoryGirl.define do
 
   factory :provider do
     sequence(:name) { |n| "Provider#{n}"}
+
+    factory :aws_provider do
+      name 'Amazon'
+      more_attributes FactoryHelpers::hash_from_json('provider-amazon.json')
+    end
   end
 
   factory :resource do
