@@ -28,6 +28,10 @@ class ActionDispatch::IntegrationTest
   # when using `save_and_open_page`
   Capybara.asset_host = 'http://localhost:3000'
 
+  def reload_page page
+    page.evaluate_script('window.location.reload()')
+  end
+
   # Saving a page to public (for debugging) allows to serve it authentical (with assets) via `rails s`
   def show_page
     file = capybara_file
