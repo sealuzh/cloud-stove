@@ -207,10 +207,12 @@ FactoryGirl.define do
     trait :amazon_s1 do
       name 'storage'
       more_attributes(JSON.parse '{"price_per_gb":"0.0300"}')
+      resource_type 'storage'
     end
     trait :amazon_s2 do
       name 'infrequentAccessStorage'
       more_attributes(JSON.parse '{"price_per_gb":"0.0125"}')
+      resource_type 'storage'
     end
 
     trait :google_c1 do
@@ -224,6 +226,7 @@ FactoryGirl.define do
     trait :google_s1 do
       name 'CP-BIGSTORE-STORAGE'
       more_attributes(JSON.parse '{"price_per_month_gb":0.026}')
+      resource_type 'storage'
     end
   end
 
