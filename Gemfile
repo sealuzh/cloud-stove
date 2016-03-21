@@ -68,6 +68,18 @@ group :development, :test do
   gem 'byebug'
   gem 'quiet_assets'
   gem 'webmock'
+
+  gem 'minitest-reporters'
+  gem 'simplecov', require: false
+
+  # Acceptance test framework for web applications: https://github.com/jnicklas/capybara
+  gem 'capybara'
+  # Support headless UI tests; Requires PhantomJS: http://phantomjs.org/
+  gem 'poltergeist'
+  # Different DB cleaning strategy is required for Javascript UI tests running in a separate thread
+  gem 'database_cleaner'
+  # Fixtures replacement for integration tests
+  gem 'factory_girl_rails'
 end
 
 group :development do

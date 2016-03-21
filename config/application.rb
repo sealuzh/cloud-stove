@@ -24,5 +24,9 @@ module CloudStove
     config.active_record.raise_in_transactional_callbacks = true
     
     config.active_job.queue_adapter = :delayed_job
+
+    # Custom configuration using the recommended `config.x` property:
+    # http://guides.rubyonrails.org/configuring.html#custom-configuration
+    config.x.gravatar_host = 'www.gravatar.com'
   end
 end

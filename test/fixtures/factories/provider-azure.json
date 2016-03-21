@@ -1,0 +1,238 @@
+{
+  "pricelist": {
+    "compute": {
+      "D1v2": {
+        "type": "compute",
+        "cores": "1",
+        "mem_gb": "3.5",
+        "price_per_hour": 0.073
+      },
+      "D2v2": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "7",
+        "price_per_hour": 0.146
+      },
+      "D3v2": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "14",
+        "price_per_hour": 0.293
+      },
+      "D4v2": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "28",
+        "price_per_hour": 0.585
+      },
+      "D5v2": {
+        "type": "compute",
+        "cores": "16",
+        "mem_gb": "56",
+        "price_per_hour": 1.17
+      },
+      "D11v2": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "14",
+        "price_per_hour": 0.185
+      },
+      "D12v2": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "28",
+        "price_per_hour": 0.371
+      },
+      "D13v2": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "56",
+        "price_per_hour": 0.741
+      },
+      "D14v2": {
+        "type": "compute",
+        "cores": "16",
+        "mem_gb": "112",
+        "price_per_hour": 1.482
+      },
+      "A0": {
+        "type": "compute",
+        "cores": "1",
+        "mem_gb": "0.75",
+        "price_per_hour": 0.02
+      },
+      "A1": {
+        "type": "compute",
+        "cores": "1",
+        "mem_gb": "1.75",
+        "price_per_hour": 0.06
+      },
+      "A2": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "3.5",
+        "price_per_hour": 0.12
+      },
+      "A3": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "7",
+        "price_per_hour": 0.24
+      },
+      "A4": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "14",
+        "price_per_hour": 0.48
+      },
+      "A5": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "14",
+        "price_per_hour": 0.25
+      },
+      "A6": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "28",
+        "price_per_hour": 0.55
+      },
+      "A7": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "56",
+        "price_per_hour": 1.0
+      },
+      "D1": {
+        "type": "compute",
+        "cores": "1",
+        "mem_gb": "3.5",
+        "price_per_hour": 0.067
+      },
+      "D2": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "7",
+        "price_per_hour": 0.134
+      },
+      "D3": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "14",
+        "price_per_hour": 0.268
+      },
+      "D4": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "28",
+        "price_per_hour": 0.536
+      },
+      "D11": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "14",
+        "price_per_hour": 0.175
+      },
+      "D12": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "28",
+        "price_per_hour": 0.35
+      },
+      "D13": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "56",
+        "price_per_hour": 0.7
+      },
+      "D14": {
+        "type": "compute",
+        "cores": "16",
+        "mem_gb": "112",
+        "price_per_hour": 1.387
+      },
+      "G1": {
+        "type": "compute",
+        "cores": "2",
+        "mem_gb": "28",
+        "price_per_hour": 0.61
+      },
+      "G2": {
+        "type": "compute",
+        "cores": "4",
+        "mem_gb": "56",
+        "price_per_hour": 1.22
+      },
+      "G3": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "112",
+        "price_per_hour": 2.44
+      },
+      "G4": {
+        "type": "compute",
+        "cores": "16",
+        "mem_gb": "224",
+        "price_per_hour": 4.88
+      },
+      "G5": {
+        "type": "compute",
+        "cores": "32",
+        "mem_gb": "448",
+        "price_per_hour": 8.69
+      },
+      "A8": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "56",
+        "price_per_hour": 0.975
+      },
+      "A9": {
+        "type": "compute",
+        "cores": "16",
+        "mem_gb": "112",
+        "price_per_hour": 1.95
+      },
+      "A10": {
+        "type": "compute",
+        "cores": "8",
+        "mem_gb": "56",
+        "price_per_hour": 0.78
+      },
+      "A11": {
+        "type": "compute",
+        "cores": "16",
+        "mem_gb": "112",
+        "price_per_hour": 1.56
+      }
+    },
+    "storage": {
+      "LRS": {
+        "type": "storage",
+        "price_per_month_gb": "0.024"
+      },
+      "ZRS": {
+        "type": "storage",
+        "price_per_month_gb": "0.03"
+      },
+      "GRS": {
+        "type": "storage",
+        "price_per_month_gb": "0.048"
+      },
+      "RA-GRS": {
+        "type": "storage",
+        "price_per_month_gb": "0.061"
+      }
+    }
+  },
+  "sla": {
+    "storage": {
+      "uri": "https://azure.microsoft.com/en-us/support/legal/sla/storage/v1_0/",
+      "availability": "0.9999"
+    },
+    "compute": {
+      "uri": "https://azure.microsoft.com/en-us/support/legal/sla/virtual-machines/v1_0/",
+      "availability": "0.9995"
+    }
+  }
+}
