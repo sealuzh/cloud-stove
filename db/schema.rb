@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309101013) do
+ActiveRecord::Schema.define(version: 20160505144135) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -102,6 +102,20 @@ ActiveRecord::Schema.define(version: 20160309101013) do
   end
 
   add_index "deployment_rules", ["component_id"], name: "index_deployment_rules_on_component_id"
+
+  create_table "ingredients", force: :cascade do |t|
+    t.string   "name"
+    t.text     "body"
+    t.string   "type"
+    t.text     "more_attributes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "parent_id"
+    t.integer  "template_id"
+  end
+
+  add_index "ingredients", ["parent_id"], name: "index_ingredients_on_parent_id"
+  add_index "ingredients", ["template_id"], name: "index_ingredients_on_template_id"
 
   create_table "providers", force: :cascade do |t|
     t.string   "name"
