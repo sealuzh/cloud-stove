@@ -1,5 +1,8 @@
 require_relative 'helpers/factory_girl'
 FactoryGirl.define do
+  factory :constraint do
+    ingredient nil
+  end
   factory :ingredient do
     name "MyString"
     body "MyText"
