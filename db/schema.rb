@@ -106,10 +106,9 @@ ActiveRecord::Schema.define(version: 20160505144135) do
   create_table "ingredients", force: :cascade do |t|
     t.string   "name"
     t.text     "body"
-    t.string   "type"
     t.text     "more_attributes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "parent_id"
     t.integer  "template_id"
   end
