@@ -5,8 +5,10 @@
 * Create a topic branch for your changes.
   
   ```
-  git checkout -b <my-awesome-feature>
+  git checkout -b <feature/my-awesome-feature>
   ```
+
+  Namespaces: `feature/*`, `fix/*`, `hotfix/*`, `support/*`
 
 * Make your change. Add tests for your change. Make the tests pass:
   
@@ -39,6 +41,12 @@ working on.
   ```
   show_page
   ```
+
+* Lint factories
+
+    ```
+    rake factory_girl:lint
+    ```
 
 * Test Wercker CI build locally
 
