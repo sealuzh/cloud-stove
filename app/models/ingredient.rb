@@ -9,4 +9,6 @@ class Ingredient < Base
 
   has_many :constraints
 
+  has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id'
+  has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id'
 end

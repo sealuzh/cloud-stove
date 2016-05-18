@@ -1,16 +1,22 @@
 require_relative 'helpers/factory_girl'
 FactoryGirl.define do
+  factory :dependency_constraint do
+    association :source, factory: :ingredient
+    association :target, factory: :ingredient
+  end
+
   factory :constraint do
-    ingredient nil
+    association :ingredient, factory: :ingredient
   end
+
   factory :ingredient do
-    name "MyString"
-    body "MyText"
-    type ""
-    more_attributes "MyText"
-    template_ingredient nil
-    parent_ingredient nil
+    sequence(:name) { |n| "Ingredient#{n}" }
+    sequence(:body) { |n| "# Ingredient body#{n} with lots of info about this app type." }
+    more_attributes '{}'
+    template nil
+    parent nil
   end
+
   factory :blueprint do
     sequence(:name) { |n| "Blueprint#{n}"}
     sequence(:body) { |n| "# Blueprint body#{n} with lots of info about this app type." }
