@@ -5,7 +5,7 @@ class Ingredient < Base
 
   #the reverse relations to the ones above
   has_many :children, class_name: "Ingredient", foreign_key: "parent_id"
-  has_one :instance, class_name: "Ingredient", foreign_key: "template_id"
+  has_many :instances, class_name: "Ingredient", foreign_key: "template_id"
 
   has_many :constraints
 
