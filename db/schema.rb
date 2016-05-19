@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160517132325) do
+ActiveRecord::Schema.define(version: 20160519131446) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -121,12 +121,14 @@ ActiveRecord::Schema.define(version: 20160517132325) do
     t.string   "name"
     t.text     "body"
     t.text     "more_attributes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "parent_id"
     t.integer  "template_id"
+    t.boolean  "is_template",     default: false
   end
 
+  add_index "ingredients", ["is_template"], name: "index_ingredients_on_is_template"
   add_index "ingredients", ["parent_id"], name: "index_ingredients_on_parent_id"
   add_index "ingredients", ["template_id"], name: "index_ingredients_on_template_id"
 

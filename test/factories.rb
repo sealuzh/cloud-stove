@@ -15,6 +15,10 @@ FactoryGirl.define do
     more_attributes '{}'
     template nil
     parent nil
+
+    trait :template do
+      is_template true
+    end
   end
 
   factory :blueprint do
