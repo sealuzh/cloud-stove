@@ -1,0 +1,25 @@
+#!rails runner
+
+puts "num_resources = #{Resource.count};"
+
+resources = Resource.all
+
+puts "resource_ids = #{resources.map(&:name).to_json};"
+
+prices = resources.map { |r| (r.price_per_month * 1000).to_i }
+puts "costs = #{prices.to_json};"
+
+ram_mb = resources.map { |r| (BigDecimal.new(r.ma['mem_gb']) * 1024).to_i rescue 0 }
+puts "ram = #{ram_mb.to_json};"
+
+cores = resources.map { |r| r.ma['cores'].to_i rescue 0 }
+puts "cpu = #{cores};"
+
+require 'matrix'
+transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
+  # FIXME: use actual transfer costs!
+  (resources[row].provider_id - resources[col].provider_id).abs * 100
+end.to_a.flatten
+
+puts "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_json});"
+
