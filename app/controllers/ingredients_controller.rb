@@ -11,11 +11,30 @@ class IngredientsController < ApplicationController
   end
 
   def new
-
+     @ingredient = if params[:copy]
+       Ingredient.find(params[:copy]).deep_dup
+     else
+       Ingredient.new
+     end
   end
 
   def edit
 
+  end
+
+  def create
+    @ingredient = Ingredient.new
+    @ingredient.update_attributes(ingredient_params)
+
+    respond_to do |format|
+      if @ingredient.save
+        format.html { redirect_to @ingredient, notice: 'Ingredient was successfully created.' }
+        format.json { render :show, status: :created, location: @ingredient}
+      else
+        format.html { render :new }
+        format.json { render json: @ingredient.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy
@@ -28,6 +47,10 @@ class IngredientsController < ApplicationController
 
     def set_ingredient
       @ingredient = Ingredient.find(params[:id])
+    end
+
+    def ingredient_params
+      params.require(:ingredient).permit(:name,:body)
     end
 
 end
