@@ -3,6 +3,7 @@ class IngredientsController < ApplicationController
 
   def index
     @ingredients = Ingredient.page(params[:page])
+    @roots = @ingredients.select {|i| is_root(i)}
   end
 
   def show

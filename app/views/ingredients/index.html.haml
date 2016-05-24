@@ -2,9 +2,9 @@
   = t('.title')
   = link_to t('.new'), new_ingredient_path, class: 'btn btn-success pull-right'
 
-= render @ingredients
+= render :partial => 'ingredient',:collection => @roots
 
 = paginate @ingredients
-.page-entries-info= page_entries_info @ingredients
+
 
 = link_to t('.new'), new_ingredient_path, class: 'btn btn-success'
