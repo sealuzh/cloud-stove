@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   end
   resources :resources
 
+  resources :ingredients, concerns: [:paginatable, :copyable]
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 

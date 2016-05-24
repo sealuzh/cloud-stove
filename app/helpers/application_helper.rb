@@ -43,5 +43,9 @@ module ApplicationHelper
     end
   end
 
+  def body_excerpt(ingredient)
+    truncate(ingredient.body, length: 300, separator: ' ')
+  end
+
 
 end

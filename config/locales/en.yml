@@ -30,6 +30,7 @@ en:
       blueprints: "Blueprints"
       cloud_applications: "Applications"
       providers: "Providers"
+      ingredients: "Ingredients"
     footer:
       about: "About"
       faq: "FAQ"
@@ -37,6 +38,9 @@ en:
       pricing: "Pricing"
       toggle_debug_info: "Toggle Debug Info"
       toggle_grid: "Toggle Grid"
+  ingredients:
+    index:
+      title: "Ingredients"
   blueprints:
     index:
       title: "Application Blueprints"

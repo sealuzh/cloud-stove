@@ -1,0 +1,10 @@
+%h1.clearfix
+  = t('.title')
+  = link_to t('.new'), new_ingredient_path, class: 'btn btn-success pull-right'
+
+= render @ingredients
+
+= paginate @ingredients
+.page-entries-info= page_entries_info @ingredients
+
+= link_to t('.new'), new_ingredient_path, class: 'btn btn-success'

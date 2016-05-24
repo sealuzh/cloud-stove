@@ -1,8 +1,4 @@
 module BlueprintsHelper
-  def body_excerpt(blueprint)
-    truncate(blueprint.body, length: 300, separator: ' ')
-  end
-  
   def nested_list_from_hash(hash, css_class: nil)
     items = hash.map do |key, value|
       value = if value.is_a?(Hash)
