@@ -1,0 +1,25 @@
+= form_for @ingredient do |f|
+  - if @ingredient.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@ingredient.errors.count, "error")} prohibited this blueprint from being saved:"
+      %ul
+        - @ingredient.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :parent
+    %br
+    = f.select :parent_id, {:include_blank => true} do
+      = content_tag(:option, '', value: NIL)
+      = @ingredients.each do |ingredient|
+        = content_tag(:option, ingredient.name, value: ingredient.id )
+
+  .form-group
+    = f.label :body
+    = f.text_area :body, rows: 25, class: 'form-control monospace md'
+  .form-group
+    = f.submit t('save'), class: 'btn btn-success'
+    = link_to t('cancel'), @ingredient, class: 'btn btn-link'

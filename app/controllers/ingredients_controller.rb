@@ -20,7 +20,7 @@ class IngredientsController < ApplicationController
   end
 
   def edit
-
+    @ingredients = Ingredient.all
   end
 
   def create
@@ -33,6 +33,18 @@ class IngredientsController < ApplicationController
         format.json { render :show, status: :created, location: @ingredient}
       else
         format.html { render :new }
+        format.json { render json: @ingredient.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      if @ingredient.update(ingredient_params)
+        format.html { redirect_to @ingredient, notice: 'Ingredient was successfully updated.' }
+        format.json { render :show, status: :ok, location: @ingredient}
+      else
+        format.html { render :edit }
         format.json { render json: @ingredient.errors, status: :unprocessable_entity }
       end
     end
