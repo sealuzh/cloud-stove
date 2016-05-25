@@ -1,6 +1,11 @@
 %h1= @ingredient.name
+.ingredient
+  .description
+    = markdown(@ingredient.body)
 
-= markdown(@ingredient.body)
+%h1='Ingredients'
+
+= render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'

@@ -11,12 +11,12 @@ class IngredientsController < ApplicationController
   end
 
   def new
-     @ingredients = Ingredient.all
-     @ingredient = if params[:copy]
-       Ingredient.find(params[:copy]).deep_dup
-     else
-       Ingredient.new
-     end
+   @ingredients = Ingredient.all
+   @ingredient = if params[:copy]
+     Ingredient.find(params[:copy]).deep_dup
+   else
+     Ingredient.new
+   end
   end
 
   def edit
