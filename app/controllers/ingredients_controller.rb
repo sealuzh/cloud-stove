@@ -11,6 +11,7 @@ class IngredientsController < ApplicationController
   end
 
   def new
+     @ingredients = Ingredient.all
      @ingredient = if params[:copy]
        Ingredient.find(params[:copy]).deep_dup
      else
@@ -50,7 +51,7 @@ class IngredientsController < ApplicationController
     end
 
     def ingredient_params
-      params.require(:ingredient).permit(:name,:body)
+      params.require(:ingredient).permit(:name,:body,:parent_id)
     end
 
 end

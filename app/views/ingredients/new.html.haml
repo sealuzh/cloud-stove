@@ -12,6 +12,12 @@
     = f.label :name
     = f.text_field :name, class: 'form-control'
   .form-group
+    = f.label :blueprint
+    %br
+    = f.select :parent_id do
+      = @ingredients.each do |ingredient|
+        = content_tag(:option, ingredient.name, value: ingredient.id )
+  .form-group
     = f.label :body
     = f.text_area :body, rows: 25, class: 'form-control monospace md'
   .form-group
