@@ -1,6 +1,7 @@
 class Ingredient < Base
   # Each ingredient can have a template that was used as a blueprint at instantiation
   belongs_to :parent, class_name: 'Ingredient'
+  validates_with SameIsTemplateValidator
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id'
 
