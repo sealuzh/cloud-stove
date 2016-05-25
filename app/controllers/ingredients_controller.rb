@@ -6,6 +6,10 @@ class IngredientsController < ApplicationController
     @roots = @ingredients.select {|i| is_root(i)}
   end
 
+  def roots
+    @roots = Ingredient.select {|i| is_root(i)}
+  end
+
   def show
 
   end

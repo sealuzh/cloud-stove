@@ -40,7 +40,11 @@ en:
       toggle_grid: "Toggle Grid"
   ingredients:
     index:
+      new: "New"
       title: "Ingredients"
+    roots:
+      new: "New"
+      title: "Applications"
   blueprints:
     index:
       title: "Application Blueprints"
