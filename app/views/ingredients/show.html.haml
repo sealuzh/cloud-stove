@@ -3,7 +3,7 @@
   .description
     = markdown(@ingredient.body)
 
-= unless @ingredient.children.length == 0
+- unless @ingredient.children.length == 0
   %h1='Ingredients'
 
 = render :partial => 'ingredient',:collection => @ingredient.children
