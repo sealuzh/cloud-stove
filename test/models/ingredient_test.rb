@@ -18,6 +18,15 @@ class IngredientTest < ActiveSupport::TestCase
     assert_equal [child1, child2], parent.children
   end
 
+  test 'all_leafs' do
+    root_parent = create(:ingredient)
+    child = create(:ingredient, parent: root_parent)
+    child_parent = create(:ingredient, parent: root_parent)
+    children = create_list(:ingredient, 2, parent: child_parent)
+
+    assert_equal ([child] + children), root_parent.all_leafs
+  end
+
   test 'ingredient template' do
     template = create(:ingredient, :template)
     instance = create(:ingredient, template: template)

@@ -8,6 +8,17 @@ class Ingredient < Base
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
 
+  def all_leafs(leafs = [])
+    children.each do |child|
+      if child.children.any?
+        leafs.push *child.all_leafs
+      else
+        leafs.push child
+      end
+    end
+    leafs
+  end
+
   # Each ingredient can have a parent that allows nesting composite ingredients
   belongs_to :template, class_name: 'Ingredient'
   validates_with TemplateInstantiationValidator
