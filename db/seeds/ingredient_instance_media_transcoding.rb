@@ -8,30 +8,42 @@ A batch processing application that transcodes videos to different formats
 HERE
 )
 
-media_instance.children.create(
+mgr = media_instance.children.create(
     name: 'Job Manager',
     body: <<HERE
 Specific things about the job manager.
 HERE
 )
+mgr.constraints << RamConstraint.create(
+    min_ram: 4096
+)
 
-media_instance.children.create(
+ds = media_instance.children.create(
     name: 'Job Data Store',
     body: <<HERE
 Specific things about this object store. Maybe S3. Or Riak.
 HERE
 )
+ds.constraints << RamConstraint.create(
+    min_ram: 1024
+)
 
-media_instance.children.create(
+queue = media_instance.children.create(
     name: 'Message Queue',
     body: <<HERE
 Specific things about the message queue. Probably RabbitMQ.
 HERE
 )
+queue.constraints << RamConstraint.create(
+    min_ram: 6144
+)
 
-media_instance.children.create(
+worker = media_instance.children.create(
     name: 'Transcoder',
     body: <<HERE
 Specific things about the transcoding worker.
 HERE
+)
+worker.constraints << RamConstraint.create(
+    min_ram: 2048
 )

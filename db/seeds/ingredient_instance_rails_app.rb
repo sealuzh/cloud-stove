@@ -15,30 +15,42 @@ A traditional wep application, let's say a web shop with
 HERE
 )
 
-rails_app_instance.children.create(
+app = rails_app_instance.children.create(
   name: 'Rails App',
   body: <<HERE
 Specific things about the Rails app.
 HERE
 )
+app.constraints << RamConstraint.create(
+    min_ram: 4096
+)
 
-rails_app_instance.children.create(
+db = rails_app_instance.children.create(
     name: 'PostgreSQL',
     body: <<HERE
 Specific things about the PostgreSQL db.
 HERE
 )
+db.constraints << RamConstraint.create(
+    min_ram: 2048
+)
 
-rails_app_instance.children.create(
+lb = rails_app_instance.children.create(
     name: 'NGINX',
     body: <<HERE
 Specific things about the NGINX load balancer.
 HERE
 )
+lb.constraints << RamConstraint.create(
+    min_ram: 1024
+)
 
-rails_app_instance.children.create(
+cdn = rails_app_instance.children.create(
     name: 'CDN',
     body: <<HERE
 Specific things about the CDN.
 HERE
+)
+cdn.constraints << RamConstraint.create(
+    min_ram: 2048
 )

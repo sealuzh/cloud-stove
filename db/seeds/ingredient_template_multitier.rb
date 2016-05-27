@@ -18,7 +18,7 @@ static content close to users. Find out more [on Wikipedia][1].
 HERE
 )
 
-multitier_template.children.create(
+app = multitier_template.children.create(
   name: 'Application Server',
   is_template: true,
   body: <<HERE
@@ -38,8 +38,11 @@ O’Reilly Media, 2009, ISBN 978-0-596-15636-7, e.g., on
 [1]: http://proquest.tech.safaribooksonline.de/book/software-engineering-and-development/9780596157647/7dot-scaling-a-cloud-infrastructure/id3143621
 HERE
 )
+app.constraints << RamConstraint.create(
+  min_ram: 3064
+)
 
-multitier_template.children.create(
+db = multitier_template.children.create(
   name: 'Database',
   is_template: true,
   body: <<HERE
@@ -56,8 +59,11 @@ deployments).
   as well.
 HERE
 )
+db.constraints << RamConstraint.create(
+    min_ram: 2048
+)
 
-multitier_template.children.create(
+lb = multitier_template.children.create(
   name: 'Load Balancer',
   is_template: true,
   body: <<HERE
@@ -74,8 +80,11 @@ or roll your own with Apache HTTPD/nginx/HAproxy/Pound.
 Typically Network I/O, CPU bound.
 HERE
 )
+lb.constraints << RamConstraint.create(
+    min_ram: 1024
+)
 
-multitier_template.children.create(
+cdn = multitier_template.children.create(
   name: 'Content Distribution Network',
   is_template: true,
   body: <<HERE
@@ -96,4 +105,7 @@ Use CDN service like [Cloudflare], [Incapsula], [Fastly], [Akamai],
 
 You don't roll your own CDN unless you're Netflix.
 HERE
+)
+cdn.constraints << RamConstraint.create(
+    min_ram: 2048
 )

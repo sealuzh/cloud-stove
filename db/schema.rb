@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20160607083407) do
     t.string   "type"
     t.integer  "source_id"
     t.integer  "target_id"
+    t.integer  "min_ram"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
