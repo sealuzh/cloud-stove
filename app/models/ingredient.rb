@@ -30,6 +30,7 @@ class Ingredient < Base
   has_many :constraints, dependent: :destroy
 
   # Associated dependency constraints
+  has_many :dependency_constraints, class_name: 'DependencyConstraint'
   has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
   has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
 
@@ -38,11 +39,11 @@ class Ingredient < Base
 
   # traverses the ingredients subtree and collects all dependency constraints in it
   def all_dependency_constraints
-    return dependency_constraints(self,{}).values
+    dependency_constraints_rec(self, {}).values
   end
 
   def is_root
-    return (self.parent.nil? && self.children.length != 0)
+    (self.parent.nil? && self.children.length != 0)
   end
 
   def as_json(options={})
@@ -114,9 +115,9 @@ class Ingredient < Base
   end
 
   # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
-  def dependency_constraints(current_ingredient,constraint_hash)
+  def dependency_constraints_rec(current_ingredient, constraint_hash)
       current_ingredient.children.all.each do |child|
-        constraint_hash.merge(dependency_constraints(child,constraint_hash))
+        constraint_hash.merge(dependency_constraints_rec(child, constraint_hash))
       end
 
       current_ingredient.constraints_as_source.all.each do |constraint|
@@ -128,5 +129,4 @@ class Ingredient < Base
 
       return constraint_hash
     end
-
 end
