@@ -18,6 +18,27 @@ static content close to users. Find out more [on Wikipedia][1].
 HERE
 )
 
+db = multitier_template.children.create(
+  name: 'Database',
+  is_template: true,
+  body: <<HERE
+Database backend (usually [MySQL](http://mysql.org/) or PostgreSQL)
+deployed on *single master instance* with hot standby (initial deployment)
+or *clustered* with *write-only master* and *n read slaves* (larger
+deployments).
+
+# Performance Considerations
+
+* Typically Disk I/O, RAM bound (CPU not as important).
+* Either use provided DBaaS (e.g., Google Cloud SQL, Amazon RDS) or
+  high I/O instance. For initial deployments, regular compute may be ok
+  as well.
+HERE
+)
+db.constraints << RamConstraint.create(
+    min_ram: 2048
+)
+
 app = multitier_template.children.create(
   name: 'Application Server',
   is_template: true,
@@ -41,26 +62,9 @@ HERE
 app.constraints << RamConstraint.create(
   min_ram: 3064
 )
-
-db = multitier_template.children.create(
-  name: 'Database',
-  is_template: true,
-  body: <<HERE
-Database backend (usually [MySQL](http://mysql.org/) or PostgreSQL)
-deployed on *single master instance* with hot standby (initial deployment)
-or *clustered* with *write-only master* and *n read slaves* (larger
-deployments).
-
-# Performance Considerations
-
-* Typically Disk I/O, RAM bound (CPU not as important).
-* Either use provided DBaaS (e.g., Google Cloud SQL, Amazon RDS) or
-  high I/O instance. For initial deployments, regular compute may be ok
-  as well.
-HERE
-)
-db.constraints << RamConstraint.create(
-    min_ram: 2048
+app.constraints << DependencyConstraint.create(
+  source: app,
+  target: db
 )
 
 lb = multitier_template.children.create(
@@ -81,7 +85,11 @@ Typically Network I/O, CPU bound.
 HERE
 )
 lb.constraints << RamConstraint.create(
-    min_ram: 1024
+  min_ram: 1024
+)
+lb.constraints << DependencyConstraint.create(
+  source: lb,
+  target: app
 )
 
 cdn = multitier_template.children.create(
@@ -107,5 +115,9 @@ You don't roll your own CDN unless you're Netflix.
 HERE
 )
 cdn.constraints << RamConstraint.create(
-    min_ram: 2048
+  min_ram: 2048
+)
+lb.constraints << DependencyConstraint.create(
+  source: cdn,
+  target: lb
 )

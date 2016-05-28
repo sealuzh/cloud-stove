@@ -1,6 +1,7 @@
 require 'matrix'
 class RecommendationEngine
   DEFAULT_MIN_RAM = 1
+  DEFAULT_DEPENDENCY_WEIGHT = 100
   def compute_recommendation(ingredient)
     # TODO: 1) Generate or refresh or use cached provider data 2) Generate ingredient data 3) Execute MiniZinc
     ActiveRecord::Base.transaction do
@@ -11,6 +12,7 @@ class RecommendationEngine
   def generate_minizinc_ingredients(ingredient)
     all_leafs = ingredient.all_leafs
     num_ingredients = all_leafs.count
+    # TODO: Determine semantics of dependency constraint (e.g., unidirectional or bidirectional network traffic?)
     dependencies = Hash.new
     all_leafs.each do |i|
       i.dependency_constraints.each do |dc|

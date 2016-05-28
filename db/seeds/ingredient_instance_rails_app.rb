@@ -15,16 +15,6 @@ A traditional wep application, let's say a web shop with
 HERE
 )
 
-app = rails_app_instance.children.create(
-  name: 'Rails App',
-  body: <<HERE
-Specific things about the Rails app.
-HERE
-)
-app.constraints << RamConstraint.create(
-    min_ram: 4096
-)
-
 db = rails_app_instance.children.create(
     name: 'PostgreSQL',
     body: <<HERE
@@ -32,7 +22,21 @@ Specific things about the PostgreSQL db.
 HERE
 )
 db.constraints << RamConstraint.create(
-    min_ram: 2048
+  min_ram: 2048
+)
+
+app = rails_app_instance.children.create(
+  name: 'Rails App',
+  body: <<HERE
+Specific things about the Rails app.
+HERE
+)
+app.constraints << RamConstraint.create(
+  min_ram: 4096
+)
+app.constraints << DependencyConstraint.create(
+  source: app,
+  target: db
 )
 
 lb = rails_app_instance.children.create(
@@ -42,7 +46,11 @@ Specific things about the NGINX load balancer.
 HERE
 )
 lb.constraints << RamConstraint.create(
-    min_ram: 1024
+  min_ram: 1024
+)
+lb.constraints << DependencyConstraint.create(
+  source: lb,
+  target: app
 )
 
 cdn = rails_app_instance.children.create(
@@ -52,5 +60,9 @@ Specific things about the CDN.
 HERE
 )
 cdn.constraints << RamConstraint.create(
-    min_ram: 2048
+  min_ram: 2048
+)
+lb.constraints << DependencyConstraint.create(
+  source: cdn,
+  target: lb
 )
