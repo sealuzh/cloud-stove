@@ -45,6 +45,8 @@ en:
     roots:
       new: "New"
       title: "Applications"
+    form:
+      add_dependency_constraint: "Add Dependency Constraint"
   blueprints:
     index:
       title: "Application Blueprints"

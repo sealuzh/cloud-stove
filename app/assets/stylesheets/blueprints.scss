@@ -5,7 +5,7 @@
 .blueprint, .application, .ingredient {
   @extend .card;
   @extend .card-block;
-  
+
   .name {
     @extend .card-title;
   }

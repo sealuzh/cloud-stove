@@ -19,4 +19,8 @@ class Ingredient < Base
            foreign_key: 'source_id'
   has_many :constraints_as_target, class_name: 'DependencyConstraint',
            foreign_key: 'target_id'
+
+  accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
+  accepts_nested_attributes_for :constraints, allow_destroy: true
+
 end

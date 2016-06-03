@@ -1,12 +1,25 @@
 %h1= @ingredient.name
-.ingredient
-  .description
+.row
+  .col-lg-6
+    -#.description
     = markdown(@ingredient.body)
-
+  - unless @dependency_constraints.length == 0
+    .col-lg-6
+      .description
+        %h2= 'Dependency Constraints'
+        %ul
+          - @dependency_constraints.each do |constraint|
+            %li
+              = link_to constraint.source.name, ingredient_path(constraint.source)
+              &#8596;
+              = link_to constraint.target.name, ingredient_path(constraint.target)
+%br
+%br
 - unless @ingredient.children.length == 0
-  %h1='Ingredients'
+  %h2='Ingredients'
 
-= render :partial => 'ingredient',:collection => @ingredient.children
+.ingredient
+  = render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
