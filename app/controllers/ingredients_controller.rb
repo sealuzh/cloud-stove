@@ -3,15 +3,14 @@ class IngredientsController < ApplicationController
 
   def index
     @ingredients = Ingredient.page(params[:page])
-    @roots = @ingredients.select {|i| is_root(i)}
   end
 
   def roots
-    @roots = Ingredient.select {|i| is_root(i)}
+    @roots = Ingredient.select {|i| i.is_root}
   end
 
   def show
-    @dependency_constraints = dependency_constraints(@ingredient).values
+    @dependency_constraints = @ingredient.all_dependency_constraints
   end
 
   def new
@@ -71,22 +70,6 @@ class IngredientsController < ApplicationController
 
     def ingredient_params
       params.require(:ingredient).permit(:name,:body,:parent_id, constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy])
-    end
-
-    def dependency_constraints(current_ingredient)
-      constraint_hash = {}
-      current_ingredient.children.all.each do |child|
-        constraint_hash.merge(dependency_constraints(child))
-      end
-
-      current_ingredient.constraints_as_source.all.each do |constraint|
-        constraint_hash[constraint.id] = constraint
-      end
-      current_ingredient.constraints_as_target.all.each do |constraint|
-        constraint_hash[constraint.id] = constraint
-      end
-
-      return constraint_hash
     end
 
 end
