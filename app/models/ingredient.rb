@@ -24,7 +24,7 @@ class Ingredient < Base
   accepts_nested_attributes_for :constraints, allow_destroy: true
 
   def all_dependency_constraints
-    return dependency_constraints(self).values
+    return dependency_constraints(self,{}).values
   end
 
   def is_root
@@ -32,10 +32,9 @@ class Ingredient < Base
   end
 
   private
-    def dependency_constraints(current_ingredient)
-      constraint_hash = {}
+    def dependency_constraints(current_ingredient,constraint_hash)
       current_ingredient.children.all.each do |child|
-        constraint_hash.merge(dependency_constraints(child))
+        constraint_hash.merge(dependency_constraints(child,constraint_hash))
       end
 
       current_ingredient.constraints_as_source.all.each do |constraint|
