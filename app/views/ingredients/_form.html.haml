@@ -13,10 +13,10 @@
   .form-group
     = f.label :parent
     %br
-    = f.select :parent_id, {:include_blank => true} do
-      = content_tag(:option, '', value: NIL)
+    = f.select :parent_id, {:include_blank => true, :selected => params[:parent_id]} do
       - @ingredients.each do |ingredient|
         = content_tag(:option, ingredient.name, value: ingredient.id )
+      = content_tag(:option, '', value: NIL)
 
   .form-group
     = f.label :body
