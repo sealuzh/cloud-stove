@@ -1,7 +1,7 @@
 = form_for @ingredient do |f|
   - if @ingredient.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@ingredient.errors.count, "error")} prohibited this blueprint from being saved:"
+      %h2= "#{pluralize(@ingredient.errors.count, "error")} prohibited this ingredient from being saved:"
       %ul
         - @ingredient.errors.full_messages.each do |msg|
           %li= msg

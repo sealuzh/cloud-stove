@@ -47,6 +47,8 @@ en:
       title: "Applications"
     form:
       add_dependency_constraint: "Add Dependency Constraint"
+    constraints_as_source_fields:
+      remove_dependency_constraint: "Remove Dependency Constraint"
   blueprints:
     index:
       title: "Application Blueprints"
