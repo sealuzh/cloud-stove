@@ -13,6 +13,11 @@ class IngredientsController < ApplicationController
     @dependency_constraints = @ingredient.all_dependency_constraints
   end
 
+  def copy
+    i = Ingredient.find(params[:copy]).copy
+    redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'
+  end
+
   def new
    @ingredients = Ingredient.all
    @ingredient = if params[:copy]

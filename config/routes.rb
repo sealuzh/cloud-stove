@@ -26,7 +26,8 @@ Rails.application.routes.draw do
   end
   resources :resources
 
-  resources :ingredients, concerns: [:paginatable, :copyable]
+  get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
+  resources :ingredients, concerns: [:paginatable]
   get 'root_ingredients' =>'ingredients#roots'
 
   # You can have the root of your site routed with "root"
