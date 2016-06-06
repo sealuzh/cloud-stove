@@ -1,5 +1,6 @@
 ---
 name: Multitier Architecture
+is_template: true
 body: |
   Usually, an n-tier application consists of a set of application servers
   backed by a database and fronted by load balancers, with a CDN serving
@@ -14,9 +15,9 @@ body: |
   - Web Frontend
   - Application Server
   - Database Backend
-components:
+children:
 - name: Application Server
-  component_type: application-server
+  is_template: true
   body: |
     Rails/Spring Boot/JSF/Django/Yaws/Revel app deployed on **app server
     group** using (puma|unicorn|passenger|...) to serve content (static and
@@ -32,35 +33,22 @@ components:
     [SafariBooks][1])*
 
     [1]: http://proquest.tech.safaribooksonline.de/book/software-engineering-and-development/9780596157647/7dot-scaling-a-cloud-infrastructure/id3143621
-  deployment_rule:
-    app-server:
-      required: true
-      min_instances: 1
 - name: Database
-  component_type: database
+  is_template: true
   body: |
     Database backend (usually [MySQL](http://mysql.org/) or PostgreSQL)
     deployed on *single master instance* with hot standby (initial deployment)
     or *clustered* with *write-only master* and *n read slaves* (larger
     deployments).
-    
+
     # Performance Considerations
-    
+
     * Typically Disk I/O, RAM bound (CPU not as important).
     * Either use provided DBaaS (e.g., Google Cloud SQL, Amazon RDS) or
       high I/O instance. For initial deployments, regular compute may be ok
       as well.
-  deployment_rule:
-    master:
-      required: true
-      min_instances: 1
-      max_instances: 1
-    read_replica:
-      required: false
-      min_instances: 0
-      max_instances: 3
 - name: Load Balancer
-  component_type: load-balancer
+  is_template: true
   body: |
     Load balancer distributes requests to app server group.
 
@@ -73,11 +61,8 @@ components:
     # Performance Considerations
 
     Typically Network I/O, CPU bound.
-  deployment_rule:
-    load-balancer:
-      required: false
 - name: Content Distribution Network
-  component_type: cdn
+  is_template: true
   body: |
     The **CDN** caches content close to users.
 
@@ -95,6 +80,3 @@ components:
     # Performance Considerations
 
     You don't roll your own CDN unless you're Netflix.
-  deployment_rule:
-    cdn:
-      required: false

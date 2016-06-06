@@ -1,0 +1,10 @@
+%h1.clearfix
+  = t('.title')
+  = link_to t('.new'), new_ingredient_path, class: 'btn btn-success pull-right'
+
+= render :partial => 'ingredient',:collection => @ingredients
+
+= paginate @ingredients
+
+
+= link_to t('.new'), new_ingredient_path, class: 'btn btn-success'

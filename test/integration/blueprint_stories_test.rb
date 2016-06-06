@@ -73,23 +73,23 @@ class BlueprintStoriesTest < ActionDispatch::IntegrationTest
     assert page.has_content? 'Blueprint was successfully destroyed.'
   end
 
-  test 'copy blueprint' do
-    bp = create(:blueprint, components_count: 2)
-    new_component = build_stubbed(:component)
-    new_name = 'Cloned blueprint'
-
-    visit blueprint_path(bp)
-    click_link 'Copy'
-
-    check 'blueprint_components_attributes_1__destroy'
-    fill_in 'Name', with: new_name, match: :first
-    click_button 'Save'
-
-    assert page.has_content? 'Blueprint was successfully created.'
-    assert page.has_content? new_name
-    new_bp = Blueprint.find_by_name new_name
-    assert_equal 1, new_bp.components.count
-    # Updating the new blueprint must not affect the old one
-    assert_equal 2, bp.components.count
-  end
+  # test 'copy blueprint' do
+  #   bp = create(:blueprint, components_count: 2)
+  #   new_component = build_stubbed(:component)
+  #   new_name = 'Cloned blueprint'
+  #
+  #   visit blueprint_path(bp)
+  #   click_link 'Copy'
+  #
+  #   check 'blueprint_components_attributes_1__destroy'
+  #   fill_in 'Name', with: new_name, match: :first
+  #   click_button 'Save'
+  #
+  #   assert page.has_content? 'Blueprint was successfully created.'
+  #   assert page.has_content? new_name
+  #   new_bp = Blueprint.find_by_name new_name
+  #   assert_equal 1, new_bp.components.count
+  #   # Updating the new blueprint must not affect the old one
+  #   assert_equal 2, bp.components.count
+  # end
 end

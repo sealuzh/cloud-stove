@@ -20,49 +20,18 @@ def assign_name_and_body(to_object:, from_attributes:)
   )
 end
 
-def create_blueprint(bp_attributes)
-  Blueprint.transaction do
-    blueprint = Blueprint.find_or_create_by(name: bp_attributes['name'])
-    assign_name_and_body(to_object: blueprint, from_attributes: bp_attributes)
-    blueprint.save!
-  
-    bp_attributes['components'].each do |component_attributes|
-      component = blueprint.components.find_or_create_by(
-        component_type: component_attributes['component_type']
-      )
-      assign_name_and_body(to_object: component, from_attributes: component_attributes)
-      component.save!
-      
-      deployment_rule = component.deployment_rule || component.build_deployment_rule
-      deployment_rule.more_attributes = component_attributes['deployment_rule']
-      deployment_rule.save!
-    end
-  end
-end
+def create_ingredient(ingredient_attributes)
+  Ingredient.transaction do
+    ingredient = Ingredient.find_or_create_by(name: ingredient_attributes['name'])
+    assign_name_and_body(to_object: ingredient, from_attributes: ingredient_attributes)
+    ingredient.save!
 
-def create_application_instance(app_instance_attributes)
-  CloudApplication.transaction do
-    app_instance = CloudApplication.find_or_create_by(name: app_instance_attributes['name'])
-    assign_name_and_body(to_object: app_instance, from_attributes: app_instance_attributes)
-    app_instance.blueprint_id = app_instance_attributes['blueprint_id']
-    app_instance.save!
-    
-    app_instance_attributes['concrete_components'].each do |concrete_component_attributes|
-      concrete_component = app_instance.concrete_components.find_or_create_by(
-        component_id: app_instance.blueprint.components.find_by(
-          component_type: concrete_component_attributes['component_type']
-        ).id
+    ingredient_attributes['children'].each do |child_attributes|
+      child = ingredient.children.find_or_create_by(
+        name: ingredient_attributes['name']
       )
-      assign_name_and_body(
-        to_object: concrete_component, 
-        from_attributes: concrete_component_attributes
-      )
-      concrete_component.save!
-      
-      concrete_component.slo_sets.delete_all
-      concrete_component_attributes['slo_sets'].each do |slo_attributes|
-        concrete_component.slo_sets.create!(more_attributes: slo_attributes)
-      end
+      assign_name_and_body(to_object: child, from_attributes: child_attributes)
+      child.save!
     end
   end
 end
@@ -74,7 +43,7 @@ Base.class_eval do
     stack_depth = [ caller.size - Base.base_stack_depth, 0 ].max
     record_properties = self.try(:name)
     record_properties ||= self.more_attributes.to_json
-    puts [ 
+    puts [
       ' ' * stack_depth, '- ', "Saving ", self.class.to_s, ": ", record_properties
     ].join
   end
@@ -110,29 +79,25 @@ def load_seed(file_name, context = binding)
   YAML.load(ERB.new(File.read(file_path)).result(context))
 end
 
-bp_multitier = load_seed('blueprint_multitier')
-bp_batch = load_seed('blueprint_batch_processing')
-
-# TODO: Add second blueprint
+multitier_template = load_seed('ingredient_template_multitier')
+batch_template = load_seed('ingredient_template_batch_processing')
 
 # Create Blueprints
 [
-  bp_multitier,
-  bp_batch,
-].prepare_hashes.each do |bp_attributes|
-  create_blueprint(bp_attributes)
+  multitier_template,
+  batch_template,
+].prepare_hashes.each do |attributes|
+  create_ingredient(attributes)
 end
 
-ai_rails_app = load_seed('application_instance_rails_app', binding)
-ai_media_transcoding = load_seed('application_instance_media_transcoding', binding)
-
-# TODO: Add more application instances
+rails_app_instance = load_seed('ingredient_instance_rails_app', binding)
+media_transcoding_instance = load_seed('ingredient_instance_media_transcoding', binding)
 
 [
-  ai_rails_app,
-  ai_media_transcoding,
-].prepare_hashes.each do |app_instance_attributes|
-  create_application_instance(app_instance_attributes)
+  rails_app_instance,
+  media_transcoding_instance,
+].prepare_hashes.each do |attributes|
+  create_ingredient(attributes)
 end
 
 # Update provider resources if we don't have any
@@ -144,6 +109,3 @@ if Provider.count.zero?
   Rails.application.config.active_job.queue_adapter = :inline
   UpdateProvidersJob.perform_later rescue nil
 end
-
-# TODO: For now, also add deployment recommendations.
-#       Deployment recommendations map slo sets to resources.

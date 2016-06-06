@@ -30,6 +30,7 @@ en:
       blueprints: "Blueprints"
       cloud_applications: "Applications"
       providers: "Providers"
+      ingredients: "Ingredients"
     footer:
       about: "About"
       faq: "FAQ"
@@ -37,6 +38,17 @@ en:
       pricing: "Pricing"
       toggle_debug_info: "Toggle Debug Info"
       toggle_grid: "Toggle Grid"
+  ingredients:
+    index:
+      new: "New"
+      title: "Ingredients"
+    roots:
+      new: "New"
+      title: "Applications"
+    form:
+      add_dependency_constraint: "Add Dependency Constraint"
+    constraints_as_source_fields:
+      remove_dependency_constraint: "Remove Dependency Constraint"
   blueprints:
     index:
       title: "Application Blueprints"

@@ -1,0 +1,28 @@
+%h1= @ingredient.name
+.row
+  .col-lg-6
+    -#.description
+    = markdown(@ingredient.body)
+  - unless @dependency_constraints.length == 0
+    .col-lg-6
+      .description
+        %h2= 'Dependency Constraints'
+        %ul
+          - @dependency_constraints.each do |constraint|
+            %li
+              = link_to constraint.source.name, ingredient_path(constraint.source)
+              &#8596;
+              = link_to constraint.target.name, ingredient_path(constraint.target)
+%br
+%br
+- unless @ingredient.children.length == 0
+  %h2='Ingredients'
+
+.ingredient
+  = render :partial => 'ingredient',:collection => @ingredient.children
+
+.actions
+  = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
+  = link_to 'Copy', copy_ingredient_path(@ingredient), class: 'btn btn-success'
+  = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
+  = link_to 'Back', ingredients_path, class: 'btn btn-link'

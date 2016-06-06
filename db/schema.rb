@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309101013) do
+ActiveRecord::Schema.define(version: 20160519131446) do
 
   create_table "application_deployment_recommendations", force: :cascade do |t|
     t.text     "more_attributes",      default: "{}", null: false
@@ -65,6 +65,20 @@ ActiveRecord::Schema.define(version: 20160309101013) do
   add_index "concrete_components", ["cloud_application_id"], name: "index_concrete_components_on_cloud_application_id"
   add_index "concrete_components", ["component_id"], name: "index_concrete_components_on_component_id"
 
+  create_table "constraints", force: :cascade do |t|
+    t.integer  "ingredient_id"
+    t.text     "more_attributes"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "type"
+    t.integer  "source_id"
+    t.integer  "target_id"
+  end
+
+  add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
+  add_index "constraints", ["source_id"], name: "index_constraints_on_source_id"
+  add_index "constraints", ["target_id"], name: "index_constraints_on_target_id"
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
@@ -102,6 +116,21 @@ ActiveRecord::Schema.define(version: 20160309101013) do
   end
 
   add_index "deployment_rules", ["component_id"], name: "index_deployment_rules_on_component_id"
+
+  create_table "ingredients", force: :cascade do |t|
+    t.string   "name"
+    t.text     "body"
+    t.text     "more_attributes"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "parent_id"
+    t.integer  "template_id"
+    t.boolean  "is_template",     default: false
+  end
+
+  add_index "ingredients", ["is_template"], name: "index_ingredients_on_is_template"
+  add_index "ingredients", ["parent_id"], name: "index_ingredients_on_parent_id"
+  add_index "ingredients", ["template_id"], name: "index_ingredients_on_template_id"
 
   create_table "providers", force: :cascade do |t|
     t.string   "name"

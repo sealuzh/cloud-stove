@@ -1,15 +1,16 @@
 ---
 name: Batch Processing
+is_template: true
 body: |
   A batch processing architecture is suitable for processing large numbers of
-  similar tasks that are reasonably large themselves. 
-  
+  similar tasks that are reasonably large themselves.
+
   Common examples are:
 
   - image transformation
   - media tanscoding
   - various data processing tasks
-  
+
   > Batch processing architectures are often synonymous with highly variable
   > usage patterns that have significant usage peaks (e.g., month-end
   > processing) followed by significant periods of underutilization.
@@ -20,64 +21,48 @@ body: |
   > results, grid management, and reporting job performance data.
   > <br>
   > — [AWS Batch Processing Reference Architecture][awsbatch]
-  
+
   *(This blueprint is based on the [AWS Batch Processing Reference
   Architecture][awsbatch].)*
-  
+
   [awsbatch]: http://media.amazonwebservices.com/architecturecenter/AWS_ac_ra_batch_03.pdf
-components:
+children:
 - name: Job Manager
-  component_type: job-manager
+  is_template: true
   body: |
     Users interact with the Job Manager application which is deployed on a
     compute instance. This component controls the process of accepting,
     scheduling, starting, managing, and completing batch jobs. It also provides
     access to the final results, job and worker statistics, and job progress
     information.
-    
+
     # Performance Considerations
-    
+
     * add some
-  deployment_rule:
-    job-manager:
-      required: true
-      min_instances: 1
 - name: Job Data Store
-  component_type: object-store
+  is_template: true
   body: |
     Raw job data is uploaded to a persitent object store.
-    
+
     Also, job results can be uploaded to the object store.
-    
+
     # Performance Considerations
-    
+
     * add some
-  deployment_rule:
-    master:
-      required: true
-      min_instances: 1
-      max_instances: 1
-    read_replica:
-      required: false
-      min_instances: 0
-      max_instances: 3
 - name: Input Queue
-  component_type: message-queue
+  is_template: true
   body: |
     Individual job tasks are inserted by the Job Manager in a MQM input queue
     on the user’s behalf.
-    
+
     Also, completed tasks can be inserted in another queue for chaining to a
     second processing stage.
-    
+
     # Performance Considerations
-    
+
     * add some
-  deployment_rule:
-    message-queue:
-      required: true
 - name: Worker
-  component_type: worker-node
+  is_template: true
   body: |
     Worker nodes are compute instances deployed on an auto scaling group.
     This group is a container that ensures health and scalability of worker
@@ -88,7 +73,3 @@ components:
     # Performance Considerations
 
     * add some
-  deployment_rule:
-    worker-node:
-      required: true
-      min_instances: 1
