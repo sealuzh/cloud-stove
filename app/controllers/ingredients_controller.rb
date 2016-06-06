@@ -27,6 +27,7 @@ class IngredientsController < ApplicationController
   end
 
   def create
+    @ingredients = Ingredient.all
     @ingredient = Ingredient.new
     @ingredient.update_attributes(ingredient_params)
 
@@ -42,7 +43,7 @@ class IngredientsController < ApplicationController
   end
 
   def update
-
+    @ingredients = Ingredient.all
     @ingredient.update_attributes(ingredient_params)
 
     respond_to do |format|
