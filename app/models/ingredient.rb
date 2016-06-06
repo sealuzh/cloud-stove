@@ -24,11 +24,10 @@ class Ingredient < Base
   has_many :constraints_as_target, class_name: 'DependencyConstraint',
            foreign_key: 'target_id'
 
-  #TODO: add validation to avoid being your own parent
-
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
 
+  # traverses the ingredients subtree and collects all dependency constraints in it
   def all_dependency_constraints
     return dependency_constraints(self,{}).values
   end
@@ -37,8 +36,44 @@ class Ingredient < Base
     return (self.parent.nil? && self.children.length != 0)
   end
 
+  def copy
+    copies_hash, root_copy = deep_dup({},self)
+
+    dependency_constraints = all_dependency_constraints
+
+    dependency_constraints.each do |dependency_constraint|
+      d = DependencyConstraint.new
+      d.source = copies_hash[dependency_constraint.source.id]
+      d.ingredient = copies_hash[dependency_constraint.source.id]
+      d.target = copies_hash[dependency_constraint.target.id]
+      d.save!
+    end
+    return root_copy
+  end
+
   private
-    def dependency_constraints(current_ingredient,constraint_hash)
+
+  def deep_dup(copies_hash,current)
+    copy = current.dup
+    copies_hash[current.id] = copy
+
+    current.children.each do |child|
+      copies_hash.merge(deep_dup(copies_hash,child)[0])
+    end
+
+    if !copies_hash.empty? && !current.parent.nil?
+      if copies_hash[current.parent.id]
+        copy.parent = copies_hash[current.parent.id]
+      end
+    end
+
+    copy.save!
+
+    return copies_hash,copy
+  end
+
+  # recursive postorder tree traversal method that returns a hash with all constraints found
+  def dependency_constraints(current_ingredient,constraint_hash)
       current_ingredient.children.all.each do |child|
         constraint_hash.merge(dependency_constraints(child,constraint_hash))
       end
