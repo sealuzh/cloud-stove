@@ -75,8 +75,22 @@ class IngredientsController < ApplicationController
     end
   end
 
-  def destroy
 
+  # DELETE /blueprints/1
+  # DELETE /blueprints/1.json
+  def destroy
+    if @ingredient.is_template
+      respond_to do |format|
+        format.html { redirect_to ingredients_url, notice: "Can't destroy a template ingredient." }
+        format.json { render json: "Can't destroy a template ingredient.", status: :forbidden}
+      end
+    else
+      @ingredient.delete_subtree
+      respond_to do |format|
+        format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    end
   end
 
   private

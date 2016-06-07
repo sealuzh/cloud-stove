@@ -36,6 +36,14 @@ class Ingredient < Base
     return (self.parent.nil? && self.children.length != 0)
   end
 
+  def delete_subtree
+    self.constraints.each {|constraint| constraint.destroy}
+    self.constraints_as_source.each {|constraint| constraint.destroy}
+    self.constraints_as_target.each {|constraint| constraint.destroy}
+    self.children.each {|child| child.delete_subtree}
+    self.destroy
+  end
+
   def as_json(options={})
     hash = {}
     hash[:id] = self.id
