@@ -30,10 +30,12 @@ build:
               # NOTE: Does not check for legacy version
               if ! which phantomjs; then
                 INSTALL_DIR=/usr/local/share &&
+                # cdn_url=http://cnpmjs.org/downloads &&
+                cdn_url=https://github.com/Medium/phantomjs/releases/download/v2.1.1 &&
                 PHANTOM_JS=phantomjs-$VERSION-linux-x86_64 &&
                 PHANTOM_JS_ZIP=$PHANTOM_JS.tar.bz2 &&
                 cd $INSTALL_DIR &&
-                curl --remote-name --location -- https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS_ZIP &&
+                curl --remote-name --location -- ${cdn_url}/$PHANTOM_JS_ZIP &&
                 tar xjf $PHANTOM_JS_ZIP &&
                 ln -s $INSTALL_DIR/$PHANTOM_JS/bin/phantomjs /usr/local/bin/phantomjs
               fi
