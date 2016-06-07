@@ -4,9 +4,7 @@
 
   .form-group
     = f.label :target
-    = f.select :target_id do
-      - @ingredients.each do |ingredient|
-        = content_tag(:option, ingredient.name, value: ingredient.id )
+    = f.select :target_id, (@ingredients - [@ingredient]).map { |i| [ i.name, i.id ] }
 
   .form-group
     = f.check_box :_destroy
