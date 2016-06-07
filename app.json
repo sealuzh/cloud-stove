@@ -17,12 +17,18 @@
     },
     "SECRET_KEY_BASE": {
       "generator": "secret"
-    }
+    },
+    "DEPLOY_TASKS": "db:migrate"
   },
   "success_url": "/",
   "addons": [ "heroku-postgresql:hobby-dev" ],
   "formation": [
     { "process": "web", "quantity": 1},
     { "process": "worker", "quantity": 1}
+  ],
+  "buildpacks": [
+    { "url": "https://github.com/heroku/heroku-buildpack-ruby" },
+    { "url": "https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks" },
+    { "url": "https://github.com/peterkeen/heroku-buildpack-vendorbinaries" }
   ]
 }

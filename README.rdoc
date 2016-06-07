@@ -52,24 +52,7 @@ with a staging application at https://fathomless-escarpment-2251-eu.herokuapp.co
 To inspect and modify the staging app's configuration use the 
 {application dashboard}[https://dashboard.heroku.com/apps/fathomless-escarpment-2251-eu/].
 
-The app uses the following buildpacks:
-
-    1. https://github.com/heroku/heroku-buildpack-ruby
-    2. https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks
-
-Show all currently active buildpacks for the app with
-
-    heroku buildpacks --app fathomless-escarpment-2251-eu
-
-Using the <code>rake-deploy-tasks</code> buildpack, we automatically run pending database migrations after each deploy (set through <code>DEPLOY_TASKS</code>):
-
-    heroku config:set DEPLOY_TASKS='db:migrate'
-
-To add the buildpack to a (new) Heroku app, run:
-
-    heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby --app <app-name>
-    heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks --app <app-name>
-    heroku config:set DEPLOY_TASKS='db:migrate'
+The app uses the {rake-deploy-tasks}[https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks] buildpack to automatically run pending migrations on deploy, as well as the {vendorbinaries}[https://github.com/peterkeen/heroku-buildpack-vendorbinaries] buildpack to pull in MiniZinc for generating recommendations.
 
 == Communication & Organization
 
