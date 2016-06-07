@@ -36,6 +36,15 @@ class Ingredient < Base
     return (self.parent.nil? && self.children.length != 0)
   end
 
+  def as_json(options={})
+    hash = {}
+    hash[:id] = self.id
+    hash[:name] = self.name
+    hash[:body] = self.body
+    hash[:children] = self.children.collect {|c| c.as_json}
+    return hash
+  end
+
   def copy
     copies_hash, root_copy = deep_dup({},self)
 
