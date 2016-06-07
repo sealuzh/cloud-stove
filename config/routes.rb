@@ -10,10 +10,10 @@ Rails.application.routes.draw do
   concern :copyable do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
   end
-  
-  resources :providers do
-    put :update_all, on: :collection
-  end
+
+  put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
+  get 'providers' => 'providers#index', as: :providers
+
   resources :resources
 
   get 'applications' =>'ingredients#applications', as: :applications
