@@ -12,15 +12,13 @@ class RecommendationEngine
   def generate_minizinc_ingredients(ingredient)
     all_leafs = ingredient.all_leafs
     num_ingredients = all_leafs.count
-    # TODO: Determine semantics of dependency constraint (e.g., unidirectional or bidirectional network traffic?)
     dependencies = Hash.new
     all_leafs.each do |i|
       i.dependency_constraints.each do |dc|
         source_index = all_leafs.index(dc.source)
         target_index = all_leafs.index(dc.target)
-        # TODO: Determine semantics of dependency constraint (e.g., unidirectional or bidirectional network traffic?)
         dependencies[[source_index,target_index]] = DEFAULT_DEPENDENCY_WEIGHT
-        # dependencies[[target_index,source_index]] = DEFAULT_DEPENDENCY_WEIGHT
+        dependencies[[target_index,source_index]] = DEFAULT_DEPENDENCY_WEIGHT
       end
     end
     inter_ingredient_traffic = Matrix.build(num_ingredients, num_ingredients) do |row, col|
