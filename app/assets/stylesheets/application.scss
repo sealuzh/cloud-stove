@@ -14,10 +14,6 @@
 @import "pagination";
 
 @import "welcome";
-@import "blueprints";
-@import "cloud_applications";
-@import "deployment_recommendations";
-@import "components";
 @import "providers";
 @import "resources";
 @import "ingredient";
@@ -34,4 +30,10 @@ html.turbolinks-progress-bar::before {
 
 blockquote {
   @extend .blockquote;
+}
+
+.form-group {
+  select {
+    @extend .c-select;
+  }
 }

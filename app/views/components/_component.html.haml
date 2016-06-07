@@ -1,7 +1,0 @@
-.component
-  .type Type: #{component.component_type}
-  .name Name: #{component.name}
-  - if component.more_attributes['dependencies']
-    %pre= component.more_attributes['dependencies'].map { |d| d['name'] }.to_json
-  - else
-    = debug component.more_attributes
