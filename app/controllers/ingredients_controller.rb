@@ -3,14 +3,27 @@ class IngredientsController < ApplicationController
 
   def index
     @ingredients = Ingredient.page(params[:page])
+    respond_to do |format|
+      format.html
+      format.json {render json: @ingredients}
+    end
   end
 
   def roots
     @roots = Ingredient.select {|i| i.is_root}
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @roots}
+    end
   end
 
   def show
     @dependency_constraints = @ingredient.all_dependency_constraints
+    respond_to do |format|
+      format.html
+      format.json {render json: @ingredient}
+    end
   end
 
   def copy
@@ -65,8 +78,6 @@ class IngredientsController < ApplicationController
   def destroy
 
   end
-
-
 
   private
 
