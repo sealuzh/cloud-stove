@@ -52,7 +52,7 @@ class IngredientsController < ApplicationController
     respond_to do |format|
       if @ingredient.save
         format.html { redirect_to @ingredient, notice: 'Ingredient was successfully created.' }
-        format.json { render :show, status: :created, location: @ingredient}
+        format.json { render json: @ingredient, status: :created}
       else
         format.html { render :new }
         format.json { render json: @ingredient.errors, status: :unprocessable_entity }
@@ -67,7 +67,7 @@ class IngredientsController < ApplicationController
     respond_to do |format|
       if @ingredient.save
         format.html { redirect_to @ingredient, notice: 'Ingredient was successfully updated.' }
-        format.json { render :show, status: :ok, location: @ingredient}
+        format.json { render json: @ingredient, status: :ok}
       else
         format.html { render :edit }
         format.json { render json: @ingredient.errors, status: :unprocessable_entity }
