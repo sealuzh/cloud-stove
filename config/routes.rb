@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   end
   resources :resources
 
-  get 'applications' =>'ingredients#roots', as: :applications
+  get 'applications' =>'ingredients#applications', as: :applications
   get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
   resources :ingredients, concerns: [:paginatable]
 

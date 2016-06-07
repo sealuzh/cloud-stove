@@ -9,7 +9,7 @@ class IngredientsController < ApplicationController
     end
   end
 
-  def roots
+  def applications
     @roots = Ingredient.select {|i| i.is_root}
 
     respond_to do |format|
