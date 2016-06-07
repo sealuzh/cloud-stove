@@ -1,0 +1,1 @@
+PATH=$PATH:$(pwd)/$(find minizinc* -type d -name bin)
