@@ -129,6 +129,6 @@ class Ingredient < Base
         constraint_hash[constraint.id] = constraint
       end
 
-      return constraint_hash
+      constraint_hash
     end
 end
