@@ -14,8 +14,6 @@ Rails.application.routes.draw do
   put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
   get 'providers' => 'providers#index', as: :providers
 
-  resources :resources
-
   get 'applications' =>'ingredients#applications', as: :applications
   get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
   resources :ingredients, concerns: [:paginatable]
