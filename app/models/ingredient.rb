@@ -42,7 +42,8 @@ class Ingredient < Base
     hash[:name] = self.name
     hash[:body] = self.body
     hash[:children] = self.children.collect {|c| c.as_json}
-    return hash
+    hash[:constraints] = self.constraints.collect {|c| c.as_json}
+    hash
   end
 
   def copy
