@@ -11,16 +11,6 @@ Rails.application.routes.draw do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
   end
   
-  resources :blueprints, concerns: [ :paginatable, :copyable ]
-
-  resources :cloud_applications, path: 'apps', concerns: [ :paginatable, :copyable ] do
-    resources :concrete_components
-    member do
-      get 'recommendations'
-      get 'provider_recommendations/:provider_id', :controller => 'deployment_recommendations', :action => 'provider_recommendations', as: :provider_recommendations
-    end
-  end
-  resources :components
   resources :providers do
     put :update_all, on: :collection
   end
