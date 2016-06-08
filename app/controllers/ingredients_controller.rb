@@ -3,19 +3,35 @@ class IngredientsController < ApplicationController
 
   def index
     @ingredients = Ingredient.page(params[:page])
+    respond_to do |format|
+      format.html
+      format.json {render json: @ingredients}
+    end
   end
 
-  def roots
+  def applications
     @roots = Ingredient.select {|i| i.is_root}
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @roots}
+    end
   end
 
   def show
     @dependency_constraints = @ingredient.all_dependency_constraints
+    respond_to do |format|
+      format.html
+      format.json {render json: @ingredient}
+    end
   end
 
   def copy
     i = Ingredient.find(params[:copy]).copy
-    redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'
+    respond_to do |format|
+      format.html {redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'}
+      format.json {render json: i, status: :ok}
+    end
   end
 
   def new
@@ -39,7 +55,7 @@ class IngredientsController < ApplicationController
     respond_to do |format|
       if @ingredient.save
         format.html { redirect_to @ingredient, notice: 'Ingredient was successfully created.' }
-        format.json { render :show, status: :created, location: @ingredient}
+        format.json { render json: @ingredient, status: :created}
       else
         format.html { render :new }
         format.json { render json: @ingredient.errors, status: :unprocessable_entity }
@@ -54,7 +70,7 @@ class IngredientsController < ApplicationController
     respond_to do |format|
       if @ingredient.save
         format.html { redirect_to @ingredient, notice: 'Ingredient was successfully updated.' }
-        format.json { render :show, status: :ok, location: @ingredient}
+        format.json { render json: @ingredient, status: :ok}
       else
         format.html { render :edit }
         format.json { render json: @ingredient.errors, status: :unprocessable_entity }
@@ -62,11 +78,23 @@ class IngredientsController < ApplicationController
     end
   end
 
+
+  # DELETE /blueprints/1
+  # DELETE /blueprints/1.json
   def destroy
-
+    if @ingredient.is_template
+      respond_to do |format|
+        format.html { redirect_to ingredients_url, notice: "Can't destroy a template ingredient." }
+        format.json { render json: "Can't destroy a template ingredient.", status: :forbidden}
+      end
+    else
+      @ingredient.destroy
+      respond_to do |format|
+        format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    end
   end
-
-
 
   private
 

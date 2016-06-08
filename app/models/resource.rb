@@ -1,6 +1,6 @@
 class Resource < Base
+  ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
-  has_and_belongs_to_many :deployment_recommendations
   scope :compute, -> { where(resource_type: 'compute') }
 
   validates :resource_type, presence: true
@@ -20,4 +20,38 @@ class Resource < Base
   def price_per_hour
     BigDecimal.new(more_attributes['price_per_hour'].to_s || 0)
   end
+
+  def as_json(options={})
+    hash = {}
+    hash[:id] = self.id
+    hash[:resource_type] = self.resource_type
+
+    params = case self.resource_type
+                 when 'compute'
+                   compute_as_json(self)
+
+                 when 'storage'
+                   storage_as_json(self)
+               end
+    hash = hash.merge(params)
+    hash
+  end
+
+  private
+
+    def compute_as_json(resource)
+      hash = {}
+      hash[:cores] = resource.cores
+      hash[:mem_gb] = resource.mem_gb
+      hash[:price_per_hour] = resource.price_per_hour
+      hash[:price_per_month] = resource.price_per_month
+      hash[:bandwidth_mpbs] = resource.bandwidth_mbps unless !resource.bandwidth_mbps
+      hash
+    end
+
+    def storage_as_json(resource)
+      hash = {}
+      hash[:price_per_month_gb] = resource.price_per_month_gb
+      hash
+    end
 end

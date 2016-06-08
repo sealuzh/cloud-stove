@@ -42,7 +42,7 @@ en:
     index:
       new: "New"
       title: "Ingredients"
-    roots:
+    applications:
       new: "New"
       title: "Applications"
     form:

@@ -10,25 +10,18 @@ Rails.application.routes.draw do
   concern :copyable do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
   end
-  
-  resources :blueprints, concerns: [ :paginatable, :copyable ]
 
-  resources :cloud_applications, path: 'apps', concerns: [ :paginatable, :copyable ] do
-    resources :concrete_components
-    member do
-      get 'recommendations'
-      get 'provider_recommendations/:provider_id', :controller => 'deployment_recommendations', :action => 'provider_recommendations', as: :provider_recommendations
-    end
-  end
-  resources :components
-  resources :providers do
-    put :update_all, on: :collection
-  end
-  resources :resources
+  put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
+  get 'providers' => 'providers#index', as: :providers
 
-  get 'applications' =>'ingredients#roots', as: :applications
+  get 'applications' =>'ingredients#applications', as: :applications
   get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
+
   resources :ingredients, concerns: [:paginatable]
+
+  resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
+
+  resources :resources, only: [:show, :index], concerns: [:paginatable]
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
