@@ -102,7 +102,7 @@ group :development do
   # gem 'flamegraph'
   # gem 'memory_profiler'
   gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
-  gem 'rack-cors', :require => 'rack/cors'
+  # gem 'rack-cors', :require => 'rack/cors'
 
 end
 
