@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160607083407) do
+ActiveRecord::Schema.define(version: 20160608183104) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20160607083407) do
     t.string   "type"
     t.integer  "source_id"
     t.integer  "target_id"
+    t.integer  "min_ram"
+    t.integer  "min_cpus"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
@@ -42,6 +44,17 @@ ActiveRecord::Schema.define(version: 20160607083407) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "deployment_recommendations", force: :cascade do |t|
+    t.text     "more_attributes"
+    t.text     "ingredients_data"
+    t.text     "resources_data"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "deployment_recommendations", ["ingredient_id"], name: "index_deployment_recommendations_on_ingredient_id"
 
   create_table "ingredients", force: :cascade do |t|
     t.string   "name"

@@ -8,6 +8,17 @@ class Ingredient < Base
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
 
+  def all_leafs(leafs = [])
+    children.each do |child|
+      if child.children.any?
+        leafs.push *child.all_leafs
+      else
+        leafs.push child
+      end
+    end
+    leafs
+  end
+
   # Each ingredient can have a parent that allows nesting composite ingredients
   belongs_to :template, class_name: 'Ingredient'
   validates_with TemplateInstantiationValidator
@@ -15,23 +26,32 @@ class Ingredient < Base
   # Reverse relationship: each template ingredient can have derived instance ingredients
   has_many :instances, class_name: 'Ingredient', foreign_key: 'template_id'
 
+  has_one :deployment_recommendation
+
   # Associated generic constraints
   has_many :constraints, dependent: :destroy
 
-  # Associated dependency constraints
+  # Generic constraints
+  has_many :constraints
+  ## Dependency constraints
+  has_many :dependency_constraints, class_name: 'DependencyConstraint'
   has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
   has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
+  ## Ram constraints
+  has_many :ram_constraints, class_name: 'RamConstraint'
+  ## Cpu constraints
+  has_many :cpu_constraints, class_name: 'CpuConstraint'
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
 
   # traverses the ingredients subtree and collects all dependency constraints in it
   def all_dependency_constraints
-    return dependency_constraints(self,{}).values
+    dependency_constraints_rec(self, {}).values
   end
 
   def is_root
-    return (self.parent.nil? && self.children.length != 0)
+    (self.parent.nil? && self.children.length != 0)
   end
 
   def as_json(options={})
@@ -81,6 +101,10 @@ class Ingredient < Base
     root_copy
   end
 
+  def schedule_recommendation_job
+    ComputeRecommendationJob.perform_later(self)
+  end
+
   private
 
   def deep_dup(copies_hash,current)
@@ -103,9 +127,9 @@ class Ingredient < Base
   end
 
   # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
-  def dependency_constraints(current_ingredient,constraint_hash)
+  def dependency_constraints_rec(current_ingredient, constraint_hash)
       current_ingredient.children.all.each do |child|
-        constraint_hash.merge(dependency_constraints(child,constraint_hash))
+        constraint_hash.merge(dependency_constraints_rec(child, constraint_hash))
       end
 
       current_ingredient.constraints_as_source.all.each do |constraint|
@@ -115,7 +139,6 @@ class Ingredient < Base
         constraint_hash[constraint.id] = constraint
       end
 
-      return constraint_hash
+      constraint_hash
     end
-
 end

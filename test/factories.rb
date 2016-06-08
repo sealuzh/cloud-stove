@@ -32,8 +32,7 @@ FactoryGirl.define do
         amazon_provider.resources = [
             create(:resource, :amazon_c1, provider: amazon_provider),
             create(:resource, :amazon_c2, provider: amazon_provider),
-            create(:resource, :amazon_s1, provider: amazon_provider),
-            create(:resource, :amazon_s2, provider: amazon_provider),
+            create(:resource, :amazon_c3, provider: amazon_provider),
         ]
         amazon_provider.save
       end
@@ -51,7 +50,6 @@ FactoryGirl.define do
         google_provider.resources = [
             create(:resource, :google_c1, provider: google_provider),
             create(:resource, :google_c2, provider: google_provider),
-            create(:resource, :google_s1, provider: google_provider),
         ]
         google_provider.save
       end
@@ -80,6 +78,10 @@ FactoryGirl.define do
       name 't2.micro'
       more_attributes(JSON.parse '{"cores":"1", "mem_gb":"1.0", "price_per_hour":"0.013"}')
     end
+    trait :amazon_c3 do
+      name 'c3.2xlarge'
+      more_attributes(JSON.parse '{"cores":"8", "mem_gb":"15.0", "price_per_hour":"0.42"}')
+    end
     trait :amazon_s1 do
       name 'storage'
       more_attributes(JSON.parse '{"price_per_gb":"0.0300"}')
@@ -105,5 +107,4 @@ FactoryGirl.define do
       resource_type 'storage'
     end
   end
-
 end
