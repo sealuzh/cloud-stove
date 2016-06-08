@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :ingredients, concerns: [:paginatable]
 
-  resources :constraints, only: [:show, :index, :destroy, :create], concerns: [:paginatable]
+  resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
 
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 

@@ -1,6 +1,6 @@
 class ConstraintsController < ApplicationController
 
-  before_action :set_dependency_constraint, only: [:show, :destroy]
+  before_action :set_constraint, only: [:show, :destroy, :update]
 
 
   def show
@@ -31,6 +31,18 @@ class ConstraintsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      if @constraint.update(constraint_params)
+        format.html
+        format.json {render json: @constraint, status: :ok}
+      else
+        format.html
+        format.json {render json: @constraint.errors, status: :unprocessable_entity}
+      end
+    end
+  end
+
   def destroy
     @constraint.destroy
     respond_to do |format|
@@ -41,7 +53,7 @@ class ConstraintsController < ApplicationController
 
   private
 
-    def set_dependency_constraint
+    def set_constraint
       @constraint = Constraint.find(params[:id])
     end
 
@@ -53,7 +65,7 @@ class ConstraintsController < ApplicationController
       type = constraint_params[:type]
       constraint_clazz = type.constantize
       constraint_instance = constraint_clazz.new
-      constraint_instance.update_attributes(constraint_params)
+      constraint_instance.assign_attributes(constraint_params)
       constraint_instance
     end
 end
