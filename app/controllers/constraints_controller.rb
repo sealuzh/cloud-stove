@@ -21,8 +21,13 @@ class ConstraintsController < ApplicationController
   def create
     @constraint = deserialize_to_constraint
     respond_to do |format|
-      format.html
-      format.json {render json: @constraint, status: :created}
+      if @constraint.save!
+        format.html
+        format.json {render json: @constraint, status: :created}
+      else
+        format.html
+        format.json {render json: @constraint.errors, status: :unprocessable_entity}
+      end
     end
   end
 
@@ -49,5 +54,6 @@ class ConstraintsController < ApplicationController
       constraint_clazz = type.constantize
       constraint_instance = constraint_clazz.new
       constraint_instance.update_attributes(constraint_params)
+      constraint_instance
     end
 end
