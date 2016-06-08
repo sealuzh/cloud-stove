@@ -42,17 +42,10 @@ build:
         - script:
             name: Install vendor binaries
             code: |
-              # This code lifted from https://github.com/peterkeen/heroku-buildpack-vendorbinaries/blob/master/bin/compile
-              if [ ! -s $1/.vendor_urls ]; then
-                echo ".vendor_urls empty. Skipping." | indent
-                exit 0
-              fi
-
-              cd $1
-
-              while read url; do
+              # This code adapted from https://github.com/peterkeen/heroku-buildpack-vendorbinaries/blob/master/bin/compile
+              [ -f .vendor_urls ] && while read url; do
                 if [ -n "$url" ]; then # incase ensure_newline_at_eof_on_save is enabled
-                  echo Vendoring $url | indent
+                  echo Vendoring $url
 
                   extension="${url##*.}" # http://stackoverflow.com/q/965053
                   flag="-z" # by default use gz
