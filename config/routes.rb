@@ -16,7 +16,10 @@ Rails.application.routes.draw do
 
   get 'applications' =>'ingredients#applications', as: :applications
   get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
+
   resources :ingredients, concerns: [:paginatable]
+
+  resources :constraints, only: [:show, :index, :destroy, :create], concerns: [:paginatable]
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
