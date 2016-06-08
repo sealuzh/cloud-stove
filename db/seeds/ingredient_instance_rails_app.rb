@@ -16,13 +16,16 @@ HERE
 )
 
 db = rails_app_instance.children.create(
-    name: 'PostgreSQL',
-    body: <<HERE
+  name: 'PostgreSQL',
+  body: <<HERE
 Specific things about the PostgreSQL db.
 HERE
 )
 db.constraints << RamConstraint.create(
   min_ram: 2048
+)
+db.constraints << CpuConstraint.create(
+  min_cpus: 1
 )
 
 app = rails_app_instance.children.create(
@@ -33,6 +36,9 @@ HERE
 )
 app.constraints << RamConstraint.create(
   min_ram: 4096
+)
+app.constraints << CpuConstraint.create(
+  min_cpus: 1
 )
 app.constraints << DependencyConstraint.create(
   source: app,
@@ -48,6 +54,9 @@ HERE
 lb.constraints << RamConstraint.create(
   min_ram: 1024
 )
+lb.constraints << CpuConstraint.create(
+  min_cpus: 1
+)
 lb.constraints << DependencyConstraint.create(
   source: lb,
   target: app
@@ -62,7 +71,10 @@ HERE
 cdn.constraints << RamConstraint.create(
   min_ram: 2048
 )
-lb.constraints << DependencyConstraint.create(
+cdn.constraints << CpuConstraint.create(
+  min_cpus: 1
+)
+cdn.constraints << DependencyConstraint.create(
   source: cdn,
   target: lb
 )

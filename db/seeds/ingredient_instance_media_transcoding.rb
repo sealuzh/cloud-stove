@@ -17,6 +17,9 @@ HERE
 mgr.constraints << RamConstraint.create(
     min_ram: 4096
 )
+mgr.constraints << CpuConstraint.create(
+    min_cpus: 1
+)
 
 ds = media_instance.children.create(
     name: 'Job Data Store',
@@ -26,6 +29,9 @@ HERE
 )
 ds.constraints << RamConstraint.create(
     min_ram: 1024
+)
+ds.constraints << CpuConstraint.create(
+    min_cpus: 1
 )
 
 queue = media_instance.children.create(
@@ -37,6 +43,9 @@ HERE
 queue.constraints << RamConstraint.create(
     min_ram: 6144
 )
+queue.constraints << CpuConstraint.create(
+    min_cpus: 1
+)
 
 worker = media_instance.children.create(
     name: 'Transcoder',
@@ -46,4 +55,7 @@ HERE
 )
 worker.constraints << RamConstraint.create(
     min_ram: 2048
+)
+worker.constraints << CpuConstraint.create(
+    min_cpus: 1
 )

@@ -1,0 +1,2 @@
+class CpuConstraint < Constraint
+end

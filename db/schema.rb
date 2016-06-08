@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160608082515) do
+ActiveRecord::Schema.define(version: 20160608183104) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20160608082515) do
     t.integer  "source_id"
     t.integer  "target_id"
     t.integer  "min_ram"
+    t.integer  "min_cpus"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"

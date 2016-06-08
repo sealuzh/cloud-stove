@@ -38,6 +38,9 @@ array[Ingredients, Ingredients] of int: inter_ingredient_traffic;
 % Component RAM requirements
 array[Ingredients] of int: min_ram;
 
+% Component CPU requirements
+array[Ingredients] of int: min_cpus;
+
 %
 % Decision variables
 %
@@ -70,6 +73,9 @@ constraint total_cost =
   
 % Chosen resources must have enough RAM
 constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
+
+% Chosen resources must have enough CPU cores
+constraint forall(i in Ingredients)(cpu[assignments[i]] >= min_cpus[i]);
 
 output [ "{\"ingredients\" :[" ] ++ [ "\"" ++ show(resource_ids[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
          ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ "\", " ]

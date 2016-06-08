@@ -3,6 +3,7 @@ require 'tempfile'
 
 class DeploymentRecommendation < Base
   DEFAULT_MIN_RAM = 1
+  DEFAULT_MIN_CPUS = 1
   DEFAULT_DEPENDENCY_WEIGHT = 100
 
   belongs_to :ingredient
@@ -40,7 +41,6 @@ class DeploymentRecommendation < Base
       ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
       self.more_attributes['ingredients'] = ingredients_hash
       self.save!
-
     else
       fail "Error executing MiniZinc:\n#{output}"
     end
@@ -96,6 +96,12 @@ class DeploymentRecommendation < Base
       i.ram_constraints.first.min_ram rescue DEFAULT_MIN_RAM
     end
     ingredients_data << "min_ram = #{min_ram.to_json};"
+    ingredients_data << "\n"
+
+    min_cpus = ingredient.all_leafs.collect do |i|
+      i.cpu_constraints.first.min_cpus rescue DEFAULT_MIN_CPUS
+    end
+    ingredients_data << "min_cpus = #{min_cpus.to_json};"
     ingredients_data << "\n"
 
     self.ingredients_data = ingredients_data

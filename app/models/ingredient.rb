@@ -39,6 +39,8 @@ class Ingredient < Base
   has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
   ## Ram constraints
   has_many :ram_constraints, class_name: 'RamConstraint'
+  ## Cpu constraints
+  has_many :cpu_constraints, class_name: 'CpuConstraint'
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true

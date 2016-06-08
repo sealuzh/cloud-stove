@@ -47,6 +47,9 @@ HERE
 mgr.constraints << RamConstraint.create(
     min_ram: 4096
 )
+mgr.constraints << CpuConstraint.create(
+    min_cpus: 1
+)
 
 ds = batch_template.children.create(
   name: 'Job Data Store',
@@ -63,6 +66,9 @@ HERE
 )
 ds.constraints << RamConstraint.create(
     min_ram: 1024
+)
+ds.constraints << CpuConstraint.create(
+    min_cpus: 1
 )
 
 queue = batch_template.children.create(
@@ -83,6 +89,9 @@ HERE
 queue.constraints << RamConstraint.create(
     min_ram: 6144
 )
+queue.constraints << CpuConstraint.create(
+    min_cpus: 1
+)
 
 worker = batch_template.children.create(
   name: 'Worker',
@@ -101,4 +110,7 @@ HERE
 )
 worker.constraints << RamConstraint.create(
     min_ram: 2048
+)
+worker.constraints << CpuConstraint.create(
+    min_cpus: 1
 )
