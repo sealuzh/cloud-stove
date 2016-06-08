@@ -6,7 +6,7 @@ class Ingredient < Base
   validates_with NoCyclesValidator
 
   # Reverse relationship: each parent ingredient can have children ingredients
-  has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id'
+  has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
 
   # Each ingredient can have a parent that allows nesting composite ingredients
   belongs_to :template, class_name: 'Ingredient'
@@ -16,13 +16,11 @@ class Ingredient < Base
   has_many :instances, class_name: 'Ingredient', foreign_key: 'template_id'
 
   # Associated generic constraints
-  has_many :constraints
+  has_many :constraints, dependent: :destroy
 
   # Associated dependency constraints
-  has_many :constraints_as_source, class_name: 'DependencyConstraint',
-           foreign_key: 'source_id'
-  has_many :constraints_as_target, class_name: 'DependencyConstraint',
-           foreign_key: 'target_id'
+  has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
+  has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
@@ -34,14 +32,6 @@ class Ingredient < Base
 
   def is_root
     return (self.parent.nil? && self.children.length != 0)
-  end
-
-  def delete_subtree
-    self.constraints.each {|constraint| constraint.destroy}
-    self.constraints_as_source.each {|constraint| constraint.destroy}
-    self.constraints_as_target.each {|constraint| constraint.destroy}
-    self.children.each {|child| child.delete_subtree}
-    self.destroy
   end
 
   def as_json(options={})

@@ -85,7 +85,7 @@ class IngredientsController < ApplicationController
         format.json { render json: "Can't destroy a template ingredient.", status: :forbidden}
       end
     else
-      @ingredient.delete_subtree
+      @ingredient.destroy
       respond_to do |format|
         format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
         format.json { head :no_content }
