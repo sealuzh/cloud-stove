@@ -39,3 +39,7 @@
     li { @extend .list-inline-item; }
   }
 }
+
+img[src$='#img-fluid'] {
+  @extend .img-fluid;
+}
