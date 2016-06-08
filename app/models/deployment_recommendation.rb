@@ -29,10 +29,10 @@ class DeploymentRecommendation < Base
     soln_sep = "----------" # '--soln-sep'
     search_complete_msg = "==========" # '--search-complete-msg'
     output = `mzn-g12fd #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}`
-    output.gsub!(', ]', ']')
-    results = output.split(soln_sep)
-    last_result = results[results.size - 2] # last entry contains the search complete msg
     if $?.success?
+      output.gsub!(', ]', ']')
+      results = output.split(soln_sep)
+      last_result = results[results.size - 2] # last entry contains the search complete msg
       self.more_attributes = last_result
       self.save!
     else
