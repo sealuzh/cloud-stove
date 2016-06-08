@@ -1,7 +1,7 @@
-SEEDS_ROOT = Rails.root + 'db/seeds/'
+SEEDS_ROOT = Rails.configuration.x.seeds_root
 
 def require_seed(name)
-  require SEEDS_ROOT + name
+  require (SEEDS_ROOT + name)
 end
 
 Dir.glob(SEEDS_ROOT + 'ingredient_template_*.rb').each { |f| require f }

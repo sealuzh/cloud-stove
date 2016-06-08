@@ -71,6 +71,6 @@ constraint total_cost =
 % Chosen resources must have enough RAM
 constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
 
-output [ show(resource_ids[assignments[i]]) ++ ", " | i in Ingredients ] ++
-            [ "vm cost: " ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ ", " ] ++
-            [ " total cost: " ++ show(total_cost) ++ "\n" ];
+output [ "{\"resources\" :[" ] ++ [ "\"" ++ show(resource_ids[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
+         ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ "\", " ]
+         ++ [ " \"total_cost\": " ++ show(total_cost) ++ "}" ];

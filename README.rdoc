@@ -33,6 +33,12 @@ specifications and requirements.
     cd cloud-stove
     bin/setup
 
+* Make sure that the {MiniZinc}[http://www.minizinc.org/] binary `mzn-g12fd` is present in the path:
+
+    ```bash
+    export PATH=/Applications/MiniZincIDE.app/Contents/Resources/:$PATH
+    ```
+
 === Making Changes
 
 See the {contribution guide}[link:CONTRIBUTING.md]
