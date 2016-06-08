@@ -28,7 +28,10 @@ class IngredientsController < ApplicationController
 
   def copy
     i = Ingredient.find(params[:copy]).copy
-    redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'
+    respond_to do |format|
+      format.html {redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'}
+      format.json {render json: i, status: :ok}
+    end
   end
 
   def new
