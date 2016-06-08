@@ -34,7 +34,13 @@ class DeploymentRecommendation < Base
       results = output.split(soln_sep)
       last_result = results[results.size - 2] # last entry contains the search complete msg
       self.more_attributes = last_result
+      self.save! # serializes `more_attributes` into a hash
+      ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
+      resource_ids = lookup_resource_ids(self.more_attributes['ingredients'])
+      ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+      self.more_attributes['ingredients'] = ingredients_hash
       self.save!
+
     else
       fail "Error executing MiniZinc:\n#{output}"
     end
@@ -42,6 +48,12 @@ class DeploymentRecommendation < Base
     ensure
     resources.unlink
     ingredients.unlink
+  end
+
+  # Maps an array resource strings into an array of resource ids
+  # Example: ["c3.2xlarge", "c3.2xlarge", "t2.micro", "c3.2xlarge"] => [120, 120, 119, 120]
+  def lookup_resource_ids(resource_strings)
+    resource_strings.map { |s| Resource.find_by_name(s).id }
   end
 
   def generate_resources_data

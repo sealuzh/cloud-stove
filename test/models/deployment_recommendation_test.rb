@@ -15,7 +15,18 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
     recommendation = DeploymentRecommendation.construct(rails_app)
 
-    expected_recommendation = JSON.parse '{"resources":["c3.2xlarge", "c3.2xlarge", "t2.micro", "c3.2xlarge"], "vm_cost":"947.11", "total_cost":947112}'
+    c3_2xlarge = Resource.find_by_name('c3.2xlarge')
+    t2_micro = Resource.find_by_name('t2.micro')
+    ingredient_ids = rails_app.children.sort_by(&:id).map(&:id)
+    resource_ids = [c3_2xlarge.id, c3_2xlarge.id, t2_micro.id, c3_2xlarge.id]
+    # Corresponds to: ["c3.2xlarge", "c3.2xlarge", "t2.micro", "c3.2xlarge"]
+    ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    expected_recommendation =  {
+      'ingredients' => ingredients_hash,
+      'vm_cost' => '947.11',
+      'total_cost' => 947112
+    }
+    # Example JSON: {"ingredients":{"3":145,"4":145,"5":144,"6":145},"vm_cost":"947.11","total_cost":947112}
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
