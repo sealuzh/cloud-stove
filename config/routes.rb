@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   resources :constraints, only: [:show, :index, :destroy, :create], concerns: [:paginatable]
 
+  resources :resources, only: [:show, :index], concerns: [:paginatable]
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
