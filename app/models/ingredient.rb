@@ -99,6 +99,10 @@ class Ingredient < Base
     root_copy
   end
 
+  def schedule_recommendation_job
+    ComputeRecommendationJob.perform_later(self)
+  end
+
   private
 
   def deep_dup(copies_hash,current)
