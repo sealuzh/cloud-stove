@@ -93,6 +93,7 @@ GEM
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     ffi (1.9.10)
+    ffi (1.9.10-x64-mingw32)
     font-awesome-sass (4.5.0)
       sass (>= 3.2)
     formatador (0.2.5)
@@ -172,6 +173,8 @@ GEM
     nenv (0.3.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.7.2-x64-mingw32)
+      mini_portile2 (~> 2.0.0.rc2)
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -179,6 +182,7 @@ GEM
       rack
       rake (>= 0.8.1)
     pg (0.18.4)
+    pg (0.18.4-x64-mingw32)
     poltergeist (1.9.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -191,6 +195,7 @@ GEM
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
+    rack-cors (0.4.0)
     rack-livereload (0.3.16)
       rack
     rack-test (0.6.3)
@@ -269,6 +274,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.11)
+    sqlite3 (1.3.11-x64-mingw32)
     terminal-notifier-guard (1.6.4)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
@@ -280,6 +286,8 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2016.4)
+      tzinfo (>= 1.0.0)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -300,6 +308,7 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   benchmark-ips
@@ -326,6 +335,7 @@ DEPENDENCIES
   pg
   poltergeist
   quiet_assets
+  rack-cors
   rack-livereload
   rails (~> 4.2.4)
   rails-assets-jquery-timeago!
@@ -341,9 +351,13 @@ DEPENDENCIES
   terminal-notifier-guard
   therubyracer
   turbolinks
+  tzinfo-data
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
   webmock
 
+RUBY VERSION
+   ruby 2.2.4p230
+
 BUNDLED WITH
-   1.11.2
+   1.12.1

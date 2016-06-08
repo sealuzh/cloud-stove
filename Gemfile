@@ -88,7 +88,7 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  
+
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-bundler'
@@ -101,6 +101,9 @@ group :development do
   # gem 'rack-mini-profiler'
   # gem 'flamegraph'
   # gem 'memory_profiler'
+  gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
+  gem 'rack-cors', :require => 'rack/cors'
+
 end
 
 gem 'rails_12factor', group: :production
