@@ -3,6 +3,8 @@ class DependencyConstraint < Constraint
   belongs_to :source, class_name: 'Ingredient'
   belongs_to :target, class_name: 'Ingredient'
 
+  validates_with NoSuchIngredientValidator
+
   # in the form, only source and target can be set, this ensures that the :ingredient association is also set correctly
   before_save :attach_source_ingredient
 
