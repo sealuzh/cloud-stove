@@ -1,4 +1,4 @@
-SEEDS_ROOT = Rails.configuration.x.seeds_root
+SEEDS_ROOT = Rails.root + 'db/seeds/'
 
 def require_seed(name)
   require (SEEDS_ROOT + name)

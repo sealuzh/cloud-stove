@@ -1,8 +1,9 @@
 require 'test_helper'
 
 class DeploymentRecommendationTest < ActiveSupport::TestCase
+  SEEDS_ROOT = Rails.root + 'db/seeds/'
   def require_seed(name)
-    require (Rails.configuration.x.seeds_root + name)
+    require (SEEDS_ROOT + name)
   end
 
   test 'generate deployment recommendation' do

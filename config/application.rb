@@ -34,8 +34,6 @@ module CloudStove
     ### Custom configuration using the recommended `config.x` property:
     # http://guides.rubyonrails.org/configuring.html#custom-configuration
     # Access using `Rails.configuration.x`
-    config.x.seeds_root = Rails.root + 'db/seeds/'
-
     config.x.gravatar_host = 'www.gravatar.com'
 
     # # CORS Configuration for handling preflight RequestService
