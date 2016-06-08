@@ -46,7 +46,7 @@ class ConstraintsController < ApplicationController
   def destroy
     @constraint.destroy
     respond_to do |format|
-      format.html
+      format.html {redirect_to :back, notice: 'Constraint was successfully destroyed.' }
       format.json {head :no_content, status: :deleted}
     end
   end

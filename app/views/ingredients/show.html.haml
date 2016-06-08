@@ -13,6 +13,8 @@
               = link_to constraint.source.name, ingredient_path(constraint.source)
               &#8596;
               = link_to constraint.target.name, ingredient_path(constraint.target)
+              &nbsp;
+              = link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
 %br
 %br
 - unless @ingredient.children.length == 0
