@@ -1,6 +1,6 @@
 class Resource < Base
+  ma_accessor :cores, :type, :bandwidth_mbps, :mem_gb
   belongs_to :provider
-  has_and_belongs_to_many :deployment_recommendations
   scope :compute, -> { where(resource_type: 'compute') }
 
   validates :resource_type, presence: true
