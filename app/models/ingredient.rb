@@ -59,6 +59,8 @@ class Ingredient < Base
     hash[:id] = self.id
     hash[:name] = self.name
     hash[:body] = self.body
+    hash[:created_at] = self.created_at
+    hash[:updated_at] = self.updated_at
     hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
     hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:constraints] == false
     hash
