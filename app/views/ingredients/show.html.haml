@@ -5,16 +5,33 @@
     = markdown(@ingredient.body)
   - unless @dependency_constraints.length == 0
     .col-lg-6
-      .description
-        %h2= 'Dependency Constraints'
-        %ul
-          - @dependency_constraints.each do |constraint|
-            %li
-              = link_to constraint.source.name, ingredient_path(constraint.source)
-              &#8596;
-              = link_to constraint.target.name, ingredient_path(constraint.target)
-              &nbsp;
-              = link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+      - unless @deployment_recommendation.nil?
+        .description
+          %h5= 'Deployment Recommendation'
+          %ul
+            %li= "Total cost: #{@deployment_recommendation[:total_cost]}"
+            %li= "VM cost: #{@deployment_recommendation[:vm_cost]}"
+          ='Instances:'
+          %ul
+            - @deployment_recommendation[:recommendation].each do |entry|
+              %li
+                = link_to entry[:ingredient].name, ingredients_path(entry[:ingredient])
+                &#8596;
+                = "#{entry[:resource].provider.name} #{entry[:resource].name}"
+
+
+%br
+%h3= 'Dependency Constraints'
+.description
+  %ul
+    - @dependency_constraints.each do |constraint|
+      %li
+        = link_to constraint.source.name, ingredient_path(constraint.source)
+        &#8596;
+        = link_to constraint.target.name, ingredient_path(constraint.target)
+        &nbsp;
+        = link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+
 %br
 %br
 - unless @ingredient.children.length == 0
@@ -24,6 +41,7 @@
   = render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
+  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger'
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
   = link_to 'Copy', copy_ingredient_path(@ingredient), class: 'btn btn-success'
   = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'

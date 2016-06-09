@@ -20,6 +20,7 @@ class IngredientsController < ApplicationController
 
   def show
     @dependency_constraints = @ingredient.all_dependency_constraints
+    @deployment_recommendation = @ingredient.deployment_recommendation.embed_ingredients unless @ingredient.deployment_recommendation.nil?
     respond_to do |format|
       format.html
       format.json {render json: @ingredient}

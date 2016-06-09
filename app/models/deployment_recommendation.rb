@@ -127,17 +127,12 @@ class DeploymentRecommendation < Base
     end
   end
 
-  def as_json(options={})
-    ingredients_hash = self.more_attributes['ingredients']
-    vm_cost = self.more_attributes['vm_cost']
-    total_cost = self.more_attributes['total_cost']
 
-    hash = {}
-    hash[:vm_cost] = vm_cost
-    hash[:total_cost] = total_cost
+  def as_json(options={})
+    hash = extract_params(self)
 
     ingredients = []
-    ingredients_hash.each do |ingredient_id, resource_id|
+    hash[:recommendation].each do |ingredient_id, resource_id|
       entry = {}
       entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json
       entry[:resource] = Resource.find(resource_id).as_json
@@ -148,4 +143,29 @@ class DeploymentRecommendation < Base
     hash
 
   end
+
+  def embed_ingredients
+    hash = extract_params(self)
+
+    ingredients = []
+    hash[:recommendation].each do |ingredient_id, resource_id|
+      entry = {}
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i)
+      entry[:resource] = Resource.find(resource_id)
+      ingredients << entry
+    end
+
+    hash[:recommendation] = ingredients
+    hash
+  end
+
+  private
+
+    def extract_params(recommendation)
+      hash = {}
+      hash[:vm_cost] = recommendation.more_attributes['vm_cost']
+      hash[:total_cost] = recommendation.more_attributes['total_cost']
+      hash[:recommendation] = (recommendation.more_attributes['ingredients']) ? recommendation.more_attributes['ingredients'] : []
+      hash
+    end
 end
