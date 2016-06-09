@@ -32,12 +32,14 @@ class AzureUpdater < ProviderUpdater
         next if cells.count < 5
         resource_id = cells.first.text.gsub(/\s/, '')
         amounts = JSON.load(cells[4].css('>span.price-data').attribute('data-amount').to_s)
+        next unless amounts.is_a?(Hash)
         price_per_hour = amounts["default"]
         pricelist[resource_id] = {
             'type' => 'compute',
             'cores' => cells[1].css('strong').text,
             'mem_gb' => cells[2].css('strong').text,
             'price_per_hour' => price_per_hour,
+            'regions' => amounts['regional'],
         }
       end
       provider = Provider.find_or_create_by(name: 'Microsoft Azure')
