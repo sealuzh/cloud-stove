@@ -11,13 +11,17 @@ Rails.application.routes.draw do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
   end
 
+
   put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
   get 'providers' => 'providers#index', as: :providers
 
   get 'applications' =>'ingredients#applications', as: :applications
   get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
 
-  resources :ingredients, concerns: [:paginatable]
+  resources :ingredients, concerns: [:paginatable] do
+    put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
+    get 'recommendation' => 'deployment_recommendations#show', as: :recommendation
+  end
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
 

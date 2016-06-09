@@ -126,4 +126,49 @@ class DeploymentRecommendation < Base
       end
     end
   end
+
+
+  def as_json(options={})
+    hash = extract_params(self)
+
+    ingredients = []
+    hash[:recommendation].each do |ingredient_id, resource_id|
+      entry = {}
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
+      entry[:resource] = Resource.find(resource_id).as_json({:children => false, :constraints => false})
+      ingredients << entry
+    end
+
+    hash[:recommendation] = ingredients
+    hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
+    hash
+
+  end
+
+  def embed_ingredients
+    hash = extract_params(self)
+
+    ingredients = []
+    hash[:recommendation].each do |ingredient_id, resource_id|
+      entry = {}
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i)
+      entry[:resource] = Resource.find(resource_id)
+      ingredients << entry
+    end
+
+    hash[:recommendation] = ingredients
+    hash
+  end
+
+  private
+
+    def extract_params(recommendation)
+      hash = {}
+      hash[:vm_cost] = recommendation.more_attributes['vm_cost']
+      hash[:total_cost] = recommendation.more_attributes['total_cost']
+      hash[:recommendation] = (recommendation.more_attributes['ingredients']) ? recommendation.more_attributes['ingredients'] : []
+      hash[:created_at] = recommendation.created_at
+      hash[:updated_at] = recommendation.updated_at
+      hash
+    end
 end

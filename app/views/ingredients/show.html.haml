@@ -1,20 +1,52 @@
-%h1= @ingredient.name
+%h1{:style => 'text-align: center'}= @ingredient.name
+%hr
+  %br
 .row
   .col-lg-6
-    -#.description
-    = markdown(@ingredient.body)
+    .description
+      %h5{:style => 'text-align: center'}= 'Description'
+      %hr
+      = markdown(@ingredient.body)
   - unless @dependency_constraints.length == 0
     .col-lg-6
-      .description
-        %h2= 'Dependency Constraints'
-        %ul
-          - @dependency_constraints.each do |constraint|
-            %li
-              = link_to constraint.source.name, ingredient_path(constraint.source)
-              &#8596;
-              = link_to constraint.target.name, ingredient_path(constraint.target)
-              &nbsp;
-              = link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+      - unless @deployment_recommendation.nil?
+        .description
+          %h5{:style => 'text-align: center'}= 'Deployment Recommendation'
+          %hr
+          %ul
+            %li= "Total cost: #{@deployment_recommendation[:total_cost]} $"
+            %li= "VM cost: #{@deployment_recommendation[:vm_cost]} $"
+          %table.table
+            %thead
+              %tr
+                %th Ingredient
+                %th Resource
+                %th Price
+                %th Provider
+            %tbody
+              - @deployment_recommendation[:recommendation].each do |entry|
+                %tr
+                  %td= link_to entry[:ingredient].name, ingredients_path(entry[:ingredient])
+                  %td= "#{entry[:resource].name}"
+                  %td= "#{entry[:resource].price_per_month}"
+                  %td= "#{entry[:resource].provider.name}"
+
+- unless @dependency_constraints.length == 0
+  %br
+  %h3= 'Dependency Constraints'
+  %table.table
+    %thead
+      %tr
+        %th Source Ingredient
+        %th Target Ingredient
+        %th
+    %tbody
+      - @dependency_constraints.each do |constraint|
+        %tr
+          %td= link_to constraint.source.name, ingredient_path(constraint.source)
+          %td= link_to constraint.target.name, ingredient_path(constraint.target)
+          %td= link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+
 %br
 %br
 - unless @ingredient.children.length == 0
@@ -24,6 +56,7 @@
   = render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
+  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger' unless !@ingredient.is_root
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
   = link_to 'Copy', copy_ingredient_path(@ingredient), class: 'btn btn-success'
   = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'

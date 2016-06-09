@@ -25,6 +25,8 @@ class Resource < Base
     hash = {}
     hash[:id] = self.id
     hash[:resource_type] = self.resource_type
+    hash[:name] = self.name
+    hash[:provider] = self.provider.name
 
     params = case self.resource_type
                  when 'compute'
@@ -46,12 +48,16 @@ class Resource < Base
       hash[:price_per_hour] = resource.price_per_hour
       hash[:price_per_month] = resource.price_per_month
       hash[:bandwidth_mpbs] = resource.bandwidth_mbps unless !resource.bandwidth_mbps
+      hash[:created_at] = resource.created_at
+      hash[:updated_at] = resource.updated_at
       hash
     end
 
     def storage_as_json(resource)
       hash = {}
       hash[:price_per_month_gb] = resource.price_per_month_gb
+      hash[:created_at] = resource.created_at
+      hash[:updated_at] = resource.updated_at
       hash
     end
 end
