@@ -19,6 +19,11 @@ class DeploymentRecommendationsController < ApplicationController
         format.html
         format.json { render json: 'Ingredient does not exist!', status: :not_found}
       end
+    elsif !ingredient.is_root
+      respond_to do |format|
+       format.html
+       format.json { render json: 'Ingredient must be a root ingredient!', status: :forbidden}
+      end
     else
       ingredient.schedule_recommendation_job
       respond_to do |format|

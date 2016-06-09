@@ -30,7 +30,7 @@
                   %td= "#{entry[:resource].name}"
                   %td= "#{entry[:resource].price_per_month}"
                   %td= "#{entry[:resource].provider.name}"
-                  
+
 - unless @dependency_constraints.length == 0
   %br
   %h3= 'Dependency Constraints'
@@ -56,7 +56,7 @@
   = render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
-  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger'
+  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger' unless !@ingredient.is_root
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
   = link_to 'Copy', copy_ingredient_path(@ingredient), class: 'btn btn-success'
   = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
