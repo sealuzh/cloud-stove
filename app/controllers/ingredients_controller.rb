@@ -19,6 +19,8 @@ class IngredientsController < ApplicationController
   end
 
   def show
+    @cpu_constraint = @ingredient.cpu_constraints.first
+    @ram_constraint = @ingredient.ram_constraints.first
     @dependency_constraints = @ingredient.all_dependency_constraints
     @deployment_recommendation = @ingredient.deployment_recommendation.embed_ingredients unless @ingredient.deployment_recommendation.nil?
     respond_to do |format|

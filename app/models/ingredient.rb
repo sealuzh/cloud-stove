@@ -142,5 +142,6 @@ class Ingredient < Base
       end
 
       constraint_hash
-    end
+  end
+
 end
