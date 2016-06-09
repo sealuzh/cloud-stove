@@ -12,13 +12,18 @@
             %li= "Total cost: #{@deployment_recommendation[:total_cost]}"
             %li= "VM cost: #{@deployment_recommendation[:vm_cost]}"
           ='Instances:'
-          %ul
-            - @deployment_recommendation[:recommendation].each do |entry|
-              %li
-                = link_to entry[:ingredient].name, ingredients_path(entry[:ingredient])
-                &#8596;
-                = "#{entry[:resource].provider.name} #{entry[:resource].name}"
-
+          %table.table
+            %thead
+              %tr
+                %th Ingredient
+                %th Resource
+                %th Provider
+            %tbody
+              - @deployment_recommendation[:recommendation].each do |entry|
+                %tr
+                  %td= link_to entry[:ingredient].name, ingredients_path(entry[:ingredient])
+                  %td= "#{entry[:resource].name}"
+                  %td= "#{entry[:resource].provider.name}"
 
 %br
 %h3= 'Dependency Constraints'
