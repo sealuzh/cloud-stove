@@ -25,6 +25,8 @@ class Resource < Base
     hash = {}
     hash[:id] = self.id
     hash[:resource_type] = self.resource_type
+    hash[:name] = self.name
+    hash[:provider] = self.provider.name
 
     params = case self.resource_type
                  when 'compute'
