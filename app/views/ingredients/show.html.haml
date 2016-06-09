@@ -7,35 +7,40 @@
     .col-lg-6
       - unless @deployment_recommendation.nil?
         .description
-          %h5= 'Deployment Recommendation'
+          %h5{:style => 'text-align: center'}= 'Deployment Recommendation'
+          %hr
           %ul
-            %li= "Total cost: #{@deployment_recommendation[:total_cost]}"
-            %li= "VM cost: #{@deployment_recommendation[:vm_cost]}"
-          ='Instances:'
+            %li= "Total cost: #{@deployment_recommendation[:total_cost]} $"
+            %li= "VM cost: #{@deployment_recommendation[:vm_cost]} $"
           %table.table
             %thead
               %tr
                 %th Ingredient
                 %th Resource
+                %th Price
                 %th Provider
             %tbody
               - @deployment_recommendation[:recommendation].each do |entry|
                 %tr
                   %td= link_to entry[:ingredient].name, ingredients_path(entry[:ingredient])
                   %td= "#{entry[:resource].name}"
+                  %td= "#{entry[:resource].price_per_month}"
                   %td= "#{entry[:resource].provider.name}"
 
 %br
 %h3= 'Dependency Constraints'
-.description
-  %ul
+%table.table
+  %thead
+    %tr
+      %th Source Ingredient
+      %th Target Ingredient
+      %th
+  %tbody
     - @dependency_constraints.each do |constraint|
-      %li
-        = link_to constraint.source.name, ingredient_path(constraint.source)
-        &#8596;
-        = link_to constraint.target.name, ingredient_path(constraint.target)
-        &nbsp;
-        = link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+      %tr
+        %td= link_to constraint.source.name, ingredient_path(constraint.source)
+        %td= link_to constraint.target.name, ingredient_path(constraint.target)
+        %td= link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
 
 %br
 %br
