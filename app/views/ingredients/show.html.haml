@@ -55,19 +55,20 @@
               %tr
                 %td= link_to constraint.source.name, ingredient_path(constraint.source)
                 %td= link_to constraint.target.name, ingredient_path(constraint.target)
-                %td= link_to 'Delete', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+                %td= link_to 'X', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
       .row
         .col-sm-6
           - unless @cpu_constraint.nil?
             %br
             %h4= 'CPU Constraint'
             ="Minimal number of cores: #{@cpu_constraint.min_cpus}"
+            = link_to 'X', constraint_path(@cpu_constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
         .col-sm-6
           - unless @ram_constraint.nil?
             %br
             %h4= 'RAM Constraint'
             ="Minimal RAM in MB: #{@ram_constraint.min_ram}"
-
+            = link_to 'X', constraint_path(@ram_constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
 
 %br
 %br
