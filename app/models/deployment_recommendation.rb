@@ -126,4 +126,26 @@ class DeploymentRecommendation < Base
       end
     end
   end
+
+  def as_json(options={})
+    ingredients_hash = self.more_attributes['ingredients']
+    vm_cost = self.more_attributes['vm_cost']
+    total_cost = self.more_attributes['total_cost']
+
+    hash = {}
+    hash[:vm_cost] = vm_cost
+    hash[:total_cost] = total_cost
+
+    ingredients = []
+    ingredients_hash.each do |ingredient_id, resource_id|
+      entry = {}
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json
+      entry[:resource] = Resource.find(resource_id).as_json
+      ingredients << entry
+    end
+
+    hash[:recommendation] = ingredients
+    hash
+
+  end
 end
