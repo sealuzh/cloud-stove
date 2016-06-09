@@ -134,12 +134,13 @@ class DeploymentRecommendation < Base
     ingredients = []
     hash[:recommendation].each do |ingredient_id, resource_id|
       entry = {}
-      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json
-      entry[:resource] = Resource.find(resource_id).as_json
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
+      entry[:resource] = Resource.find(resource_id).as_json({:children => false, :constraints => false})
       ingredients << entry
     end
 
     hash[:recommendation] = ingredients
+    hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
     hash
 
   end
