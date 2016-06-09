@@ -25,7 +25,7 @@
             %tbody
               - @deployment_recommendation[:recommendation].each do |entry|
                 %tr
-                  %td= link_to entry[:ingredient].name, ingredients_path(entry[:ingredient])
+                  %td= link_to entry[:ingredient].name, ingredient_path(entry[:ingredient])
                   %td= "#{entry[:resource].name}"
                   %td= "#{entry[:resource].price_per_month}"
                   %td= "#{entry[:resource].provider.name}"
