@@ -10,11 +10,20 @@ class IngredientsController < ApplicationController
   end
 
   def applications
-    @roots = Ingredient.select {|i| i.is_root}
+    @roots = Ingredient.select {|i| i.is_root && !i.is_template}
 
     respond_to do |format|
       format.html
       format.json {render json: @roots}
+    end
+  end
+
+  def templates
+    @templates = Ingredient.select {|i| i.is_root && i.is_template}
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @templates}
     end
   end
 

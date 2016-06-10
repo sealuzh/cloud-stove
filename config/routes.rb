@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get 'providers' => 'providers#index', as: :providers
 
   get 'applications' =>'ingredients#applications', as: :applications
-  # get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
+  get 'templates' =>'ingredients#templates', as: :templates
 
   resources :ingredients, concerns: [:paginatable] do
     put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation

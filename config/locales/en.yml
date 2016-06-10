@@ -30,6 +30,7 @@ en:
       blueprints: "Blueprints"
       cloud_applications: "Applications"
       providers: "Providers"
+      templates: "Templates"
       ingredients: "Ingredients"
     footer:
       about: "About"
@@ -45,6 +46,9 @@ en:
     applications:
       new: "New"
       title: "Applications"
+    templates:
+      new: "New"
+      title: "Templates"
     form:
       add_dependency_constraint: "Add Dependency Constraint"
       add_cpu_constraint: "Add CPU Constraint"
@@ -55,47 +59,6 @@ en:
       remove_cpu_constraint: "Remove CPU Constraint"
     ram_constraint_fields:
       remove_ram_constraint: "Remove RAM Constraint"
-  blueprints:
-    index:
-      title: "Application Blueprints"
-      new: "New Blueprint"
-    show:
-      new_application_instance: "New Application Instance"
-    form:
-      add_component: "Add Component"
-    component_fields:
-      remove_component: "Remove Component"
-    deployment_rule_fields:
-      name: "Rules"
-  cloud_applications:
-    index:
-      title: "My Applications"
-      new: "New Application"
-    show:
-      slos: "Target SLOs"
-    edit:
-      title: "Edit Application"
-    concrete_component_fields:
-      remove_component: "Remove Component"
-    slo_fields:
-      remove_slo: "Remove SLO"
   providers:
     provider:
       last_updated: "Updated"
-  slos:
-    metrics:
-      availability: "availability"
-      response_time: "response time"
-      costs: "costs"
-      value_format: "%{currency}%{value}%{unit}%{interval}"
-    operators:
-      lt: '<'
-      lte: '≤'
-      eq: '='
-      neq: '≠'
-      gt: '>'
-      gte: '≥'
-      in: 'in'
-      where: 'where'
-    qualifiers:
-      per: 'per'
