@@ -19,6 +19,8 @@ class IngredientsController < ApplicationController
   end
 
   def show
+    @cpu_constraint = @ingredient.cpu_constraint
+    @ram_constraint = @ingredient.ram_constraint
     @dependency_constraints = @ingredient.all_dependency_constraints
     @deployment_recommendation = @ingredient.deployment_recommendation.embed_ingredients unless @ingredient.deployment_recommendation.nil?
     respond_to do |format|
@@ -104,7 +106,10 @@ class IngredientsController < ApplicationController
     end
 
     def ingredient_params
-      params.require(:ingredient).permit(:name,:body,:parent_id, constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy])
+      params.require(:ingredient).permit(:name,:body,:parent_id,
+                                         constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
+                                         ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],
+                                         cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy])
     end
 
 end

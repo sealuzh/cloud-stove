@@ -1,0 +1,13 @@
+%fieldset
+  %hr
+  %h3 CPU Constraint
+
+  .form-group
+    = f.label 'Minimal number of CPUs/cores'
+    = f.select :min_cpus, [1,2,3,4,5,6,7,8,9,10]
+
+  .form-group
+    = f.check_box :_destroy
+    = f.label :_destroy, t('.remove_cpu_constraint')
+
+  %hr

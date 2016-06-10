@@ -24,7 +24,22 @@
       = render 'constraints_as_source_fields', f:builder
 
   .form-group
+    = f.fields_for :cpu_constraint do |builder|
+      = render 'cpu_constraint_fields', f:builder
+
+  .form-group
+    = f.fields_for :ram_constraint do |builder|
+      = render 'ram_constraint_fields', f:builder
+
+
+  .form-group
     = link_to_add_fields t('.add_dependency_constraint'), f, :constraints_as_source, DependencyConstraint
+
+  .form-group
+    = link_to_add_fields t('.add_cpu_constraint'), f, :cpu_constraint, CpuConstraint
+
+  .form-group
+    = link_to_add_fields t('.add_ram_constraint'), f, :ram_constraint, RamConstraint
 
   .form-group
     = f.submit t('save'), class: 'btn btn-success'
