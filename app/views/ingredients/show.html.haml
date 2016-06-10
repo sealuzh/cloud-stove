@@ -81,5 +81,7 @@
   = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger' unless !@ingredient.is_root
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
   = link_to 'Copy', ingredient_copy_ingredient_path(@ingredient), class: 'btn btn-success'
+  = link_to 'Create Template', ingredient_template_path(@ingredient), class: 'btn btn-success'
+  = link_to 'Instantiate', ingredient_instance_path(@ingredient), class: 'btn btn-success'
   = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
   = link_to 'Back', ingredients_path, class: 'btn btn-link'

@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
     get 'recommendation' => 'deployment_recommendations#show', as: :recommendation
     get 'copy' => 'ingredients#copy', as: :copy_ingredient
+    get 'template' => 'ingredients#template', as: :template
+    get 'instance' => 'ingredients#instance', as: :instance
   end
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]

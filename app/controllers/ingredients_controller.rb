@@ -37,6 +37,38 @@ class IngredientsController < ApplicationController
     end
   end
 
+  def template
+    i = Ingredient.find(params[:ingredient_id]).template
+    if i
+      respond_to do |format|
+        format.html {redirect_to i, notice: 'Template was successfully created.'}
+        format.json {render json: i, status: :ok}
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Can only make templates out of root non-template ingredients.'}
+        format.json {render json: 'Can only make templates out of root non-template ingredients..', status: :forbidden}
+      end
+    end
+  end
+
+  def instance
+    i = Ingredient.find(params[:ingredient_id]).instance
+    if i
+      respond_to do |format|
+        format.html {redirect_to i, notice: 'Template was successfully instantiated.'}
+        format.json {render json: i, status: :ok}
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Can only instantiate root template ingredients.'}
+        format.json {render json: 'Can only instantiate root template ingredients.', status: :forbidden}
+      end
+    end
+  end
+
+
+
   def new
    @ingredients = Ingredient.all
    @ingredient = if params[:copy]
