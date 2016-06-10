@@ -3,8 +3,9 @@
 %br
 .actions
   = link_to 'Copy', ingredient_copy_ingredient_path(@ingredient), class: 'btn btn-success'
-  = link_to 'Create Template', ingredient_template_path(@ingredient), class: 'btn btn-success'
+  = link_to 'Create Template', ingredient_make_template_path(@ingredient), class: 'btn btn-success'
   = link_to 'Instantiate', ingredient_instance_path(@ingredient), class: 'btn btn-success'
+  = link_to 'Show Instances', ingredient_instances_path(@ingredient), class: 'btn btn-success' unless (!@ingredient.is_root && !@ingredient.is_template)
 
 - if !@deployment_recommendation.nil?
   .row

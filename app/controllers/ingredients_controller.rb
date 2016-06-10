@@ -27,6 +27,31 @@ class IngredientsController < ApplicationController
     end
   end
 
+  def instances
+    i = Ingredient.find_by(params[:ingredient_id])
+    if i
+      if i.is_root && i.is_template
+        @instances = i.instances
+        respond_to do |format|
+          format.html
+          format.json {render json: @instances}
+        end
+      else
+        respond_to do |format|
+          format.html {redirect_to :back, notice: 'Ingredient must be root and a template.'}
+          format.json {render json: 'Ingredient must be root and a template.', status: :forbidden}
+        end
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Ingredient not found.'}
+        format.json {render json: 'Ingredient not found.', status: :not_found}
+      end
+    end
+
+    # @instances = Ingredient.find(params[:ingredient_id]).
+  end
+
   def show
     @cpu_constraint = @ingredient.cpu_constraint
     @ram_constraint = @ingredient.ram_constraint

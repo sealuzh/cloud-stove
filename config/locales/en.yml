@@ -49,6 +49,9 @@ en:
     templates:
       new: "New"
       title: "Templates"
+    instances:
+      new: "New"
+      title: "Instances"
     form:
       add_dependency_constraint: "Add Dependency Constraint"
       add_cpu_constraint: "Add CPU Constraint"

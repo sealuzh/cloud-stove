@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get 'copy' => 'ingredients#copy', as: :copy_ingredient
     get 'template' => 'ingredients#template', as: :make_template
     get 'instance' => 'ingredients#instance', as: :instance
+    get 'instances' =>'ingredients#instances', as: :instances
   end
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
