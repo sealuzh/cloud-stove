@@ -1,0 +1,13 @@
+%fieldset
+  %hr
+  %h3 RAM Constraint
+
+  .form-group
+    = f.label 'Minimal RAM in megabytes'
+    = f.select :min_ram, [128,256,512,1024,2048,4096,8192,16384]
+
+  .form-group
+    = f.check_box :_destroy
+    = f.label :_destroy, t('.remove_ram_constraint')
+
+  %hr

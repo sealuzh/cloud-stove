@@ -38,12 +38,14 @@ class Ingredient < Base
   has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
   has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
   ## Ram constraints
-  has_many :ram_constraints, class_name: 'RamConstraint'
+  has_one :ram_constraint, class_name: 'RamConstraint', dependent: :destroy
   ## Cpu constraints
-  has_many :cpu_constraints, class_name: 'CpuConstraint'
+  has_one :cpu_constraint, class_name: 'CpuConstraint', dependent: :destroy
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
+  accepts_nested_attributes_for :cpu_constraint, allow_destroy: true
+  accepts_nested_attributes_for :ram_constraint, allow_destroy: true
 
   # traverses the ingredients subtree and collects all dependency constraints in it
   def all_dependency_constraints

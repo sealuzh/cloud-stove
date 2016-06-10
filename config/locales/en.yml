@@ -47,8 +47,14 @@ en:
       title: "Applications"
     form:
       add_dependency_constraint: "Add Dependency Constraint"
+      add_cpu_constraint: "Add CPU Constraint"
+      add_ram_constraint: "Add RAM Constraint"
     constraints_as_source_fields:
       remove_dependency_constraint: "Remove Dependency Constraint"
+    cpu_constraint_fields:
+      remove_cpu_constraint: "Remove CPU Constraint"
+    ram_constraint_fields:
+      remove_ram_constraint: "Remove RAM Constraint"
   blueprints:
     index:
       title: "Application Blueprints"

@@ -93,13 +93,13 @@ class DeploymentRecommendation < Base
     ingredients_data << "\n"
 
     min_ram = ingredient.all_leafs.collect do |i|
-      i.ram_constraints.first.min_ram rescue DEFAULT_MIN_RAM
+      i.ram_constraint.min_ram rescue DEFAULT_MIN_RAM
     end
     ingredients_data << "min_ram = #{min_ram.to_json};"
     ingredients_data << "\n"
 
     min_cpus = ingredient.all_leafs.collect do |i|
-      i.cpu_constraints.first.min_cpus rescue DEFAULT_MIN_CPUS
+      i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS
     end
     ingredients_data << "min_cpus = #{min_cpus.to_json};"
     ingredients_data << "\n"
