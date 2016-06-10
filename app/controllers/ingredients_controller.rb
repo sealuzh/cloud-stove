@@ -30,7 +30,7 @@ class IngredientsController < ApplicationController
   end
 
   def copy
-    i = Ingredient.find(params[:copy]).copy
+    i = Ingredient.find(params[:ingredient_id]).copy
     respond_to do |format|
       format.html {redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'}
       format.json {render json: i, status: :ok}
