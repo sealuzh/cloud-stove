@@ -10,12 +10,46 @@ class IngredientsController < ApplicationController
   end
 
   def applications
-    @roots = Ingredient.select {|i| i.is_root}
+    @roots = Ingredient.select {|i| i.is_root && !i.is_template}
 
     respond_to do |format|
       format.html
       format.json {render json: @roots}
     end
+  end
+
+  def templates
+    @templates = Ingredient.select {|i| i.is_root && i.is_template}
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @templates}
+    end
+  end
+
+  def instances
+    i = Ingredient.find_by(params[:ingredient_id])
+    if i
+      if i.is_root && i.is_template
+        @instances = i.instances
+        respond_to do |format|
+          format.html
+          format.json {render json: @instances}
+        end
+      else
+        respond_to do |format|
+          format.html {redirect_to :back, notice: 'Ingredient must be root and a template.'}
+          format.json {render json: 'Ingredient must be root and a template.', status: :forbidden}
+        end
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Ingredient not found.'}
+        format.json {render json: 'Ingredient not found.', status: :not_found}
+      end
+    end
+
+    # @instances = Ingredient.find(params[:ingredient_id]).
   end
 
   def show
@@ -30,12 +64,44 @@ class IngredientsController < ApplicationController
   end
 
   def copy
-    i = Ingredient.find(params[:copy]).copy
+    i = Ingredient.find(params[:ingredient_id]).copy
     respond_to do |format|
       format.html {redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'}
       format.json {render json: i, status: :ok}
     end
   end
+
+  def template
+    i = Ingredient.find(params[:ingredient_id]).make_template
+    if i
+      respond_to do |format|
+        format.html {redirect_to i, notice: 'Template was successfully created.'}
+        format.json {render json: i, status: :ok}
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Can only make templates out of root non-template ingredients.'}
+        format.json {render json: 'Can only make templates out of root non-template ingredients..', status: :forbidden}
+      end
+    end
+  end
+
+  def instance
+    i = Ingredient.find(params[:ingredient_id]).instantiate
+    if i
+      respond_to do |format|
+        format.html {redirect_to i, notice: 'Template was successfully instantiated.'}
+        format.json {render json: i, status: :ok}
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Can only instantiate root template ingredients.'}
+        format.json {render json: 'Can only instantiate root template ingredients.', status: :forbidden}
+      end
+    end
+  end
+
+
 
   def new
    @ingredients = Ingredient.all

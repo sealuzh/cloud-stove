@@ -2,7 +2,7 @@ class Ingredient < Base
 
   # Each ingredient can have a template that was used as a blueprint at instantiation
   belongs_to :parent, class_name: 'Ingredient'
-  # validates_with SameIsTemplateValidator
+  validates_with SameIsTemplateValidator
   validates_with NoCyclesValidator
 
   # Reverse relationship: each parent ingredient can have children ingredients
@@ -61,6 +61,8 @@ class Ingredient < Base
     hash[:id] = self.id
     hash[:name] = self.name
     hash[:body] = self.body
+    hash[:parent_id] = self.parent.id unless self.parent.nil?
+    hash[:template_id] = self.template.id unless self.template.nil?
     hash[:created_at] = self.created_at
     hash[:updated_at] = self.updated_at
     hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
@@ -69,41 +71,20 @@ class Ingredient < Base
   end
 
   def copy
-    # copiesh_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
-    # root_copy: the root ingredient of the new (copied) hierarchy
-    copies_hash, root_copy = deep_dup({},self)
-
-    # get all dependency constraints of the original root ingredient, to copy them onto the new structure
-    dependency_constraints = all_dependency_constraints
-
-    if self.parent
-      # attach to parent of origin if there is any
-      root_copy.parent = self.parent
-
-      # if only a subtree is copied (e.g. the root_copy has a parent), there may be dependency constraints to ingredients that did not get copied
-      # because they were outside the subtree being copied (e.g. they have no entry in the copies_hash)
-      # then we use the original ingredient as source/target instead of the non-existing copy
-      dependency_constraints.each do |dependency_constraint|
-        d = DependencyConstraint.new
-        d.source = (copies_hash[dependency_constraint.source.id]) ? copies_hash[dependency_constraint.source.id] : Ingredient.find(dependency_constraint.source.id)
-        d.ingredient = (copies_hash[dependency_constraint.source.id]) ? copies_hash[dependency_constraint.source.id] : Ingredient.find(dependency_constraint.source.id)
-        d.target = (copies_hash[dependency_constraint.target.id]) ? copies_hash[dependency_constraint.target.id] : Ingredient.find(dependency_constraint.target.id)
-        d.save!
-      end
-
-    else
-      dependency_constraints.each do |dependency_constraint|
-        d = DependencyConstraint.new
-        d.source = copies_hash[dependency_constraint.source.id]
-        d.ingredient = copies_hash[dependency_constraint.source.id]
-        d.target = copies_hash[dependency_constraint.target.id]
-        d.save!
-      end
-    end
-
-    root_copy.save!
-    root_copy
+    engine = IngredientCopyEngine.new
+    engine.copy(self)
   end
+
+  def make_template
+    engine = IngredientCopyEngine.new
+    engine.make_template(self)
+  end
+
+  def instantiate
+    engine = IngredientCopyEngine.new
+    engine.instantiate(self)
+  end
+
 
   def schedule_recommendation_job
     ComputeRecommendationJob.perform_later(self)
@@ -113,6 +94,8 @@ class Ingredient < Base
 
   def deep_dup(copies_hash,current)
     copy = current.dup
+    copy.cpu_constraint = current.cpu_constraint.dup unless current.cpu_constraint.nil?
+    copy.ram_constraint = current.ram_constraint.dup unless current.ram_constraint.nil?
     copies_hash[current.id] = copy
 
     current.children.each do |child|

@@ -16,11 +16,15 @@ Rails.application.routes.draw do
   get 'providers' => 'providers#index', as: :providers
 
   get 'applications' =>'ingredients#applications', as: :applications
-  get 'ingredients/copy/:copy' => 'ingredients#copy', as: :copy_ingredient
+  get 'templates' =>'ingredients#templates', as: :templates
 
   resources :ingredients, concerns: [:paginatable] do
     put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
     get 'recommendation' => 'deployment_recommendations#show', as: :recommendation
+    get 'copy' => 'ingredients#copy', as: :copy_ingredient
+    get 'template' => 'ingredients#template', as: :make_template
+    get 'instance' => 'ingredients#instance', as: :instance
+    get 'instances' =>'ingredients#instances', as: :instances
   end
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
