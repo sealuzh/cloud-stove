@@ -73,12 +73,12 @@ class Ingredient < Base
     engine.copy(self)
   end
 
-  def template
+  def make_template
     engine = IngredientCopyEngine.new
     engine.make_template(self)
   end
 
-  def instance
+  def instantiate
     engine = IngredientCopyEngine.new
     engine.instantiate(self)
   end

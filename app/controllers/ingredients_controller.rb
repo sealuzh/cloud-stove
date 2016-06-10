@@ -47,7 +47,7 @@ class IngredientsController < ApplicationController
   end
 
   def template
-    i = Ingredient.find(params[:ingredient_id]).template
+    i = Ingredient.find(params[:ingredient_id]).make_template
     if i
       respond_to do |format|
         format.html {redirect_to i, notice: 'Template was successfully created.'}
@@ -62,7 +62,7 @@ class IngredientsController < ApplicationController
   end
 
   def instance
-    i = Ingredient.find(params[:ingredient_id]).instance
+    i = Ingredient.find(params[:ingredient_id]).instantiate
     if i
       respond_to do |format|
         format.html {redirect_to i, notice: 'Template was successfully instantiated.'}
