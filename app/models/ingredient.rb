@@ -69,7 +69,7 @@ class Ingredient < Base
   end
 
   def copy
-    # copiesh_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
+    # copies_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
     # root_copy: the root ingredient of the new (copied) hierarchy
     copies_hash, root_copy = deep_dup({},self)
 
@@ -113,6 +113,8 @@ class Ingredient < Base
 
   def deep_dup(copies_hash,current)
     copy = current.dup
+    copy.cpu_constraint = current.cpu_constraint.dup unless current.cpu_constraint.nil?
+    copy.ram_constraint = current.ram_constraint.dup unless current.ram_constraint.nil?
     copies_hash[current.id] = copy
 
     current.children.each do |child|
