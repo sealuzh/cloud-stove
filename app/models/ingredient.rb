@@ -100,7 +100,7 @@ class Ingredient < Base
         d.save!
       end
     end
-
+    root_copy.name = copy_ingredient_name(root_copy)
     root_copy.save!
     root_copy
   end
@@ -146,6 +146,12 @@ class Ingredient < Base
       end
 
       constraint_hash
+  end
+
+  def copy_ingredient_name(ingredient)
+    num_copies = Ingredient.where(name: ingredient.name).length
+    name = ingredient.name + " [v#{num_copies}]"
+    name
   end
 
 end
