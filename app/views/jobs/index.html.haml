@@ -1,6 +1,11 @@
 %h1.clearfix
   = t('.title')
 
+%div.page-header
+  %div.btn-group
+    = button_to 'Refresh', jobs_path, method: :get, class: 'btn', form_class: 'btn-rails pull-left'
+
+
 %table.table
   %thead
     %tr
