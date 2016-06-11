@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   # get 'jobs' => 'jobs#index'
 
-  resources :jobs, only:[:index, :show]
+  resources :jobs, only:[:index, :show, :destroy]
 
   put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
   get 'providers' => 'providers#index', as: :providers
