@@ -32,6 +32,7 @@ en:
       providers: "Providers"
       templates: "Templates"
       ingredients: "Ingredients"
+      jobs: "Jobs"
     footer:
       about: "About"
       faq: "FAQ"

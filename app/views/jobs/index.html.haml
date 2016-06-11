@@ -24,4 +24,6 @@
         %td= link_to_if job.last_error.present?, truncate(job.last_error), job_path(job)
         %td
           -if job.can_destroy?
-            = button_to 'Delete', job_path(job), method: :delete, class: 'btn btn-danger btn-mini', form_class: 'btn-rails pull-right'
+            = button_to 'Delete', job_path(job), method: :delete, class: 'btn btn-danger btn-sm', form_class: 'btn-rails'
+          -if job.can_queue?
+            = button_to 'Run Next', job_run_path(job), method: :get, class: 'btn btn-sm', form_class: 'btn-rails'
