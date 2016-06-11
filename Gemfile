@@ -31,6 +31,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Markdown parser for pretty text
 gem 'redcarpet'
 
+# Delayed Web for Delayed Job views and management
+gem 'delayed-web'
+
 # FontAwesome for icons
 gem 'font-awesome-sass', '~> 4.5.0'
 
