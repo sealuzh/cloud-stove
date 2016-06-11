@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
 
-  mount Delayed::Web::Engine, at: '/jobs'
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-  
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
@@ -12,6 +8,9 @@ Rails.application.routes.draw do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
   end
 
+  # get 'jobs' => 'jobs#index'
+
+  resources :jobs, only:[:index, :show]
 
   put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
   get 'providers' => 'providers#index', as: :providers

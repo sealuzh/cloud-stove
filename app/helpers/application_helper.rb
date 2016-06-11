@@ -47,5 +47,12 @@ module ApplicationHelper
     truncate(ingredient.body, length: 300, separator: ' ')
   end
 
+  def status_dom_class(status)
+    case status
+      when 'executing' then 'label label-warning'
+      when 'failed'    then 'label label-important'
+      else                  'label label-default'
+    end
+  end
 
 end

@@ -1,0 +1,74 @@
+%h1.clearfix
+  = t('.title')
+
+%table.table
+  %thead
+    %tr
+      %th ID
+      %th Status
+      %th Created
+      %th Run At
+      %th Attempts
+      %th{:style => 'width: 190px;'} Last Error
+      %th{:style => 'width: 115px;'} Actions
+  - @jobs.each do |job|
+    %tbody
+      %tr
+        %td= link_to "##{job.id}",job_path(job)
+        %td
+          %span{:class => "#{status_dom_class(job.status)}"}
+            =job.status
+        %td= job.created_at
+        %td= job.run_at
+        %td= job.attempts
+        %td= link_to_if job.last_error.present?, truncate(job.last_error), job_path(job)
+        %td
+          -if job.can_destroy?
+            = button_to 'Delete', job_path(job), method: :delete, class: 'btn btn-danger btn-mini', form_class: 'btn-rails pull-right'
+
+
+-#<table class="table table-bordered">
+-#  <thead>
+-#    <tr>
+-#      <th>ID</th>
+-#      <th>Status</th>
+-#      <th>Created At</th>
+-#      <th>Run At</th>
+-#      <th>Attempts</th>
+-#      <th style="width: 190px;">Last Error</th>
+-#      <th style="width: 115px;">Actions</th>
+-#    </tr>
+-#  </thead>
+-#  <tbody>
+-#    <% if jobs.any? %>
+-#      <% jobs.each do |job| %>
+-#        <tr>
+-#          <td><%= link_to "##{job.id}", job_path(job) %></td>
+-#          <td>
+-#            <span class="<%= status_dom_class(job.status) %>">
+-#              <%= job.status.capitalize %>
+-#            </span>
+-#          </td>
+-#          <td><%= job.created_at %></td>
+-#          <td><%= job.run_at %></td>
+-#          <td><%= job.attempts %></td>
+-#          <td><%= link_to_if job.last_error.present?, truncate(job.last_error), job_path(job) %></td>
+-#          <td>
+-#            <% if job.can_queue? %>
+-#              <%= button_to 'Run Next', queue_job_path(job), method: :put, class: 'btn btn-mini', form_class: 'btn-rails pull-left' %>
+-#            <% end %>
+-#            <% if job.can_destroy? %>
+-#              <%= button_to 'Delete', job_path(job), method: :delete, class: 'btn btn-danger btn-mini', form_class: 'btn-rails pull-right' %>
+-#            <% end %>
+-#          </td>
+-#        </tr>
+-#      <% end %>
+-#    <% else %>
+-#      <tr>
+-#        <td colspan="7">
+-#          An empty queue is a good queue.
+-#        </td>
+-#      </tr>
+-#    <% end %>
+-#  </tbody>
+-#</table>
