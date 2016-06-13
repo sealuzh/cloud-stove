@@ -1,12 +1,38 @@
 class JobsController < ApplicationController
 
   def index
-    @jobs ||= Delayed::Web::Job.all
+    respond_to do |format|
+      format.html{
+        @jobs ||= Delayed::Web::Job.all
+      }
+
+      format.json{
+        @jobs = JobWrapper.all
+        render json: @jobs, status: :ok
+      }
+    end
   end
 
   def show
+    respond_to do |format|
+      format.html {
+        @job ||= Delayed::Web::Job.find params[:id]
+      }
+
+      format.json {
+        @job = JobWrapper.find_by_uuid(params[:id])
+        if @job.nil?
+          render json:'There is no job with the given ID!', status: :not_found
+        else
+          render json: @job, status: :ok
+        end
+      }
+    end
+
     @job ||= Delayed::Web::Job.find params[:id]
   end
+
+
 
   def destroy
     @job ||= Delayed::Web::Job.find params[:id]
