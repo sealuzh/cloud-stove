@@ -32,8 +32,7 @@ module CloudStove
     # CORS Configuration for handling preflight RequestService
     config.middleware.insert_before 0, 'Rack::Cors' do
       allow do
-        origins 'localhost:1232', '127.0.0.1:1232', /serene-garden-85460-pr-\d+.herokuapp.com/, 'serene-garden-85460.herokuapp.com' , 'staging.frontend.thestove.io'
-
+        origins 'localhost:1232', '127.0.0.1:1232', /\Ahttps:\/\/serene-garden-85460-pr-\d+\.herokuapp\.com.*\z/, 'serene-garden-85460.herokuapp.com' , 'staging.frontend.thestove.io'
         resource '/cors',
                  :headers => :any,
                  :methods => [:post],
