@@ -25,10 +25,10 @@ class DeploymentRecommendationsController < ApplicationController
        format.json { render json: 'Ingredient must be a root ingredient!', status: :forbidden}
       end
     else
-      ingredient.schedule_recommendation_job
+      job_id = ingredient.schedule_recommendation_job.job_id
       respond_to do |format|
         format.html {redirect_to :back, notice: 'DeploymentRecommendation has been scheduled!' }
-        format.json { render json: 'Recommendation was successfully scheduled!', status: :ok}
+        format.json { render json: {:job_id => job_id}, status: :ok}
       end
     end
   end
