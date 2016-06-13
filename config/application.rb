@@ -29,27 +29,27 @@ module CloudStove
 
     config.active_job.queue_adapter = :delayed_job
 
+    # CORS Configuration for handling preflight RequestService
+    config.middleware.insert_before 0, 'Rack::Cors', debug: true, :logger => (-> { Rails.logger }) do
+      allow do
+        origins 'localhost:1232', '127.0.0.1:1232', 'serene-garden-85460-pr-*.herokuapp.com', 'serene-garden-85460.herokuapp.com' , 'staging.frontend.thestove.io'
+
+        resource '/cors',
+                 :headers => :any,
+                 :methods => [:post],
+                 :credentials => true,
+                 :max_age => 0
+
+        resource '*',
+                 :headers => :any,
+                 :methods => [:get, :post, :delete, :put, :patch, :options, :head],
+                 :max_age => 0
+      end
+    end
+
     ### Custom configuration using the recommended `config.x` property:
     # http://guides.rubyonrails.org/configuring.html#custom-configuration
     # Access using `Rails.configuration.x`
     config.x.gravatar_host = 'www.gravatar.com'
-
-    # CORS Configuration for handling preflight RequestService
-    config.middleware.insert_before 0, 'Rack::Cors', :debug => true, :logger => (-> { Rails.logger }) do
-          allow do
-            origins 'localhost:1232', '127.0.0.1:1232', 'staging.frontend.thestove.io'
-
-            resource '/cors',
-              :headers => :any,
-              :methods => [:post],
-              :credentials => true,
-              :max_age => 0
-
-            resource '*',
-              :headers => :any,
-              :methods => [:get, :post, :delete, :put, :patch, :options, :head],
-              :max_age => 0
-          end
-    end
   end
 end
