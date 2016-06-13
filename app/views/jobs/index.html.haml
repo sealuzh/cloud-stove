@@ -1,0 +1,34 @@
+%h1.clearfix
+  = t('.title')
+
+%div.page-header
+  %div.btn-group
+    = button_to 'Refresh', jobs_path, method: :get, class: 'btn', form_class: 'btn-rails pull-left'
+
+
+%table.table
+  %thead
+    %tr
+      %th ID
+      %th Status
+      %th Created
+      %th Run At
+      %th Attempts
+      %th{:style => 'width: 190px;'} Last Error
+      %th{:style => 'width: 115px;'} Actions
+  - @jobs.each do |job|
+    %tbody
+      %tr
+        %td= link_to "##{job.id}",job_path(job)
+        %td
+          %span{:class => "#{status_dom_class(job.status)}"}
+            =job.status
+        %td= job.created_at
+        %td= job.run_at
+        %td= job.attempts
+        %td= link_to_if job.last_error.present?, truncate(job.last_error), job_path(job)
+        %td
+          -if job.can_destroy?
+            = button_to 'Delete', job_path(job), method: :delete, class: 'btn btn-danger btn-sm', form_class: 'btn-rails'
+          -if job.can_queue?
+            = button_to 'Run Next', job_run_path(job), method: :get, class: 'btn btn-sm', form_class: 'btn-rails'

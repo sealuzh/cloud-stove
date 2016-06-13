@@ -1,0 +1,14 @@
+%h1.clearfix
+  = t('.title')
+
+%div.page-header
+  %div.btn-group
+    -if @job.can_queue?
+      = button_to 'Run Next', job_run_path(@job), method: :get, class: 'btn', form_class: 'btn-rails pull-left'
+    -if @job.can_destroy?
+      = button_to 'Delete', job_path(@job), method: :delete, class: 'btn btn-danger', form_class: 'btn-rails pull-right'
+%h2= 'Last Error'
+%pre= @job.last_error
+
+%h2= 'Handler'
+%pre= @job.handler

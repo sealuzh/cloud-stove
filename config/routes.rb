@@ -1,14 +1,17 @@
 Rails.application.routes.draw do
 
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-  
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
   
   concern :copyable do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
+  end
+
+  # get 'jobs' => 'jobs#index'
+
+  resources :jobs, only:[:index, :show, :destroy] do
+    get 'run' => 'jobs#run', as: :run
   end
 
 

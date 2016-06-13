@@ -32,6 +32,7 @@ en:
       providers: "Providers"
       templates: "Templates"
       ingredients: "Ingredients"
+      jobs: "Jobs"
     footer:
       about: "About"
       faq: "FAQ"
@@ -65,3 +66,8 @@ en:
   providers:
     provider:
       last_updated: "Updated"
+  jobs:
+    index:
+      title: "Jobs"
+    show:
+      title: "Job"
