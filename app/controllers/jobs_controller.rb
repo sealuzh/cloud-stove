@@ -1,7 +1,16 @@
 class JobsController < ApplicationController
 
   def index
-    @jobs ||= Delayed::Web::Job.all
+    respond_to do |format|
+      format.html{
+        @jobs ||= Delayed::Web::Job.all
+      }
+
+      format.json{
+        @jobs = JobWrapper.all
+        render json: @jobs, status: :ok
+      }
+    end
   end
 
   def show
