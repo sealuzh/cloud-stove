@@ -69,8 +69,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'pry'
   gem 'pry-rails' # Use pry as Rails console
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  gem 'pry-byebug' # Use `binding.pry` as debugger with: step, next, finish, continue
   gem 'quiet_assets'
   gem 'webmock'
 
