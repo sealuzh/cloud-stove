@@ -46,4 +46,10 @@ Rails.application.configure do
 
   # Custom Cloud Stove config
   config.x.gravatar_host = 'localhost:3000'
+
+  # Override environment variables to prevent test from doing bad things.
+  ENV['ANC_ACCESS_KEY_ID'] = 'dummy_anc_access_key_id_for_testing'
+  ENV['ANC_PRIVATE_KEY'] = 'dummy_anc_private_key_for_testing'
+  ENV['DIGITALOCEAN_TOKEN'] = 'dummy_digitalocean_token_for_testing'
+  ENV['PAPERTRAIL_API_TOKEN'] = 'dummy_papertrail_api_token_for_testing'
 end
