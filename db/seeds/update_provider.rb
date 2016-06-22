@@ -18,5 +18,12 @@ if Provider.count.zero?
   # Execute the update job inline. We need the resources to create
   # deployment recommendations in the next step.
   Rails.application.config.active_job.queue_adapter = :inline
-  UpdateProvidersJob.perform_later rescue nil
+  
+  ProviderUpdater.class_eval do
+    def self.update_providers
+      providers.each { |p| p.perform_later rescue nil }
+    end
+  end
+  
+  UpdateProvidersJob.perform_later
 end
