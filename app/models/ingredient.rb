@@ -90,7 +90,17 @@ class Ingredient < Base
     ComputeRecommendationJob.perform_later(self)
   end
 
+  # looks for the root of the application hierarchy of this ingredient and returns it
+  def application_root
+      if self.parent.nil?
+        return self
+      else
+        return self.parent.application_root
+      end
+  end
+
   private
+
 
   def deep_dup(copies_hash,current)
     copy = current.dup
