@@ -1,5 +1,5 @@
 %h1.clearfix
   = t('.title') + " of "  
-  =link_to @instances.first.template.name, @instances.first.template
+  -#=link_to @instances.first.template.name, @instances.first.template
 
 = render :partial => 'ingredient',:collection => @instances

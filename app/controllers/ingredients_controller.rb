@@ -28,7 +28,7 @@ class IngredientsController < ApplicationController
   end
 
   def instances
-    i = Ingredient.find_by(params[:ingredient_id])
+    i = Ingredient.find_by(id: params[:ingredient_id])
     if i
       if i.is_root && i.is_template
         @instances = i.instances
@@ -44,12 +44,10 @@ class IngredientsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html {redirect_to :back, notice: 'Ingredient not found.'}
-        format.json {render json: 'Ingredient not found.', status: :not_found}
+        format.html {redirect_to :templates, notice: 'Template not found.'}
+        format.json {render json: 'Template not found.', status: :not_found}
       end
     end
-
-    # @instances = Ingredient.find(params[:ingredient_id]).
   end
 
   def show
