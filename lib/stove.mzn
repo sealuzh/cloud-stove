@@ -50,10 +50,10 @@ array[Ingredients] of var 1..num_resources: assignments;
 
 % Total Deployment Cost
 int: max_total = num_ingredients * max(costs);
-var 0..max_total: total_cost;
+var int: total_cost;
 
 % Minimize total cost
-solve :: int_search(assignments, smallest, indomain_min, complete)
+solve %:: int_search(assignments, first_fail, indomain_min, complete)
   minimize total_cost;
 
 %
