@@ -27,17 +27,15 @@ specifications and requirements.
   
   For RVM, run <code>rvm install $(cat cloud-stove/.ruby-version)</code>.
 
-* Install `phantomjs` for headless UI tests: http://phantomjs.org/download.html
+* Install <code>phantomjs</code> for headless UI tests: http://phantomjs.org/download.html
 
 * Set up dependencies and database
     cd cloud-stove
     bin/setup
 
-* Make sure that the {MiniZinc}[http://www.minizinc.org/] binary `mzn-g12fd` is present in the path:
+* Make sure that the {MiniZinc}[http://www.minizinc.org/] binary <code>mzn-g12fd</code> is present in the path:
 
-    ```bash
     export PATH=/Applications/MiniZincIDE.app/Contents/Resources/:$PATH
-    ```
 
 === Making Changes
 
