@@ -15,6 +15,18 @@
   ```
   bundle exec rake test
   ```
+  
+  If tests fail with `sh: mzn-g12fd: command not found` make sure that your
+  MiniZinc installation is on your `PATH`. If it is on your `PATH` and you
+  still get the error, make sure that `spring` starts with the correct `PATH`:
+  
+  ```
+  bin/spring stop
+  PATH=<path/to/minizinc>/:$PATH bundle exec rake test
+  ```
+  
+  This should set the correct environment for the newly started `spring` 
+  process.
 
 * Make sure that your code always has appropriate test coverage.
 
