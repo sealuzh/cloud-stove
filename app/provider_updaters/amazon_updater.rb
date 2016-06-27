@@ -15,23 +15,27 @@ class AmazonUpdater < ProviderUpdater
       provider.more_attributes['pricelist'][:compute] = pricelist
       provider.save!
 
-      # For now, get all instance types from first region (should be us-east-1)
-      region = pricelist['config']['regions'].first
-      region['instanceTypes'].each do |it|
-        # type: generalCurrentGen, computeCurrentGen, gpuCurrentGen, hiMemCurrentGen, storageCurrentGen
-        instance_type = it['type']
-        it['sizes'].each do |s|
-          # Attributes: size, vCPU, ECU, memoryGiB, storageGB, valueColumns
-          resource_id = s['size']
-          resource = provider.resources.find_or_create_by(name: resource_id)
+      pricelist['config']['regions'].each do |region_json|
+        region = region_json['region']
 
-          resource.resource_type = 'compute'
-          resource.more_attributes['cores'] = s['vCPU']
-          resource.more_attributes['mem_gb'] = BigDecimal.new(s['memoryGiB'])
-          resource.more_attributes['price_per_hour'] = s['valueColumns'].first['prices']['USD']
-          resource.save!
+        region_json['instanceTypes'].each do |it|
+
+          instance_type = it['type']
+          it['sizes'].each do |s|
+            # Attributes: size, vCPU, ECU, memoryGiB, storageGB, valueColumns
+            resource_id = s['size']
+            resource = provider.resources.find_or_create_by(name: resource_id)
+
+            resource.resource_type = 'compute'
+            resource.more_attributes['cores'] = s['vCPU']
+            resource.more_attributes['mem_gb'] = BigDecimal.new(s['memoryGiB'])
+            resource.more_attributes['price_per_hour'] = s['valueColumns'].first['prices']['USD']
+            resource.region = region
+            resource.save!
+          end
         end
       end
+      
     rescue Net::HTTPError, JSON::ParserError => e
       logger.error "Error, #{e.inspect}"
     end
