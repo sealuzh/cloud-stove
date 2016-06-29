@@ -31,7 +31,7 @@ class AmazonUpdater < ProviderUpdater
           resource.more_attributes['mem_gb'] = BigDecimal.new(s['memoryGiB'])
           resource.more_attributes['price_per_hour'] = s['valueColumns'].first['prices']['USD']
           resource.region = region
-          resource.region_code = (provider.id.to_s + region).hash
+          resource.region_code = provider.region_code(region)
           resource.save!
         end
       end
@@ -61,7 +61,7 @@ class AmazonUpdater < ProviderUpdater
           resource.resource_type = 'storage'
           resource.region = region
           resource.more_attributes['price_per_gb'] = storageType['prices']['USD']
-          resource.region_code = (provider.id.to_s + region).hash
+          resource.region_code = provider.region_code(region)
           resource.save!
         end
       end
