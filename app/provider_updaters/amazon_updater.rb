@@ -24,7 +24,7 @@ class AmazonUpdater < ProviderUpdater
         it['sizes'].each do |s|
           # Attributes: size, vCPU, ECU, memoryGiB, storageGB, valueColumns
           resource_id = s['size']
-          resource = provider.resources.find_or_create_by(name: resource_id)
+          resource = provider.resources.find_or_create_by(name: resource_id, region: region, provider_id: provider.id)
 
           resource.resource_type = 'compute'
           resource.more_attributes['cores'] = s['vCPU']
@@ -56,7 +56,7 @@ class AmazonUpdater < ProviderUpdater
         tier['storageTypes'].each do |storageType|
           storage_name = storageType['type']
           resource_name = tier_name + "_" + storage_name
-          resource = provider.resources.find_or_create_by(name: resource_name)
+          resource = provider.resources.find_or_create_by(name: resource_name, region: region, provider_id: provider.id)
           resource.resource_type = 'storage'
           resource.region = region
           resource.more_attributes['price_per_gb'] = storageType['prices']['USD']
@@ -71,24 +71,6 @@ class AmazonUpdater < ProviderUpdater
     logger.error "Error, #{e.inspect}"
   end
 
-  # def update_storage(provider)
-  #   response = make_request('http://a0.awsstatic.com/pricing/1/s3/pricing-storage-s3.min.js')
-  #   pricelist = parse_callback(response.body)
-  #
-  #   provider.more_attributes['pricelist'][:storage] = pricelist
-  #   region = pricelist['config']['regions'].first
-  #
-  #   region['tiers'].first['storageTypes'].each do |storageType|
-  #     resource_name = storageType['type']
-  #     resource = provider.resources.find_or_create_by(name: resource_name)
-  #     resource.resource_type = 'storage'
-  #     resource.more_attributes['price_per_gb'] = storageType['prices']['USD']
-  #     resource.save!
-  #   end
-  #
-  # rescue Net::HTTPError, JSON::ParserError => e
-  #   logger.error "Error, #{e.inspect}"
-  # end
 
 
   #update general Amazon provider data
