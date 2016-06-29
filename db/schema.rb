@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160629094357) do
+ActiveRecord::Schema.define(version: 20160629131653) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20160629094357) do
     t.datetime "updated_at",                     null: false
     t.string   "resource_type"
     t.string   "region"
+    t.integer  "region_code"
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
