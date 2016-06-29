@@ -11,7 +11,12 @@ class Provider < Base
     end
   end
 
+  def region_code(region_name)
+    (self.id + region_name).hash
+  end
+
   def self.update_providers
     UpdateProvidersJob.perform_later
   end
+
 end
