@@ -67,8 +67,9 @@ gem 'delayed_job_active_record'
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  gem 'pry'
+  gem 'pry-rails' # Use pry as Rails console
+  gem 'pry-byebug' # Use `binding.pry` as debugger with: step, next, finish, continue
   gem 'quiet_assets'
   gem 'webmock'
 

@@ -53,7 +53,7 @@ GEM
       sass (~> 3.4)
       thor (~> 0.19)
     builder (3.2.2)
-    byebug (8.2.2)
+    byebug (9.0.5)
     capybara (2.6.2)
       addressable
       mime-types (>= 1.16)
@@ -194,6 +194,11 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -316,7 +321,6 @@ DEPENDENCIES
   benchmark-ips
   bootstrap (~> 4.0.0.alpha3)
   bourbon
-  byebug
   capybara
   coffee-rails (~> 4.1.0)
   database_cleaner
@@ -337,6 +341,9 @@ DEPENDENCIES
   passenger
   pg
   poltergeist
+  pry
+  pry-byebug
+  pry-rails
   quiet_assets
   rack-cors
   rack-livereload
@@ -359,5 +366,8 @@ DEPENDENCIES
   web-console (~> 2.0)
   webmock
 
+RUBY VERSION
+   ruby 2.2.4p230
+
 BUNDLED WITH
-   1.12.1
+   1.12.5
