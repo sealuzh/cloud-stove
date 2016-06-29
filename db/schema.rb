@@ -80,13 +80,13 @@ ActiveRecord::Schema.define(version: 20160629131653) do
 
   create_table "resources", force: :cascade do |t|
     t.string   "name"
-    t.text     "more_attributes", default: "{}", null: false
+    t.text     "more_attributes",           default: "{}", null: false
     t.integer  "provider_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "resource_type"
     t.string   "region"
-    t.integer  "region_code"
+    t.integer  "region_code",     limit: 8
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
