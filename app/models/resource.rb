@@ -1,5 +1,5 @@
 class Resource < Base
-  ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb, :region
+  ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
   scope :compute, -> { where(resource_type: 'compute') }
 
