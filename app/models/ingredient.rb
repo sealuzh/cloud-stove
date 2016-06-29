@@ -41,6 +41,8 @@ class Ingredient < Base
   has_one :ram_constraint, class_name: 'RamConstraint', dependent: :destroy
   ## Cpu constraints
   has_one :cpu_constraint, class_name: 'CpuConstraint', dependent: :destroy
+  ## Preferred region constraints
+  has_one :preferred_region_constraint, class_name: 'PreferredRegionConstraint', dependent: :destroy
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
