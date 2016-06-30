@@ -45,7 +45,11 @@ class AtlanticNetUpdater < ProviderUpdater
     pricelist.each_pair do |key, instance_type|
       next unless instance_type['platform'] == platform
       resource_id = instance_type['plan_name']
-      resource = provider.resources.find_or_create_by(name: resource_id)
+
+      #TODO: use real regions instead of default EUWEST region
+      region = 'EUWEST1'
+
+      resource = provider.resources.find_or_create_by(name: resource_id, region: region, provider_id: provider.id)
 
       resource.resource_type = 'compute'
       resource.more_attributes['cores'] = instance_type['num_cpu']
@@ -53,6 +57,7 @@ class AtlanticNetUpdater < ProviderUpdater
       resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
       resource.more_attributes['os_platform'] = instance_type['platform']
       resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
+      resource.region_code = provider.region_code(region)
       resource.save!
     end
   rescue Net::HTTPError, JSON::ParserError, ProviderUpdater::Error => e
