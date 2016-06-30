@@ -57,19 +57,27 @@ class DeploymentRecommendation < Base
 
   def generate_resources_data
     resources_data = ''
-    resources_data << "num_resources = #{Resource.count};"
+    resources_data << "num_resources = #{Resource.compute.count};"
+    resources_data << "\n"
 
-    resources = Resource.all
+    resources = Resource.compute.sort_by &:id
     resources_data << "resource_ids = #{resources.map(&:name).to_json};"
+    resources_data << "\n"
+
+    resources_data << "regions = #{resources.map(&:region_code).to_json};"
+    resources_data << "\n"
 
     prices = resources.map { |r| (r.price_per_month * 1000).to_i }
     resources_data << "costs = #{prices.to_json};"
+    resources_data << "\n"
 
     ram_mb = resources.map { |r| (BigDecimal.new(r.ma['mem_gb']) * 1024).to_i rescue 0 }
     resources_data << "ram = #{ram_mb.to_json};"
+    resources_data << "\n"
 
     cores = resources.map { |r| r.ma['cores'].to_i rescue 0 }
     resources_data << "cpu = #{cores};"
+    resources_data << "\n"
 
     transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
       # FIXME: use actual transfer costs!
@@ -82,7 +90,7 @@ class DeploymentRecommendation < Base
   def generate_ingredients_data
     ingredients_data = ''
 
-    all_leafs = ingredient.all_leafs.sort_by &:id
+    all_leafs = ingredient.all_leafs.sort_by(&:id)
     num_ingredients = all_leafs.count
     ingredients_data << "num_ingredients = #{num_ingredients};"
     ingredients_data << "\n"
@@ -101,6 +109,10 @@ class DeploymentRecommendation < Base
       i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS
     end
     ingredients_data << "min_cpus = #{min_cpus.to_json};"
+    ingredients_data << "\n"
+
+    ingredients_data << "preferred_regions = array2d(Ingredients, Resources,
+                          #{preferred_regions(all_leafs).to_a.flatten.to_json});"
     ingredients_data << "\n"
 
     self.ingredients_data = ingredients_data
@@ -126,6 +138,22 @@ class DeploymentRecommendation < Base
     end
   end
 
+  def preferred_regions(all_leafs)
+    region_codes = Resource.compute.sort_by(&:id).map(&:region_code)
+    regions = Array.new
+    all_leafs.each do |ingredient|
+        if ingredient.preferred_region_constraint.present?
+          # regions.push(region_codes.map { |rc| ingredient.preferred_region_constraint.region_codes.include? rc ? 1.to_i : 0.to_i })
+          a = Array.new(region_codes.count, 0.to_i)
+          # FIXME: This only sets one resource of the region to 1 instead of all => results in unresolvable constraint
+          ingredient.preferred_region_constraint.region_codes.each { |pr| a[region_codes.index(pr)] = 1.to_i }
+          regions.push(a)
+        else
+          regions.push(Array.new(region_codes.count, 1.to_i))
+        end
+      end
+      regions.flatten
+    end
 
   def as_json(options={})
     hash = extract_params(self)
@@ -141,7 +169,6 @@ class DeploymentRecommendation < Base
     hash[:recommendation] = ingredients
     hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
     hash
-
   end
 
   def embed_ingredients

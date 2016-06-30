@@ -2,12 +2,6 @@
 int: num_ingredients;
 set of int: Ingredients = 1..num_ingredients;
 
-% Number of available providers
-% int: num_providers;
-% OR:
-% Number of available regions across all providers
-% int: num_regions;
-
 % Total number of resources available for deployment
 int: num_resources;
 set of int: Resources = 1..num_resources;
@@ -18,6 +12,9 @@ set of int: Resources = 1..num_resources;
 
 % Resource IDs
 array[Resources] of string: resource_ids;
+
+% Regions as region hashes derived from provider name and region name
+array[Resources] of int: regions;
 
 % Resource prices per hour (maybe month?) in mUSD
 array[Resources] of int: costs;
@@ -40,6 +37,13 @@ array[Ingredients] of int: min_ram;
 
 % Component CPU requirements
 array[Ingredients] of int: min_cpus;
+
+% FIXME: How to represent multiple preferred regions per ingredient?
+% A MiniZinc array cannot contain another array
+% [[us-west-1, us-west-2], [us-west-1], eu-east-1]
+
+% Region constraints for each ingredient
+array[Ingredients, Resources] of int: preferred_regions;
 
 %
 % Decision variables
@@ -70,7 +74,12 @@ constraint total_cost =
   sum(i in Ingredients, j in Ingredients)(
     inter_ingredient_traffic[i,j] * transfer_costs[assignments[i],assignments[j]]
   );
-  
+
+% TODO: Formulate the constraint that the assigned regions need to be part of the constraint region list
+%member(array[int] of var bool:       x, var bool:       y)
+%constraint forall(i in Ingredients)(member(row(preferred_regions, i), ));
+%constraint forall(i in Ingredients)(preferred_regions[i, assignments[i]] == 1);
+
 % Chosen resources must have enough RAM
 constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
 
@@ -78,5 +87,6 @@ constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
 constraint forall(i in Ingredients)(cpu[assignments[i]] >= min_cpus[i]);
 
 output [ "{\"ingredients\" :[" ] ++ [ "\"" ++ show(resource_ids[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "{\"regions\" :[" ] ++ [ "\"" ++ show(regions[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
          ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ "\", " ]
          ++ [ " \"total_cost\": " ++ show(total_cost) ++ "}" ];
