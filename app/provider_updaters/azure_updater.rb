@@ -46,10 +46,14 @@ class AzureUpdater < ProviderUpdater
       provider.more_attributes['pricelist']['compute'] = pricelist
       provider.save!
       pricelist.each_pair do |resource_id, data|
-        resource = provider.resources.find_or_create_by(name: resource_id)
-        resource.resource_type = 'compute'
-        resource.more_attributes = data.except('type')
-        resource.save!
+        data['regions'].each do |region, price|
+          resource = provider.resources.find_or_create_by(name: resource_id, region: region)
+          resource.resource_type = 'compute'
+          resource.more_attributes = data.except('type')
+          resource.more_attributes['price_per_hour'] = price
+          resource.region_code = provider.region_code(region)
+          resource.save!
+        end
       end
     end
 
