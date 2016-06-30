@@ -49,7 +49,7 @@ class AtlanticNetUpdater < ProviderUpdater
       #TODO: use real regions instead of default EUWEST region
       region = 'EUWEST1'
 
-      resource = provider.resources.find_or_create_by(name: resource_id, region: region, provider_id: provider.id)
+      resource = provider.resources.find_or_create_by(name: resource_id, region: region)
 
       resource.resource_type = 'compute'
       resource.more_attributes['cores'] = instance_type['num_cpu']

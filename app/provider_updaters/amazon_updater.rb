@@ -24,7 +24,7 @@ class AmazonUpdater < ProviderUpdater
         it['sizes'].each do |s|
           # Attributes: size, vCPU, ECU, memoryGiB, storageGB, valueColumns
           resource_id = s['size']
-          resource = provider.resources.find_or_create_by(name: resource_id, region: region, provider_id: provider.id)
+          resource = provider.resources.find_or_create_by(name: resource_id, region: region)
 
           resource.resource_type = 'compute'
           resource.more_attributes['cores'] = s['vCPU']
@@ -57,7 +57,7 @@ class AmazonUpdater < ProviderUpdater
         tier['storageTypes'].each do |storageType|
           storage_name = storageType['type']
           resource_name = tier_name + "_" + storage_name
-          resource = provider.resources.find_or_create_by(name: resource_name, region: region, provider_id: provider.id)
+          resource = provider.resources.find_or_create_by(name: resource_name, region: region)
           resource.resource_type = 'storage'
           resource.region = region
           resource.more_attributes['price_per_gb'] = storageType['prices']['USD']
