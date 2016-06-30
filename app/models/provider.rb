@@ -1,5 +1,5 @@
 class Provider < Base
-  has_many :resources
+  has_many :resources, dependent: :destroy
 
   # Return availability of provider
   # if there is none, assume 0.95
