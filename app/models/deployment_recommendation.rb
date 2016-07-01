@@ -142,18 +142,15 @@ class DeploymentRecommendation < Base
     region_codes = Resource.compute.sort_by(&:id).map(&:region_code)
     regions = Array.new
     all_leafs.each do |ingredient|
-        if ingredient.preferred_region_constraint.present?
-          # regions.push(region_codes.map { |rc| ingredient.preferred_region_constraint.region_codes.include? rc ? 1.to_i : 0.to_i })
-          a = Array.new(region_codes.count, 0.to_i)
-          # FIXME: This only sets one resource of the region to 1 instead of all => results in unresolvable constraint
-          ingredient.preferred_region_constraint.region_codes.each { |pr| a[region_codes.index(pr)] = 1.to_i }
-          regions.push(a)
-        else
-          regions.push(Array.new(region_codes.count, 1.to_i))
-        end
+      if ingredient.preferred_region_constraint.present?
+        ingredient_codes = ingredient.preferred_region_constraint.region_codes
+        regions.push(region_codes.map { |rc| (ingredient_codes.include? rc) ? 1.to_i : 0.to_i })
+      else
+        regions.push(Array.new(region_codes.count, 1.to_i))
       end
-      regions.flatten
     end
+    regions.flatten
+  end
 
   def as_json(options={})
     hash = extract_params(self)
