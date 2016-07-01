@@ -75,10 +75,8 @@ constraint total_cost =
     inter_ingredient_traffic[i,j] * transfer_costs[assignments[i],assignments[j]]
   );
 
-% TODO: Formulate the constraint that the assigned regions need to be part of the constraint region list
-%member(array[int] of var bool:       x, var bool:       y)
-%constraint forall(i in Ingredients)(member(row(preferred_regions, i), ));
-%constraint forall(i in Ingredients)(preferred_regions[i, assignments[i]] == 1);
+% Chosen resources must be in the preferred region
+constraint forall(i in Ingredients)(preferred_regions[i, assignments[i]] == 1);
 
 % Chosen resources must have enough RAM
 constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
