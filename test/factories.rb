@@ -29,10 +29,12 @@ FactoryGirl.define do
       name 'Amazon'
       more_attributes FactoryHelpers::hash_from_json('provider-amazon.json')
       after(:create) do |amazon_provider|
+        region = 'eu-west-1'
+        region_code = amazon_provider.region_code(region)
         amazon_provider.resources = [
-            create(:resource, :amazon_c1, provider: amazon_provider),
-            create(:resource, :amazon_c2, provider: amazon_provider),
-            create(:resource, :amazon_c3, provider: amazon_provider),
+            create(:resource, :amazon_c1, region: region, region_code: region_code, provider: amazon_provider),
+            create(:resource, :amazon_c2, region: region, region_code: region_code, provider: amazon_provider),
+            create(:resource, :amazon_c3, region: region, region_code: region_code, provider: amazon_provider),
         ]
         amazon_provider.save
       end
@@ -47,9 +49,11 @@ FactoryGirl.define do
       name 'Google'
       more_attributes FactoryHelpers::hash_from_json('provider-google.json')
       after(:create) do |google_provider|
+        region = 'europe-west1-b'
+        region_code = google_provider.region_code(region)
         google_provider.resources = [
-            create(:resource, :google_c1, provider: google_provider),
-            create(:resource, :google_c2, provider: google_provider),
+            create(:resource, :google_c1, region: region, region_code: region_code, provider: google_provider),
+            create(:resource, :google_c2, region: region, region_code: region_code, provider: google_provider),
         ]
         google_provider.save
       end

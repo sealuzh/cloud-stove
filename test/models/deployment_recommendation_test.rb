@@ -23,10 +23,13 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
     expected_recommendation =  {
       'ingredients' => ingredients_hash,
+      'regions' => [c3_2xlarge.region_code, c3_2xlarge.region_code, t2_micro.region_code, c3_2xlarge.region_code],
       'vm_cost' => '947.11',
       'total_cost' => 947112
     }
-    # Example JSON: {"ingredients":{"3":145,"4":145,"5":144,"6":145},"vm_cost":"947.11","total_cost":947112}
+    # Example JSON: {"ingredients":{"3":145,"4":145,"5":144,"6":145},
+    # "regions":[-1468347494899780561,-1468347494899780561,-1468347494899780561,-1468347494899780561],
+    # "vm_cost":"947.11","total_cost":947112}
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
