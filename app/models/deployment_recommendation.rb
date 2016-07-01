@@ -81,7 +81,7 @@ class DeploymentRecommendation < Base
 
     transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
       # FIXME: use actual transfer costs!
-      (resources[row].provider_id - resources[col].provider_id).abs * 100
+      (resources[row].region_code - resources[col].region_code).abs / 1000
     end
     resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_a.flatten.to_json});"
     self.resources_data = resources_data
