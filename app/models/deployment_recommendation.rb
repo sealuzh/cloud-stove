@@ -144,9 +144,9 @@ class DeploymentRecommendation < Base
     all_leafs.each do |ingredient|
       if ingredient.preferred_region_constraint.present?
         ingredient_codes = ingredient.preferred_region_constraint.region_codes
-        regions.push(region_codes.map { |rc| (ingredient_codes.include? rc) ? 1.to_i : 0.to_i })
+        regions.push(region_codes.map { |rc| (ingredient_codes.include? rc) })
       else
-        regions.push(Array.new(region_codes.count, 1.to_i))
+        regions.push(Array.new(region_codes.count, true))
       end
     end
     regions.flatten

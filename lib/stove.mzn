@@ -38,12 +38,8 @@ array[Ingredients] of int: min_ram;
 % Component CPU requirements
 array[Ingredients] of int: min_cpus;
 
-% FIXME: How to represent multiple preferred regions per ingredient?
-% A MiniZinc array cannot contain another array
-% [[us-west-1, us-west-2], [us-west-1], eu-east-1]
-
 % Region constraints for each ingredient
-array[Ingredients, Resources] of int: preferred_regions;
+array[Ingredients, Resources] of bool: preferred_regions;
 
 %
 % Decision variables
@@ -76,7 +72,7 @@ constraint total_cost =
   );
 
 % Chosen resources must be in the preferred region
-constraint forall(i in Ingredients)(preferred_regions[i, assignments[i]] == 1);
+constraint forall(i in Ingredients)(preferred_regions[i, assignments[i]] == true);
 
 % Chosen resources must have enough RAM
 constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
