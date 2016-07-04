@@ -1,1 +1,1 @@
-PATH=$PATH:$(pwd)/$(find minizinc* -type d -name bin)
+PATH=$PATH:$(pwd)/vendor/minizinc/bin
