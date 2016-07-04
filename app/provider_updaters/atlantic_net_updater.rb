@@ -47,18 +47,20 @@ class AtlanticNetUpdater < ProviderUpdater
       resource_id = instance_type['plan_name']
 
       #TODO: use real regions instead of default EUWEST region
-      region = 'EUWEST1'
+      regions = ['EUWEST1','USEAST1','USEAST2','USCENTRAL1','USWEST1','CAEAST1']
 
-      resource = provider.resources.find_or_create_by(name: resource_id, region: region)
+      regions.each do |region|
+        resource = provider.resources.find_or_create_by(name: resource_id, region: region)
 
-      resource.resource_type = 'compute'
-      resource.more_attributes['cores'] = instance_type['num_cpu']
-      resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['ram'].to_s) / 1024
-      resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
-      resource.more_attributes['os_platform'] = instance_type['platform']
-      resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
-      resource.region_code = provider.region_code(region)
-      resource.save!
+        resource.resource_type = 'compute'
+        resource.more_attributes['cores'] = instance_type['num_cpu']
+        resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['ram'].to_s) / 1024
+        resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
+        resource.more_attributes['os_platform'] = instance_type['platform']
+        resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
+        resource.region_code = provider.region_code(region)
+        resource.save!
+      end
     end
   rescue Net::HTTPError, JSON::ParserError, ProviderUpdater::Error => e
     logger.error "Error, #{e.inspect}"
