@@ -2,10 +2,19 @@ class Resource < Base
   ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
   scope :compute, -> { where(resource_type: 'compute') }
-  scope :area, ->(area) { where(region: PreferredRegionConstraint.region_from_area(area)) }
-  scope :areas, ->(areas) { where(region: areas.map { |a| PreferredRegionConstraint.region_from_area(a) }.flatten.uniq.compact) }
+  scope :region_area, ->(region_area) { where(region_area: region_area) }
 
   validates :resource_type, presence: true
+
+  def self.region_codes(region_area)
+    Resource.region_area(region_area).select(:region, :provider_id).distinct.map do |resource|
+      resource.provider.region_code(resource.region)
+    end
+  end
+
+  def self.regions(region_area)
+    Resource.region_area(region_area).select(:region).distinct.map(&:region)
+  end
 
   def is_compute?
     resource_type == 'compute'

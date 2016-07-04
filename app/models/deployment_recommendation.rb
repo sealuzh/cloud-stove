@@ -5,6 +5,7 @@ class DeploymentRecommendation < Base
   DEFAULT_MIN_RAM = 1
   DEFAULT_MIN_CPUS = 1
   DEFAULT_DEPENDENCY_WEIGHT = 100
+  DEFAULT_REGION_AREAS = %w(EU)
 
   belongs_to :ingredient
 
@@ -82,21 +83,35 @@ class DeploymentRecommendation < Base
 
     transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
       # FIXME: use actual transfer costs!
-      (resources[row].region_code - resources[col].region_code).abs % 1000
+      if resources[row].region_code == resources[col].region_code
+        0
+      elsif resources[row].region_area == resources[col].region_area
+        if resources[row].provider_id == resources[col].provider_id
+          10
+        else
+          30
+        end
+      else
+        100
+      end
     end
     resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_a.flatten.to_json});"
     self.resources_data = resources_data
   end
 
   def filtered_resources
+    Resource.region_area(preferred_region_areas).compute.sort_by(&:id)
+  end
+
+  def preferred_region_areas
     all_leafs = ingredient.all_leafs.sort_by(&:id)
     areas = []
     all_leafs.each do |leaf|
-      if leaf.preferred_region_constraint.present?
-        areas.push(leaf.preferred_region_constraint.preferred_region)
+      if leaf.preferred_region_area_constraint.present?
+        areas.push(leaf.preferred_region_area_constraint.preferred_region_area)
       end
     end
-    Resource.areas(areas).compute.sort_by &:id
+    areas.empty? ? DEFAULT_REGION_AREAS : areas
   end
 
   def generate_ingredients_data
@@ -154,8 +169,8 @@ class DeploymentRecommendation < Base
     region_codes = filtered_resources.map(&:region_code)
     regions = Array.new
     all_leafs.each do |ingredient|
-      if ingredient.preferred_region_constraint.present?
-        ingredient_codes = ingredient.preferred_region_constraint.region_codes
+      if ingredient.preferred_region_area_constraint.present?
+        ingredient_codes = ingredient.preferred_region_area_constraint.region_codes
         regions.push(region_codes.map { |rc| (ingredient_codes.include? rc) })
       else
         regions.push(Array.new(region_codes.count, true))

@@ -16,14 +16,14 @@ ActiveRecord::Schema.define(version: 20160704125342) do
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
     t.text     "more_attributes"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "type"
     t.integer  "source_id"
     t.integer  "target_id"
     t.integer  "min_ram"
     t.integer  "min_cpus"
-    t.string   "preferred_region"
+    t.string   "preferred_region_area"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
