@@ -49,7 +49,6 @@ array[Ingredients, Resources] of bool: preferred_regions;
 array[Ingredients] of var 1..num_resources: assignments;
 
 % Total Deployment Cost
-int: max_total = num_ingredients * max(costs);
 var int: total_cost;
 
 % Minimize total cost
