@@ -48,15 +48,21 @@ array[Ingredients, Resources] of bool: preferred_regions;
 % Component assignment
 array[Ingredients] of var 1..num_resources: assignments;
 
+int: max_costs = max(costs);
+array[Ingredients] of var 1..max_costs: assignment_costs;
+
 % Total Deployment Cost
 var int: total_cost;
 
 % Minimize total cost
-solve :: int_search(assignments, first_fail, indomain_min, complete)
+solve :: int_search(assignment_costs, first_fail, indomain_min, complete)
+  minimize total_cost;
 
 %
 % Constraints
 %
+
+constraint forall(i in Ingredients)(assignment_costs[i] == costs[assignments[i]]);
 
 % Calculate total cost
 constraint total_cost = 
