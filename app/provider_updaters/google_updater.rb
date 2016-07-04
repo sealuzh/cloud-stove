@@ -72,9 +72,11 @@ class GoogleUpdater < ProviderUpdater
       gcp_price_list.each_pair do |key, value|
         next unless ((key.start_with? bigstore_storage_prefix) || (key.start_with? nearline_storage_prefix))
 
-        resource = provider.resources.find_or_create_by(name: key)
+        region = 'us'
+        resource = provider.resources.find_or_create_by(name: key, region: region)
         resource.resource_type = 'storage'
-        resource.more_attributes['price_per_month_gb'] = value['us']
+        resource.region_code = provider.region_code(region)
+        resource.more_attributes['price_per_month_gb'] = value[region]
         resource.save!
 
       end
