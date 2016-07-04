@@ -56,11 +56,12 @@ class DeploymentRecommendation < Base
   end
 
   def generate_resources_data
+    resources = filtered_resources
+
     resources_data = ''
-    resources_data << "num_resources = #{Resource.compute.count};"
+    resources_data << "num_resources = #{resources.count};"
     resources_data << "\n"
 
-    resources = Resource.compute.sort_by &:id
     resources_data << "resource_ids = #{resources.map(&:name).to_json};"
     resources_data << "\n"
 
@@ -81,10 +82,21 @@ class DeploymentRecommendation < Base
 
     transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
       # FIXME: use actual transfer costs!
-      (resources[row].region_code - resources[col].region_code).abs / 1000
+      (resources[row].region_code - resources[col].region_code).abs % 1000
     end
     resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_a.flatten.to_json});"
     self.resources_data = resources_data
+  end
+
+  def filtered_resources
+    all_leafs = ingredient.all_leafs.sort_by(&:id)
+    areas = []
+    all_leafs.each do |leaf|
+      if leaf.preferred_region_constraint.present?
+        areas.push(leaf.preferred_region_constraint.preferred_region)
+      end
+    end
+    Resource.areas(areas).compute.sort_by &:id
   end
 
   def generate_ingredients_data
@@ -139,7 +151,7 @@ class DeploymentRecommendation < Base
   end
 
   def preferred_regions(all_leafs)
-    region_codes = Resource.compute.sort_by(&:id).map(&:region_code)
+    region_codes = filtered_resources.map(&:region_code)
     regions = Array.new
     all_leafs.each do |ingredient|
       if ingredient.preferred_region_constraint.present?

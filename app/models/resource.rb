@@ -2,13 +2,15 @@ class Resource < Base
   ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
   scope :compute, -> { where(resource_type: 'compute') }
+  scope :area, ->(area) { where(region: PreferredRegionConstraint.region_from_area(area)) }
+  scope :areas, ->(areas) { where(region: areas.map { |a| PreferredRegionConstraint.region_from_area(a) }.flatten.uniq.compact) }
 
   validates :resource_type, presence: true
-  
+
   def is_compute?
     resource_type == 'compute'
   end
-  
+
   def price_per_month
     if more_attributes['price_per_month']
       BigDecimal.new(more_attributes['price_per_month'].to_s)
@@ -16,7 +18,7 @@ class Resource < Base
       price_per_hour * 744
     end
   end
-  
+
   def price_per_hour
     BigDecimal.new(more_attributes['price_per_hour'].to_s || 0)
   end
