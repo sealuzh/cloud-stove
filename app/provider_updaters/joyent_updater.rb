@@ -2,7 +2,7 @@ class JoyentUpdater < ProviderUpdater
   def perform
     update_provider
     update_compute
-    update_storage
+    # update_storage
   end
 
 
@@ -17,31 +17,37 @@ class JoyentUpdater < ProviderUpdater
       provider.save!
     end
 
-    def update_compute
-      uri = URI('https://www.joyent.com/assets/js/pricing.json')
 
-      pricelist = JSON.load(open(uri))
+  def update_compute
+    provider = Provider.find_or_create_by(name: 'Joyent')
+    uri = URI('https://www.joyent.com/pricing')
+    doc = Nokogiri::HTML(open(uri))
+    # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
+    regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
+    kvm_div = doc.css('div#kvm')
+    instances = kvm_div.css('div.instance')
 
-      provider = Provider.find_or_create_by(name: 'Joyent')
-      provider.more_attributes['pricelist']['compute'] = pricelist
-      provider.save!
+    instances.each do |instance_element|
 
-      pricelist['Portfolio'].each do |instance_type|
-        # For now, we only store VM types, no containers
-        next unless instance_type['OS'] == 'Hardware VM'
-
-        resource_id = instance_type['API Name']
-        resource = provider.resources.find_or_create_by(name: resource_id)
-        resource.resource_type = 'compute'
-        resource.more_attributes['price_per_hour'] = instance_type['Price']
-        resource.more_attributes['cores'] = instance_type['vCPUs']
-        resource.more_attributes['mem_gb'] = instance_type['RAM GiB']
-        resource.more_attributes['bandwidth_gbps'] = instance_type['Network']
-        resource.save!
-
+      if number_from(instance_element.css('li.spec.cpu').text) < 1
+        next
       end
+      regions.each do |region|
+        resource_name = instance_element.css('li.spec.api').text
 
+        resource = provider.resources.find_or_create_by(name: resource_name, region: region)
+        resource.more_attributes['price_per_hour'] = number_from(instance_element.css('p.pph.s')[0].text)
+        resource.more_attributes['price_per_month'] = number_from(instance_element.css('p.pph.s')[1].text)
+        resource.more_attributes['cores'] = number_from(instance_element.css('li.spec.cpu').text)
+        resource.more_attributes['mem_gb'] = number_from(instance_element.css('li.spec.ram').text)
+        resource.more_attributes['disk_gb'] = number_from(instance_element.css('li.spec.disk').text)
+        resource.resource_type = 'compute'
+        resource.region_code = provider.region_code(region)
+        resource.save!
+      end
     end
+
+  end
 
     def update_storage
       provider = Provider.find_or_create_by(name: 'Joyent')
@@ -71,5 +77,10 @@ class JoyentUpdater < ProviderUpdater
       provider.save!
 
 
+    end
+
+
+    def number_from(string)
+      Float(string.delete('^0-9.').to_d)
     end
 end
