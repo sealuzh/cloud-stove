@@ -52,8 +52,7 @@ array[Ingredients] of var 1..num_resources: assignments;
 var int: total_cost;
 
 % Minimize total cost
-solve %:: int_search(assignments, first_fail, indomain_min, complete)
-  minimize total_cost;
+solve :: int_search(assignments, first_fail, indomain_min, complete)
 
 %
 % Constraints
