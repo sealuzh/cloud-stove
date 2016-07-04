@@ -1,7 +1,7 @@
 class AzureUpdater < ProviderUpdater
   def perform
     update_provider
-    update_compute
+    # update_compute
     update_storage
   end
 
@@ -63,18 +63,24 @@ class AzureUpdater < ProviderUpdater
       doc = Nokogiri::HTML(open(uri))
       pricelist = {}
       provider = Provider.find_or_create_by(name: 'Microsoft Azure')
-      blob_storage_div = doc.css('div.wa-content.wa-conditionalDisplay')[0]
+      blob_storage_div = doc.css('div.wa-content.wa-tabs-container.wa-conditionalDisplay')[0]
       first_tb_prices = blob_storage_div.css('tbody').css('tr').css('td')
       blob_storage_div.css('thead').css('th').each_with_index do |resource_name,index |
-        next unless (index != 0) #skip the first tablehead since that is the description column
-        resource = provider.resources.find_or_create_by(name: resource_name.text)
-        resource.resource_type = 'storage'
-        resource.more_attributes['price_per_month_gb'] = first_tb_prices[index].text.delete('^0-9.').to_d
-        resource.save!
-        pricelist[resource_name.text] = {
-            'type' => 'storage',
-            'price_per_month_gb' => resource.more_attributes['price_per_month_gb']
-        }
+
+        #skip the first tablehead since that is the description column
+        next unless (index != 0) && (!first_tb_prices[index].children.first.attributes['data-amount'].nil?)
+
+        region_hash = JSON.parse(first_tb_prices[index].children.first.attributes['data-amount'].value)
+        region_hash['regional'].each do |region,price|
+          resource = provider.resources.find_or_create_by(name: resource_name.text, region: region)
+          resource.resource_type = 'storage'
+          resource.more_attributes['price_per_month_gb'] = price
+          resource.save!
+          pricelist[resource_name.text] = {
+              'type' => 'storage',
+              'price_per_month_gb' => resource.more_attributes['price_per_month_gb']
+          }
+        end
       end
       provider.more_attributes['pricelist']['storage'] = pricelist
       provider.save!
