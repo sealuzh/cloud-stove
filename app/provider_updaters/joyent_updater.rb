@@ -2,7 +2,7 @@ class JoyentUpdater < ProviderUpdater
   def perform
     update_provider
     update_compute
-    # update_storage
+    update_storage
   end
 
 
@@ -51,32 +51,26 @@ class JoyentUpdater < ProviderUpdater
 
     def update_storage
       provider = Provider.find_or_create_by(name: 'Joyent')
-
-      uri = URI('https://www.joyent.com/object-storage/pricing')
+      uri = URI('https://www.joyent.com/pricing/manta')
       doc = Nokogiri::HTML(open(uri))
 
-      storage_div = doc.css('div#storage')
+      rows = doc.css('tbody')[0].css('tr')
+      rows.pop()
 
-      pricelist = {}
+      # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
+      regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
 
-      storage_div.css('table').css('thead').css('tr').css('th').each_with_index do |resource_name, index|
-        next if (index==0)
 
-        resource = provider.resources.find_or_create_by(name: resource_name.text)
-        resource.resource_type = 'storage'
-        resource.more_attributes['price_per_month_gb'] = storage_div.css('table').css('tbody').css('tr')[0].css('td')[index].text.delete('^0-9.').to_d
-        resource.save!
-
-        pricelist[resource.name] = {
-            'type' => 'storage',
-            'price_per_month_gb' => resource.more_attributes['price_per_month_gb']
-        }
+      rows.each do |storage_element|
+        regions.each do |region|
+          resource_name = storage_element.css('td')[0].text
+          resource = provider.resources.find_or_create_by(name: resource_name, region: region)
+          resource.resource_type = 'storage'
+          resource.region_code = provider.region_code(region)
+          resource.more_attributes['price_per_month_gb'] = number_from(storage_element.css('td')[1].text)
+          resource.save!
+        end
       end
-
-      provider.more_attributes['pricelist']['storage'] = pricelist
-      provider.save!
-
-
     end
 
 
