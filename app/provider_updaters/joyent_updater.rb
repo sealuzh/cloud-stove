@@ -18,36 +18,37 @@ class JoyentUpdater < ProviderUpdater
     end
 
 
-  def update_compute
-    provider = Provider.find_or_create_by(name: 'Joyent')
-    uri = URI('https://www.joyent.com/pricing')
-    doc = Nokogiri::HTML(open(uri))
-    # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
-    regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
-    kvm_div = doc.css('div#kvm')
-    instances = kvm_div.css('div.instance')
+    def update_compute
+      provider = Provider.find_or_create_by(name: 'Joyent')
+      uri = URI('https://www.joyent.com/pricing')
+      doc = Nokogiri::HTML(open(uri))
+      # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
+      regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
+      kvm_div = doc.css('div#kvm')
+      instances = kvm_div.css('div.instance')
 
-    instances.each do |instance_element|
+      instances.each do |instance_element|
 
-      if number_from(instance_element.css('li.spec.cpu').text) < 1
-        next
+        if number_from(instance_element.css('li.spec.cpu').text) < 1
+          next
+        end
+        regions.each do |region|
+          resource_name = instance_element.css('li.spec.api').text
+
+          resource = provider.resources.find_or_create_by(name: resource_name, region: region)
+          resource.more_attributes['price_per_hour'] = number_from(instance_element.css('p.pph.s')[0].text)
+          resource.more_attributes['price_per_month'] = number_from(instance_element.css('p.pph.s')[1].text)
+          resource.more_attributes['cores'] = number_from(instance_element.css('li.spec.cpu').text)
+          resource.more_attributes['mem_gb'] = number_from(instance_element.css('li.spec.ram').text)
+          resource.more_attributes['disk_gb'] = number_from(instance_element.css('li.spec.disk').text)
+          resource.resource_type = 'compute'
+          resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
+          resource.save!
+        end
       end
-      regions.each do |region|
-        resource_name = instance_element.css('li.spec.api').text
 
-        resource = provider.resources.find_or_create_by(name: resource_name, region: region)
-        resource.more_attributes['price_per_hour'] = number_from(instance_element.css('p.pph.s')[0].text)
-        resource.more_attributes['price_per_month'] = number_from(instance_element.css('p.pph.s')[1].text)
-        resource.more_attributes['cores'] = number_from(instance_element.css('li.spec.cpu').text)
-        resource.more_attributes['mem_gb'] = number_from(instance_element.css('li.spec.ram').text)
-        resource.more_attributes['disk_gb'] = number_from(instance_element.css('li.spec.disk').text)
-        resource.resource_type = 'compute'
-        resource.region_code = provider.region_code(region)
-        resource.save!
-      end
     end
-
-  end
 
     def update_storage
       provider = Provider.find_or_create_by(name: 'Joyent')
@@ -67,6 +68,7 @@ class JoyentUpdater < ProviderUpdater
           resource = provider.resources.find_or_create_by(name: resource_name, region: region)
           resource.resource_type = 'storage'
           resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
           resource.more_attributes['price_per_month_gb'] = number_from(storage_element.css('td')[1].text)
           resource.save!
         end
@@ -77,4 +79,14 @@ class JoyentUpdater < ProviderUpdater
     def number_from(string)
       Float(string.delete('^0-9.').to_d)
     end
+
+    def extract_region_area(region)
+      if (region.downcase().include? 'us')
+        return 'US'
+      elsif (region.downcase().include? 'eu')
+        return 'EU'
+      end
+    end
+
+
 end

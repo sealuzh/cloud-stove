@@ -59,10 +59,22 @@ class AtlanticNetUpdater < ProviderUpdater
         resource.more_attributes['os_platform'] = instance_type['platform']
         resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
         resource.region_code = provider.region_code(region)
+        resource.region_area = extract_region_area(region)
         resource.save!
       end
     end
   rescue Net::HTTPError, JSON::ParserError, ProviderUpdater::Error => e
     logger.error "Error, #{e.inspect}"
   end
+
+
+  private
+    def extract_region_area(region)
+      if (region.downcase().include? 'us') || (region.downcase().include? 'ca')
+        return 'US'
+      elsif region.downcase().include? 'eu'
+        return 'EU'
+      end
+    end
+
 end

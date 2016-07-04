@@ -1,7 +1,7 @@
 class AzureUpdater < ProviderUpdater
   def perform
     update_provider
-    # update_compute
+    update_compute
     update_storage
   end
 
@@ -52,6 +52,7 @@ class AzureUpdater < ProviderUpdater
           resource.more_attributes = data.except('type')
           resource.more_attributes['price_per_hour'] = price
           resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
           resource.save!
         end
       end
@@ -84,5 +85,17 @@ class AzureUpdater < ProviderUpdater
       end
       provider.more_attributes['pricelist']['storage'] = pricelist
       provider.save!
+    end
+
+    def extract_region_area(region)
+      if (region.downcase().include? 'us-') || (region.downcase().include? 'canada') || (region.downcase().include? 'usgov')
+        return 'US'
+      elsif (region.downcase().include? 'eu') || (region.downcase().include? 'europe')
+        return 'EU'
+      elsif (region.downcase().include? 'australia') || (region.downcase().include? 'japan') || (region.downcase().include? 'asia') || (region.downcase().include? 'india')
+        return 'ASIA'
+      elsif region.downcase().include? 'brazil'
+        return 'SA'
+      end
     end
 end

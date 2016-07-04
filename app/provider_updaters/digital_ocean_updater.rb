@@ -25,6 +25,7 @@ class DigitalOceanUpdater < ProviderUpdater
         resource.more_attributes['price_per_hour'] = instance_type['price_hourly']
         resource.more_attributes['price_per_month'] = instance_type['price_monthly']
         resource.region_code = provider.region_code(region)
+        resource.region_area = extract_region_area(region)
         resource.save!
       end
 
@@ -32,4 +33,16 @@ class DigitalOceanUpdater < ProviderUpdater
   rescue Net::HTTPError, JSON::ParserError => e
     logger.error "Error, #{e.inspect}"
   end
+
+  private
+
+    def extract_region_area(region)
+      if (region.downcase().include? 'nyc') || (region.downcase().include? 'sfo') || (region.downcase().include? 'tor')
+        return 'US'
+      elsif (region.downcase().include? 'lon') || (region.downcase().include? 'fra') || (region.downcase().include? 'ams')
+        return 'EU'
+      elsif (region.downcase().include? 'sgp') || (region.downcase().include? 'blr')
+        return 'ASIA'
+      end
+    end
 end

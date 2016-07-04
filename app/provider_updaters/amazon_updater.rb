@@ -32,6 +32,7 @@ class AmazonUpdater < ProviderUpdater
           resource.more_attributes['price_per_hour'] = s['valueColumns'].first['prices']['USD']
           resource.region = region
           resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
           resource.save!
         end
       end
@@ -62,6 +63,7 @@ class AmazonUpdater < ProviderUpdater
           resource.region = region
           resource.more_attributes['price_per_gb'] = storageType['prices']['USD']
           resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
           resource.save!
         end
       end
@@ -117,6 +119,19 @@ class AmazonUpdater < ProviderUpdater
     end
 
     JSON.parse(result)
+  end
+
+
+  def extract_region_area(region)
+    if region.downcase().include? 'us'
+      return 'US'
+    elsif region.downcase().include? 'eu'
+      return 'EU'
+    elsif region.downcase().include? 'ap'
+      return 'ASIA'
+    elsif region.downcase().include? 'sa'
+      return 'SA'
+    end
   end
 
 end
