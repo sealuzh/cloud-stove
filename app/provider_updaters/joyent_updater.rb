@@ -17,59 +17,75 @@ class JoyentUpdater < ProviderUpdater
       provider.save!
     end
 
+
     def update_compute
-      uri = URI('https://www.joyent.com/assets/js/pricing.json')
-
-      pricelist = JSON.load(open(uri))
-
       provider = Provider.find_or_create_by(name: 'Joyent')
-      provider.more_attributes['pricelist']['compute'] = pricelist
-      provider.save!
+      uri = URI('https://www.joyent.com/pricing')
+      doc = Nokogiri::HTML(open(uri))
+      # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
+      regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
+      kvm_div = doc.css('div#kvm')
+      instances = kvm_div.css('div.instance')
+      instances.each do |instance_element|
 
-      pricelist['Portfolio'].each do |instance_type|
-        # For now, we only store VM types, no containers
-        next unless instance_type['OS'] == 'Hardware VM'
+        if number_from(instance_element.css('li.spec.cpu').text) < 1
+          next
+        end
+        regions.each do |region|
+          resource_name = instance_element.css('li.spec.api').text
 
-        resource_id = instance_type['API Name']
-        resource = provider.resources.find_or_create_by(name: resource_id)
-        resource.resource_type = 'compute'
-        resource.more_attributes['price_per_hour'] = instance_type['Price']
-        resource.more_attributes['cores'] = instance_type['vCPUs']
-        resource.more_attributes['mem_gb'] = instance_type['RAM GiB']
-        resource.more_attributes['bandwidth_gbps'] = instance_type['Network']
-        resource.save!
-
+          resource = provider.resources.find_or_create_by(name: resource_name, region: region)
+          resource.more_attributes['price_per_hour'] = number_from(instance_element.css('p.pph.s')[0].text)
+          resource.more_attributes['price_per_month'] = number_from(instance_element.css('p.pph.s')[1].text)
+          resource.more_attributes['cores'] = number_from(instance_element.css('li.spec.cpu').text)
+          resource.more_attributes['mem_gb'] = number_from(instance_element.css('li.spec.ram').text)
+          resource.more_attributes['disk_gb'] = number_from(instance_element.css('li.spec.disk').text)
+          resource.resource_type = 'compute'
+          resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
+          resource.save!
+        end
       end
 
     end
 
     def update_storage
       provider = Provider.find_or_create_by(name: 'Joyent')
-
-      uri = URI('https://www.joyent.com/object-storage/pricing')
+      uri = URI('https://www.joyent.com/pricing/manta')
       doc = Nokogiri::HTML(open(uri))
 
-      storage_div = doc.css('div#storage')
+      rows = doc.css('tbody')[0].css('tr')
+      rows.pop()
 
-      pricelist = {}
+      # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
+      regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
 
-      storage_div.css('table').css('thead').css('tr').css('th').each_with_index do |resource_name, index|
-        next if (index==0)
 
-        resource = provider.resources.find_or_create_by(name: resource_name.text)
-        resource.resource_type = 'storage'
-        resource.more_attributes['price_per_month_gb'] = storage_div.css('table').css('tbody').css('tr')[0].css('td')[index].text.delete('^0-9.').to_d
-        resource.save!
-
-        pricelist[resource.name] = {
-            'type' => 'storage',
-            'price_per_month_gb' => resource.more_attributes['price_per_month_gb']
-        }
+      rows.each do |storage_element|
+        regions.each do |region|
+          resource_name = storage_element.css('td')[0].text
+          resource = provider.resources.find_or_create_by(name: resource_name, region: region)
+          resource.resource_type = 'storage'
+          resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
+          resource.more_attributes['price_per_month_gb'] = number_from(storage_element.css('td')[1].text)
+          resource.save!
+        end
       end
-
-      provider.more_attributes['pricelist']['storage'] = pricelist
-      provider.save!
-
-
     end
+
+
+    def number_from(string)
+      Float(string.delete('^0-9.').to_d)
+    end
+
+    def extract_region_area(region)
+      if (region.downcase().include? 'us')
+        return 'US'
+      elsif (region.downcase().include? 'eu')
+        return 'EU'
+      end
+    end
+
+
 end

@@ -15,16 +15,34 @@ class DigitalOceanUpdater < ProviderUpdater
     
     pricelist['sizes'].each do |instance_type|
       resource_id = instance_type['slug']
-      resource = provider.resources.find_or_create_by(name: resource_id)
-      
-      resource.resource_type = 'compute'
-      resource.more_attributes['cores'] = instance_type['vcpus']
-      resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['memory']) / 1024
-      resource.more_attributes['price_per_hour'] = instance_type['price_hourly']
-      resource.more_attributes['price_per_month'] = instance_type['price_monthly']
-      resource.save!
+
+      instance_type['regions'].each do |region|
+        resource = provider.resources.find_or_create_by(name: resource_id, region: region)
+
+        resource.resource_type = 'compute'
+        resource.more_attributes['cores'] = instance_type['vcpus']
+        resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['memory']) / 1024
+        resource.more_attributes['price_per_hour'] = instance_type['price_hourly']
+        resource.more_attributes['price_per_month'] = instance_type['price_monthly']
+        resource.region_code = provider.region_code(region)
+        resource.region_area = extract_region_area(region)
+        resource.save!
+      end
+
     end
   rescue Net::HTTPError, JSON::ParserError => e
     logger.error "Error, #{e.inspect}"
   end
+
+  private
+
+    def extract_region_area(region)
+      if (region.downcase().include? 'nyc') || (region.downcase().include? 'sfo') || (region.downcase().include? 'tor')
+        return 'US'
+      elsif (region.downcase().include? 'lon') || (region.downcase().include? 'fra') || (region.downcase().include? 'ams')
+        return 'EU'
+      elsif (region.downcase().include? 'sgp') || (region.downcase().include? 'blr')
+        return 'ASIA'
+      end
+    end
 end

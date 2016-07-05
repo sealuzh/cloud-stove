@@ -11,65 +11,74 @@ Set-Cookie: PHPSESSID=4cke5b740i7029t6eee4dffmo3; path=/
 X-Cache-Info: not cacheable; response specified "Cache-Control: no-store"
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script type="application/ld+json">
+<!-- saved from url=(0036)https://www.joyent.com/pricing/manta -->
+<html lang="en" class="js svg wf-dincondensedweb-n4-active wf-opensans-n3-active wf-opensans-n4-active wf-opensans-n7-active wf-sourcecodepro-i4-active wf-sourcecodepro-i7-active wf-sourcecodepro-n4-active wf-sourcecodepro-n7-active wf-active"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script async="" defer="true" src="https://api.olark.com/2.0/sites/3485-546-10-5485/visits?_callback=_olark_callback_d922d944_645f_48dd_b53e_6b0881b267ee&amp;_method=POST&amp;_data=%7B%22conversation_id%22%3A%22OWj0WfQTGQUV08Tk5m5zs5V5JNQENM0A%22%2C%22cache%22%3A%220.8313802968299218%22%7D"></script><script async="" defer="true" src="./joyent_storage_files/jquery.js"></script><script async="" defer="true" src="./joyent_storage_files/visits"></script><script async="" id="db_ip_api" src="./joyent_storage_files/ip.json"></script>
+    <script type="text/javascript" id="www-widgetapi-script" src="./joyent_storage_files/www-widgetapi.js" async=""></script><script type="text/javascript" async="" src="./joyent_storage_files/linkid.js"></script><script async="" id="demandbase_js_lib" src="./joyent_storage_files/rt9IDBtd.min.js"></script><script type="text/javascript" async="" src="./joyent_storage_files/munchkin.js"></script><script src="./joyent_storage_files/iframe_api"></script><script async="" src="./joyent_storage_files/analytics.js"></script><script type="application/ld+json">
     {  "@context" : "http://schema.org",
        "@type" : "WebSite",
        "name" : "Joyent",
        "url" : "https://www.joyent.com"
     }
     </script>
-    <script src="//cdn.optimizely.com/js/293681119.js"></script>
-    <meta HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
-    <title>Joyent Manta Storage Service Pricing - Object Storage - Joyent</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pricing for Joyent's Manta Storage Service.">
-        <link rel="canonical" href="https://www.joyent.com/object-storage/pricing">
-        <!-- Retina Images -->
-    <script>(function(w){var dpr=((w.devicePixelRatio===undefined)?1:w.devicePixelRatio);if(!!w.navigator.standalone){var r=new XMLHttpRequest();r.open('GET','/retinaimages.php?devicePixelRatio='+dpr,false);r.send()}else{document.cookie='devicePixelRatio='+dpr+'; path=/'}})(window)</script>
 
-    <!-- Le styles -->
-            <link rel="stylesheet" type="text/css" href="/assets/css/style.css?v=1458075661">
-        <link rel="stylesheet" type="text/css" href="/assets/css/footable.core.css">
-    
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <script src="/assets/js/respond.min.js"></script>
-    <![endif]-->
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="/favicon.ico?v=1401924075">
-    <link rel="apple-touch-icon" sizes="144x144" href="/touch-icon-144.png?v=1401924075">
-    <link rel="apple-touch-icon" sizes="114x114" href="/touch-icon-114.png?v=1401924075">
-    <link rel="apple-touch-icon" sizes="72x72" href="/touch-icon-72.png?v=1401924075">
-    <link rel="apple-touch-icon" href="/touch-icon-57.png?v=1401924075">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-    <script src="/assets/js/bootstrap.min.js?v=1425334028" type="text/javascript"></script>
-    <script src="/assets/js/footable.js" type="text/javascript"></script>
-            <script type="text/javascript" src="//use.typekit.net/jxh6tul.js"></script>
-        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    
-    <script src="/assets/js/jquery.validate.js" type="text/javascript"></script>
-    <script src="//secure-a.vimeocdn.com/js/froogaloop2.min.js" type="text/javascript"></script>
-    <script src="/assets/js/prettify.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/css/prettify.css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <!-- TWITTER TRACKING 11.11.13 -->
-    <meta property="twitter:account_id" content="666523" />
+    <title>Joyent | Pricing</title>
+    <meta name="description" content="Pricing for Joyent&#39;s Manta object storage service.">
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.footable').footable();
-        $('pre').each(function() {
-            var thepre = $(this);
-            if (!thepre.hasClass('ignore')) thepre.addClass('prettyprint');
+    <link rel="stylesheet" href="./joyent_storage_files/style.css">    <script src="./joyent_storage_files/jquery.min.js"></script>    <link rel="stylesheet" href="./joyent_storage_files/footable.core.min.css">    <script src="./joyent_storage_files/bootstrap.min.js"></script>    <script src="./joyent_storage_files/footable.js"></script>    <script type="text/javascript">
+        $(document).ready(function() {
+            $('pre').each(function() {
+                var thepre = $(this);
+                if (!thepre.hasClass('ignore')) thepre.addClass('prettyprint');
+            });
+            $('#toggle-menu').on('touchstart click',menu);
+            $('#page').on('touchstart click',function(e) {
+                var $bod = $('body');
+                if ($bod.hasClass('menu-visible')) {
+                    menu(e);
+                }
+            });
+            $('#menu .main-nav li.top.subs > a').on('touchstart click', function() {
+                var theClass = $(this).attr('id');
+                if($(this).parent().hasClass('dropped')) {
+                    $('li.top').removeClass('dropped');
+                    $('ul.nav-drop').hide(300);
+                } else {
+                    $('li.top').removeClass('dropped');
+                    $('ul.nav-drop').hide(300);
+                    $(this).parent().addClass('dropped');
+                    $('ul.nav-drop.' + theClass).show(300);
+                }
+                return false;
+            });
         });
-        prettyPrint();
-        
-    });
-</script>
+        function menu(e) {
+            e.preventDefault();
+
+            var $body = $( 'body' ),
+                $page = $( '#page' ),
+                $menu = $( '#menu' ),
+                transitionEnd = 'transitionend webkitTransitionEnd otransitionend MSTransitionEnd';
+
+            $body.addClass( 'animating' );
+
+            if ( $body.hasClass( 'menu-visible' ) ) {
+                $body.addClass( 'right' );
+            } else {
+                $body.addClass( 'left' );
+            }
+
+            $page.on( transitionEnd, function() {
+                $body.removeClass( 'animating right left' ).toggleClass( 'menu-visible' );
+                $page.off( transitionEnd );
+            });
+            e.stopPropagation();
+        };
+    </script>
+    <link rel="stylesheet" type="text/css" href="./joyent_storage_files/prettify.css">    <script src="./joyent_storage_files/xrt3gzo.js"></script>    <style type="text/css">.tk-din-condensed-web{font-family:"din-condensed-web",sans-serif;}.tk-open-sans{font-family:"open-sans",sans-serif;}.tk-source-code-pro{font-family:"source-code-pro",sans-serif;}</style><link rel="stylesheet" href="./joyent_storage_files/l" media="all"><script>try{Typekit.load({ async: true });}catch(e){}</script>
+
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -80,152 +89,264 @@ X-Cache-Info: not cacheable; response specified "Cache-Control: no-store"
     ga('require', 'linkid', 'linkid.js');
     ga('send', 'pageview');
 </script>
-<script src="/assets/js/jquery.waypoints.min.js"></script>
-</head>
-
-<body class="pricing manta-pricing" id="toc-top">
-    <!-- Retina Images -->
-    <noscript><style id="devicePixelRatio" media="only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)">#devicePixelRatio{background-image:url("/retinaimages.php?devicePixelRatio=2")}</style></noscript>
-
-        <div class="wrap">
-                <img src="/assets/img/logo-black.svg" class="print-logo visible-print">
-    <div class="main-nav">
-    <div class="container" id="main-nav">
+<link id="mktoForms2BaseStyle" rel="stylesheet" type="text/css" href="./joyent_storage_files/forms2.css"><link id="mktoForms2ThemeStyle" rel="stylesheet" type="text/css" href="./joyent_storage_files/forms2-theme-inset.css"><script async="true" type="text/javascript" src="https://s.adroll.com/j/roundtrip.js"></script><script src="./joyent_storage_files/application2.js" async="" defer="" data-cfasync="false"></script><style type="text/css">.olark-key,#hbl_code,#olark-data{display: none !important;}</style><link id="habla_style_div" type="text/css" rel="stylesheet" href="./joyent_storage_files/275d13dd9f84bb38b16963ca0fd58178.css"><style type="text/css">#olk-b-1362 .cancel-button-olk-9874,#olk-b-1362 .referral-button-olk-9874{font-family:"Helvetica Neue",HelveticaNeue,Helvetica,Arial,sans-serif !important;font-size:14px !important;font-weight:bold !important;border-radius:3px !important;border:1px solid #d65129;-webkit-font-smoothing:antialiased;width:80% !important;padding:10px 15px !important;margin-bottom:10px !important;transition:.03s;}#olk-b-1362 .cancel-button-olk-9874:hover,#olk-b-1362 .referral-button-olk-9874:hover{border:1px solid #c14925}#olk-b-1362 .cancel-button-olk-9874:focus,#olk-b-1362 .referral-button-olk-9874:focus{outline:0}#olk-b-1362{width:100% !important;display:inline-block !important}#olk-b-1362 .wrapper-olk-9874{background:#fff;border-left:1px solid #ededed;border-right:1px solid #ededed;text-align:center;width:100%;position:absolute;top:34px;right:0;bottom:0;left:0;padding:10px;box-sizing:border-box;overflow-y:auto}#olk-b-1362 .description-olk-9874{font-size:14px;font-family:"Helvetica Neue",HelveticaNeue,Helvetica,Arial,sans-serif;line-height:1.4em;margin:0 0 15px}#olk-b-1362 .cancel-button-olk-9874{background:#d65129;color:#fff;}#olk-b-1362 .cancel-button-olk-9874:hover{background:#c14925}#olk-b-1362 .referral-button-olk-9874{background:#fff;color:#d65129;}#olk-b-1362 .referral-button-olk-9874:hover{color:#c14925}#olk-b-1362 .brand-olk-9874{color:#a6aeb0 !important;font-family:"Helvetica Neue",HelveticaNeue,Helvetica,Arial,sans-serif !important;padding:0 !important;font-size:11px !important;margin:0 0 5px 10px !important;display:inline-block !important;transition:.03s;}#olk-b-1362 .brand-olk-9874:hover{color:#d65129 !important}</style><style type="text/css">@media print {#habla_beta_container_do_not_rely_on_div_classes_or_names {display: none !important}}</style></head>
+<body class="manta-pricing manta"><div id="olark" style="display: none;"><olark><iframe frameborder="0" id="olark-loader" src="./joyent_storage_files/saved_resource.html"></iframe></olark></div>
+    <div id="menu">
+    <nav>
         <div class="row">
-            <div class="col-sm-2">
-                <a class="logo" href="/"><img src="/assets/img/logo.svg" class="svg" alt="Joyent logo"></a>
-            </div>
-            <div class="col-sm-6">
-                <div class="navbar visible-xs">
-                    <div class="navbar-header">
-                        <a class="btn navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </a>
-                        <ul class="header-actions">
-                            <li><a href="/search" class="search-icon"></a></li>
-
-                            <li itemref="b"><a href="/blog">Blog</a></li>
-                            <li itemref="b"><a href="/about">About</a></li>
-                            <li itemref="b"><a href="/developers">Developers</a></li>
-                            <li><a class="signin" href="https://my.joyent.com/landing/signin/" data-slug="signin">Sign In</a></li>
+            <div class="col-xs-12">
+                    <img src="./joyent_storage_files/logo.svg" class="">
+                <ul class="main-nav hidden-print">
+                    <li class="top"><a href="https://www.joyent.com/">Home</a></li>
+                    <li class="top subs active dropped"><a id="triton-mobile" href="https://www.joyent.com/triton" class="active">Triton</a>
+                        <ul class="nav-drop triton-mobile active">
+                            <li><a id="triton-overview-mobile" class="" href="https://www.joyent.com/triton">Overview</a></li>
+                            <li><a id="containerpilot-mobile" class="" href="https://www.joyent.com/containerpilot">ContainerPilot</a></li>
+                            <li><a id="datacenter-mobile" class="" href="https://www.joyent.com/datacenter">DataCenter</a></li>
+                            <li><a id="smartos-mobile" class="" href="https://www.joyent.com/smartos">SmartOS</a></li>
+                            <li><a id="pricing-mobile" class=" active" href="https://www.joyent.com/pricing">Pricing &amp; Support</a></li>
                         </ul>
+                    </li>
+                    <li class="top"><a id="node-js-mobile" href="https://www.joyent.com/node-js">Node.js</a></li>
+                    <li class="top"><a id="manta-mobile" href="https://www.joyent.com/manta">Manta</a></li>
+                    <li class="top subs"><a id="about-mobile" href="https://www.joyent.com/about">About</a>
+                        <ul class="nav-drop about-mobile">
+                            <li><a id="about-overview-mobile" class="" href="https://www.joyent.com/about">Overview</a></li>
+                                                        <li><a id="management-mobile" class="" href="https://www.joyent.com/about/management">Management Team</a></li>
+                                                        <li><a id="press-mobile" class="" href="https://www.joyent.com/about/press">Press Room</a></li>
+                                                        <li><a id="events-mobile" class="" href="https://www.joyent.com/about/events">Events</a></li>
+                                                        <li><a id="careers-mobile" class="" href="https://www.joyent.com/about/careers">Careers</a></li>
+                                                    </ul>
+                    </li>
+                    <li class="top"><a id="blog-mobile" href="https://www.joyent.com/blog">Blog</a></li>
+                </ul>
+                <hr>
+                <ul class="menu actions main-nav hidden-print">
+                    <li><a href="https://my.joyent.com/" id="header-signin">Sign In</a></li>
+                    <li><a href="https://my.joyent.com/landing/signup/701800000015N22" class="getstarted" id="mobile-menu-getstarted">Get Started</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </div><!-- #menu -->
+    <div id="page">
+        <div class="wrap top">
+    <header class="header cf" role="banner">
+        <nav class="navbar-fixed-top main" role="navigation">
+    <div class="container">
+        <div class="row main">
+            <div class="col-sm-12">
+                <a href="https://www.joyent.com/pricing/manta#" class="menu-toggle btn navbar-toggle visible-xs" data-segment="hamburger-menu" id="toggle-menu"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+                <a href="https://www.joyent.com/" id="header-logo" class="hidden-xs">
+                        <img src="./joyent_storage_files/logo.svg" class="">
+                </a>
+                    <img src="./joyent_storage_files/logo.svg" class="visible-xs">
+                <ul class="menu main hidden-xs">
+                    <li class="products"><a href="https://www.joyent.com/triton" id="header-products">Products</a>
+                        <div class="product-drop">
+                            <ul>
+                                <li><a href="https://www.joyent.com/node-js" class="node" id="dropdown-node"><img src="./joyent_storage_files/node.svg"><br><small>Node.js</small><br>Production<br>Support</a></li>
+                                <li><a href="https://www.joyent.com/triton" class="triton" id="dropdown-triton"><img src="./joyent_storage_files/triton.svg"><br><small>Triton</small><br>Containers<br>as a Service</a></li>
+                                <li><a href="https://www.joyent.com/manta" class="manta" id="dropdown-manta"><img src="./joyent_storage_files/manta.svg"><br><small>Manta</small><br>Object<br>Storage</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="https://www.joyent.com/about" id="header-about">About</a></li>
+                    <li><a href="https://www.joyent.com/blog" id="header-blog">Blog</a></li>
+                </ul>
+                <ul class="menu actions hidden-xs">
+                    <li><a href="https://my.joyent.com/" id="header-signin">Sign In</a></li>
+                    <li><a href="https://my.joyent.com/landing/signup/701800000015N22" class="getstarted" id="header-getstarted">Get Started</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+                    <div class="wrap secondary hidden-xs">
+            <div class="container">
+                <div class="row secondary">
+                    <div class="col-sm-12">
+                        <ul class="menu secondary">
+                                                                                    <li><a href="https://www.joyent.com/triton" id="secondary-nav-triton">Triton Overview</a></li>
+                                                        <li><a href="https://www.joyent.com/containerpilot" id="secondary-nav-containerpilot">ContainerPilot</a></li>
+                                                        <li><a href="https://www.joyent.com/datacenter" id="secondary-nav-datacenter">DataCenter</a></li>
+                                                        <li><a href="https://www.joyent.com/smartos" id="secondary-nav-smartos">SmartOS</a></li>
+                                                        <li><a class="active" href="https://www.joyent.com/pricing" id="secondary-nav-pricing">Cloud Pricing</a></li>
+                                                    </ul>
                     </div>
                 </div>
-                <div class="navbar-collapse collapse">
-                                    <ul class="nav">
-                                                <li itemref="b"><a href="https://www.joyent.com/public-cloud"><span>Public Cloud</span></a></li>
-                                                <li itemref="b"><a href="https://www.joyent.com/private-cloud"><span>Private Cloud</span></a></li>
-                                                <li id="a" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" itemref="b"><a class="active" itemprop="url" href="https://www.joyent.com/object-storage"><span itemprop="title">Object Storage</span></a></li>
-                                                <li itemref="b"><a href="https://www.joyent.com/services"><span>Services</span></a></li>
-                                                <li itemref="b"><a href="https://www.joyent.com/partners"><span>Partners</span></a></li>
-                                            </ul>
-                                                                                        <ul class="nav subnav">
-                                                        <li><a href="https://www.joyent.com/object-storage/documentation"><span>Documentation</span></a></li>
-                                                        <li id="b" itemscope itemtype="http://data-vocabulary.org/Breadcrumb" itemprop="child"><a class="active" itemprop="url" href="https://www.joyent.com/object-storage/pricing"><span itemprop="title">Pricing</span></a></li>
-                                                        <li><a href="https://www.joyent.com/object-storage/job-examples"><span>Job Examples</span></a></li>
-                                                    </ul>
-                                                                                                                                                                                                                                                <p class="visible-xs">Sign Up Now <a href="https://my.joyent.com/landing/signup/701800000015N22" class="getstarted" id="header-getstarted">Get Started</a></p>                </div>
             </div>
+        </div>
+            </nav>
+    </header>
+<div class="container">
+    <div class="row top">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h1 class="visible-xs">Cloud Pricing</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 pricing-tabs">
+            <a href="https://www.joyent.com/pricing" class="">Compute</a>
+            <a href="https://www.joyent.com/pricing/images" class="">Image</a>
+            <a href="https://www.joyent.com/pricing/manta" class="active">Manta <span class="hidden-xs">Service</span></a>
+            <a href="https://www.joyent.com/pricing/bandwidth" class="">Bandwidth</a>
+            <a href="https://www.joyent.com/pricing/support-tiers" class="">Support</a>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row chart">
+        <div class="col-sm-2 column tabs">
+            <ul class="switch manta">
+                <li class="storage active"><a href="https://www.joyent.com/pricing/manta" class="storage">Storage</a></li>
+                <li class="compute"><a href="https://www.joyent.com/pricing/manta" class="compute">Compute</a></li>
+                <li class="requests"><a href="https://www.joyent.com/pricing/manta" class="requests">Requests</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-10 tab-content">
+            <div class="tab-pane active" id="storage">
+                <table class="table">
+                    <thead>
+                        <tr><th>Storage Tier</th><th>Per Individual Copy</th><th>Per 2 Copies (default)</th>
+                     </tr></thead>
+                     <tbody>
+                        <tr><td>First 1 TB/month</td><td>$0.043 per GB</td><td>$0.086 per GB</td></tr>
+                        <tr><td>Next 49 TB/month</td><td>$0.036 per GB</td><td>$0.072 per GB</td></tr>
+                        <tr><td>Next 450 TB/month</td><td>$0.032 per GB</td><td>$0.064 per GB</td></tr>
+                        <tr><td>Next 500 TB/month</td><td>$0.029 per GB</td><td>$0.058 per GB</td></tr>
+                        <tr><td>Next 4000 TB/month</td><td>$0.027 per GB</td><td>$0.054 per GB</td></tr>
+                        <tr><td>Next 5000 TB/month</td><td>$0.025 per GB</td><td>$0.050 per GB</td></tr>
+                        <tr><td colspan="3">Default is 2 copies. When submitting an object to the service, you can specify the number of copies stored, from one (1) to six (6). Storage billing has a per object minimum of 128kb.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="compute">
+                <p>With this compute service, you're only paying for the seconds that it takes to do your compute job directly on an object. All compute jobs are made up of one or more tasks. Tasks are the actual computation on an object or the output of another task.</p>
+                <p>This service measures tasks in wall-clock time normalized per GB DRAM and is metered in seconds. You never pay for idle time or the time while data is moving (because it never does).</p>
+                <p>Price is $0.00004/GB DRAM•sec</p>
 
-            <div class="col-sm-4 hidden-xs">
-                <ul class="header-actions">
-                    <li><form action="/search" style="display: none;" class="site-search"><input type="text" placeholder="Search Joyent" name="q"><input type="submit" value=""></form><a href="" class="search-icon"></a></li>
-                    <li><a href="/blog" id="actions-blog">Blog</a></li>
-                    <li><a href="/about" id="actions-about">About</a></li>
-                    <li><a href="/developers" id="actions-developers">Dev<span class="hidden-xs hidden-md hidden-sm"> Center</span><span class="hidden-lg">s</span></a></li>
-                    <li><a class="signin" href="https://my.joyent.com/landing/signin/" data-slug="signin" id="actions-signin">Sign In</a></li>
+                <p>The default instance size provided is 1GB in DRAM and you can select larger instance types that provide up to 32GB of DRAM and 1TB of temporary disk space.</p>
+
+                <p><strong>The rate for each task is calculated as follows:</strong> first, take the DRAM requested when the job was submitted and find the rate in the corresponding tier in the table below. Similarly, take the disk space requested when the job was submitted and find the corresponding tier in the table. The rate for the task is the <em>greater</em> of the rates for these two tiers. For example, if you request 2GB of DRAM and 32GB of disk space, tasks will be charged at the tier 2 rate (because of the DRAM requested). If you request 2GB of DRAM and 128GB of disk space, tasks will be charged at the tier 3 rate (because of the disk space requested).</p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Pricing Tier</th><th>DRAM (GB)</th><th>Max. Disk Space (GB)</th><th>$ Price/sec</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>1</td><td>32</td><td>0.00004</td></tr>
+                        <tr><td>2</td><td>2</td><td>64</td><td>0.00008</td></tr>
+                        <tr><td>3</td><td>4</td><td>128</td><td>0.00016</td></tr>
+                        <tr><td>4</td><td>8</td><td>256</td><td>0.00032</td></tr>
+                        <tr><td>5</td><td>16</td><td>512</td><td>0.00064</td></tr>
+                        <tr><td>6</td><td>32</td><td>1024</td><td>0.00128</td></tr>
+                    </tbody>
+                </table>
+
+                <p>If you run 1000 parallel tasks on 1000 objects and they each take a second, then you've used 1000 seconds of time and the cost for this job would be $0.04.</p>
+
+                <p>If you run 1000 parallel tasks in 32GB DRAM instances on 1000 objects and they each take a second, then you've used 32000 seconds of time and the cost for this job would be $1.28.</p>
+            </div>
+            <div class="tab-pane" id="requests">
+                <table class="table">
+                    <thead>
+                        <tr><th>Request Type</th><th>Price per unit of requests</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Delete</td><td>Free</td></tr>
+                        <tr><td>POST, PUT, LIST (“GET DIR”)</td><td>$0.005/1000 requests</td></tr>
+                        <tr><td>GET, OPTION, HEAD</td><td>$0.004/10000 requests</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="./joyent_storage_files/combined.js"></script>
+<footer class="footer" id="footer">
+    <div class="container hidden-print">
+        <div class="foot-logo row">
+            <div class="col-sm-12">
+                <p><img src="./joyent_storage_files/foot-logo.svg" class="svg"></p>
+            </div>
+            <div class="col-sm-8">
+                <p class="tag">Joyent delivers container-native infrastructure, offering organizations high-performance, yet simple public cloud and private cloud software solutions for today’s demanding real-time web and mobile applications.</p>
+            </div>
+            <div class="col-sm-3 col-sm-offset-1">
+                <p>Connect with Joyent</p>
+                <ul class="social clearfix">
+    <li><a href="http://twitter.com/joyent" class="twitter"></a></li>
+    <li><a href="http://www.linkedin.com/company/joyent" class="linkedin"></a></li>
+    <li><a href="https://www.facebook.com/joyentcloud" class="facebook"></a></li>
+    <li><a href="https://plus.google.com/116067599577083513668/posts" class="google"></a></li>
+    <li><a href="https://www.joyent.com/blog/feed" class="rss"></a></li>
+</ul>
+            </div>
+        </div>
+    </div>
+    <div class="container hidden-xs" id="footer">
+        <div class="row hidden-xs hidden-print">
+            <div class="col-sm-3 col-md-2 column">
+                <h4>Products</h4>
+                <ul>
+                    <li><a href="https://www.joyent.com/node-js" id="foot-node-product">Node.js Production Support</a></li>
+                    <li><a href="https://www.joyent.com/triton" id="foot-triton-product">Triton Containers as a Service</a></li>
+                    <li><a href="https://www.joyent.com/manta" id="foot-manta-product">Manta Object Storage</a></li>
                 </ul>
-                                    <p>Sign Up Now <a href="https://my.joyent.com/landing/signup/701800000015N22" class="getstarted" id="header-getstarted">Get Started</a></p>
-                            </div>
+            </div>
+            <div class="col-sm-3 col-md-2 column">
+                <h4>Open Source</h4>
+                <ul>
+                    <li><a href="https://www.joyent.com/containerpilot" id="foot-containerpilot-open-source">ContainerPilot</a></li>
+                    <li><a href="https://www.joyent.com/triton" id="foot-datacenter-open-source">Triton</a></li>
+                    <li><a href="https://www.joyent.com/smartos" id="foot-smartos-open-source">SmartOS</a></li>
+                    <li><a href="https://www.joyent.com/node-js" id="foot-node-open-source">Node.js</a></li>
+                    <li><a href="http://github.com/joyent" id="foot-github">Github/joyent</a></li>
+                    <li><a href="http://github.com/autopilotpattern" id="foot-github-autopilotpattern">Github/autopilotpattern</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-2 col-md-2 column">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="https://www.joyent.com/blog" id="foot-blog">Blog</a></li>
+                    <li><a href="https://www.joyent.com/node-js/production" id="foot-node-docs">Node.js</a></li>
+                    <li><a href="https://apidocs.joyent.com/manta/" id="foot-manta-docs">Manta</a></li>
+                    <li><a href="https://www.joyent.com/containerpilot/docs" id="foot-containerpilot-docs">Triton ContainerPilot</a></li>
+                    <li><a href="https://www.joyent.com/datacenter/docs" id="foot-datacenter-docs">Triton DataCenter</a></li>
+                    <li><a href="https://wiki.smartos.org/display/DOC/Home" id="foot-smartos-docs">Triton SmartOS</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-2 col-md-2 column">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="https://www.joyent.com/about" id="foot-about">Overview</a></li>
+                    <li><a href="https://www.joyent.com/about/press" id="foot-press">Press Room</a></li>
+                    <li><a href="https://www.joyent.com/about/events" id="foot-events">Events</a></li>
+                    <li><a href="https://www.joyent.com/about/management" id="foot-management">Management</a></li>
+                    <li><a href="https://www.joyent.com/about/careers" id="foot-careers">Careers</a></li>
+                    <li><a href="https://www.joyent.com/contact" id="foot-contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-2 column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="https://help.joyent.com/home" id="footer-help-desk">Help Desk</a></li>
+                    <li><a href="https://status.joyent.com/" id="footer-system-status">System Status</a></li>
+                    <li><a href="https://www.joyent.com/pricing/manta#" id="footer-feedback" data-toggle="modal" data-target="#feedback">Site Feedback</a></li>
+                    <li><a href="https://www.joyent.com/search" id="footer-search">Site Search</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row copyright">
+            <div class="col-sm-6 logorow">
+                <p>© 2016 Joyent, Inc. | <a href="https://www.joyent.com/about/policies">Policies</a> | <a href="https://www.joyent.com/about/security-and-compliance">Compliance</a></p>            </div>
         </div>
     </div>
-</div>
 
-<div class="container main" id="main">
-
-<div class="row top"><div class="col-lg-12 col-md-12 col-sm-12">
-    <h1>Joyent Manta Service Pricing</h1>
-</div></div>
-<div class="row">
-<div class="col-lg-12 col-md-12 col-sm-12 pricing-tabs">
-    <a href="/public-cloud/pricing" class="">Compute</a>
-    <a href="/public-cloud/image-pricing" class="">Image</a>
-    <a href="/object-storage/pricing" class="active">Manta <span class="hidden-xs">Service</span></a>
-    <a href="/public-cloud/bandwidth-pricing" class="">Bandwidth</a>
-    <a href="/services/support-tiers" class="">Support</a>
-</div></div>
-<div class="row chart">
-    <div class="col-sm-2 column tabs">
-        <ul class="switch manta">
-            <li class="storage active"><a href="" class="storage">Storage</a></li>
-            <li class="compute"><a href="" class="compute">Compute</a></li>
-            <li class="requests"><a href="" class="requests">Requests</a></li>
-        </ul>
-    </div>
-    <div class="col-sm-10 tab-content">
-        <div class="tab-pane active" id="storage">
-            <table class="table">
-                <thead>
-                    <tr><th>Storage Tier</th><th>Per Individual Copy</th><th>Per 2 Copies (default)</th>
-                 </thead>
-                 <tbody>
-                    <tr><td>First 1 TB/month</td><td>$0.043 per GB</td><td>$0.086 per GB</td></tr>
-                    <tr><td>Next 49 TB/month</td><td>$0.036 per GB</td><td>$0.072 per GB</td></tr>
-                    <tr><td>Next 450 TB/month</td><td>$0.032 per GB</td><td>$0.064 per GB</td></tr>
-                    <tr><td>Next 500 TB/month</td><td>$0.029 per GB</td><td>$0.058 per GB</td></tr>
-                    <tr><td>Next 4000 TB/month</td><td>$0.027 per GB</td><td>$0.054 per GB</td></tr>
-                    <tr><td>Next 5000 TB/month</td><td>$0.025 per GB</td><td>$0.050 per GB</td></tr>
-                    <tr><td colspan="3">Default is 2 copies. When submitting an object to the service, you can specify the number of copies stored, from one (1) to six (6). Storage billing has a per object minimum of 128kb.</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane" id="compute">
-            <p>With this compute service, you're only paying for the seconds that it takes to do your compute job directly on an object. All compute jobs are made up of one or more tasks. Tasks are the actual computation on an object or the output of another task.</p>
-            <p>This service measures tasks in wall-clock time normalized per GB DRAM and is metered in seconds. You never pay for idle time or the time while data is moving (because it never does).</p>
-            <p>Price is $0.00004/GB DRAM•sec</p>
-
-            <p>The default instance size provided is 1GB in DRAM and you can select larger instance types that provide up to 32GB of DRAM and 1TB of temporary disk space.</p>
-
-            <p><strong>The rate for each task is calculated as follows:</strong> first, take the DRAM requested when the job was submitted and find the rate in the corresponding tier in the table below. Similarly, take the disk space requested when the job was submitted and find the corresponding tier in the table. The rate for the task is the <em>greater</em> of the rates for these two tiers. For example, if you request 2GB of DRAM and 32GB of disk space, tasks will be charged at the tier 2 rate (because of the DRAM requested). If you request 2GB of DRAM and 128GB of disk space, tasks will be charged at the tier 3 rate (because of the disk space requested).</p>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Pricing Tier</th><th>DRAM (GB)</th><th>Max. Disk Space (GB)</th><th>$ Price/sec</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>1</td><td>1</td><td>32</td><td>0.00004</td></tr>
-                    <tr><td>2</td><td>2</td><td>64</td><td>0.00008</td></tr>
-                    <tr><td>3</td><td>4</td><td>128</td><td>0.00016</td></tr>
-                    <tr><td>4</td><td>8</td><td>256</td><td>0.00032</td></tr>
-                    <tr><td>5</td><td>16</td><td>512</td><td>0.00064</td></tr>
-                    <tr><td>6</td><td>32</td><td>1024</td><td>0.00128</td></tr>
-                </tbody>
-            </table>
-
-            <p>If you run 1000 parallel tasks on 1000 objects and they each take a second, then you've used 1000 seconds of time and the cost for this job would be $0.04.</p>
-
-            <p>If you run 1000 parallel tasks in 32GB DRAM instances on 1000 objects and they each take a second, then you've used 32000 seconds of time and the cost for this job would be $1.28.</p>
-        </div>
-        <div class="tab-pane" id="requests">
-            <table class="table">
-                <thead>
-                    <tr><th>Request Type</th><th>Price per unit of requests</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Delete</td><td>Free</td></tr>
-                    <tr><td>POST, PUT, LIST (“GET DIR”)</td><td>$0.005/1000 requests</td></tr>
-                    <tr><td>GET, OPTION, HEAD</td><td>$0.004/10000 requests</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="clearfix"></div>
-    <script src="https://www.joyent.com/assets/js/combined.js"></script>    
 <script type="text/javascript">
 /* <![CDATA[ */
 var google_conversion_id = 1006325634;
@@ -233,12 +354,12 @@ var google_custom_params = window.google_tag_params;
 var google_remarketing_only = true;
 /* ]]> */
 </script>
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script>
+<script type="text/javascript" src="./joyent_storage_files/conversion.js">
+</script><iframe name="google_conversion_frame" title="Google conversion frame" width="300" height="13" src="./joyent_storage_files/saved_resource(1).html" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no"></iframe>
 <noscript>
-<div style="display:inline;">
-<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006325634/?value=0&amp;guid=ON&amp;script=0"/>
-</div>
+&lt;div style="display:inline;"&gt;
+&lt;img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1006325634/?value=0&amp;amp;guid=ON&amp;amp;script=0"/&gt;
+&lt;/div&gt;
 </noscript>
 
 <!-- ADROLL TRACKER 01.07.13 -->
@@ -262,7 +383,7 @@ window.onload = function(){
 <!-- End ADROLL TRACKER -->
 
 <!-- Marketo Munchkin -->
-<script type="text/javascript" src="//munchkin.marketo.net/munchkin.js"></script>
+<script type="text/javascript" src="./joyent_storage_files/munchkin(1).js"></script>
 <script type="text/javascript">try { mktoMunchkin("993-RJQ-253"); } catch(err) { }</script>
 <!-- End Marketo Munchkin -->
 <script>
@@ -273,108 +394,70 @@ window.onload = function(){
 (window,document,'script','scripts.demandbase.com/rt9IDBtd.min.js','demandbase_js_lib');
 </script>
 <!-- Olark -->
-<script type='text/javascript'>/*{literal}<![CDATA[*/window.olark||(function(i){var e=window,h=document,a=e.location.protocol=="https:"?"https:":"http:",g=i.name,b="load";(function(){e[g]=function(){(c.s=c.s||[]).push(arguments)};var c=e[g]._={},f=i.methods.length; while(f--){(function(j){e[g][j]=function(){e[g]("call",j,arguments)}})(i.methods[f])} c.l=i.loader;c.i=arguments.callee;c.f=setTimeout(function(){if(c.f){(new Image).src=a+"//"+c.l.replace(".js",".png")+"&"+escape(e.location.href)}c.f=null},20000);c.p={0:+new Date};c.P=function(j){c.p[j]=new Date-c.p[0]};function d(){c.P(b);e[g](b)}e.addEventListener?e.addEventListener(b,d,false):e.attachEvent("on"+b,d); (function(){function l(j){j="head";return["<",j,"></",j,"><",z,' onl'+'oad="var d=',B,";d.getElementsByTagName('head')[0].",y,"(d.",A,"('script')).",u,"='",a,"//",c.l,"'",'"',"></",z,">"].join("")}var z="body",s=h[z];if(!s){return setTimeout(arguments.callee,100)}c.P(1);var y="appendChild",A="createElement",u="src",r=h[A]("div"),G=r[y](h[A](g)),D=h[A]("iframe"),B="document",C="domain",q;r.style.display="none";s.insertBefore(r,s.firstChild).id=g;D.frameBorder="0";D.id=g+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){D.src="javascript:false"} D.allowTransparency="true";G[y](D);try{D.contentWindow[B].open()}catch(F){i[C]=h[C];q="javascript:var d="+B+".open();d.domain='"+h.domain+"';";D[u]=q+"void(0);"}try{var H=D.contentWindow[B];H.write(l());H.close()}catch(E){D[u]=q+'d.write("'+l().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}c.P(2)})()})()})({loader:(function(a){return "static.olark.com/jsclient/loader0.js?ts="+(a?a[1]:(+new Date))})(document.cookie.match(/olarkld=([0-9]+)/)),name:"olark",methods:["configure","extend","declare","identify"]});
-olark.identify('3485-546-10-5485');/*]]>{/literal}*/</script> <!-- End Olark -->
+<script type="text/javascript">/*{literal}<![CDATA[*/window.olark||(function(i){var e=window,h=document,a=e.location.protocol=="https:"?"https:":"http:",g=i.name,b="load";(function(){e[g]=function(){(c.s=c.s||[]).push(arguments)};var c=e[g]._={},f=i.methods.length; while(f--){(function(j){e[g][j]=function(){e[g]("call",j,arguments)}})(i.methods[f])} c.l=i.loader;c.i=arguments.callee;c.f=setTimeout(function(){if(c.f){(new Image).src=a+"//"+c.l.replace(".js",".png")+"&"+escape(e.location.href)}c.f=null},20000);c.p={0:+new Date};c.P=function(j){c.p[j]=new Date-c.p[0]};function d(){c.P(b);e[g](b)}e.addEventListener?e.addEventListener(b,d,false):e.attachEvent("on"+b,d); (function(){function l(j){j="head";return["<",j,"></",j,"><",z,' onl'+'oad="var d=',B,";d.getElementsByTagName('head')[0].",y,"(d.",A,"('script')).",u,"='",a,"//",c.l,"'",'"',"></",z,">"].join("")}var z="body",s=h[z];if(!s){return setTimeout(arguments.callee,100)}c.P(1);var y="appendChild",A="createElement",u="src",r=h[A]("div"),G=r[y](h[A](g)),D=h[A]("iframe"),B="document",C="domain",q;r.style.display="none";s.insertBefore(r,s.firstChild).id=g;D.frameBorder="0";D.id=g+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){D.src="javascript:false"} D.allowTransparency="true";G[y](D);try{D.contentWindow[B].open()}catch(F){i[C]=h[C];q="javascript:var d="+B+".open();d.domain='"+h.domain+"';";D[u]=q+"void(0);"}try{var H=D.contentWindow[B];H.write(l());H.close()}catch(E){D[u]=q+'d.write("'+l().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}c.P(2)})()})()})({loader:(function(a){return "static.olark.com/jsclient/loader0.js?ts="+(a?a[1]:(+new Date))})(document.cookie.match(/olarkld=([0-9]+)/)),name:"olark",methods:["configure","extend","declare","identify"]});
+olark.identify('3485-546-10-5485');/*]]>{/literal}*/</script>
+<!-- End Olark -->
+    <link rel="stylesheet" href="./joyent_storage_files/MyFontsWebfontsKit.css"></footer>
+</div>
+<script src="./joyent_storage_files/forms2.min.js"></script>
+<div class="modal" id="feedback">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2>Joyent.com Feedback</h2>
+            </div>
+            <div class="modal-body">
+              <div class="thankyou alert-success" style="display: none;">
+                  <h4>Thank You</h4>
+                  <p>Thank you for helping us improve joyent.com.</p>
+              </div>
+              <form id="mktoForm_1244" novalidate="novalidate" class="mktoForm mktoHasWidth mktoLayoutLeft" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: rgb(51, 51, 51); width: 1906px;"><style type="text/css">.mktoForm .mktoButtonWrap.mktoPaperMashup .mktoButton{
+border:none;
+background: #222;
+display: inline-block;
+padding: 5px 10px 6px;
+color: #fff;
+text-decoration: none;
+-moz-border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+border-bottom: 1px solid rgba(0,0,0,0.25);
+position: relative;
+cursor: pointer;
+font-size: 13px;
+font-weight: bold;
+line-height: 1;
+text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+background-color: #ff5c00;
+}
+.mktoForm .mktoButtonWrap.mktoPaperMashup .mktoButton:hover {
+background-color: #111;
+color: #fff;
+background-color: #d45500;
+}
+.mktoForm .mktoButtonWrap.mktoPaperMashup .mktoButton:active {
+top: 1px;
+}
+</style><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap"><label for="FirstName" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>First Name:</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><input id="FirstName" name="FirstName" maxlength="255" type="text" class="mktoField mktoTextField mktoHasWidth" style="width: 225px;"><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap"><label for="LastName" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>Last Name:</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><input id="LastName" name="LastName" maxlength="255" type="text" class="mktoField mktoTextField mktoHasWidth" style="width: 225px;"><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap"><label for="Email" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>Email Address:</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><input id="Email" name="Email" maxlength="255" type="email" class="mktoField mktoEmailField mktoHasWidth" style="width: 225px;"><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap mktoRequiredField"><label for="Other_course__c" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>We're You able to Find What You're Looking for?</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><input id="Other_course__c" name="Other_course__c" maxlength="255" type="text" class="mktoField mktoTextField mktoHasWidth mktoRequired" style="width: 225px;"><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap mktoRequiredField"><label for="Lead_Notes__c" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>Suggestions for Improving the Site?</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><textarea id="Lead_Notes__c" name="Lead_Notes__c" rows="2" class="mktoField mktoHasWidth mktoRequired" maxlength="550" style="width: 225px;"></textarea><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap mktoRequiredField"><label for="Web_Comment__c" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>What Part of the Site was Most Helpful?</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><textarea id="Web_Comment__c" name="Web_Comment__c" rows="2" class="mktoField mktoHasWidth mktoRequired" maxlength="500" style="width: 225px;"></textarea><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoFormRow"><div class="mktoFieldDescriptor mktoFormCol" style="margin-bottom: 10px;"><div class="mktoOffset" style="width: 10px;"></div><div class="mktoFieldWrap"><label for="Primary_goal_of_your_Node_js_application__c" class="mktoLabel mktoHasWidth" style="width: 171px;"><div class="mktoAsterix">*</div>Additional Comments:</label><div class="mktoGutter mktoHasWidth" style="width: 10px;"></div><textarea id="Primary_goal_of_your_Node_js_application__c" name="Primary_goal_of_your_Node_js_application__c" rows="2" class="mktoField mktoHasWidth" maxlength="300" style="width: 225px;"></textarea><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoClear"></div></div><div class="mktoButtonRow"><span class="mktoButtonWrap mktoPaperMashup" style="margin-left: 120px;"><button type="submit" class="mktoButton">Submit</button></span></div><input type="hidden" name="formid" class="mktoField mktoFieldDescriptor" value="1244"><input type="hidden" name="munchkinId" class="mktoField mktoFieldDescriptor" value="993-RJQ-253"></form>
+              <script>
+                MktoForms2.loadForm("//app-sjf.marketo.com", "993-RJQ-253", 1244, function(form){
+                    form.onSuccess(function(values, followUpUrl){
+                      //get the form's jQuery element and hide it
+                      form.getFormElem().hide();
+                      //return false to prevent the submission handler from taking the lead to the follow up url.
+                      $('.thankyou').show();
+                      return false;
+                    });
+                  });
+              </script>
+            </div>
+        </div>
+    </div>
+</div>
 
-    </div></div><!-- /container main and wrap -->:
-            <div class="row cta foot">
-            <div class="container hidden-print">
-                <div class="col-sm-12">
-                    <p>Sign up now for Instant Cloud Access <a href="https://my.joyent.com/landing/signup/701800000015N22" class="getstarted" id="foot-getstarted">Get Started</a><span class="hidden-xs"> &nbsp;or&nbsp; <a href="javascript:void(0);" onclick="olark('api.box.expand')" class="contact-link"><img src="/assets/img/homepage/contact.svg">&nbsp; Chat with a Cloud Specialist</a></span></p>
-                </div>
-            </div>
-        </div>
-      <footer class="footer" id="footer">
-    <div class="foot-logo row">
-        <div class="container hidden-print">
-            <div class="col-sm-12">
-                <p><img src="/assets/img/logo.svg" class="svg" width="180"></p>
-                <p class="tag">High-Performance Container-Native Infrastructure for Today's Demanding Real-Time Web and Mobile Applications</p>
-            </div>
-        </div>
-    </div>
-    <div class="container" id="footer">
-        <div class="row hidden-xs hidden-print">
-            <div class="col-sm-2">
-                <h4>Products</h4>
-                <ul>
-                    <li><a href="/public-cloud" id="foot-public-cloud">Public Cloud</a></li>
-                    <li><a href="/private-cloud" id="foot-private-cloud">Private Cloud</a></li>
-                    <li><a href="/object-storage" id="foot-object-storage">Object Storage</a></li>
-                    <li><a href="/services/nodejs-support" id="foot-node-support">Node.js Support</a></li>
-                    <li><a href="/services/training-services" id="foot-training">Training</a></li>
-                    <li><a href="/services/professional-services" id="foot-professional-services">Professional Services</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-2">
-                <h4>Partners</h4>
-                <ul>
-                    <li><a href="/partners" id="foot-platform">Platform</a></li>
-                    <li><a href="/partners" id="foot-application">Application</a></li>
-                    <li><a href="/partners" id="foot-data">Data</a></li>
-                    <li><a href="/partners" id="foot-infrastructure">Infrastructure</a></li>
-                    <li><a href="/partners" id="foot-services">Services</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-2">
-                <h4>Documentation</h4>
-                <ul>
-                    <li><a href="http://docs.joyent.com/public-cloud" id="foot-jpc-docs">Public Cloud</a></li>
-                    <li><a href="http://docs.joyent.com/sdc7" id="foot-sdc-docs">Private Cloud</a></li>
-                    <li><a href="http://apidocs.joyent.com/cloudapi/" id="foot-apidocs">Joyent Cloud API</a></li>
-                    <li><a href="http://apidocs.joyent.com/manta/" id="foot-manta-docs">Object Storage</a></li>
-                    <li><a href="/developers/node" id="foot-node-dev">Node.js in Production</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-2">
-                <h4>Open Source</h4>
-                <ul>
-                    <li><a href="http://nodejs.org" id="foot-node">Node.js</a></li>
-                    <li><a href="http://smartos.org" id="foot-smartos">SmartOS</a></li>
-                    <li><a href="https://github.com/joyent/sdc" id="foot-sdc">SmartDataCenter</a></li>
-                    <li><a href="http://github.com/joyent" id="foot-github">Github/joyent</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-2">
-                <h4>About</h4>
-                <ul>
-                    <li><a href="/about" id="foot-about">Overview</a></li>
-                    <li><a href="/about/press" id="foot-press">Press Room</a></li>
-                    <li><a href="/about/events" id="foot-events">Events</a></li>
-                    <li><a href="/about/management" id="foot-management">Management</a></li>
-                    <li><a href="/about/customers" id="foot-customers">Customers</a></li>
-                    <li><a href="/about/careers" id="foot-careers">Careers</a></li>
-                    <li><a href="/contact" id="foot-contact">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-2">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="/blog" id="foot-blog">Blog</a></li>
-                    <li><a href="/developers/resources/type:Guides" id="foot-guides">Guides</a></li>
-                    <li><a href="/developers/resources/type:Data%20Sheets" id="foot-datasheets">Datasheets</a></li>
-                    <li><a href="/developers/resources/type:White%20Papers" id="foot-white-papers">White Papers</a></li>
-                    <li><a href="/developers/resources/type:Videos" id="foot-videos">Videos</a></li>
-                    <li><a href="/developers/resources/type:Presentations" id="foot-presentations">Presentations</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="row copyright">
-            <div class="col-sm-6 logorow">
-                <p>© 2016 Joyent, Inc. | <a href="https://www.joyent.com/about/policies">Policies</a> | <a href="https://www.joyent.com/about/security-and-compliance">Compliance</a></p>            </div>
-            <div class="col-lg-2 col-md-3 col-sm-3 col-md-3 col-lg-offset-4 col-md-offset-3 col-sm-offset-3">
-                <ul class="social clearfix">
-    <li><a href="http://twitter.com/joyent" class="twitter"></a></li>
-    <li><a href="http://www.linkedin.com/company/joyent" class="linkedin"></a></li>
-    <li><a href="https://www.facebook.com/joyentcloud" class="facebook"></a></li>
-    <li><a href="https://plus.google.com/116067599577083513668/posts" class="google"></a></li>
-    <li><a href="/blog/feed" class="rss"></a></li>
-</ul>
-            </div>
-    </div>
-    </footer>
-    </body>
-</html>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -388,3 +471,6 @@ $(document).ready(function() {
     });
 });
 </script>
+
+
+</div><iframe src="./joyent_storage_files/ect.html" id="db_ect" height="0" width="0" style="display: none;"></iframe><img style="display:none" alt="Demandbase pixel" id="db_pixel_ad" src="./joyent_storage_files/pixel"><img style="display:none" alt="Demandbase pixel" id="db_pixel_rt" src="./joyent_storage_files/pixel(1)"><div id="mktoStyleLoaded" style="display: none; border-top-color: rgb(18, 52, 86);"></div><form novalidate="novalidate" class="mktoForm mktoHasWidth mktoLayoutLeft" style="font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: rgb(51, 51, 51); visibility: hidden; position: absolute; top: -500px; left: -1000px; width: 1905px;"></form><iframe name="mktoFormsXDIframe0.17727786387193611" id="MktoForms2XDIframe" src="./joyent_storage_files/XDFrame.html" style="display: none;"></iframe><span style="display: none;"><iframe style="display: none !important;" id="_olark_framesocket62374" src="./joyent_storage_files/storage.html"></iframe></span><div id="habla_beta_container_do_not_rely_on_div_classes_or_names" class="habla-browser-chrome habla-desktop olrk-noquirks"><div id="hbl_operator_state_div" class="olrk-away"><div id="hbl_region" class="olrk-normal"><div id="habla_window_state_div" class=" olrk-state-compressed"><div id="habla_window_div" style="margin: 0px 20px; bottom: 0px; right: 0px; display: none; position: fixed;" class="habla_window_div_base hbl_pal_main_width olrk-fixed-bottom olrk-fixed-right "><div id="habla_compressed_div" style="display: block;"></div><div id="habla_panel_div" class="habla_panel_border hbl_pal_main_bg hbl_pal_panel_border hbl_pal_main_font_family hbl_pal_main_font_size " style="display: block;"><div id="habla_both_div" style="display: block;"><div id="habla_topbar_div" class="habla_topbar_div_normal hbl_pal_title_fg hbl_pal_title_bg habla_topbar_div_compressed "><a id="habla_popout_a" class="habla_button habla_button_a_normal hbl_pal_header_font_size hbl_pal_main_font_family hbl_pal_button_bg hbl_pal_button_fg ">&gt;</a><a id="habla_sizebutton_a" class="habla_button habla_button_a_normal hbl_pal_header_font_size hbl_pal_main_font_family hbl_pal_button_bg hbl_pal_button_fg ">^</a><a id="habla_oplink_a" class="habla_oplink_a_normal hbl_pal_header_font_size hbl_pal_title_fg ">Contact Sales</a></div></div><div id="habla_expanded_div" style="display: none;"><div id="habla_middle_div"><div id="habla_middle_wrapper_div"><div id="habla_conversation_div" class="hbl_panel habla_conversation_div hbl_pal_main_height hbl_pal_control_border hbl_pal_main_fg hbl_pal_main_bg   habla_conversation_message_on " style="height: 300px; overflow: hidden; display: none;"><span id="hbl_body_message">Sales Questions? Chat here or call (855) 4-JOYENT </span></div><div id="habla_offline_message_sent_div" class="hbl_panel habla_offline_message_sent_div hbl_pal_main_height hbl_pal_control_border hbl_pal_main_fg " style="display: none;">Thanks for your message!  We'll get back to you shortly.</div><div id="habla_offline_message_div" class="hbl_panel habla_offline_message_div hbl_pal_control_border hbl_pal_main_fg " style="display: block;"><span id="habla_offline_message_span">We're not around, but we'd love to chat another time.</span><div class="hbl_txt_wrapper"><textarea id="habla_name_input" name="habla_name_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Name" style="height: 20px; display: block;"></textarea></div><div class="hbl_txt_wrapper"><textarea id="habla_offline_email_input" name="habla_offline_email_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Email" style="height: 20px; display: block;"></textarea></div><div class="hbl_txt_wrapper"><textarea id="habla_offline_phone_input" name="habla_offline_phone_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Phone" style="height: 20px; display: block;"></textarea></div><div class="hbl_txt_wrapper"><textarea id="habla_offline_body_input" name="habla_offline_body_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="We&#39;re not around but we still want to hear from you!  Leave us a note and we will e-mail or call you back soon." style="height: 215px; display: block;"></textarea></div><span id="habla_offline_error_span" class="habla_offline_error_span "></span><input id="habla_offline_submit_input" name="habla_offline_submit_input" type="submit" class="habla_offline_submit_input hbl_pal_offline_submit_fg hbl_pal_control_border hbl_pal_offline_submit_bg " value="Send" style="display: block;"><div id="habla_offline_clear_div" class="clear_style "></div></div><div id="habla_pre_chat_div" class="hbl_panel habla_pre_chat_div hbl_pal_main_height hbl_pal_main_fg " style="display: none; height: 300px;"><span id="habla_pre_chat_span">Sales Questions? Chat here or call (855) 4-JOYENT </span><div class="hbl_txt_wrapper"><textarea id="habla_pre_chat_name_input" name="habla_pre_chat_name_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Name" style="height: 20px; line-height: 20px;"></textarea></div><div class="hbl_txt_wrapper"><textarea id="habla_pre_chat_email_input" name="habla_pre_chat_email_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Email" style="height: 20px; line-height: 20px;"></textarea></div><div class="hbl_txt_wrapper"><textarea id="habla_pre_chat_phone_input" name="habla_pre_chat_phone_input" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Phone" style="height: 20px; line-height: 20px;"></textarea></div><span id="habla_pre_chat_error_span"></span><input id="habla_pre_chat_submit_input" name="habla_pre_chat_submit_input" type="submit" class="habla_pre_chat_form_field habla_offline_submit_input hbl_pal_offline_submit_fg hbl_pal_control_border hbl_pal_offline_submit_bg " value="Click here to start chatting"><div id="habla_pre_chat_clear_div" class="clear_style "></div></div></div><form id="habla_chatform_form" action="https://www.joyent.com/pricing/manta#" method="GET" autocomplete="off" class="habla_chatform_form " style="display: none;"><div id="habla_input_div" class="habla_input_div "><div class="hbl_txt_wrapper"><textarea id="habla_wcsend_input" name="habla_wcsend_input" size="undefined" class="habla_wcsend_field habla_wcsend_input_pre habla_wcsend_input_normal hbl_pal_input_pre_fg hbl_pal_main_font_family hbl_pal_input_font_size hbl_pal_control_border " placeholder="Type here and hit &lt;enter&gt; to chat" disabled="" style="line-height: 20px; height: 20px; display: none;"></textarea></div></div></form></div><div style="clear: both;"><div id="olk-b-1362" data-reactid=".0"><div class="wrapper-olk-9874" style="display:none;" data-reactid=".0.0"><p class="description-olk-9874" data-reactid=".0.0.0">10,000+ companies rely on Olark software to chat with customers directly.</p><button class="cancel-button-olk-9874" data-reactid=".0.0.1">Go back</button><button class="referral-button-olk-9874" data-reactid=".0.0.2">Try Olark on your site</button></div><a class="brand-olk-9874" data-reactid=".0.1">Powered by Olark</a></div></div></div></div><div id="habla_closed_div" style="display: none;"></div></div></div></div></div></div></body></html>

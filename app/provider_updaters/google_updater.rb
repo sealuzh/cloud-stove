@@ -44,18 +44,20 @@ class GoogleUpdater < ProviderUpdater
         resource_id.gsub!(/(#{gce_prefix}|#{preemptible_postfix})/, '')
 
         next if preemptible
-        resource = provider.resources.find_or_create_by(name: resource_id)
-        # FIXME: For now, use prices for instances in Europe. They're more
-        # expensive. Better for conservative estimates. Should eventually
-        # include all regions
-        resource.more_attributes['price_per_hour'] = value['europe']
-        # FIXME: 744 hours/month assumes a 31 day month. Same as above.
-        price_per_month = BigDecimal.new(value['europe'].to_s) * 744 * full_month_discount
-        resource.more_attributes['price_per_month'] = price_per_month
-        resource.more_attributes['cores'] = value['cores']
-        resource.more_attributes['mem_gb'] = value['memory']
-        resource.resource_type = 'compute'
-        resource.save!
+        regions = ['europe','us','asia']
+        regions.each do |region|
+          resource = provider.resources.find_or_create_by(name: resource_id, region:region)
+          resource.more_attributes['price_per_hour'] = value[region]
+          # FIXME: 744 hours/month assumes a 31 day month. Same as above.
+          price_per_month = BigDecimal.new(value[region].to_s) * 744 * full_month_discount
+          resource.more_attributes['price_per_month'] = price_per_month
+          resource.more_attributes['cores'] = value['cores']
+          resource.more_attributes['mem_gb'] = value['memory']
+          resource.resource_type = 'compute'
+          resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
+          resource.save!
+        end
       end
     end
 
@@ -71,13 +73,27 @@ class GoogleUpdater < ProviderUpdater
       gcp_price_list.each_pair do |key, value|
         next unless ((key.start_with? bigstore_storage_prefix) || (key.start_with? nearline_storage_prefix))
 
-        resource = provider.resources.find_or_create_by(name: key)
+        region = 'us'
+        resource = provider.resources.find_or_create_by(name: key, region: region)
         resource.resource_type = 'storage'
-        resource.more_attributes['price_per_month_gb'] = value['us']
+        resource.region_code = provider.region_code(region)
+        resource.region_area = extract_region_area(region)
+        resource.more_attributes['price_per_month_gb'] = value[region]
         resource.save!
 
       end
 
+    end
+
+
+    def extract_region_area(region)
+      if (region.downcase().include? 'us')
+        return 'US'
+      elsif (region.downcase().include? 'europe')
+        return 'EU'
+      elsif (region.downcase().include? 'asia')
+        return 'ASIA'
+      end
     end
 
 end

@@ -45,17 +45,36 @@ class AtlanticNetUpdater < ProviderUpdater
     pricelist.each_pair do |key, instance_type|
       next unless instance_type['platform'] == platform
       resource_id = instance_type['plan_name']
-      resource = provider.resources.find_or_create_by(name: resource_id)
 
-      resource.resource_type = 'compute'
-      resource.more_attributes['cores'] = instance_type['num_cpu']
-      resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['ram'].to_s) / 1024
-      resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
-      resource.more_attributes['os_platform'] = instance_type['platform']
-      resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
-      resource.save!
+      #TODO: use real regions instead of default EUWEST region
+      regions = ['EUWEST1','USEAST1','USEAST2','USCENTRAL1','USWEST1','CAEAST1']
+
+      regions.each do |region|
+        resource = provider.resources.find_or_create_by(name: resource_id, region: region)
+
+        resource.resource_type = 'compute'
+        resource.more_attributes['cores'] = instance_type['num_cpu']
+        resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['ram'].to_s) / 1024
+        resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
+        resource.more_attributes['os_platform'] = instance_type['platform']
+        resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
+        resource.region_code = provider.region_code(region)
+        resource.region_area = extract_region_area(region)
+        resource.save!
+      end
     end
   rescue Net::HTTPError, JSON::ParserError, ProviderUpdater::Error => e
     logger.error "Error, #{e.inspect}"
   end
+
+
+  private
+    def extract_region_area(region)
+      if (region.downcase().include? 'us') || (region.downcase().include? 'ca')
+        return 'US'
+      elsif region.downcase().include? 'eu'
+        return 'EU'
+      end
+    end
+
 end
