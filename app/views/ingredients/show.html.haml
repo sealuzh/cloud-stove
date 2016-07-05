@@ -75,6 +75,13 @@
             %h4= 'RAM Constraint'
             ="Minimal RAM in MB: #{@ram_constraint.min_ram}"
             = link_to 'X', constraint_path(@ram_constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+      .row
+        .col-sm-6
+          - unless @region_constraint.nil?
+            %br
+            %h4= 'Region Constraint'
+            ="Preferred Region: #{@region_constraint.preferred_region_area}"
+            = link_to 'X', constraint_path(@region_constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
 
 %br
 %br
