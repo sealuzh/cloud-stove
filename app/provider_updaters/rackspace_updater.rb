@@ -5,7 +5,7 @@ class RackspaceUpdater < ProviderUpdater
   def perform
     doc = get_pricing_doc
     update_provider
-    # update_compute(doc)
+    update_compute(doc)
     update_storage(doc)
   end
 
