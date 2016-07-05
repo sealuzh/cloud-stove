@@ -14,28 +14,27 @@
         %h5{:style => 'text-align: center'}= 'Description'
         %hr
         = markdown(@ingredient.body)
-    - unless @dependency_constraints.length == 0
-      .col-lg-6
-        .description
-          %h5{:style => 'text-align: center'}= 'Deployment Recommendation'
-          %hr
-          %ul
-            %li= "Total cost: #{@deployment_recommendation[:total_cost]} $"
-            %li= "VM cost: #{@deployment_recommendation[:vm_cost]} $"
-          %table.table
-            %thead
+    .col-lg-6
+      .description
+        %h5{:style => 'text-align: center'}= 'Deployment Recommendation'
+        %hr
+        %ul
+          %li= "Total cost: #{@deployment_recommendation[:total_cost]} $"
+          %li= "VM cost: #{@deployment_recommendation[:vm_cost]} $"
+        %table.table
+          %thead
+            %tr
+              %th Ingredient
+              %th Resource
+              %th Price
+              %th Provider
+          %tbody
+            - @deployment_recommendation[:recommendation].each do |entry|
               %tr
-                %th Ingredient
-                %th Resource
-                %th Price
-                %th Provider
-            %tbody
-              - @deployment_recommendation[:recommendation].each do |entry|
-                %tr
-                  %td= link_to entry[:ingredient].name, ingredient_path(entry[:ingredient])
-                  %td= "#{entry[:resource].name}"
-                  %td= "#{entry[:resource].price_per_month}"
-                  %td= "#{entry[:resource].provider.name}"
+                %td= link_to entry[:ingredient].name, ingredient_path(entry[:ingredient])
+                %td= "#{entry[:resource].name}"
+                %td= "#{entry[:resource].price_per_month}"
+                %td= "#{entry[:resource].provider.name}"
 - else
   .row
     .description
