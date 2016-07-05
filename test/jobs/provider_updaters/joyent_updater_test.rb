@@ -19,11 +19,11 @@ class JoyentUpdaterTest < ActiveJob::TestCase
     assert_not_nil provider
     assert_not_empty provider.resources
 
-    # As of 2016-03-03, there are 18 compute instance types
+    # As of 2016-07-05, there are 112 compute instance types
     # see https://www.joyent.com/public-cloud/pricing#hardwarevm
     assert_equal 112, provider.resources.where(resource_type: 'compute').count
 
-    #As of 2016-03-16, there are 2 storage types
+    #As of 2016-07-05, there are 42 storage types
     # see https://www.joyent.com/object-storage/pricing
     assert_equal 42, provider.resources.where(resource_type: 'storage').count
   end
