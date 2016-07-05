@@ -29,7 +29,7 @@ class DeploymentRecommendation < Base
 
     soln_sep = "----------" # '--soln-sep'
     search_complete_msg = "==========" # '--search-complete-msg'
-    command = "minizinc -G or-tools -f #{Rails.root}/vendor/minizinc/bin/fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
+    command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
     output = `#{command}`
     if $?.success?
       output.gsub!(', ]', ']')
