@@ -36,19 +36,10 @@ class DeploymentRecommendation < Base
     ingredients.write self.ingredients_data
     ingredients.close
 
-    soln_sep = "----------" # '--soln-sep'
-    search_complete_msg = "==========" # '--search-complete-msg'
     command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
     stdout, stderr, status = Open3.capture3(command)
     if status.success?
-      stdout.gsub!(', ]', ']')
-      results = stdout.split(soln_sep)
-      last_result = results[results.size - 2] # last entry contains the search complete msg
-      self.more_attributes = last_result
-      self.save! # serializes `more_attributes` into a hash
-      ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
-      resource_ids = lookup_resource_ids(self.more_attributes['ingredients'])
-      ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+      ingredients_hash = extract_result(stdout)
       self.more_attributes['ingredients'] = ingredients_hash
       self.save!
     else
@@ -63,6 +54,20 @@ class DeploymentRecommendation < Base
     ensure
     resources.unlink
     ingredients.unlink
+  end
+
+  def extract_result(output)
+    soln_sep = "----------" # '--soln-sep'
+    search_complete_msg = "==========" # '--search-complete-msg'
+
+    output.gsub!(', ]', ']')
+    results = output.split(soln_sep)
+    last_result = results[results.size - 2] # last entry contains the search complete msg
+    self.more_attributes = last_result
+    self.save! # serializes `more_attributes` into a hash
+    ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
+    resource_ids = lookup_resource_ids(self.more_attributes['ingredients'])
+    Hash[ingredient_ids.zip(resource_ids)]
   end
 
   # Maps an array resource strings into an array of resource ids
