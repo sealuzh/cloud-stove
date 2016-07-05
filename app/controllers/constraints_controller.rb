@@ -58,7 +58,7 @@ class ConstraintsController < ApplicationController
     end
 
     def constraint_params
-      params.permit(:type, :ingredient_id, :target_id, :source_id, :min_ram, :min_cpus)
+      params.permit(:type, :ingredient_id, :target_id, :source_id, :min_ram, :min_cpus, :preferred_region_area)
     end
 
     def deserialize_to_constraint

@@ -1,0 +1,13 @@
+%fieldset
+  %hr
+  %h3 Region Area Constraint
+
+  .form-group
+    = f.label 'Preferred Region'
+    = f.select :preferred_region_area, ['EU','USA','ASIA','SA']
+
+  .form-group
+    = f.check_box :_destroy
+    = f.label :_destroy, t('.remove_region_constraint')
+
+  %hr
