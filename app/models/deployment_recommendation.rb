@@ -168,14 +168,14 @@ class DeploymentRecommendation < Base
   end
 
   def preferred_regions(all_leafs)
-    region_codes = filtered_resources.map(&:region_code)
+    resource_region_codes = filtered_resources.map(&:region_code)
     regions = Array.new
     all_leafs.each do |ingredient|
       if ingredient.preferred_region_area_constraint.present?
-        ingredient_codes = ingredient.preferred_region_area_constraint.region_codes
-        regions.push(region_codes.map { |rc| (ingredient_codes.include? rc) })
+        preferred_region_codes = Set.new(ingredient.preferred_region_area_constraint.region_codes)
+        regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
       else
-        regions.push(Array.new(region_codes.count, true))
+        regions.push(Array.new(resource_region_codes.count, true))
       end
     end
     regions.flatten
