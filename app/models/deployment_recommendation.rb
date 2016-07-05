@@ -4,10 +4,17 @@ require 'tempfile'
 require 'open3'
 
 class DeploymentRecommendation < Base
+  # Constraint defaults
   DEFAULT_MIN_RAM = 1
   DEFAULT_MIN_CPUS = 1
   DEFAULT_DEPENDENCY_WEIGHT = 100
   DEFAULT_REGION_AREAS = %w(EU)
+
+  # Transfer costs
+  INTRA_REGION_TRANSFER = 0
+  INTER_REGION_SAME_PROVIDER_TRANSFER = 10
+  INTER_REGION_DIFFERENT_PROVIDER_TRANSFER = 30
+  INTER_REGION_AREA_TRANSFER = 100
 
   belongs_to :ingredient
 
@@ -92,15 +99,15 @@ class DeploymentRecommendation < Base
     transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
       # FIXME: use actual transfer costs!
       if resources[row].region_code == resources[col].region_code
-        0
+        INTRA_REGION_TRANSFER
       elsif resources[row].region_area == resources[col].region_area
         if resources[row].provider_id == resources[col].provider_id
-          10
+          INTER_REGION_SAME_PROVIDER_TRANSFER
         else
-          30
+          INTER_REGION_DIFFERENT_PROVIDER_TRANSFER
         end
       else
-        100
+        INTER_REGION_AREA_TRANSFER
       end
     end
     resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_a.flatten.to_json});"
