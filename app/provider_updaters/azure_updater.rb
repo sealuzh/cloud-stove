@@ -75,6 +75,8 @@ class AzureUpdater < ProviderUpdater
         region_hash['regional'].each do |region,price|
           resource = provider.resources.find_or_create_by(name: resource_name.text, region: region)
           resource.resource_type = 'storage'
+          resource.region_code = provider.region_code(region)
+          resource.region_area = extract_region_area(region)
           resource.more_attributes['price_per_month_gb'] = price
           resource.save!
           pricelist[resource_name.text] = {
