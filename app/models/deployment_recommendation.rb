@@ -1,4 +1,5 @@
 require 'matrix'
+require 'set'
 require 'tempfile'
 
 class DeploymentRecommendation < Base
@@ -106,13 +107,13 @@ class DeploymentRecommendation < Base
 
   def preferred_region_areas
     all_leafs = ingredient.all_leafs.sort_by(&:id)
-    areas = []
+    areas = Set.new
     all_leafs.each do |leaf|
       if leaf.preferred_region_area_constraint.present?
-        areas.push(leaf.preferred_region_area_constraint.preferred_region_area)
+        areas.add(leaf.preferred_region_area_constraint.preferred_region_area)
       end
     end
-    areas.empty? ? DEFAULT_REGION_AREAS : areas
+    areas.empty? ? DEFAULT_REGION_AREAS : areas.to_a
   end
 
   def generate_ingredients_data
