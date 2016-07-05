@@ -1,6 +1,7 @@
 require 'matrix'
 require 'set'
 require 'tempfile'
+require 'open3'
 
 class DeploymentRecommendation < Base
   DEFAULT_MIN_RAM = 1
@@ -31,10 +32,10 @@ class DeploymentRecommendation < Base
     soln_sep = "----------" # '--soln-sep'
     search_complete_msg = "==========" # '--search-complete-msg'
     command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
-    output = `#{command}`
-    if $?.success?
-      output.gsub!(', ]', ']')
-      results = output.split(soln_sep)
+    stdout, stderr, status = Open3.capture3(command)
+    if status.success?
+      stdout.gsub!(', ]', ']')
+      results = stdout.split(soln_sep)
       last_result = results[results.size - 2] # last entry contains the search complete msg
       self.more_attributes = last_result
       self.save! # serializes `more_attributes` into a hash
@@ -44,7 +45,12 @@ class DeploymentRecommendation < Base
       self.more_attributes['ingredients'] = ingredients_hash
       self.save!
     else
-      fail "Error executing MiniZinc:\n#{output}"
+      fail "Error executing MiniZinc!\n
+            ----------stdout----------\n
+            #{stdout}\n
+            ----------stderr----------\n
+            #{stderr}
+            --------------------------"
     end
 
     ensure
