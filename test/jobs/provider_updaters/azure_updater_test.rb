@@ -16,7 +16,7 @@ class AzureUpdaterTest < ActiveJob::TestCase
   test 'creates resources in db' do
     assert_empty Provider.where(name: 'Microsoft Azure')
 
-    AzureUpdater.perform_now
+    AzureUpdater.new.perform
 
     provider = Provider.find_by(name: 'Microsoft Azure')
     assert_not_nil provider
