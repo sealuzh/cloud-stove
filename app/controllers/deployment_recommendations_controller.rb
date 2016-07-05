@@ -10,6 +10,15 @@ class DeploymentRecommendationsController < ApplicationController
 
   end
 
+  def index
+    @recommendations = DeploymentRecommendation.where(ingredient_id: params[:ingredient_id])
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @recommendations, status: :ok}
+    end
+
+  end
 
   def trigger
     ingredient = Ingredient.find_by_id(params[:ingredient_id])

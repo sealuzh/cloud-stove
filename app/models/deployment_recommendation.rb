@@ -9,7 +9,6 @@ class DeploymentRecommendation < Base
   belongs_to :ingredient
 
   def self.construct(ingredient)
-    ingredient.deployment_recommendation.destroy if ingredient.deployment_recommendation
     recommendation = DeploymentRecommendation.create(ingredient: ingredient)
     recommendation.generate_resources_data
     recommendation.generate_ingredients_data
