@@ -26,7 +26,6 @@ class JoyentUpdater < ProviderUpdater
       regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
       kvm_div = doc.css('div#kvm')
       instances = kvm_div.css('div.instance')
-
       instances.each do |instance_element|
 
         if number_from(instance_element.css('li.spec.cpu').text) < 1
