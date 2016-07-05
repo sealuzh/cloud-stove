@@ -5,8 +5,8 @@ class RackspaceUpdater < ProviderUpdater
   def perform
     doc = get_pricing_doc
     update_provider
-    update_compute(doc)
-    # update_storage(doc)
+    # update_compute(doc)
+    update_storage(doc)
   end
 
 
@@ -25,6 +25,14 @@ class RackspaceUpdater < ProviderUpdater
   def update_storage(doc)
     table = doc.css('div.horizontal-scroll')[4].css('.cloud-pricing-table')[0]
     resource_id = 'cloud-files'
+
+    # Rackspace does not differentiate prices between different regions, hence the regions are not crawble from the pricing tables
+    # We hardcode the regions here, taken from https://www.rackspace.com/about/datacenters
+
+    regions = ['LON','SYD','DFW','IAD','ORD','HKG']
+
+
+
     price_per_month_gb =  number_from(table.css('.pricing-col-monthly')[0])
     price_per_hour_gb = number_from(table.css('.pricing-col-hourly')[0])
 
@@ -34,12 +42,18 @@ class RackspaceUpdater < ProviderUpdater
         'price_per_month_gb' => price_per_month_gb
     }
 
-    provider = Provider.find_by(name: 'Rackspace')
-    resource = provider.resources.find_or_create_by(name: resource_id)
-    resource.more_attributes['price_per_hour_gb'] = price_per_hour_gb
-    resource.more_attributes['price_per_month_gb'] = price_per_month_gb
-    resource.resource_type = 'storage'
-    resource.save!
+    regions.each do |region|
+      provider = Provider.find_by(name: 'Rackspace')
+      resource = provider.resources.find_or_create_by(name: resource_id, region: region)
+      resource.more_attributes['price_per_hour_gb'] = price_per_hour_gb
+      resource.more_attributes['price_per_month_gb'] = price_per_month_gb
+      resource.region_code = provider.region_code(region)
+      resource.region_area = extract_region_area(region)
+      resource.resource_type = 'storage'
+      resource.save!
+
+    end
+
 
     provider = Provider.find_by(name: 'Rackspace')
     provider.more_attributes['pricelist']['storage'] = pricelist
