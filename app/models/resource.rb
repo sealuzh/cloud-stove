@@ -58,6 +58,8 @@ class Resource < Base
       hash[:mem_gb] = resource.mem_gb
       hash[:price_per_hour] = resource.price_per_hour
       hash[:price_per_month] = resource.price_per_month
+      hash[:region] = resource.region
+      hash[:region_area] = resource.region_area
       hash[:bandwidth_mpbs] = resource.bandwidth_mbps unless !resource.bandwidth_mbps
       hash[:created_at] = resource.created_at
       hash[:updated_at] = resource.updated_at
@@ -67,6 +69,8 @@ class Resource < Base
     def storage_as_json(resource)
       hash = {}
       hash[:price_per_month_gb] = resource.price_per_month_gb
+      hash[:region] = resource.region
+      hash[:region_area] = resource.region_area
       hash[:created_at] = resource.created_at
       hash[:updated_at] = resource.updated_at
       hash
