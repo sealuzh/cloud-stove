@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
   resources :ingredients, concerns: [:paginatable] do
     put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
-    get 'recommendation' => 'deployment_recommendations#show', as: :recommendation
+    get 'recommendations' => 'deployment_recommendations#index', as: :recommendations
     get 'copy' => 'ingredients#copy', as: :copy_ingredient
     get 'template' => 'ingredients#template', as: :make_template
     get 'instance' => 'ingredients#instance', as: :instance

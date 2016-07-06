@@ -26,7 +26,7 @@ class Ingredient < Base
   # Reverse relationship: each template ingredient can have derived instance ingredients
   has_many :instances, class_name: 'Ingredient', foreign_key: 'template_id'
 
-  has_one :deployment_recommendation
+  has_many :deployment_recommendations
 
   # Associated generic constraints
   has_many :constraints, dependent: :destroy
