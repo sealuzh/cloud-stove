@@ -31,6 +31,10 @@
     = f.fields_for :ram_constraint do |builder|
       = render 'ram_constraint_fields', f:builder
 
+  .form-group
+    = f.fields_for :preferred_region_area_constraint do |builder|
+      = render 'preferred_region_area_constraint_fields', f:builder
+
 
   .form-group
     = link_to_add_fields t('.add_dependency_constraint'), f, :constraints_as_source, DependencyConstraint
@@ -40,6 +44,9 @@
 
   .form-group
     = link_to_add_fields t('.add_ram_constraint'), f, :ram_constraint, RamConstraint
+
+  .form-group
+    = link_to_add_fields t('.add_region_constraint'), f, :preferred_region_area_constraint, PreferredRegionAreaConstraint
 
   .form-group
     = f.submit t('save'), class: 'btn btn-success'

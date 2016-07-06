@@ -57,12 +57,15 @@ en:
       add_dependency_constraint: "Add Dependency Constraint"
       add_cpu_constraint: "Add CPU Constraint"
       add_ram_constraint: "Add RAM Constraint"
+      add_region_constraint: "Add Region Constraint"
     constraints_as_source_fields:
       remove_dependency_constraint: "Remove Dependency Constraint"
     cpu_constraint_fields:
       remove_cpu_constraint: "Remove CPU Constraint"
     ram_constraint_fields:
       remove_ram_constraint: "Remove RAM Constraint"
+    preferred_region_area_constraint_fields:
+      remove_region_constraint: "Remove Region Constraint"
   providers:
     provider:
       last_updated: "Updated"
