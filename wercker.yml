@@ -54,7 +54,7 @@ build:
                   elif [ "$extension" == "tar" ]; then flag=""  # no compression
                   fi
 
-                  curl -L --silent $url | tar x $flag
+                  curl --location --silent --show-error $url | tar x $flag
                 fi
               done < .vendor_urls
 
