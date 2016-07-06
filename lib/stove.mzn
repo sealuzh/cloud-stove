@@ -2,12 +2,6 @@
 int: num_ingredients;
 set of int: Ingredients = 1..num_ingredients;
 
-% Number of available providers
-% int: num_providers;
-% OR:
-% Number of available regions across all providers
-% int: num_regions;
-
 % Total number of resources available for deployment
 int: num_resources;
 set of int: Resources = 1..num_resources;
@@ -18,6 +12,9 @@ set of int: Resources = 1..num_resources;
 
 % Resource IDs
 array[Resources] of string: resource_ids;
+
+% Regions as region hashes derived from provider name and region name
+array[Resources] of int: regions;
 
 % Resource prices per hour (maybe month?) in mUSD
 array[Resources] of int: costs;
@@ -41,6 +38,9 @@ array[Ingredients] of int: min_ram;
 % Component CPU requirements
 array[Ingredients] of int: min_cpus;
 
+% Region constraints for each ingredient
+array[Ingredients, Resources] of bool: preferred_regions;
+
 %
 % Decision variables
 %
@@ -48,17 +48,21 @@ array[Ingredients] of int: min_cpus;
 % Component assignment
 array[Ingredients] of var 1..num_resources: assignments;
 
+int: max_costs = max(costs);
+array[Ingredients] of var 1..max_costs: assignment_costs;
+
 % Total Deployment Cost
-int: max_total = num_ingredients * max(costs);
 var int: total_cost;
 
 % Minimize total cost
-solve %:: int_search(assignments, first_fail, indomain_min, complete)
+solve :: int_search(assignment_costs, first_fail, indomain_min, complete)
   minimize total_cost;
 
 %
 % Constraints
 %
+
+constraint forall(i in Ingredients)(assignment_costs[i] == costs[assignments[i]]);
 
 % Calculate total cost
 constraint total_cost = 
@@ -70,13 +74,19 @@ constraint total_cost =
   sum(i in Ingredients, j in Ingredients)(
     inter_ingredient_traffic[i,j] * transfer_costs[assignments[i],assignments[j]]
   );
-  
+
+% Chosen resources must be in the preferred region
+constraint forall(i in Ingredients)(preferred_regions[i, assignments[i]] == true);
+
 % Chosen resources must have enough RAM
 constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
 
 % Chosen resources must have enough CPU cores
 constraint forall(i in Ingredients)(cpu[assignments[i]] >= min_cpus[i]);
 
-output [ "{\"ingredients\" :[" ] ++ [ "\"" ++ show(resource_ids[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
-         ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ "\", " ]
-         ++ [ " \"total_cost\": " ++ show(total_cost) ++ "}" ];
+output [ "{" ]
+    ++ [ "\"ingredients\" :[" ] ++ [ "\"" ++ show(resource_ids[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "\"regions\" :[" ] ++ [ show(regions[assignments[i]]) ++ ", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ "\", " ]
+    ++ [ " \"total_cost\": " ++ show(total_cost) ]
+    ++ [ "}" ];

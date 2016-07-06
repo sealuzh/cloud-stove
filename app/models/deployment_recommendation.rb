@@ -1,10 +1,20 @@
 require 'matrix'
+require 'set'
 require 'tempfile'
+require 'open3'
 
 class DeploymentRecommendation < Base
+  # Constraint defaults
   DEFAULT_MIN_RAM = 1
   DEFAULT_MIN_CPUS = 1
   DEFAULT_DEPENDENCY_WEIGHT = 100
+  DEFAULT_REGION_AREAS = %w(EU)
+
+  # Transfer costs
+  INTRA_REGION_TRANSFER = 0
+  INTER_REGION_SAME_PROVIDER_TRANSFER = 10
+  INTER_REGION_DIFFERENT_PROVIDER_TRANSFER = 30
+  INTER_REGION_AREA_TRANSFER = 100
 
   belongs_to :ingredient
 
@@ -26,27 +36,38 @@ class DeploymentRecommendation < Base
     ingredients.write self.ingredients_data
     ingredients.close
 
-    soln_sep = "----------" # '--soln-sep'
-    search_complete_msg = "==========" # '--search-complete-msg'
-    output = `minizinc -G or-tools -f #{Rails.root}/vendor/minizinc/bin/fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}`
-    if $?.success?
-      output.gsub!(', ]', ']')
-      results = output.split(soln_sep)
-      last_result = results[results.size - 2] # last entry contains the search complete msg
-      self.more_attributes = last_result
-      self.save! # serializes `more_attributes` into a hash
-      ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
-      resource_ids = lookup_resource_ids(self.more_attributes['ingredients'])
-      ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
+    stdout, stderr, status = Open3.capture3(command)
+    if status.success?
+      ingredients_hash = extract_result(stdout)
       self.more_attributes['ingredients'] = ingredients_hash
       self.save!
     else
-      fail "Error executing MiniZinc:\n#{output}"
+      fail "Error executing MiniZinc!\n
+            ----------stdout----------\n
+            #{stdout}\n
+            ----------stderr----------\n
+            #{stderr}
+            --------------------------"
     end
 
     ensure
     resources.unlink
     ingredients.unlink
+  end
+
+  def extract_result(output)
+    soln_sep = "----------" # '--soln-sep'
+    search_complete_msg = "==========" # '--search-complete-msg'
+
+    output.gsub!(', ]', ']')
+    results = output.split(soln_sep)
+    last_result = results[results.size - 2] # last entry contains the search complete msg
+    self.more_attributes = last_result
+    self.save! # serializes `more_attributes` into a hash
+    ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
+    resource_ids = lookup_resource_ids(self.more_attributes['ingredients'])
+    Hash[ingredient_ids.zip(resource_ids)]
   end
 
   # Maps an array resource strings into an array of resource ids
@@ -56,33 +77,70 @@ class DeploymentRecommendation < Base
   end
 
   def generate_resources_data
-    resources_data = ''
-    resources_data << "num_resources = #{Resource.count};"
+    resources = filtered_resources
 
-    resources = Resource.all
+    resources_data = ''
+    resources_data << "num_resources = #{resources.count};"
+    resources_data << "\n"
+
     resources_data << "resource_ids = #{resources.map(&:name).to_json};"
+    resources_data << "\n"
+
+    resources_data << "regions = #{resources.map(&:region_code).to_json};"
+    resources_data << "\n"
 
     prices = resources.map { |r| (r.price_per_month * 1000).to_i }
     resources_data << "costs = #{prices.to_json};"
+    resources_data << "\n"
 
     ram_mb = resources.map { |r| (BigDecimal.new(r.ma['mem_gb']) * 1024).to_i rescue 0 }
     resources_data << "ram = #{ram_mb.to_json};"
+    resources_data << "\n"
 
     cores = resources.map { |r| r.ma['cores'].to_i rescue 0 }
     resources_data << "cpu = #{cores};"
+    resources_data << "\n"
 
     transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
       # FIXME: use actual transfer costs!
-      (resources[row].provider_id - resources[col].provider_id).abs * 100
+      if resources[row].region_code == resources[col].region_code
+        INTRA_REGION_TRANSFER
+      elsif resources[row].region_area == resources[col].region_area
+        if resources[row].provider_id == resources[col].provider_id
+          INTER_REGION_SAME_PROVIDER_TRANSFER
+        else
+          INTER_REGION_DIFFERENT_PROVIDER_TRANSFER
+        end
+      else
+        INTER_REGION_AREA_TRANSFER
+      end
     end
     resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_a.flatten.to_json});"
     self.resources_data = resources_data
   end
 
+  def filtered_resources
+    Resource.region_area(preferred_region_areas).compute.sort_by(&:id)
+  end
+
+  def preferred_region_areas
+    all_leafs = ingredient.all_leafs.sort_by(&:id)
+    areas = Set.new
+    if self.ingredient.preferred_region_area_constraint.present?
+      areas.add(self.ingredient.preferred_region_area_constraint.preferred_region_area)
+    end
+    all_leafs.each do |leaf|
+      if leaf.preferred_region_area_constraint.present?
+        areas.add(leaf.preferred_region_area_constraint.preferred_region_area)
+      end
+    end
+    areas.empty? ? DEFAULT_REGION_AREAS : areas.to_a
+  end
+
   def generate_ingredients_data
     ingredients_data = ''
 
-    all_leafs = ingredient.all_leafs.sort_by &:id
+    all_leafs = ingredient.all_leafs.sort_by(&:id)
     num_ingredients = all_leafs.count
     ingredients_data << "num_ingredients = #{num_ingredients};"
     ingredients_data << "\n"
@@ -101,6 +159,10 @@ class DeploymentRecommendation < Base
       i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS
     end
     ingredients_data << "min_cpus = #{min_cpus.to_json};"
+    ingredients_data << "\n"
+
+    ingredients_data << "preferred_regions = array2d(Ingredients, Resources,
+                          #{preferred_regions(all_leafs).to_a.flatten.to_json});"
     ingredients_data << "\n"
 
     self.ingredients_data = ingredients_data
@@ -126,6 +188,22 @@ class DeploymentRecommendation < Base
     end
   end
 
+  def preferred_regions(all_leafs)
+    resource_region_codes = filtered_resources.map(&:region_code)
+    regions = Array.new
+    all_leafs.each do |ingredient|
+      if ingredient.preferred_region_area_constraint.present?
+        preferred_region_codes = Set.new(ingredient.preferred_region_area_constraint.region_codes)
+        regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
+      elsif self.ingredient.preferred_region_area_constraint.present?
+        preferred_region_codes = Set.new(self.ingredient.preferred_region_area_constraint.region_codes)
+        regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
+      else
+        regions.push(Array.new(resource_region_codes.count, true))
+      end
+    end
+    regions.flatten
+  end
 
   def as_json(options={})
     hash = extract_params(self)
@@ -141,7 +219,6 @@ class DeploymentRecommendation < Base
     hash[:recommendation] = ingredients
     hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
     hash
-
   end
 
   def embed_ingredients
