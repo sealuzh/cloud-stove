@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160712093739) do
     t.integer  "min_ram"
     t.integer  "min_cpus"
     t.string   "preferred_region_area"
+    t.string   "preferred_providers"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
