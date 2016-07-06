@@ -7,7 +7,7 @@ class ProviderConstraint < Constraint
 
   def as_json(options={})
     hash = super
-    hash[:providers] = self.provider_list
+    hash[:preferred_providers] = self.provider_list
     hash
   end
 end
