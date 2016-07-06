@@ -82,7 +82,12 @@
             %h4= 'Region Constraint'
             ="Preferred Region: #{@region_constraint.preferred_region_area}"
             = link_to 'X', constraint_path(@region_constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
-
+        .col-sm-6
+          - unless @provider_constraint.nil?
+            %br
+            %h4= 'Provider Constraint'
+            ="Preferred Providers: #{@provider_constraint.preferred_providers}"
+            = link_to 'X', constraint_path(@provider_constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
 %br
 %br
 - unless @ingredient.children.length == 0

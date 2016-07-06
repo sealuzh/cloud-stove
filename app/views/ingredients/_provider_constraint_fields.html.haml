@@ -1,0 +1,13 @@
+%fieldset
+  %hr
+  %h3 Provider Constraint
+
+  .form-group
+    = f.label 'Preferred Providers'
+    = f.text_field :preferred_providers
+
+  .form-group
+    = f.check_box :_destroy
+    = f.label :_destroy, t('.remove_region_constraint')
+
+  %hr

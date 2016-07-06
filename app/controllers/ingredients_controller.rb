@@ -55,6 +55,7 @@ class IngredientsController < ApplicationController
     @ram_constraint = @ingredient.ram_constraint
     @region_constraint = @ingredient.preferred_region_area_constraint
     @dependency_constraints = @ingredient.all_dependency_constraints
+    @provider_constraint = @ingredient.provider_constraint
     @deployment_recommendation = @ingredient.deployment_recommendations.last.embed_ingredients unless @ingredient.deployment_recommendations.empty?
     respond_to do |format|
       format.html
@@ -175,7 +176,8 @@ class IngredientsController < ApplicationController
                                          constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
                                          ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],
                                          cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy],
-                                         preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy])
+                                         preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy],
+                                         provider_constraint_attributes:[:id, :ingredient_id, :preferred_providers, :_destroy])
     end
 
 end

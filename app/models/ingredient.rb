@@ -51,6 +51,7 @@ class Ingredient < Base
   accepts_nested_attributes_for :cpu_constraint, allow_destroy: true
   accepts_nested_attributes_for :ram_constraint, allow_destroy: true
   accepts_nested_attributes_for :preferred_region_area_constraint, allow_destroy: true
+  accepts_nested_attributes_for :provider_constraint, allow_destroy: true
 
 
   # traverses the ingredients subtree and collects all dependency constraints in it
