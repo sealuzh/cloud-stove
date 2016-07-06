@@ -126,6 +126,9 @@ class DeploymentRecommendation < Base
   def preferred_region_areas
     all_leafs = ingredient.all_leafs.sort_by(&:id)
     areas = Set.new
+    if self.ingredient.preferred_region_area_constraint.present?
+      areas.add(self.ingredient.preferred_region_area_constraint.preferred_region_area)
+    end
     all_leafs.each do |leaf|
       if leaf.preferred_region_area_constraint.present?
         areas.add(leaf.preferred_region_area_constraint.preferred_region_area)
@@ -191,6 +194,9 @@ class DeploymentRecommendation < Base
     all_leafs.each do |ingredient|
       if ingredient.preferred_region_area_constraint.present?
         preferred_region_codes = Set.new(ingredient.preferred_region_area_constraint.region_codes)
+        regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
+      elsif self.ingredient.preferred_region_area_constraint.present?
+        preferred_region_codes = Set.new(self.ingredient.preferred_region_area_constraint.region_codes)
         regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
       else
         regions.push(Array.new(resource_region_codes.count, true))
