@@ -16,15 +16,19 @@
   bundle exec rake test
   ```
   
-  If tests fail with `sh: mzn-g12fd: command not found` make sure that your
-  MiniZinc installation is on your `PATH`. If it is on your `PATH` and you
+  If tests fail with `sh: minizinc: command not found` make sure that your
+  `or-tools` MiniZinc installation is in your `PATH`. If it is on your `PATH` and you
   still get the error, make sure that `spring` starts with the correct `PATH`:
   
   ```
   bin/spring stop
-  PATH=<path/to/minizinc>/:$PATH bundle exec rake test
+  PATH=<path/to/minizinc/bin>/:$PATH bundle exec rake test
   ```
-  
+
+  If tests fail with `Cannot access include directory .../share/minizinc/or-tools/`,
+  make sure that the first MiniZinc binary in the path points to the `or-tools` distribution
+  and not to any other MiniZinc implementation.
+
   This should set the correct environment for the newly started `spring` 
   process.
 
