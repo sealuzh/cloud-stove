@@ -18,10 +18,10 @@ class DeploymentRecommendation < Base
 
   belongs_to :ingredient
 
-  def self.construct(ingredient)
+  def self.construct(ingredient, provider_id = nil)
     recommendation = DeploymentRecommendation.create(ingredient: ingredient)
-    recommendation.generate_resources_data
-    recommendation.generate_ingredients_data
+    recommendation.generate_resources_data(provider_id)
+    recommendation.generate_ingredients_data(provider_id)
     recommendation.generate
     recommendation.save!
     recommendation
@@ -76,8 +76,8 @@ class DeploymentRecommendation < Base
     resource_codes.map { |rc| Resource.find_by_resource_code(rc).id }
   end
 
-  def generate_resources_data
-    resources = filtered_resources
+  def generate_resources_data(provider_id)
+    resources = filtered_resources(provider_id)
 
     resources_data = ''
     resources_data << "num_resources = #{resources.count};"
@@ -119,8 +119,12 @@ class DeploymentRecommendation < Base
     self.resources_data = resources_data
   end
 
-  def filtered_resources
-    Resource.region_area(preferred_region_areas).compute.sort_by(&:id)
+  def filtered_resources(provider_id)
+    if provider_id
+      Resource.where(provider_id: provider_id).region_area(preferred_region_areas).compute.sort_by(&:id)
+    else
+      Resource.region_area(preferred_region_areas).compute.sort_by(&:id)
+    end
   end
 
   def preferred_region_areas
@@ -137,7 +141,7 @@ class DeploymentRecommendation < Base
     areas.empty? ? DEFAULT_REGION_AREAS : areas.to_a
   end
 
-  def generate_ingredients_data
+  def generate_ingredients_data(provider_id)
     ingredients_data = ''
 
     all_leafs = ingredient.all_leafs.sort_by(&:id)
@@ -162,7 +166,7 @@ class DeploymentRecommendation < Base
     ingredients_data << "\n"
 
     ingredients_data << "preferred_regions = array2d(Ingredients, Resources,
-                          #{preferred_regions(all_leafs).to_a.flatten.to_json});"
+                          #{preferred_regions(all_leafs, provider_id).to_a.flatten.to_json});"
     ingredients_data << "\n"
 
     self.ingredients_data = ingredients_data
@@ -188,8 +192,8 @@ class DeploymentRecommendation < Base
     end
   end
 
-  def preferred_regions(all_leafs)
-    resource_region_codes = filtered_resources.map(&:region_code)
+  def preferred_regions(all_leafs, provider_id)
+    resource_region_codes = filtered_resources(provider_id).map(&:region_code)
     regions = Array.new
     all_leafs.each do |ingredient|
       if ingredient.preferred_region_area_constraint.present?
