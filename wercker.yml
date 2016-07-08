@@ -39,27 +39,10 @@ build:
                 tar xjf $PHANTOM_JS_ZIP &&
                 ln -s $INSTALL_DIR/$PHANTOM_JS/bin/phantomjs /usr/local/bin/phantomjs
               fi
+        - inz/vendor-binaries
         - script:
-            name: Install vendor binaries
-            code: |
-              # This code adapted from https://github.com/peterkeen/heroku-buildpack-vendorbinaries/blob/master/bin/compile
-              [ -f .vendor_urls ] && while read url; do
-                if [ -n "$url" ]; then # incase ensure_newline_at_eof_on_save is enabled
-                  echo Vendoring $url
-
-                  extension="${url##*.}" # http://stackoverflow.com/q/965053
-                  flag="-z" # by default use gz
-                  if [ "$extension" == "xz" ]; then flag="--xz"
-                  elif [ "$extension" == "bz2" ]; then flag="--bzip2"
-                  elif [ "$extension" == "tar" ]; then flag=""  # no compression
-                  fi
-
-                  curl --location --silent --show-error $url | tar x $flag
-                fi
-              done < .vendor_urls
-
-              # And finally, source the .profile.d scripts
-              for script in .profile.d/*; do source $script; done
+            name: Source .profile.d scripts
+            code: for script in .profile.d/*; do source $script; done
         - script:
             name: Bundle config
             code: |
