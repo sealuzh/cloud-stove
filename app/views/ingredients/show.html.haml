@@ -61,7 +61,56 @@
               %tr
                 %td= link_to constraint.source.name, ingredient_path(constraint.source)
                 %td= link_to constraint.target.name, ingredient_path(constraint.target)
-                %td= link_to 'X', constraint_path(constraint), :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+                %td
+
+      - unless @all_cpu_constraints.length == 0
+        %br
+        %h4= 'CPU Constraints'
+        %table.table
+          %thead
+            %tr
+              %th Ingredient
+              %th CPU Cores
+              %th
+          %tbody
+            - @all_cpu_constraints.each do |constraint|
+              %tr
+                %td= link_to constraint.ingredient.name, ingredient_path(constraint.ingredient)
+                %td= "#{constraint.min_cpus}"
+                %td
+
+      - unless @all_ram_constraints.length == 0
+        %br
+        %h4= 'RAM Constraints'
+        %table.table
+          %thead
+            %tr
+              %th Ingredient
+              %th RAM (Megabytes)
+              %th
+          %tbody
+            - @all_ram_constraints.each do |constraint|
+              %tr
+                %td= link_to constraint.ingredient.name, ingredient_path(constraint.ingredient)
+                %td= "#{constraint.min_ram}"
+                %td
+
+      - unless @all_region_constraints.length == 0
+        %br
+        %h4= 'Region Constraints'
+        %table.table
+          %thead
+            %tr
+              %th Ingredient
+              %th Region
+              %th
+          %tbody
+            - @all_region_constraints.each do |constraint|
+              %tr
+                %td= link_to constraint.ingredient.name, ingredient_path(constraint.ingredient)
+                %td= "#{constraint.preferred_region_area}"
+                %td
+
       .row
         .col-sm-6
           - unless @cpu_constraint.nil?

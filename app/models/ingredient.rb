@@ -56,6 +56,18 @@ class Ingredient < Base
     dependency_constraints_rec(self, {}).values
   end
 
+  def all_ram_constraints
+    ram_constraints_rec(self, {}).values
+  end
+
+  def all_cpu_constraints
+    cpu_constraints_rec(self,{}).values
+  end
+
+  def all_region_constraints
+    region_constraints_rec(self,{}).values
+  end
+
   def is_root
     (self.parent.nil? && self.children.length != 0)
   end
@@ -142,5 +154,30 @@ class Ingredient < Base
 
       constraint_hash
   end
+
+  def ram_constraints_rec(current_ingredient,constraints_hash)
+    current_ingredient.children.all.each do |child|
+      constraints_hash.merge(ram_constraints_rec(child,constraints_hash))
+    end
+    constraints_hash[current_ingredient.ram_constraint.id] = current_ingredient.ram_constraint unless current_ingredient.ram_constraint.nil?
+    return constraints_hash
+  end
+
+  def cpu_constraints_rec(current_ingredient,constraints_hash)
+    current_ingredient.children.all.each do |child|
+      constraints_hash.merge(cpu_constraints_rec(child,constraints_hash))
+    end
+    constraints_hash[current_ingredient.cpu_constraint.id] = current_ingredient.cpu_constraint unless current_ingredient.cpu_constraint.nil?
+    return constraints_hash
+  end
+
+  def region_constraints_rec(current_ingredient,constraints_hash)
+    current_ingredient.children.all.each do |child|
+      constraints_hash.merge(region_constraints_rec(child,constraints_hash))
+    end
+    constraints_hash[current_ingredient.preferred_region_area_constraint.id] = current_ingredient.preferred_region_area_constraint unless current_ingredient.preferred_region_area_constraint.nil?
+    return constraints_hash
+  end
+
 
 end

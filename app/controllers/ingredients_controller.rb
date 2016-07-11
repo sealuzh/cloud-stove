@@ -56,6 +56,10 @@ class IngredientsController < ApplicationController
     @region_constraint = @ingredient.preferred_region_area_constraint
     @dependency_constraints = @ingredient.all_dependency_constraints
     @deployment_recommendation = @ingredient.deployment_recommendations.last.embed_ingredients unless @ingredient.deployment_recommendations.empty?
+    @all_ram_constraints = @ingredient.all_ram_constraints
+    @all_cpu_constraints = @ingredient.all_cpu_constraints
+    @all_region_constraints = @ingredient.all_region_constraints
+
     respond_to do |format|
       format.html
       format.json {render json: @ingredient}
