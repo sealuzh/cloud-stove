@@ -70,10 +70,10 @@ class DeploymentRecommendation < Base
     Hash[ingredient_ids.zip(resource_ids)]
   end
 
-  # Maps an array resource strings into an array of resource ids
-  # Example: ["c3.2xlarge", "c3.2xlarge", "t2.micro", "c3.2xlarge"] => [120, 120, 119, 120]
-  def lookup_resource_ids(resource_strings)
-    resource_strings.map { |s| Resource.find_by_name(s).id }
+  # Maps an array resource codes into an array of resource ids
+  # Example: ["-1960662187398715820", "-1960662187398715820", "-1110787312779595262", "-1960662187398715820"] => [120, 120, 119, 120]
+  def lookup_resource_ids(resource_codes)
+    resource_codes.map { |rc| Resource.find_by_resource_code(rc).id }
   end
 
   def generate_resources_data
@@ -83,7 +83,7 @@ class DeploymentRecommendation < Base
     resources_data << "num_resources = #{resources.count};"
     resources_data << "\n"
 
-    resources_data << "resource_ids = #{resources.map(&:name).to_json};"
+    resources_data << "resources = #{resources.map(&:resource_code).to_json};"
     resources_data << "\n"
 
     resources_data << "regions = #{resources.map(&:region_code).to_json};"

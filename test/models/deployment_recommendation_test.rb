@@ -19,7 +19,6 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     t2_micro = Resource.find_by_name('t2.micro')
     ingredient_ids = rails_app.children.sort_by(&:id).map(&:id)
     resource_ids = [c3_2xlarge.id, c3_2xlarge.id, t2_micro.id, c3_2xlarge.id]
-    # Corresponds to: ["c3.2xlarge", "c3.2xlarge", "t2.micro", "c3.2xlarge"]
     ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
     expected_recommendation =  {
       'ingredients' => ingredients_hash,

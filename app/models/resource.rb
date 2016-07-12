@@ -1,6 +1,7 @@
 class Resource < Base
   ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
+  before_create :generate_resource_code
   scope :compute, -> { where(resource_type: 'compute') }
   scope :region_area, ->(region_area) { where(region_area: region_area) }
 
@@ -14,6 +15,11 @@ class Resource < Base
 
   def self.regions(region_area)
     Resource.region_area(region_area).select(:region).distinct.map(&:region)
+  end
+
+  def resource_code
+    # Assuming that 1) `region_code` (provider + region) and 2) region name together identify a resource
+    (self.region_code.to_s + self.name.to_s).hash
   end
 
   def is_compute?
@@ -51,6 +57,10 @@ class Resource < Base
   end
 
   private
+
+    def generate_resource_code
+      self.resource_code = resource_code
+    end
 
     def compute_as_json(resource)
       hash = {}
