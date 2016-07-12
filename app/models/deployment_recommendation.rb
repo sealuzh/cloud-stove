@@ -101,21 +101,7 @@ class DeploymentRecommendation < Base
     resources_data << "cpu = #{cores};"
     resources_data << "\n"
 
-    transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
-      # FIXME: use actual transfer costs!
-      if resources[row].region_code == resources[col].region_code
-        INTRA_REGION_TRANSFER
-      elsif resources[row].region_area == resources[col].region_area
-        if resources[row].provider_id == resources[col].provider_id
-          INTER_REGION_SAME_PROVIDER_TRANSFER
-        else
-          INTER_REGION_DIFFERENT_PROVIDER_TRANSFER
-        end
-      else
-        INTER_REGION_AREA_TRANSFER
-      end
-    end
-    resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs.to_a.flatten.to_json});"
+    resources_data << "transfer_costs = array2d(Resources, Resources, #{transfer_costs(resources).to_a.flatten.to_json});"
     self.resources_data = resources_data
   end
 
@@ -139,6 +125,23 @@ class DeploymentRecommendation < Base
       end
     end
     areas.empty? ? DEFAULT_REGION_AREAS : areas.to_a
+  end
+
+  def transfer_costs(resources)
+    Matrix.build(resources.count, resources.count) do |row, col|
+      # FIXME: use actual transfer costs!
+      if resources[row].region_code == resources[col].region_code
+        INTRA_REGION_TRANSFER
+      elsif resources[row].region_area == resources[col].region_area
+        if resources[row].provider_id == resources[col].provider_id
+          INTER_REGION_SAME_PROVIDER_TRANSFER
+        else
+          INTER_REGION_DIFFERENT_PROVIDER_TRANSFER
+        end
+      else
+        INTER_REGION_AREA_TRANSFER
+      end
+    end
   end
 
   def generate_ingredients_data(provider_id)
