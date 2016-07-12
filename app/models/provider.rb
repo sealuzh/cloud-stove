@@ -12,11 +12,10 @@ class Provider < Base
   end
 
   def region_code(region_name)
-    (self.id.to_s + region_name.to_s).hash
+    (self.name.to_s + region_name.to_s).hash
   end
 
   def self.update_providers
     UpdateProvidersJob.perform_later
   end
-
 end
