@@ -47,7 +47,6 @@ class RackspaceUpdater < ProviderUpdater
       resource = provider.resources.find_or_create_by(name: resource_id, region: region)
       resource.more_attributes['price_per_hour_gb'] = price_per_hour_gb
       resource.more_attributes['price_per_month_gb'] = price_per_month_gb
-      resource.region_code = provider.region_code(region)
       resource.region_area = extract_region_area(region)
       resource.resource_type = 'storage'
       resource.save!
@@ -95,7 +94,6 @@ class RackspaceUpdater < ProviderUpdater
     pricelist.each_pair do |resource_id, data|
       regions.each do |region|
         resource = provider.resources.find_or_create_by(name: resource_id, region: region)
-        resource.region_code = provider.region_code(region)
         resource.region = region
         resource.region_area = extract_region_area(region)
         resource.more_attributes = data

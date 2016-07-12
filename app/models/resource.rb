@@ -1,6 +1,7 @@
 class Resource < Base
   ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
+  before_create :generate_region_code
   before_create :generate_resource_code
   scope :compute, -> { where(resource_type: 'compute') }
   scope :region_area, ->(region_area) { where(region_area: region_area) }
@@ -15,6 +16,10 @@ class Resource < Base
 
   def self.regions(region_area)
     Resource.region_area(region_area).select(:region).distinct.map(&:region)
+  end
+
+  def region_code
+    self.provider.region_code(self.region)
   end
 
   def resource_code
@@ -57,6 +62,10 @@ class Resource < Base
   end
 
   private
+
+    def generate_region_code
+      self.region_code = region_code
+    end
 
     def generate_resource_code
       self.resource_code = resource_code
