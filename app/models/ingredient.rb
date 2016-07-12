@@ -94,7 +94,14 @@ class Ingredient < Base
 
 
   def schedule_recommendation_job
-    ComputeRecommendationJob.perform_later(self)
+    preferred_providers = self.provider_constraint.provider_list rescue [nil]
+    jobs = []
+    preferred_providers.each do |provider_name|
+      provider_id = Provider.find_by_name(provider_name)
+      jobs << ComputeRecommendationJob.perform_later(self, provider_id)
+    end
+    # TODO: Adjust API to return a list of job ids for each job
+    jobs.last
   end
 
   # looks for the root of the application hierarchy of this ingredient and returns it
