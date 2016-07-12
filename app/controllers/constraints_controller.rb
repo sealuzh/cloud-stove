@@ -34,7 +34,7 @@ class ConstraintsController < ApplicationController
   def update
     respond_to do |format|
       params = constraint_params
-      if !params[:preferred_providers].nil?
+      if params[:preferred_providers].present?
         params[:preferred_providers] = constraint_params[:preferred_providers].join(',')
       end
       if @constraint.update(params)
@@ -74,7 +74,7 @@ class ConstraintsController < ApplicationController
         constraint_instance.ingredient_id = constraint_params[:ingredient_id]
         constraint_instance.preferred_providers = constraint_params[:preferred_providers].join(',')
         constraint_instance
-      elsif
+      else
         constraint_clazz = type.constantize
         constraint_instance = constraint_clazz.new
         constraint_instance.assign_attributes(constraint_params)
