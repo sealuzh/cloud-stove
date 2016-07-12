@@ -79,7 +79,7 @@ class Resource < Base
       hash[:price_per_month] = resource.price_per_month
       hash[:region] = resource.region
       hash[:region_area] = resource.region_area
-      hash[:bandwidth_mpbs] = resource.bandwidth_mbps unless !resource.bandwidth_mbps
+      hash[:bandwidth_mpbs] = resource.bandwidth_mbps if resource.bandwidth_mbps
       hash[:created_at] = resource.created_at
       hash[:updated_at] = resource.updated_at
       hash
