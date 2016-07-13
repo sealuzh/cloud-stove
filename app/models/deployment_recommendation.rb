@@ -41,18 +41,27 @@ class DeploymentRecommendation < Base
     if status.success?
       result = extract_result(stdout)
       self.more_attributes = result
-      self.save!
+      unless self.save # serializes `more_attributes` result string into a hash
+        err_msg = self.errors.full_messages
+        self.destroy!
+        fail [ 'Error parsing MiniZinc output!',
+               '----------result----------',
+               result,
+               '----------error----------',
+               err_msg,
+               '--------------------------' ].join("\n")
+      end
 
       mapping = ingredient_resource_mapping(self.more_attributes['ingredients'])
       self.more_attributes['ingredients'] = mapping
       self.save!
     else
-      fail "Error executing MiniZinc!\n
-            ----------stdout----------\n
-            #{stdout}\n
-            ----------stderr----------\n
-            #{stderr}
-            --------------------------"
+      fail [ 'Error executing MiniZinc!',
+             '----------stdout----------',
+             stdout,
+             '----------stderr----------',
+             stderr,
+             '--------------------------' ].join("\n")
     end
 
     ensure
@@ -61,8 +70,8 @@ class DeploymentRecommendation < Base
   end
 
   def extract_result(output)
-    soln_sep = "----------" # '--soln-sep'
-    search_complete_msg = "==========" # '--search-complete-msg'
+    soln_sep = '----------' # '--soln-sep'
+    search_complete_msg = '==========' # '--search-complete-msg'
 
     output.gsub!(', ]', ']')
     results = output.split(soln_sep)
