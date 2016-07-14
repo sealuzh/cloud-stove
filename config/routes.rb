@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
 
   put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
+  get 'providers/names' => 'providers#names', as: :provider_names
   get 'providers' => 'providers#index', as: :providers
 
   get 'applications' =>'ingredients#applications', as: :applications
