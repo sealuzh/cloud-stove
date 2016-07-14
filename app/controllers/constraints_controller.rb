@@ -33,11 +33,7 @@ class ConstraintsController < ApplicationController
 
   def update
     respond_to do |format|
-      params = constraint_params
-      if params[:preferred_providers].present?
-        params[:preferred_providers] = constraint_params[:preferred_providers].join(',')
-      end
-      if @constraint.update(params)
+      if @constraint.update(constraint_params)
         format.html
         format.json {render json: @constraint, status: :ok}
       else
@@ -62,23 +58,18 @@ class ConstraintsController < ApplicationController
     end
 
     def constraint_params
-      params.permit(:type, :ingredient_id, :target_id, :source_id, :min_ram, :min_cpus, :preferred_region_area, :preferred_providers =>[])
+      p = params.permit(:type, :ingredient_id, :target_id, :source_id, :min_ram, :min_cpus, :preferred_region_area, :preferred_providers =>[])
+      if p[:type] == 'ProviderConstraint'
+        p[:preferred_providers] = p[:preferred_providers].join(',')
+      end
+      p
     end
 
     def deserialize_to_constraint
       type = constraint_params[:type]
-      
-      if type == 'ProviderConstraint'
-        constraint_clazz = type.constantize
-        constraint_instance = constraint_clazz.new
-        constraint_instance.ingredient_id = constraint_params[:ingredient_id]
-        constraint_instance.preferred_providers = constraint_params[:preferred_providers].join(',')
-        constraint_instance
-      else
-        constraint_clazz = type.constantize
-        constraint_instance = constraint_clazz.new
-        constraint_instance.assign_attributes(constraint_params)
-        constraint_instance
-      end
+      constraint_clazz = type.constantize
+      constraint_instance = constraint_clazz.new
+      constraint_instance.assign_attributes(constraint_params)
+      constraint_instance
     end
 end
