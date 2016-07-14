@@ -18,11 +18,11 @@ class Resource < Base
     Resource.region_area(region_area).select(:region).distinct.map(&:region)
   end
 
-  def region_code
+  def derive_region_code
     self.provider.region_code(self.region)
   end
 
-  def resource_code
+  def derive_resource_code
     # Assuming that 1) `region_code` (provider + region) and 2) region name together identify a resource
     (self.region_code.to_s + self.name.to_s).hash
   end
@@ -64,11 +64,11 @@ class Resource < Base
   private
 
     def generate_region_code
-      self.region_code = region_code
+      self.region_code = derive_region_code
     end
 
     def generate_resource_code
-      self.resource_code = resource_code
+      self.resource_code = derive_resource_code
     end
 
     def compute_as_json(resource)
