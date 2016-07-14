@@ -39,16 +39,29 @@ class DeploymentRecommendation < Base
     command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
     stdout, stderr, status = Open3.capture3(command)
     if status.success?
-      ingredients_hash = extract_result(stdout)
-      self.more_attributes['ingredients'] = ingredients_hash
+      result = extract_result(stdout)
+      self.more_attributes = result
+      unless self.save # serializes `more_attributes` result string into a hash
+        err_msg = self.errors.full_messages
+        self.destroy!
+        fail [ 'Error parsing MiniZinc output!',
+               '----------result----------',
+               result,
+               '----------error----------',
+               err_msg,
+               '--------------------------' ].join("\n")
+      end
+
+      mapping = ingredient_resource_mapping(self.more_attributes['ingredients'])
+      self.more_attributes['ingredients'] = mapping
       self.save!
     else
-      fail "Error executing MiniZinc!\n
-            ----------stdout----------\n
-            #{stdout}\n
-            ----------stderr----------\n
-            #{stderr}
-            --------------------------"
+      fail [ 'Error executing MiniZinc!',
+             '----------stdout----------',
+             stdout,
+             '----------stderr----------',
+             stderr,
+             '--------------------------' ].join("\n")
     end
 
     ensure
@@ -57,16 +70,17 @@ class DeploymentRecommendation < Base
   end
 
   def extract_result(output)
-    soln_sep = "----------" # '--soln-sep'
-    search_complete_msg = "==========" # '--search-complete-msg'
+    soln_sep = '----------' # '--soln-sep'
+    search_complete_msg = '==========' # '--search-complete-msg'
 
     output.gsub!(', ]', ']')
     results = output.split(soln_sep)
-    last_result = results[results.size - 2] # last entry contains the search complete msg
-    self.more_attributes = last_result
-    self.save! # serializes `more_attributes` into a hash
+    results[results.size - 2] # last entry contains the search complete msg
+  end
+
+  def ingredient_resource_mapping(ingredients)
     ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
-    resource_ids = lookup_resource_ids(self.more_attributes['ingredients'])
+    resource_ids = lookup_resource_ids(ingredients)
     Hash[ingredient_ids.zip(resource_ids)]
   end
 
