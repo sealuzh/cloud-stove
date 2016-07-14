@@ -16,7 +16,18 @@ class DeploymentRecommendation < Base
   INTER_REGION_DIFFERENT_PROVIDER_TRANSFER = 30
   INTER_REGION_AREA_TRANSFER = 100
 
+  # MiniZinc
+  SOLN_SEP = '----------' # '--soln-sep'
+  SEARCH_COMPLETE_MSG = '==========' # '--search-complete-msg'
+  UNSATISFIABLE_MSG = '=====UNSATISFIABLE====='
+
+  # Status
+  UNSATISFIABLE = 'unsatisfiable'
+
   belongs_to :ingredient
+
+  scope :satisfiable, -> { where("deployment_recommendations.status != ? or deployment_recommendations.status IS NULL", UNSATISFIABLE) }
+  scope :unsatisfiable, -> { where(status: UNSATISFIABLE) }
 
   def self.construct(ingredient, provider_id = nil)
     recommendation = DeploymentRecommendation.create(ingredient: ingredient)
@@ -39,7 +50,24 @@ class DeploymentRecommendation < Base
     command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
     stdout, stderr, status = Open3.capture3(command)
     if status.success?
-      result = extract_result(stdout)
+      parse_result(stdout)
+    else
+      fail [ 'Error executing MiniZinc!',
+             '----------stdout----------',
+             stdout,
+             '----------stderr----------',
+             stderr,
+             '--------------------------' ].join("\n")
+    end
+
+    ensure
+    resources.unlink
+    ingredients.unlink
+  end
+
+  def parse_result(stdout)
+    result = extract_result(stdout)
+    if satisfiable?(result)
       self.more_attributes = result
       unless self.save # serializes `more_attributes` result string into a hash
         err_msg = self.errors.full_messages
@@ -56,26 +84,19 @@ class DeploymentRecommendation < Base
       self.more_attributes['ingredients'] = mapping
       self.save!
     else
-      fail [ 'Error executing MiniZinc!',
-             '----------stdout----------',
-             stdout,
-             '----------stderr----------',
-             stderr,
-             '--------------------------' ].join("\n")
+      self.status = 'unsatisfiable'
+      save!
     end
-
-    ensure
-    resources.unlink
-    ingredients.unlink
   end
 
   def extract_result(output)
-    soln_sep = '----------' # '--soln-sep'
-    search_complete_msg = '==========' # '--search-complete-msg'
-
     output.gsub!(', ]', ']')
-    results = output.split(soln_sep)
+    results = output.split(SOLN_SEP)
     results[results.size - 2] # last entry contains the search complete msg
+  end
+
+  def satisfiable?(result)
+    !result.include?(UNSATISFIABLE_MSG)
   end
 
   def ingredient_resource_mapping(ingredients)

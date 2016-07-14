@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160712093739) do
+ActiveRecord::Schema.define(version: 20160714113957) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20160712093739) do
     t.integer  "ingredient_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.string   "status"
   end
 
   add_index "deployment_recommendations", ["ingredient_id"], name: "index_deployment_recommendations_on_ingredient_id"
