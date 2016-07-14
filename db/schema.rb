@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160704125342) do
+ActiveRecord::Schema.define(version: 20160712093739) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160704125342) do
     t.integer  "min_ram"
     t.integer  "min_cpus"
     t.string   "preferred_region_area"
+    t.string   "preferred_providers"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(version: 20160704125342) do
     t.string   "region"
     t.integer  "region_code",     limit: 8
     t.string   "region_area"
+    t.integer  "resource_code",   limit: 8
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"

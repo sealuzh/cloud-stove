@@ -1,7 +1,7 @@
 class ComputeRecommendationJob < ActiveJob::Base
   queue_as :default
 
-  def perform(ingredient)
-    DeploymentRecommendation.construct(ingredient)
+  def perform(ingredient, provider_id)
+    DeploymentRecommendation.construct(ingredient, provider_id)
   end
 end

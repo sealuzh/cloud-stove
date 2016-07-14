@@ -43,12 +43,15 @@ class Ingredient < Base
   has_one :cpu_constraint, class_name: 'CpuConstraint', dependent: :destroy
   ## Preferred region constraints
   has_one :preferred_region_area_constraint, class_name: 'PreferredRegionAreaConstraint', dependent: :destroy
+  ## Provider constraints
+  has_one :provider_constraint, class_name: 'ProviderConstraint', dependent: :destroy
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
   accepts_nested_attributes_for :cpu_constraint, allow_destroy: true
   accepts_nested_attributes_for :ram_constraint, allow_destroy: true
   accepts_nested_attributes_for :preferred_region_area_constraint, allow_destroy: true
+  accepts_nested_attributes_for :provider_constraint, allow_destroy: true
 
 
   # traverses the ingredients subtree and collects all dependency constraints in it
@@ -89,58 +92,61 @@ class Ingredient < Base
     engine.instantiate(self)
   end
 
-
   def schedule_recommendation_job
-    ComputeRecommendationJob.perform_later(self)
+    preferred_providers = self.provider_constraint.provider_list rescue [nil]
+    jobs = []
+    preferred_providers.each do |provider_name|
+      provider_id = Provider.find_by_name(provider_name)
+      jobs << ComputeRecommendationJob.perform_later(self, provider_id)
+    end
+    # TODO: Adjust API to return a list of job ids for each job
+    jobs.last
   end
 
   # looks for the root of the application hierarchy of this ingredient and returns it
   def application_root
-      if self.parent.nil?
-        return self
-      else
-        return self.parent.application_root
-      end
+    if self.parent.nil?
+      self
+    else
+      self.parent.application_root
+    end
   end
 
   private
 
+    def deep_dup(copies_hash,current)
+      copy = current.dup
+      copy.cpu_constraint = current.cpu_constraint.dup if current.cpu_constraint.present?
+      copy.ram_constraint = current.ram_constraint.dup if current.ram_constraint.present?
+      copies_hash[current.id] = copy
 
-  def deep_dup(copies_hash,current)
-    copy = current.dup
-    copy.cpu_constraint = current.cpu_constraint.dup unless current.cpu_constraint.nil?
-    copy.ram_constraint = current.ram_constraint.dup unless current.ram_constraint.nil?
-    copies_hash[current.id] = copy
+      current.children.each do |child|
+        copies_hash.merge(deep_dup(copies_hash,child)[0])
+      end
 
-    current.children.each do |child|
-      copies_hash.merge(deep_dup(copies_hash,child)[0])
+      if !copies_hash.empty? && !current.parent.nil?
+        if copies_hash[current.parent.id]
+          copy.parent = copies_hash[current.parent.id]
+        end
+      end
+
+      copy.save!
+
+      return copies_hash,copy
     end
 
-    if !copies_hash.empty? && !current.parent.nil?
-      if copies_hash[current.parent.id]
-        copy.parent = copies_hash[current.parent.id]
-      end
+    # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
+    def dependency_constraints_rec(current_ingredient, constraint_hash)
+        current_ingredient.children.all.each do |child|
+          constraint_hash.merge(dependency_constraints_rec(child, constraint_hash))
+        end
+
+        current_ingredient.constraints_as_source.all.each do |constraint|
+          constraint_hash[constraint.id] = constraint
+        end
+        current_ingredient.constraints_as_target.all.each do |constraint|
+          constraint_hash[constraint.id] = constraint
+        end
+        constraint_hash
     end
-
-    copy.save!
-
-    return copies_hash,copy
-  end
-
-  # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
-  def dependency_constraints_rec(current_ingredient, constraint_hash)
-      current_ingredient.children.all.each do |child|
-        constraint_hash.merge(dependency_constraints_rec(child, constraint_hash))
-      end
-
-      current_ingredient.constraints_as_source.all.each do |constraint|
-        constraint_hash[constraint.id] = constraint
-      end
-      current_ingredient.constraints_as_target.all.each do |constraint|
-        constraint_hash[constraint.id] = constraint
-      end
-
-      constraint_hash
-  end
-
 end

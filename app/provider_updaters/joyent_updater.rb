@@ -41,7 +41,6 @@ class JoyentUpdater < ProviderUpdater
           resource.more_attributes['mem_gb'] = number_from(instance_element.css('li.spec.ram').text)
           resource.more_attributes['disk_gb'] = number_from(instance_element.css('li.spec.disk').text)
           resource.resource_type = 'compute'
-          resource.region_code = provider.region_code(region)
           resource.region_area = extract_region_area(region)
           resource.save!
         end
@@ -66,7 +65,6 @@ class JoyentUpdater < ProviderUpdater
           resource_name = storage_element.css('td')[0].text
           resource = provider.resources.find_or_create_by(name: resource_name, region: region)
           resource.resource_type = 'storage'
-          resource.region_code = provider.region_code(region)
           resource.region_area = extract_region_area(region)
           resource.more_attributes['price_per_month_gb'] = number_from(storage_element.css('td')[1].text)
           resource.save!

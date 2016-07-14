@@ -58,7 +58,6 @@ class AtlanticNetUpdater < ProviderUpdater
         resource.more_attributes['price_per_hour'] = BigDecimal.new(instance_type['rate_per_hr'].to_s)
         resource.more_attributes['os_platform'] = instance_type['platform']
         resource.more_attributes['bandwidth_mbps'] = instance_type['bandwidth']
-        resource.region_code = provider.region_code(region)
         resource.region_area = extract_region_area(region)
         resource.save!
       end

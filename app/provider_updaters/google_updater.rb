@@ -54,7 +54,6 @@ class GoogleUpdater < ProviderUpdater
           resource.more_attributes['cores'] = value['cores']
           resource.more_attributes['mem_gb'] = value['memory']
           resource.resource_type = 'compute'
-          resource.region_code = provider.region_code(region)
           resource.region_area = extract_region_area(region)
           resource.save!
         end
@@ -76,7 +75,6 @@ class GoogleUpdater < ProviderUpdater
         region = 'us'
         resource = provider.resources.find_or_create_by(name: key, region: region)
         resource.resource_type = 'storage'
-        resource.region_code = provider.region_code(region)
         resource.region_area = extract_region_area(region)
         resource.more_attributes['price_per_month_gb'] = value[region]
         resource.save!

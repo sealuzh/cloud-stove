@@ -11,7 +11,7 @@ set of int: Resources = 1..num_resources;
 % all regions (hopefully this does not get too big to solve)
 
 % Resource IDs
-array[Resources] of string: resource_ids;
+array[Resources] of int: resources;
 
 % Regions as region hashes derived from provider name and region name
 array[Resources] of int: regions;
@@ -85,7 +85,7 @@ constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);
 constraint forall(i in Ingredients)(cpu[assignments[i]] >= min_cpus[i]);
 
 output [ "{" ]
-    ++ [ "\"ingredients\" :[" ] ++ [ "\"" ++ show(resource_ids[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "\"ingredients\" :[" ] ++ [ "\"" ++ show(resources[assignments[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
     ++ [ "\"regions\" :[" ] ++ [ show(regions[assignments[i]]) ++ ", " | i in Ingredients ] ++ [ "]," ]
     ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(costs[assignments[i]]) / 1000.0) ++ "\", " ]
     ++ [ " \"total_cost\": " ++ show(total_cost) ]

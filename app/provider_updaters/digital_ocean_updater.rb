@@ -24,7 +24,6 @@ class DigitalOceanUpdater < ProviderUpdater
         resource.more_attributes['mem_gb'] = BigDecimal.new(instance_type['memory']) / 1024
         resource.more_attributes['price_per_hour'] = instance_type['price_hourly']
         resource.more_attributes['price_per_month'] = instance_type['price_monthly']
-        resource.region_code = provider.region_code(region)
         resource.region_area = extract_region_area(region)
         resource.save!
       end
