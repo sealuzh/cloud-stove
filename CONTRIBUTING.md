@@ -1,6 +1,6 @@
 # Making Changes
 
-* Pick a story from the backlog in the [Development Board](https://trello.com/b/UC8jBtDg/cloud-stove-development) and assign yourself to it
+* Pick a story from the backlog in the [List of issues](https://github.com/inz/cloud-stove/issues) and assign yourself to it
 
 * Create a topic branch for your changes.
   
@@ -30,6 +30,7 @@
   * If tests fail with `Cannot access include directory .../share/minizinc/or-tools/`,
     make sure that the first MiniZinc binary in the `PATH` points to the *or-tools* distribution
     and not to any other MiniZinc implementation.
+  * The wiki has further [troubleshooting tips](https://github.com/inz/cloud-stove/wiki#troubleshooting).
 
 * Make sure that your code always has appropriate test coverage.
 

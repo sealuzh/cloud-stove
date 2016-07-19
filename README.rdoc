@@ -53,19 +53,17 @@ The current status of our CI builds is shown below.
 
 Successful CI builds are then deployed to a 
 {Heroku pipeline}[https://dashboard.heroku.com/pipelines/1296b077-f98d-4095-8352-09b35444cc15]
-with a staging application at https://fathomless-escarpment-2251-eu.herokuapp.com.
+with a staging application at https://staging.backend.thestove.io.
 To inspect and modify the staging app's configuration use the 
 {application dashboard}[https://dashboard.heroku.com/apps/fathomless-escarpment-2251-eu/].
 
-The app uses the {rake-deploy-tasks}[https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks] buildpack to automatically run pending migrations on deploy, as well as the {vendorbinaries}[https://github.com/peterkeen/heroku-buildpack-vendorbinaries] buildpack to pull in MiniZinc for generating recommendations.
+The app uses the {rake-deploy-tasks}[https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks] buildpack to automatically run pending migrations on deploy, as well as the {vendorbinaries}[https://github.com/peterkeen/heroku-buildpack-vendorbinaries] buildpack to pull in a custom {MiniZinc release}[https://github.com/inz/minizinc-dist] for generating recommendations.
 
 == Communication & Organization
 
-Planning and development of the Cloud Stove is coordinated on Trello:
+Planning and development of the Cloud Stove is coordinated using the GitHub {wiki}[https://github.com/inz/cloud-stove/wiki], {issues}[https://github.com/inz/cloud-stove/issues], {milestones}[https://github.com/inz/cloud-stove/milestones], and {pull requests}[https://github.com/inz/cloud-stove/pulls]. 
 
-* The {Cloud Stove Organization}[https://trello.com/thestove]
-* {Cloud Stove Roadmap}[https://trello.com/b/JO3lR0c0/cloud-stove-roadmap]
-* {Cloud Stove Development}[https://trello.com/b/UC8jBtDg/cloud-stove-development]
+In the {Cloud Stove Roadmap}[https://github.com/inz/cloud-stove/wiki/Roadmap] we discuss upcoming features and define milestones and issues to implement them.
 
 Daily communication and coordination happens on Slack:
 
