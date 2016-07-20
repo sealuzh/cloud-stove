@@ -30,3 +30,6 @@
 
 # Ignore Capybara page savings from IT debugging
 /public/capybara
+
+# Ignore vendored MiniZinc distribution
+/vendor/minizinc
