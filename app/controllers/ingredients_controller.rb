@@ -179,12 +179,12 @@ class IngredientsController < ApplicationController
                                            cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy],
                                            preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy],
                                            provider_constraint_attributes:[:id, :ingredient_id, :preferred_providers, :_destroy])
-      elsif
-      params.require(:ingredient).permit(:name,:body,:parent_id,
-                                         constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
-                                         ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],
-                                         cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy],
-                                         preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy])
+      else
+        params.require(:ingredient).permit(:name,:body,:parent_id,
+                                           constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
+                                           ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],
+                                           cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy],
+                                           preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy])
       end
     end
 
