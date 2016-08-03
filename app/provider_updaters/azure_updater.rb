@@ -35,7 +35,6 @@ class AzureUpdater < ProviderUpdater
         next if price_data_span.empty?
         data_amount_value = price_data_span.attribute('data-amount')
         amounts = JSON.load(data_amount_value.to_s)
-        # amounts = JSON.load(cells[4].css('>span.price-data').attribute('data-amount').to_s)
         next unless amounts.is_a?(Hash)
         price_per_hour = amounts["default"]
         pricelist[resource_id] = {
@@ -70,7 +69,7 @@ class AzureUpdater < ProviderUpdater
       blob_storage_div = doc.css('div.wa-content.wa-tabs-container.wa-conditionalDisplay')[0]
       first_tb_prices = blob_storage_div.css('tbody').css('tr').css('td')
       blob_storage_div.css('thead').css('th').each_with_index do |resource_name,index |
-
+        next if resource_name.text == ''
         #skip the first tablehead since that is the description column
         next unless (index != 0) && (!first_tb_prices[index].children.first.attributes['data-amount'].nil?)
 
