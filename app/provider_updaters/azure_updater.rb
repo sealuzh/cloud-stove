@@ -31,7 +31,11 @@ class AzureUpdater < ProviderUpdater
         # instance id, cores, ram, disk sizes, price
         next if cells.count < 5
         resource_id = cells.first.text.gsub(/\s/, '')
-        amounts = JSON.load(cells[4].css('>span.price-data').attribute('data-amount').to_s)
+        price_data_span = cells[4].css('>span.price-data')
+        next if price_data_span.empty?
+        data_amount_value = price_data_span.attribute('data-amount')
+        amounts = JSON.load(data_amount_value.to_s)
+        # amounts = JSON.load(cells[4].css('>span.price-data').attribute('data-amount').to_s)
         next unless amounts.is_a?(Hash)
         price_per_hour = amounts["default"]
         pricelist[resource_id] = {
