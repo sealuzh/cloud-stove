@@ -22,6 +22,8 @@
     }
 }
 
+$line-height: $line-height-base !default;
+
 <% if Rails.env.development? %>
 body.with-baseline-grid {
   @include baseline-grid($font-size-root * $line-height / 2);

@@ -35,6 +35,6 @@ blockquote {
 
 .form-group {
   select {
-    @extend .c-select;
+    @extend .custom-select;
   }
 }
