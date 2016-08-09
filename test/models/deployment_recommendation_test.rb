@@ -15,14 +15,14 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
     recommendation = DeploymentRecommendation.construct(rails_app)
 
-    c3_2xlarge = Resource.find_by_name('c3.2xlarge')
-    t2_micro = Resource.find_by_name('t2.micro')
+    expected_resources = %w(c3.2xlarge c3.2xlarge t2.micro c3.2xlarge).collect { |n|  Resource.find_by_name(n) }
     ingredient_ids = rails_app.children.sort_by(&:id).map(&:id)
-    resource_ids = [c3_2xlarge.id, c3_2xlarge.id, t2_micro.id, c3_2xlarge.id]
+    resource_ids = expected_resources.collect(&:id)
     ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    region_codes = expected_resources.collect(&:region_code)
     expected_recommendation =  {
       'ingredients' => ingredients_hash,
-      'regions' => [c3_2xlarge.region_code, c3_2xlarge.region_code, t2_micro.region_code, c3_2xlarge.region_code],
+      'regions' => region_codes,
       'vm_cost' => '947.11',
       'total_cost' => 947112
     }
@@ -47,9 +47,10 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     ingredient_ids = rails_app.children.sort_by(&:id).map(&:id)
     resource_ids = expected_resources.collect(&:id)
     ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    region_codes = expected_resources.collect(&:region_code)
     expected_recommendation = {
       'ingredients' => ingredients_hash,
-      'regions' => expected_resources.collect(&:region_code),
+      'regions' => region_codes,
       'vm_cost' => '627.19',
       'total_cost' => 627192
     }
