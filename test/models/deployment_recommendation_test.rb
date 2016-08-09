@@ -32,6 +32,30 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
+  test 'region constraint on root ingredient' do
+    Ingredient.find_or_create_by(name: 'Multitier Architecture')
+    load_seed 'ingredient_instance_rails_app'
+    rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
+    rails_app.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
+    create(:amazon_provider)
+    create(:google_provider)
+    create(:azure_provider)
+
+    recommendation = DeploymentRecommendation.construct(rails_app)
+
+    expected_resources = %w(A2 A3 A1 A2).collect { |n|  Resource.find_by_name(n) }
+    ingredient_ids = rails_app.children.sort_by(&:id).map(&:id)
+    resource_ids = expected_resources.collect(&:id)
+    ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    expected_recommendation = {
+      'ingredients' => ingredients_hash,
+      'regions' => expected_resources.collect(&:region_code),
+      'vm_cost' => '627.19',
+      'total_cost' => 627192
+    }
+    assert_equal expected_recommendation, recommendation.more_attributes
+  end
+
   # test 'unsatisfiable constraint' do
   #   skip 'TODO: write a test with an unsatisfiable constraint property'
   # end
