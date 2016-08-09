@@ -84,8 +84,8 @@ class DeploymentRecommendation < Base
       self.more_attributes['ingredients'] = mapping
       self.save!
     else
-      self.status = 'unsatisfiable'
-      save!
+      self.status = UNSATISFIABLE
+      self.save!
     end
   end
 
@@ -99,9 +99,9 @@ class DeploymentRecommendation < Base
     !result.include?(UNSATISFIABLE_MSG)
   end
 
-  def ingredient_resource_mapping(ingredients)
+  def ingredient_resource_mapping(ingredient_resources)
     ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
-    resource_ids = lookup_resource_ids(ingredients)
+    resource_ids = lookup_resource_ids(ingredient_resources)
     Hash[ingredient_ids.zip(resource_ids)]
   end
 
