@@ -56,7 +56,14 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
-  # test 'unsatisfiable constraint' do
-  #   skip 'TODO: write a test with an unsatisfiable constraint property'
-  # end
+  test 'unsatisfiable constraint' do
+    Ingredient.find_or_create_by(name: 'Multitier Architecture')
+    load_seed 'ingredient_instance_rails_app'
+    rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
+    create(:google_provider)
+
+    recommendation = DeploymentRecommendation.construct(rails_app)
+    # Google provider factories have no instance available to satisfy the 4G RAM constraint
+    assert_equal 'unsatisfiable', recommendation.status
+  end
 end
