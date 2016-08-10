@@ -23,10 +23,7 @@
 /coverage/
 
 # Ignore wercker build files
-/_builds/
-/_cache/
-/_projects/
-/_steps/
+.wercker
 
 # Ignore Capybara page savings from IT debugging
 /public/capybara
