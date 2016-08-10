@@ -5,7 +5,7 @@
   = link_to 'Copy', ingredient_copy_ingredient_path(@ingredient), class: 'btn btn-success'
   = link_to 'Create Template', ingredient_make_template_path(@ingredient), class: 'btn btn-success'
   = link_to 'Instantiate', ingredient_instance_path(@ingredient), class: 'btn btn-success'
-  = link_to 'Show Instances', ingredient_instances_path(@ingredient), class: 'btn btn-success' unless (!@ingredient.is_root && !@ingredient.is_template)
+  = link_to 'Show Instances', ingredient_instances_path(@ingredient), class: 'btn btn-success' unless (!@ingredient.application_root? && !@ingredient.is_template)
 
 - if !@deployment_recommendation.nil?
   .row
@@ -96,7 +96,7 @@
     = render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
-  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger' unless !@ingredient.is_root
+  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger' unless !@ingredient.application_root?
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
   = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
   = link_to 'Back', ingredients_path, class: 'btn btn-link'

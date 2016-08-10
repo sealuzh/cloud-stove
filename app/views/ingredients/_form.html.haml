@@ -51,7 +51,7 @@
   .form-group
     = link_to_add_fields t('.add_region_constraint'), f, :preferred_region_area_constraint, PreferredRegionAreaConstraint
 
-  - if @ingredient.is_root
+  - if @ingredient.application_root?
     .form-group
       = link_to_add_fields t('.add_provider_constraint'), f, :provider_constraint, ProviderConstraint
 

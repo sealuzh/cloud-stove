@@ -60,10 +60,6 @@ class Ingredient < Base
     dependency_constraints_rec(self, {}).values
   end
 
-  def is_root
-    (self.parent.nil? && self.children.length != 0)
-  end
-
   # Lists all region areas present in the model
   def preferred_region_areas
     region_constraints.uniq
@@ -136,13 +132,17 @@ class Ingredient < Base
     jobs.last
   end
 
-  # looks for the root of the application hierarchy of this ingredient and returns it
+  # Returns the root ingredient in the application hierarchy
   def application_root
-    if self.parent.nil?
+    if application_root?
       self
     else
       self.parent.application_root
     end
+  end
+
+  def application_root?
+    (self.parent.nil? && self.children.count > 0)
   end
 
   private

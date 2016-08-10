@@ -5,11 +5,11 @@ class IngredientCopyEngine
   end
 
   def make_template(original_ingredient)
-    (!original_ingredient.is_template && original_ingredient.is_root)?base_copy(original_ingredient,true,false):NIL
+    (!original_ingredient.is_template && original_ingredient.application_root?)?base_copy(original_ingredient, true, false):NIL
   end
 
   def instantiate(original_ingredient)
-    (original_ingredient.is_template && original_ingredient.is_root)?base_copy(original_ingredient,false,true):NIL
+    (original_ingredient.is_template && original_ingredient.application_root?)?base_copy(original_ingredient, false, true):NIL
   end
 
 
