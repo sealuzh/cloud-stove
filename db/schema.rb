@@ -100,11 +100,11 @@ ActiveRecord::Schema.define(version: 20160811141022) do
     t.integer  "cpu_cores"
     t.integer  "ram_mb"
     t.integer  "baseline_num_users"
-    t.integer  "requests_per_user_per_moth"
+    t.integer  "requests_per_user"
     t.integer  "request_size_kb"
     t.integer  "ingredient_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   add_index "workloads", ["ingredient_id"], name: "index_workloads_on_ingredient_id"

@@ -4,7 +4,7 @@ class CreateWorkloads < ActiveRecord::Migration
       t.integer :cpu_cores
       t.integer :ram_mb
       t.integer :baseline_num_users
-      t.integer :requests_per_user_per_moth
+      t.integer :requests_per_user
       t.integer :request_size_kb
       t.references :ingredient, index: true, foreign_key: true
       t.timestamps null: false
