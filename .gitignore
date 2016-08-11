@@ -30,3 +30,4 @@
 
 # Ignore vendored MiniZinc distribution
 /vendor/minizinc
+/.project

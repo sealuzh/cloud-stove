@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714113957) do
+ActiveRecord::Schema.define(version: 20160811141022) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -95,5 +95,18 @@ ActiveRecord::Schema.define(version: 20160714113957) do
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
+
+  create_table "workloads", force: :cascade do |t|
+    t.integer  "cpu_cores"
+    t.integer  "ram_mb"
+    t.integer  "baseline_num_users"
+    t.integer  "requests_per_user_per_moth"
+    t.integer  "request_size_kb"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "workloads", ["ingredient_id"], name: "index_workloads_on_ingredient_id"
 
 end
