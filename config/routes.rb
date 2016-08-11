@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
-  
+
   concern :copyable do
     get 'copy/:copy', action: :new, on: :collection, as: :copy
   end
@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   end
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
+
+  resources :workloads, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
 
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
