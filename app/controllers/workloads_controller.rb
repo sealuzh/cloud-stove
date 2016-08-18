@@ -18,6 +18,14 @@ class WorkloadsController < ApplicationController
     end
   end
 
+  def new
+   @workload = if params[:copy]
+     Workload.find(params[:copy]).deep_dup
+   else
+     Workload.new
+   end
+  end
+
   def create
     @workload = Workload.new
     respond_to do |format|
@@ -58,7 +66,7 @@ class WorkloadsController < ApplicationController
     end
 
     def workload_params
-      params.permit(:ingredient_id, :cpu_cores, :ram_mb, :requests_per_user_per_moth, :request_size_kb, :baseline_num_users)
+      params.permit(:ingredient_id, :cpu_level, :ram_level, :requests_per_user_per_moth, :request_size_kb, :baseline_num_users)
     end
 
 end

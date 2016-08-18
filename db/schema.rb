@@ -97,8 +97,8 @@ ActiveRecord::Schema.define(version: 20160811141022) do
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
 
   create_table "workloads", force: :cascade do |t|
-    t.integer  "cpu_cores"
-    t.integer  "ram_mb"
+    t.integer  "cpu_level"
+    t.integer  "ram_level"
     t.integer  "baseline_num_users"
     t.integer  "requests_per_user"
     t.integer  "request_size_kb"
