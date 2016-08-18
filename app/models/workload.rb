@@ -4,8 +4,8 @@ class Workload < ActiveRecord::Base
   def as_json(options={})
     hash = {}
     hash[:id] = self.id
-    hash[:baseline_num_users] = self.baseline_num_users
-    hash[:requests_per_user] = self.requests_per_user
+    hash[:visits_per_month] = self.visits_per_month
+    hash[:requests_per_visit] = self.requests_per_visit
     hash[:request_size_kb] = self.request_size_kb
     hash[:ram_level] = self.ram_level
     hash[:cpu_level] = self.cpu_level

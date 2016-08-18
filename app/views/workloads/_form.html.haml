@@ -1,0 +1,41 @@
+= form_for @workload do |f|
+  - if @workload.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@workload.errors.count, "error")} prohibited this workload from being saved:"
+      %ul
+        - @workload.errors.full_messages.each do |msg|
+          %li= msg
+
+  = f.hidden_field :ingredient_id, :value => params[:ingredient_id]
+
+  %table
+    %tbody
+      %tr
+        %td
+          .form-group
+            = f.label :cpu_level
+            = f.select :cpu_level, options_for_select(@levels)
+        %td
+
+        %td
+          .form-group
+            = f.label :ram_level
+            = f.select :ram_level, options_for_select(@levels)
+      %tr
+        %td
+          .form-group
+            = f.label :visits_per_month
+            = f.text_field :visits_per_month, class: 'form-control'
+        %td
+          .form-group
+            = f.label :requests_per_visit
+            = f.text_field :requests_per_visit, class: 'form-control'
+
+        %td
+          .form-group
+            = f.label :request_size_kb
+            = f.text_field :request_size_kb, class: 'form-control'
+
+  .form-group
+    = f.submit t('save'), class: 'btn btn-success'
+    = link_to t('cancel'), @workload, class: 'btn btn-link'

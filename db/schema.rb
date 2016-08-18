@@ -99,8 +99,8 @@ ActiveRecord::Schema.define(version: 20160811141022) do
   create_table "workloads", force: :cascade do |t|
     t.integer  "cpu_level"
     t.integer  "ram_level"
-    t.integer  "baseline_num_users"
-    t.integer  "requests_per_user"
+    t.integer  "visits_per_month"
+    t.integer  "requests_per_visit"
     t.integer  "request_size_kb"
     t.integer  "ingredient_id"
     t.datetime "created_at",         null: false

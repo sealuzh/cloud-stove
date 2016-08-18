@@ -33,9 +33,11 @@ Rails.application.routes.draw do
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
 
-  resources :workloads, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
+  resources :workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
 
   resources :resources, only: [:show, :index], concerns: [:paginatable]
+
+  get 'workloads/new/:ingredient_id' => 'workloads#new'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
