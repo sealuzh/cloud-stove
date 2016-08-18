@@ -27,6 +27,20 @@ class IngredientTest < ActiveSupport::TestCase
     assert_equal ([child] + children), root_parent.all_leafs
   end
 
+  test 'hierarchical traversal for region constraint' do
+    root = create(:ingredient, name: 'root')
+    root.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'EU')
+    level1_1 = create(:ingredient, parent: root)
+    level1_1.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
+    level1_2 = create(:ingredient, parent: root)
+    level2_1 = create(:ingredient, parent: level1_1)
+    level2_1.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'ASIA')
+    level2_2 = create(:ingredient, parent: level1_1)
+
+    expected_regions = %w(ASIA US EU)
+    assert_equal expected_regions, root.region_constraints
+  end
+
   test 'ingredient template' do
     template = create(:ingredient, :template)
     instance = create(:ingredient, template: template)

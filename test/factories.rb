@@ -43,6 +43,17 @@ FactoryGirl.define do
     factory :azure_provider do
       name 'Microsoft Azure'
       more_attributes FactoryHelpers::hash_from_json('provider-azure.json')
+      after(:create) do |amazon_provider|
+        region = 'usgov-virginia'
+        region_area = 'US'
+        amazon_provider.resources = [
+            create(:resource, :azure_c1, region: region, region_area: region_area, provider: amazon_provider),
+            create(:resource, :azure_c2, region: region, region_area: region_area, provider: amazon_provider),
+            create(:resource, :azure_c3, region: region, region_area: region_area, provider: amazon_provider),
+            create(:resource, :azure_c4, region: region, region_area: region_area, provider: amazon_provider),
+        ]
+        amazon_provider.save
+      end
     end
 
     factory :google_provider do
@@ -95,6 +106,23 @@ FactoryGirl.define do
       name 'infrequentAccessStorage'
       more_attributes(JSON.parse '{"price_per_gb":"0.0125"}')
       resource_type 'storage'
+    end
+
+    trait :azure_c1 do
+      name 'A0'
+      more_attributes(JSON.parse '{"cores":"1","mem_gb":"0.75","price_per_hour":0.024,"regions":{"japan-east":0.024,"japan-west":0.021,"canada-central":0.024,"canada-east":0.022,"brazil-south":0.024,"australia-southeast":0.029,"australia-east":0.029,"central-india":0.02,"south-india":0.018,"west-india":0.024,"usgov-virginia":0.018,"usgov-iowa":0.018}}')
+    end
+    trait :azure_c2 do
+      name 'A1'
+      more_attributes(JSON.parse '{"cores":"1","mem_gb":"1.75","price_per_hour":0.095,"regions":{"us-west-2":0.085,"us-west-central":0.085,"japan-east":0.106,"japan-west":0.095,"canada-central":0.102,"canada-east":0.094,"brazil-south":0.11,"australia-southeast":0.113,"australia-east":0.113,"central-india":0.098,"south-india":0.088,"west-india":0.113,"usgov-virginia":0.083,"usgov-iowa":0.083}}')
+    end
+    trait :azure_c3 do
+      name 'A2'
+      more_attributes(JSON.parse '{"cores":"2","mem_gb":"3.5","price_per_hour":0.204,"regions":{"us-west-2":0.17,"us-west-central":0.17,"japan-east":0.212,"japan-west":0.19,"canada-central":0.204,"canada-east":0.187,"brazil-south":0.22,"australia-southeast":0.226,"australia-east":0.226,"central-india":0.197,"south-india":0.177,"west-india":0.226,"usgov-virginia":0.166,"usgov-iowa":0.166}}')
+    end
+    trait :azure_c4 do
+      name 'A3'
+      more_attributes(JSON.parse '{"cores":"4","mem_gb":"7","price_per_hour":0.34,"regions":{"us-west-2":0.34,"us-west-central":0.34,"japan-east":0.424,"japan-west":0.38,"canada-central":0.408,"canada-east":0.374,"brazil-south":0.44,"australia-southeast":0.452,"australia-east":0.452,"central-india":0.393,"south-india":0.354,"west-india":0.452,"usgov-virginia":0.332,"usgov-iowa":0.332}}')
     end
 
     trait :google_c1 do

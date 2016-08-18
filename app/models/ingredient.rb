@@ -8,6 +8,7 @@ class Ingredient < Base
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
 
+  # NOTICE: MUST ensure same traversal order than `region_constraints_rec`
   def all_leafs(leafs = [])
     children.each do |child|
       if child.children.any?
@@ -59,8 +60,36 @@ class Ingredient < Base
     dependency_constraints_rec(self, {}).values
   end
 
-  def is_root
-    (self.parent.nil? && self.children.length != 0)
+  # Lists all region areas present in the model
+  def preferred_region_areas
+    region_constraints.uniq
+  end
+
+  # Lists the region area for each leaf ingredient
+  def region_constraints
+    current_constraint = current_region(self, 'EU')
+    region_constraints_rec(self, [], current_constraint)
+  end
+
+  # NOTICE: MUST ensure same traversal order than `all_leafs`
+  def region_constraints_rec(current_ingredient, constraints, current_constraint)
+    current_ingredient.children.each do |child|
+      new_current_constraint = current_region(child, current_constraint)
+      if child.children.any?
+        child.region_constraints_rec(child, constraints, new_current_constraint)
+      else
+        constraints.push(new_current_constraint)
+      end
+    end
+    constraints
+  end
+
+  def current_region(current_ingredient, current_constraint)
+    if current_ingredient.preferred_region_area_constraint.present?
+      current_ingredient.preferred_region_area_constraint.preferred_region_area
+    else
+      current_constraint
+    end
   end
 
   def as_json(options={})
@@ -103,13 +132,17 @@ class Ingredient < Base
     jobs.last
   end
 
-  # looks for the root of the application hierarchy of this ingredient and returns it
+  # Returns the root ingredient in the application hierarchy
   def application_root
-    if self.parent.nil?
+    if application_root?
       self
     else
       self.parent.application_root
     end
+  end
+
+  def application_root?
+    (self.parent.nil? && self.children.count > 0)
   end
 
   private

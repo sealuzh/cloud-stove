@@ -10,7 +10,7 @@ class IngredientsController < ApplicationController
   end
 
   def applications
-    @roots = Ingredient.select {|i| i.is_root && !i.is_template}
+    @roots = Ingredient.select {|i| i.application_root? && !i.is_template}
 
     respond_to do |format|
       format.html
@@ -19,7 +19,7 @@ class IngredientsController < ApplicationController
   end
 
   def templates
-    @templates = Ingredient.select {|i| i.is_root && i.is_template}
+    @templates = Ingredient.select {|i| i.application_root? && i.is_template}
 
     respond_to do |format|
       format.html
@@ -30,7 +30,7 @@ class IngredientsController < ApplicationController
   def instances
     i = Ingredient.find_by(id: params[:ingredient_id])
     if i
-      if i.is_root && i.is_template
+      if i.application_root? && i.is_template
         @instances = i.instances
         respond_to do |format|
           format.html
@@ -172,7 +172,7 @@ class IngredientsController < ApplicationController
     end
 
     def ingredient_params
-      if @ingredient.is_root
+      if @ingredient.application_root?
         params.require(:ingredient).permit(:name,:body,:parent_id,
                                            constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
                                            ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],

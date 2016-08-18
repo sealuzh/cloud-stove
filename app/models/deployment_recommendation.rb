@@ -84,8 +84,8 @@ class DeploymentRecommendation < Base
       self.more_attributes['ingredients'] = mapping
       self.save!
     else
-      self.status = 'unsatisfiable'
-      save!
+      self.status = UNSATISFIABLE
+      self.save!
     end
   end
 
@@ -99,9 +99,9 @@ class DeploymentRecommendation < Base
     !result.include?(UNSATISFIABLE_MSG)
   end
 
-  def ingredient_resource_mapping(ingredients)
+  def ingredient_resource_mapping(ingredient_resources)
     ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
-    resource_ids = lookup_resource_ids(ingredients)
+    resource_ids = lookup_resource_ids(ingredient_resources)
     Hash[ingredient_ids.zip(resource_ids)]
   end
 
@@ -142,24 +142,10 @@ class DeploymentRecommendation < Base
 
   def filtered_resources(provider_id)
     if provider_id
-      Resource.where(provider_id: provider_id).region_area(preferred_region_areas).compute.sort_by(&:id)
+      Resource.where(provider_id: provider_id).region_area(self.ingredient.preferred_region_areas).compute.sort_by(&:id)
     else
-      Resource.region_area(preferred_region_areas).compute.sort_by(&:id)
+      Resource.region_area(self.ingredient.preferred_region_areas).compute.sort_by(&:id)
     end
-  end
-
-  def preferred_region_areas
-    all_leafs = ingredient.all_leafs.sort_by(&:id)
-    areas = Set.new
-    if self.ingredient.preferred_region_area_constraint.present?
-      areas.add(self.ingredient.preferred_region_area_constraint.preferred_region_area)
-    end
-    all_leafs.each do |leaf|
-      if leaf.preferred_region_area_constraint.present?
-        areas.add(leaf.preferred_region_area_constraint.preferred_region_area)
-      end
-    end
-    areas.empty? ? DEFAULT_REGION_AREAS : areas.to_a
   end
 
   def transfer_costs(resources)
@@ -182,7 +168,7 @@ class DeploymentRecommendation < Base
   def generate_ingredients_data(provider_id)
     ingredients_data = ''
 
-    all_leafs = ingredient.all_leafs.sort_by(&:id)
+    all_leafs = self.ingredient.all_leafs
     num_ingredients = all_leafs.count
     ingredients_data << "num_ingredients = #{num_ingredients};"
     ingredients_data << "\n"
@@ -204,7 +190,7 @@ class DeploymentRecommendation < Base
     ingredients_data << "\n"
 
     ingredients_data << "preferred_regions = array2d(Ingredients, Resources,
-                          #{preferred_regions(all_leafs, provider_id).to_a.flatten.to_json});"
+                          #{preferred_regions(self.ingredient, provider_id).to_json});"
     ingredients_data << "\n"
 
     self.ingredients_data = ingredients_data
@@ -230,19 +216,14 @@ class DeploymentRecommendation < Base
     end
   end
 
-  def preferred_regions(all_leafs, provider_id)
+  # Returns a flattened Ingredients to Resources mapping array
+  def preferred_regions(ingredient, provider_id)
     resource_region_codes = filtered_resources(provider_id).map(&:region_code)
+    region_areas = ingredient.region_constraints
     regions = Array.new
-    all_leafs.each do |ingredient|
-      if ingredient.preferred_region_area_constraint.present?
-        preferred_region_codes = Set.new(ingredient.preferred_region_area_constraint.region_codes)
-        regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
-      elsif self.ingredient.preferred_region_area_constraint.present?
-        preferred_region_codes = Set.new(self.ingredient.preferred_region_area_constraint.region_codes)
-        regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
-      else
-        regions.push(Array.new(resource_region_codes.count, true))
-      end
+    region_areas.each do |region_area|
+      preferred_region_codes = Set.new(Resource.region_codes(region_area))
+      regions.push(resource_region_codes.map { |rrc| preferred_region_codes.member?(rrc) })
     end
     regions.flatten
   end
