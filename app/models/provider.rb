@@ -1,4 +1,5 @@
 class Provider < Base
+  include DeterministicHash
   has_many :resources, dependent: :destroy
 
   # Return availability of provider
@@ -11,8 +12,12 @@ class Provider < Base
     end
   end
 
+  # Assuming that a region is identified by the composite key:
+  # 1) `provider_name`
+  # 2) `region_name`
   def region_code(region_name)
-    (self.name.to_s + region_name.to_s).hash
+    region_string = self.name.to_s + region_name.to_s
+    deterministic_hash(region_string)
   end
 
   def self.update_providers
