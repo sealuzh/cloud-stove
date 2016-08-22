@@ -31,6 +31,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Markdown parser for pretty text
 gem 'redcarpet'
 
+# Ruby wrapper for the fast non-cryptographic hash algorithm `xxHash`
+gem 'xxhash', '~> 0.3.0'
+
 # Delayed Web for Delayed Job views and management
 gem 'delayed-web'
 

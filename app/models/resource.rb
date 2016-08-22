@@ -1,4 +1,5 @@
 class Resource < Base
+  include DeterministicHash
   ma_accessor :cores, :bandwidth_mbps, :mem_gb, :price_per_month_gb
   belongs_to :provider
   before_create :generate_region_code
@@ -22,9 +23,12 @@ class Resource < Base
     self.provider.region_code(self.region)
   end
 
+  # Assuming that a resource is identified by the composite key:
+  # 1) `region_code` (provider_name + region_name)
+  # 2) region `name`
   def derive_resource_code
-    # Assuming that 1) `region_code` (provider + region) and 2) region name together identify a resource
-    (self.region_code.to_s + self.name.to_s).hash
+    resource_string = self.region_code.to_s + self.name.to_s
+    deterministic_hash(resource_string)
   end
 
   def is_compute?
