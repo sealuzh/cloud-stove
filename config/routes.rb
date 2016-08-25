@@ -33,7 +33,11 @@ Rails.application.routes.draw do
 
   resources :constraints, only: [:show, :index, :destroy, :create, :update], concerns: [:paginatable]
 
-  resources :workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
+  resources :ram_workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
+
+  resources :cpu_workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
+
+  resources :traffic_workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
 
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
