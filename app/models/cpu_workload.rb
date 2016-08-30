@@ -10,9 +10,11 @@ class CpuWorkload < ActiveRecord::Base
     hash
   end
 
-  def to_constraint()
-    num_simultaneous_users = 0
-
+  def to_constraint
+    self.ingredient.cpu_constraint.destroy if self.ingredient.cpu_constraint.present?
+    self.ingredient.cpu_constraint.create(
+      min_cpus: (1 + (self.ingredient.num_simultaneous_users - self.cspu_user_capacity)/(self.parallelism * self.cspu_user_capacity)).ceil
+    )
   end
 
 end

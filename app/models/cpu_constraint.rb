@@ -1,4 +1,5 @@
 class CpuConstraint < Constraint
+  
 
   def as_json(options={})
     hash = super
