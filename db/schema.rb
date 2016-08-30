@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830124345) do
+ActiveRecord::Schema.define(version: 20160830132649) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20160830124345) do
 
   create_table "cpu_workloads", force: :cascade do |t|
     t.integer  "cspu_user_capacity"
-    t.float    "cspu_slope"
+    t.float    "parallelism"
     t.integer  "ingredient_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
