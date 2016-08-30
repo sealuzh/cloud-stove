@@ -5,12 +5,13 @@ class CpuWorkload < ActiveRecord::Base
     hash = {}
     hash[:id] = self.id
     hash[:cspu_user_capacity] = self.cspu_user_capacity
-    hash[:cspu_slope] = self.cspu_slope
+    hash[:parallelism] = self.parallelism
     hash[:ingredient_id] = self.ingredient_id
     hash
   end
 
   def to_constraint()
+    num_simultaneous_users = 0
 
   end
 

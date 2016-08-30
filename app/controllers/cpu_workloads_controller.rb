@@ -67,7 +67,7 @@ class CpuWorkloadsController < ApplicationController
     end
 
     def cpu_workload_params
-      params.require(:cpu_workload).permit(:ingredient_id, :cspu_user_capacity, :cspu_slope)
+      params.require(:cpu_workload).permit(:ingredient_id, :cspu_user_capacity, :parallelism)
     end
 
 end
