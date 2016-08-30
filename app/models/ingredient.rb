@@ -116,6 +116,7 @@ class Ingredient < Base
     workloads = {}
     workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
     workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
+    workloads[:user_workload] = self.user_workload.as_json if self.user_workload.present?
     workloads
   end
 
