@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160811141022) do
+ActiveRecord::Schema.define(version: 20160830105910) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -96,8 +96,9 @@ ActiveRecord::Schema.define(version: 20160811141022) do
     t.integer  "ram_mb_required"
     t.float    "ram_mb_growth_per_user"
     t.integer  "ingredient_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "ram_mb_required_user_capacity"
   end
 
   add_index "ram_workloads", ["ingredient_id"], name: "index_ram_workloads_on_ingredient_id"
@@ -127,5 +128,14 @@ ActiveRecord::Schema.define(version: 20160811141022) do
   end
 
   add_index "traffic_workloads", ["ingredient_id"], name: "index_traffic_workloads_on_ingredient_id"
+
+  create_table "user_workloads", force: :cascade do |t|
+    t.integer  "num_simultaneous_users"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "user_workloads", ["ingredient_id"], name: "index_user_workloads_on_ingredient_id"
 
 end

@@ -29,6 +29,11 @@ class Ingredient < Base
 
   has_many :deployment_recommendations
 
+  # Workloads
+  has_one :cpu_workload, class_name: 'CpuWorkload'
+  has_one :ram_workload, class_name: 'RamWorkload'
+  has_one :user_workload, class_name: 'UserWorkload'
+
   # Associated generic constraints
   has_many :constraints, dependent: :destroy
 

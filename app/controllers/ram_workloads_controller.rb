@@ -67,7 +67,7 @@ class RamWorkloadsController < ApplicationController
     end
 
     def ram_workload_params
-      params.require(:ram_workload).permit(:ingredient_id, :ram_mb_required, :ram_mb_growth_per_user)
+      params.require(:ram_workload).permit(:ingredient_id, :ram_mb_required, :ram_mb_required_user_capacity, :ram_mb_growth_per_user)
     end
 
 end

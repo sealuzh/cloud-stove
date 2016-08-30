@@ -1,8 +1,5 @@
 require_relative 'helpers/factory_girl'
 FactoryGirl.define do
-  factory :workload do
-    
-  end
   factory :dependency_constraint do
     association :source, factory: :ingredient
     association :target, factory: :ingredient

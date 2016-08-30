@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Num simultaneous users:
+  = @user_workload.num_simultaneous_users
+
+= link_to 'Edit', edit_user_workload_path(@user_workload)
+\|
+= link_to 'Back', user_workloads_path

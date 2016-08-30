@@ -39,6 +39,8 @@ Rails.application.routes.draw do
 
   resources :traffic_workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
 
+  resources :user_workloads, except: [:edit], concerns: [:paginatable]
+
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
   get 'workloads/new/:ingredient_id' => 'workloads#new'
