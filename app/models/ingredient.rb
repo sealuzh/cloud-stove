@@ -158,6 +158,12 @@ class Ingredient < Base
     (self.parent.nil? && self.children.count > 0)
   end
 
+  def num_simultaneous_users
+    application_root.user_workload.num_simultaneous_users
+  rescue => e
+    raise 'User workload not specified for application root. ' + e.message
+  end
+
   private
 
     def deep_dup(copies_hash,current)
