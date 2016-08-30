@@ -3,6 +3,9 @@
 %p
   %b Num simultaneous users:
   = @user_workload.num_simultaneous_users
+  %br
+  %b Ingredient id:
+  = @user_workload.ingredient_id
 
 = link_to 'Edit', edit_user_workload_path(@user_workload)
 \|

@@ -29,7 +29,7 @@ class UserWorkloadsController < ApplicationController
     @user_workload.update_attributes(user_workload_params)
     respond_to do |format|
       if @user_workload.save!
-        format.html {redirect_to @user_workload, notice: 'User Workload was successfully created!'}
+        format.html {redirect_to @user_workload, success: 'User Workload was successfully created!'}
         format.json {render json: @user_workload, status: :created}
       else
         format.html
@@ -38,13 +38,17 @@ class UserWorkloadsController < ApplicationController
     end
   end
 
+  def edit
+    @user_workload = UserWorkload.find(params[:id])
+  end
+
   def update
     respond_to do |format|
-      if @user_workload.update(cpu_workload_params)
-        format.html
+      if @user_workload.update(user_workload_params)
+        format.html {redirect_to @user_workload, success: 'User Workload was successfully updated!'}
         format.json {render json: @user_workload, status: :ok}
       else
-        format.html
+        format.html {render 'edit'}
         format.json {render json: @user_workload.errors, status: :unprocessable_entity}
       end
     end
@@ -53,7 +57,7 @@ class UserWorkloadsController < ApplicationController
   def destroy
     @user_workload.destroy
     respond_to do |format|
-      format.html {redirect_to :back, notice: 'User Workload was successfully destroyed.' }
+      format.html {redirect_to :back, success: 'User Workload was successfully destroyed.' }
       format.json {head :no_content, status: :deleted}
     end
   end

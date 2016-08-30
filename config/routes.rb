@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   resources :traffic_workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
 
-  resources :user_workloads, except: [:edit], concerns: [:paginatable]
+  resources :user_workloads, concerns: [:paginatable]
 
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
