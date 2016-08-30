@@ -135,6 +135,7 @@ class Ingredient < Base
   end
 
   def schedule_recommendation_job
+    update_constraints
     preferred_providers = self.provider_constraint.provider_list rescue [nil]
     jobs = []
     preferred_providers.each do |provider_name|
@@ -146,6 +147,15 @@ class Ingredient < Base
   end
 
   # Returns the root ingredient in the application hierarchy
+  def update_constraints
+    all_leafs.each do |leaf|
+      leaf.ram_workload.to_constraint
+      leaf.cpu_workload.to_constraint
+    end
+  rescue => e
+    raise 'Missing a workload definition for a leaf ingredient. ' + e.message
+  end
+
   def application_root
     if application_root?
       self
