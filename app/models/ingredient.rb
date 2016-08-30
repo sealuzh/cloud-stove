@@ -108,12 +108,15 @@ class Ingredient < Base
     hash[:updated_at] = self.updated_at
     hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
     hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:constraints] == false
-    hash[:workloads] = all_workloads.collect {|c| c.as_json} unless options[:constraints] == false
+    hash[:workloads] = workload_jsons unless options[:workloads] == false || workload_jsons.empty?
     hash
   end
 
-  def all_workloads
-    [self.cpu_workload, self.ram_workload].compact
+  def workload_jsons
+    workloads = {}
+    workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
+    workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
+    workloads
   end
 
   def copy
