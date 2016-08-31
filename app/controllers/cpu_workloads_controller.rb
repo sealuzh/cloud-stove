@@ -1,5 +1,6 @@
 class CpuWorkloadsController < ApplicationController
 
+  before_action :authenticate_user!
   before_action :set_cpu_workload, only: [:show, :destroy, :update]
 
 
@@ -11,7 +12,7 @@ class CpuWorkloadsController < ApplicationController
   end
 
   def index
-    @cpu_workloads = CpuWorkload.page(params[:page])
+    @cpu_workloads = current_user.cpu_workloads.page(params[:page])
     respond_to do |format|
       format.html
       format.json {render json: @cpu_workloads, status: :ok}
@@ -29,6 +30,7 @@ class CpuWorkloadsController < ApplicationController
   def create
     @cpu_workload = CpuWorkload.new
     @cpu_workload.update_attributes(cpu_workload_params)
+    @cpu_workload.user = current_user
     respond_to do |format|
       if @cpu_workload.save!
         format.html {redirect_to @cpu_workload, notice: 'CPU Workload was successfully created!'}
@@ -63,7 +65,7 @@ class CpuWorkloadsController < ApplicationController
   private
 
     def set_cpu_workload
-      @cpu_workload = CpuWorkload.find(params[:id])
+      @cpu_workload = current_user.cpu_workloads.find(params[:id])
     end
 
     def cpu_workload_params

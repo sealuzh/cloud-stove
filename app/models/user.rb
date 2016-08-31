@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :cpu_workloads
   has_many :ram_workloads
   has_many :user_workloads
+  has_many :traffic_workloads
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

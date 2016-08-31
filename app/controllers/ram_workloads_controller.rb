@@ -1,5 +1,6 @@
 class RamWorkloadsController < ApplicationController
 
+  before_action :authenticate_user!
   before_action :set_ram_workload, only: [:show, :destroy, :update]
 
 
@@ -11,7 +12,7 @@ class RamWorkloadsController < ApplicationController
   end
 
   def index
-    @ram_workloads = RamWorkload.page(params[:page])
+    @ram_workloads = current_user.ram_workloads.page(params[:page])
     respond_to do |format|
       format.html
       format.json {render json: @ram_workloads, status: :ok}
@@ -29,6 +30,7 @@ class RamWorkloadsController < ApplicationController
   def create
     @ram_workload = RamWorkload.new
     @ram_workload.update_attributes(ram_workload_params)
+    @ram_workload.user = current_user
     respond_to do |format|
       if @ram_workload.save!
         format.html {redirect_to @ram_workload, notice: 'RAM Workload was successfully created!'}
@@ -63,7 +65,7 @@ class RamWorkloadsController < ApplicationController
   private
 
     def set_ram_workload
-      @ram_workload = RamWorkload.find(params[:id])
+      @ram_workload = current_user.ram_workloads.find(params[:id])
     end
 
     def ram_workload_params

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160831175830) do
+ActiveRecord::Schema.define(version: 20160831181810) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 20160831175830) do
     t.integer  "ingredient_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "user_id"
   end
 
   add_index "traffic_workloads", ["ingredient_id"], name: "index_traffic_workloads_on_ingredient_id"

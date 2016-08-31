@@ -1,5 +1,6 @@
 class TrafficWorkload < ActiveRecord::Base
   belongs_to :ingredient
+  belongs_to :user
 
   def as_json(options={})
     hash = {}

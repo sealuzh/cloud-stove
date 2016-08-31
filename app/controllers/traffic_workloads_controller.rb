@@ -1,5 +1,6 @@
 class TrafficWorkloadsController < ApplicationController
 
+  before_action :authenticate_user!
   before_action :set_traffic_workload, only: [:show, :destroy, :update]
 
 
@@ -11,7 +12,7 @@ class TrafficWorkloadsController < ApplicationController
   end
 
   def index
-    @traffic_workloads = TrafficWorkload.page(params[:page])
+    @traffic_workloads = current_user.traffic_workloads.page(params[:page])
     respond_to do |format|
       format.html
       format.json {render json: @traffic_workloads, status: :ok}
@@ -29,6 +30,7 @@ class TrafficWorkloadsController < ApplicationController
   def create
     @traffic_workload = TrafficWorkload.new
     @traffic_workload.update_attributes(traffic_workload_params)
+    @traffic_workload.user = current_user
     respond_to do |format|
       if @traffic_workload.save!
         format.html {redirect_to @traffic_workload, notice: 'TrafficWorkload was successfully created!'}
@@ -63,7 +65,7 @@ class TrafficWorkloadsController < ApplicationController
   private
 
     def set_traffic_workload
-      @traffic_workload = TrafficWorkload.find(params[:id])
+      @traffic_workload = current_user.traffic_workloads.find(params[:id])
     end
 
     def traffic_workload_params
