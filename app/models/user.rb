@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 
   has_many :ingredients
+  has_many :deployment_recommendations
 
   has_many :constraints
   has_many :cpu_constraints

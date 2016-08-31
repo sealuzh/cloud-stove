@@ -25,6 +25,7 @@ class DeploymentRecommendation < Base
   UNSATISFIABLE = 'unsatisfiable'
 
   belongs_to :ingredient
+  belongs_to :user
 
   scope :satisfiable, -> { where("deployment_recommendations.status != ? or deployment_recommendations.status IS NULL", UNSATISFIABLE) }
   scope :unsatisfiable, -> { where(status: UNSATISFIABLE) }
@@ -34,6 +35,7 @@ class DeploymentRecommendation < Base
     recommendation.generate_resources_data(provider_id)
     recommendation.generate_ingredients_data(provider_id)
     recommendation.generate
+    recommendation.user = recommendation.ingredient.user
     recommendation.save!
     recommendation
   end
