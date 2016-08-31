@@ -30,7 +30,7 @@ class DeploymentRecommendation < Base
   scope :unsatisfiable, -> { where(status: UNSATISFIABLE) }
 
   def self.construct(ingredient, provider_id = nil)
-    recommendation = DeploymentRecommendation.create(ingredient: ingredient)
+    recommendation = DeploymentRecommendation.create(ingredient: ingredient, num_simultaneous_users: ingredient.num_simultaneous_users)
     recommendation.generate_resources_data(provider_id)
     recommendation.generate_ingredients_data(provider_id)
     recommendation.generate
@@ -240,6 +240,7 @@ class DeploymentRecommendation < Base
     end
 
     hash[:recommendation] = ingredients
+    hash[:num_simultaneous_users] = self.num_simultaneous_users
     hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
     hash
   end
@@ -256,6 +257,7 @@ class DeploymentRecommendation < Base
     end
 
     hash[:recommendation] = ingredients
+    hash[:num_simultaneous_users] = self.num_simultaneous_users
     hash
   end
 
