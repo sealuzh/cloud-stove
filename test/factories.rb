@@ -31,6 +31,10 @@ FactoryGirl.define do
     association :ingredient, factory: :ingredient
   end
 
+  factory :preferred_region_area_constraint do
+    preferred_region_area 'EU'
+  end
+
   factory :ram_constraint do
     min_ram 2000
   end

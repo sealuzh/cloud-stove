@@ -4,6 +4,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
   test 'application instance copy with single ingredient' do
     original = create(:ingredient)
     user_wl = create(:user_workload, ingredient: original)
+    region_constraint = create(:preferred_region_area_constraint, ingredient: original)
     ram_constraint = create(:ram_constraint, ingredient: original)
     cpu_constraint = create(:cpu_constraint, ingredient: original)
     ram_wl = create(:ram_workload, ingredient: original)
@@ -24,6 +25,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     child_1_1 = create(:ingredient, parent: child_1)
 
     user_wl = create(:user_workload, ingredient: child_1_1)
+    region_constraint = create(:preferred_region_area_constraint, ingredient: child_1_1)
     ram_constraint = create(:ram_constraint, ingredient: child_1_1)
     cpu_constraint = create(:cpu_constraint, ingredient: child_1_1)
     ram_wl = create(:ram_workload, ingredient: child_1_1)
@@ -51,8 +53,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
   def assert_constraint_copy(original, copy)
     assert_equal original.ram_constraint.min_ram, copy.ram_constraint.min_ram
     assert_equal original.cpu_constraint.min_cpus, copy.cpu_constraint.min_cpus
-    # TODO: impl. region area copy
-    # assert_equal original.preferred_region_area_constraint.preferred_region_area, copy.preferred_region_area_constraint.preferred_region_area
+    assert_equal original.preferred_region_area_constraint.preferred_region_area, copy.preferred_region_area_constraint.preferred_region_area
   end
 
   def assert_workload_copy(original, copy)
