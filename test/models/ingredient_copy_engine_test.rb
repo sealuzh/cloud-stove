@@ -3,12 +3,12 @@ require 'test_helper'
 class IngredientCopyEngineTest < ActiveSupport::TestCase
   test 'application instance copy with single ingredient' do
     original = create(:ingredient)
-    user_wl = create(:user_workload, ingredient: original)
-    region_constraint = create(:preferred_region_area_constraint, ingredient: original)
-    ram_constraint = create(:ram_constraint, ingredient: original)
-    cpu_constraint = create(:cpu_constraint, ingredient: original)
-    ram_wl = create(:ram_workload, ingredient: original)
-    cpu_wl = create(:cpu_workload, ingredient: original)
+    create(:user_workload, ingredient: original)
+    create(:preferred_region_area_constraint, ingredient: original)
+    create(:ram_constraint, ingredient: original)
+    create(:cpu_constraint, ingredient: original)
+    create(:ram_workload, ingredient: original)
+    create(:cpu_workload, ingredient: original)
     copy = original.copy
 
     assert_basic_copy(original, copy)
@@ -21,23 +21,18 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     child_1 = create(:ingredient, parent: root)
     child_1_1 = create(:ingredient, parent: child_1)
 
-    user_wl = create(:user_workload, ingredient: child_1_1)
-    region_constraint = create(:preferred_region_area_constraint, ingredient: child_1_1)
-    ram_constraint = create(:ram_constraint, ingredient: child_1_1)
-    cpu_constraint = create(:cpu_constraint, ingredient: child_1_1)
-    ram_wl = create(:ram_workload, ingredient: child_1_1)
-    cpu_wl = create(:cpu_workload, ingredient: child_1_1)
+    create(:user_workload, ingredient: child_1_1)
+    create(:preferred_region_area_constraint, ingredient: child_1_1)
+    create(:ram_constraint, ingredient: child_1_1)
+    create(:cpu_constraint, ingredient: child_1_1)
+    create(:ram_workload, ingredient: child_1_1)
+    create(:cpu_workload, ingredient: child_1_1)
     copy_root = root.copy
     copy_child_1_1 = copy_root.children.first.children.first
-
-    # Basic copy
-    assert copy_root.name.start_with?(root.name)
-    assert_equal 1, copy_root.children.count
 
     assert_basic_copy(root, copy_root)
     assert_basic_copy(child_1_1, copy_child_1_1)
     assert_constraint_copy(child_1_1, copy_child_1_1)
-
     assert_workload_copy(child_1_1, copy_child_1_1)
   end
 
