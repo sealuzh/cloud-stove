@@ -1,5 +1,6 @@
 require_relative 'helpers/factory_girl'
 FactoryGirl.define do
+
   factory :ingredient do
     sequence(:name) { |n| "Ingredient#{n}" }
     sequence(:body) { |n| "# Ingredient body#{n} with lots of info about this app type." }

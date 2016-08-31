@@ -40,6 +40,9 @@ gem 'delayed-web'
 # FontAwesome for icons
 gem 'font-awesome-sass', '~> 4.5.0'
 
+# Devise for User Authentication
+gem 'devise', '~> 3.4.1'
+
 # Tether for bootstrap tooltips and popovers
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
