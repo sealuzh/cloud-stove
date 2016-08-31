@@ -10,13 +10,8 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     cpu_wl = create(:cpu_workload, ingredient: original)
     copy = original.copy
 
-    # Basic copy
-    assert copy.name.start_with?(original.name)
-    assert_equal 0, copy.children.count
-
-    # Constraints
-    assert_equal ram_constraint.min_ram, copy.ram_constraint.min_ram
-    assert_equal cpu_constraint.min_cpus, copy.cpu_constraint.min_cpus
+    assert_basic_copy(original, copy)
+    assert_constraint_copy(original, copy)
     
     # Workloads
     # assert_equal cpu_wl.cspu_user_capacity, copy.cpu_workload.cspu_user_capacity
@@ -40,12 +35,28 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     assert copy_root.name.start_with?(root.name)
     assert_equal 1, copy_root.children.count
 
-    # Constraints
-    assert_equal ram_constraint.min_ram, copy_child_1_1.ram_constraint.min_ram
-    assert_equal cpu_constraint.min_cpus, copy_child_1_1.cpu_constraint.min_cpus
+    assert_basic_copy(root, copy_root)
+    assert_basic_copy(child_1_1, copy_child_1_1)
+    assert_constraint_copy(child_1_1, copy_child_1_1)
 
-    # Workloads
-    # assert_equal cpu_wl.cspu_user_capacity, copy_child_1_1.cpu_workload.cspu_user_capacity
-    # assert_equal ram_wl.ram_mb_required, copy_child_1_1.ram_workload.ram_mb_required
+    # TODO: impl. workload copy
+    # assert_workload_copy(original, copy)
+  end
+
+  def assert_basic_copy(original, copy)
+    assert copy.name.start_with?(original.name)
+    assert_equal original.children.count, copy.children.count
+  end
+
+  def assert_constraint_copy(original, copy)
+    assert_equal original.ram_constraint.min_ram, copy.ram_constraint.min_ram
+    assert_equal original.cpu_constraint.min_cpus, copy.cpu_constraint.min_cpus
+    # TODO: impl. region area copy
+    # assert_equal original.preferred_region_area_constraint.preferred_region_area, copy.preferred_region_area_constraint.preferred_region_area
+  end
+
+  def assert_workload_copy(original, copy)
+    assert_equal original.cpu_workload.cspu_user_capacity, copy.cpu_workload.cspu_user_capacity
+    assert_equal original.ram_workload.ram_mb_required, copy.ram_workload.ram_mb_required
   end
 end
