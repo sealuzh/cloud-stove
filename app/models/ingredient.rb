@@ -147,7 +147,6 @@ class Ingredient < Base
     jobs.last
   end
 
-  # Returns the root ingredient in the application hierarchy
   def update_constraints
     all_leafs.each do |leaf|
       leaf.ram_workload.to_constraint
@@ -157,6 +156,7 @@ class Ingredient < Base
     raise 'Missing a workload definition for a leaf ingredient. ' + e.message
   end
 
+  # Returns the root ingredient in the application hierarchy
   def application_root
     if application_root?
       self
