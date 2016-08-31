@@ -14,11 +14,11 @@ class RamWorkload < ActiveRecord::Base
   def to_constraint
     self.ingredient.ram_constraint.destroy if self.ingredient.ram_constraint.present?
     self.ingredient.ram_constraint = RamConstraint.create(
-      min_ram: self.ram_mb_required + num_simultaneous_users * ram_mb_growth_per_user
+      min_ram: min_ram(self.ingredient.num_simultaneous_users)
     )
   end
 
-  def num_simultaneous_users
-    self.ingredient.num_simultaneous_users
+  def min_ram(num_simultaneous_users)
+    self.ram_mb_required + (num_simultaneous_users * self.ram_mb_growth_per_user).ceil
   end
 end
