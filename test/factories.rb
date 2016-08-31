@@ -12,8 +12,31 @@ FactoryGirl.define do
     end
   end
 
+  factory :user_workload do
+    num_simultaneous_users 300
+  end
+
+  factory :ram_workload do
+    ram_mb_required 1000
+    ram_mb_required_user_capacity 100
+    ram_mb_growth_per_user 0.5
+  end
+
+  factory :cpu_workload do
+    cspu_user_capacity 400
+    parallelism 0.75
+  end
+
   factory :constraint do
     association :ingredient, factory: :ingredient
+  end
+
+  factory :ram_constraint do
+    min_ram 2000
+  end
+
+  factory :cpu_constraint do
+    min_cpus 2
   end
 
   factory :dependency_constraint do
