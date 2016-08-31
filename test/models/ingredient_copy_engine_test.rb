@@ -12,6 +12,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     copy = original.copy
 
     assert_basic_copy(original, copy)
+    assert_equal original.user_workload.num_simultaneous_users, copy.user_workload.num_simultaneous_users
     assert_constraint_copy(original, copy)
     assert_workload_copy(original, copy)
   end
