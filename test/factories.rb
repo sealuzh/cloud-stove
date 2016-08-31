@@ -1,14 +1,5 @@
 require_relative 'helpers/factory_girl'
 FactoryGirl.define do
-  factory :dependency_constraint do
-    association :source, factory: :ingredient
-    association :target, factory: :ingredient
-  end
-
-  factory :constraint do
-    association :ingredient, factory: :ingredient
-  end
-
   factory :ingredient do
     sequence(:name) { |n| "Ingredient#{n}" }
     sequence(:body) { |n| "# Ingredient body#{n} with lots of info about this app type." }
@@ -21,6 +12,14 @@ FactoryGirl.define do
     end
   end
 
+  factory :constraint do
+    association :ingredient, factory: :ingredient
+  end
+
+  factory :dependency_constraint do
+    association :source, factory: :ingredient
+    association :target, factory: :ingredient
+  end
 
   factory :provider do
     sequence(:name) { |n| "Provider#{n}"}
