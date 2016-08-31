@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 
   has_many :ingredients
 
+  has_many :constraints
   has_many :cpu_constraints
   has_many :ram_constraints
   has_many :dependency_constraints

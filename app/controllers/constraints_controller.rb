@@ -1,5 +1,5 @@
 class ConstraintsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :set_constraint, only: [:show, :destroy, :update]
 
 
@@ -11,7 +11,7 @@ class ConstraintsController < ApplicationController
   end
 
   def index
-    @constraints = Constraint.page(params[:page])
+    @constraints = current_user.constraints.page(params[:page])
     respond_to do |format|
       format.html
       format.json {render json: @constraints, status: :ok}
@@ -54,7 +54,7 @@ class ConstraintsController < ApplicationController
   private
 
     def set_constraint
-      @constraint = Constraint.find(params[:id])
+      @constraint = current_user.constraints.find(params[:id])
     end
 
     def constraint_params
@@ -70,6 +70,7 @@ class ConstraintsController < ApplicationController
       constraint_clazz = type.constantize
       constraint_instance = constraint_clazz.new
       constraint_instance.assign_attributes(constraint_params)
+      constraint_instance.user = current_user
       constraint_instance
     end
 end
