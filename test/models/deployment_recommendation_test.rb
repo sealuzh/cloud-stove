@@ -10,6 +10,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     Ingredient.find_or_create_by(name: 'Multitier Architecture')
     load_seed 'ingredient_instance_rails_app'
     rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
+    build(:user_workload, ingredient: rails_app)
     rails_app.user_workload = UserWorkload.new(ingredient: rails_app, num_simultaneous_users: 200)
     create(:amazon_provider)
     create(:google_provider)
@@ -37,6 +38,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     Ingredient.find_or_create_by(name: 'Multitier Architecture')
     load_seed 'ingredient_instance_rails_app'
     rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
+    build(:user_workload, ingredient: rails_app)
     rails_app.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
     create(:amazon_provider)
     create(:google_provider)
@@ -62,6 +64,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     Ingredient.find_or_create_by(name: 'Multitier Architecture')
     load_seed 'ingredient_instance_rails_app'
     rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
+    build(:user_workload, ingredient: rails_app)
     rails_app.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
     lb = Ingredient.find_by_name('NGINX')
     lb.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'EU')
@@ -89,6 +92,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     Ingredient.find_or_create_by(name: 'Multitier Architecture')
     load_seed 'ingredient_instance_rails_app'
     rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
+    build(:user_workload, ingredient: rails_app)
     create(:google_provider)
 
     recommendation = DeploymentRecommendation.construct(rails_app)
