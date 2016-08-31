@@ -8,18 +8,22 @@ class IngredientCopyEngine
     (!original_ingredient.is_template && original_ingredient.application_root?)?base_copy(original_ingredient, true, false):NIL
   end
 
-  def instantiate(original_ingredient)
-    (original_ingredient.is_template && original_ingredient.application_root?)?base_copy(original_ingredient, false, true):NIL
+  def instantiate(original_ingredient, new_user)
+    (original_ingredient.is_template && original_ingredient.application_root?)?instance_copy(original_ingredient, new_user):NIL
   end
 
 
 
   private
 
-    def base_copy(original_ingredient, template=false, instance=false)
+    def instance_copy(original_ingredient,new_user)
+      base_copy(original_ingredient, false, true, new_user)
+    end
+
+    def base_copy(original_ingredient, template=false, instance=false, new_user=NIL)
       # copies_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
       # root_copy: the root ingredient of the new (copied) hierarchy
-      copies_hash, root_copy = deep_dup({},original_ingredient, template, instance)
+      copies_hash, root_copy = deep_dup({},original_ingredient, template, instance, new_user)
 
       # get all dependency constraints of the original root ingredient, to copy them onto the new structure
       dependency_constraints = original_ingredient.all_dependency_constraints
@@ -49,12 +53,13 @@ class IngredientCopyEngine
         end
       end
       root_copy.name = copy_ingredient_name(root_copy, template,instance)
+      root_copy.user = new_user unless new_user.nil?
       root_copy.save!
       root_copy
     end
 
 
-    def deep_dup(copies_hash,current, template=false, instance=false)
+    def deep_dup(copies_hash,current, template=false, instance=false, new_user=NIL)
       copy = current.dup
       copy.cpu_constraint = current.cpu_constraint.dup if current.cpu_constraint.present?
       copy.ram_constraint = current.ram_constraint.dup if current.ram_constraint.present?
@@ -67,13 +72,31 @@ class IngredientCopyEngine
       copies_hash[current.id] = copy
 
       current.children.each do |child|
-        copies_hash.merge(deep_dup(copies_hash,child,template,instance)[0])
+        copies_hash.merge(deep_dup(copies_hash,child,template,instance, new_user)[0])
       end
 
       if !copies_hash.empty? && !current.parent.nil?
         if copies_hash[current.parent.id]
           copy.parent = copies_hash[current.parent.id]
         end
+      end
+
+      if new_user.present?
+        copy.user = new_user
+
+        copy.cpu_constraint.user = new_user if copy.cpu_constraint.present?
+        copy.ram_constraint.user = new_user if copy.ram_constraint.present?
+        copy.preferred_region_area_constraint.user = new_user if copy.preferred_region_area_constraint.present?
+        copy.dependency_constraints.each do |d|
+          d.user = new_user
+          d.save!
+        end
+
+        copy.ram_workload.user = new_user if current.ram_workload.present?
+        copy.cpu_workload.user = new_user if current.cpu_workload.present?
+        copy.user_workload.user = new_user if current.user_workload.present?
+
+
       end
 
       copy.save!

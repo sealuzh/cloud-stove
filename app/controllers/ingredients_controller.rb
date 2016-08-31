@@ -1,16 +1,20 @@
 class IngredientsController < ApplicationController
   before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:templates]
+  before_action :allow_admin_only, only: [:copy, :template, :new, :create, :instances]
 
+  # Returns all ingredients (irrespective if template, instance, application) of the current user
   def index
-    @ingredients = Ingredient.page(params[:page])
+    @ingredients = current_user.ingredients.page(params[:page])
     respond_to do |format|
       format.html
       format.json {render json: @ingredients}
     end
   end
 
+  # Returns applications defined by the current user
   def applications
-    @roots = Ingredient.select {|i| i.application_root? && !i.is_template}
+    @roots = current_user.ingredients.select {|i| i.application_root? && !i.is_template}
 
     respond_to do |format|
       format.html
@@ -18,6 +22,7 @@ class IngredientsController < ApplicationController
     end
   end
 
+  # Returns all templates, independent of user
   def templates
     @templates = Ingredient.select {|i| i.application_root? && i.is_template}
 
@@ -27,6 +32,8 @@ class IngredientsController < ApplicationController
     end
   end
 
+  # (ADMIN only)
+  # Returns instances of the template with root ingredient given by params[:ingredient_id]
   def instances
     i = Ingredient.find_by(id: params[:ingredient_id])
     if i
@@ -50,6 +57,7 @@ class IngredientsController < ApplicationController
     end
   end
 
+  # returns the details of the ingredient determined by params[:id]
   def show
     @cpu_constraint = @ingredient.cpu_constraint
     @ram_constraint = @ingredient.ram_constraint
@@ -63,6 +71,8 @@ class IngredientsController < ApplicationController
     end
   end
 
+  # (ADMIN only)
+  # copies an entire hierarchy starting at the root determined by params[:ingredient_id]
   def copy
     i = Ingredient.find(params[:ingredient_id]).copy
     respond_to do |format|
@@ -71,6 +81,9 @@ class IngredientsController < ApplicationController
     end
   end
 
+
+  # (ADMIN only)
+  # makes a template out of an hierarchy starting at the root determined by params[:ingredient_id]
   def template
     i = Ingredient.find(params[:ingredient_id]).make_template
     if i
@@ -86,8 +99,9 @@ class IngredientsController < ApplicationController
     end
   end
 
+
   def instance
-    i = Ingredient.find(params[:ingredient_id]).instantiate
+    i = Ingredient.find(params[:ingredient_id]).instantiate(current_user)
     if i
       respond_to do |format|
         format.html {redirect_to i, notice: 'Template was successfully instantiated.'}
@@ -102,6 +116,7 @@ class IngredientsController < ApplicationController
   end
 
 
+  # (ADMIN only)
 
   def new
    @ingredients = Ingredient.all
@@ -113,9 +128,10 @@ class IngredientsController < ApplicationController
   end
 
   def edit
-    @ingredients = Ingredient.all
+    @ingredients = current_user.ingredients.all # the list of ingredients usable as a parent
   end
 
+  # (ADMIN only)
   def create
     @ingredients = Ingredient.all
     @ingredient = Ingredient.new
@@ -133,7 +149,7 @@ class IngredientsController < ApplicationController
   end
 
   def update
-    @ingredients = Ingredient.all
+    @ingredients = current_user.ingredients
     @ingredient.update_attributes(ingredient_params)
 
     respond_to do |format|
@@ -147,9 +163,6 @@ class IngredientsController < ApplicationController
     end
   end
 
-
-  # DELETE /blueprints/1
-  # DELETE /blueprints/1.json
   def destroy
     if @ingredient.is_template
       respond_to do |format|
@@ -166,6 +179,15 @@ class IngredientsController < ApplicationController
   end
 
   private
+
+    def allow_admin_only
+      if !current_user.is_admin
+        respond_to do |format|
+          format.html {redirect_to :back, notice: 'Only admin is allowed to perform this action.'}
+          format.json {render json: 'Only admin is allowed to perform this action.', status: :forbidden}
+        end
+      end
+    end
 
     def set_ingredient
       @ingredient = Ingredient.find(params[:id])
