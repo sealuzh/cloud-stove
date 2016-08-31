@@ -13,10 +13,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
 
     assert_basic_copy(original, copy)
     assert_constraint_copy(original, copy)
-    
-    # Workloads
-    # assert_equal cpu_wl.cspu_user_capacity, copy.cpu_workload.cspu_user_capacity
-    # assert_equal ram_wl.ram_mb_required, copy.ram_workload.ram_mb_required
+    assert_workload_copy(original, copy)
   end
 
   test 'application instance copy with 2 level children' do
@@ -41,8 +38,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     assert_basic_copy(child_1_1, copy_child_1_1)
     assert_constraint_copy(child_1_1, copy_child_1_1)
 
-    # TODO: impl. workload copy
-    # assert_workload_copy(original, copy)
+    assert_workload_copy(child_1_1, copy_child_1_1)
   end
 
   def assert_basic_copy(original, copy)
@@ -57,7 +53,7 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
   end
 
   def assert_workload_copy(original, copy)
-    assert_equal original.cpu_workload.cspu_user_capacity, copy.cpu_workload.cspu_user_capacity
     assert_equal original.ram_workload.ram_mb_required, copy.ram_workload.ram_mb_required
+    assert_equal original.cpu_workload.cspu_user_capacity, copy.cpu_workload.cspu_user_capacity
   end
 end

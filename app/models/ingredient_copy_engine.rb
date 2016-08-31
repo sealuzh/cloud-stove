@@ -59,6 +59,8 @@ class IngredientCopyEngine
       copy.cpu_constraint = current.cpu_constraint.dup unless current.cpu_constraint.nil?
       copy.ram_constraint = current.ram_constraint.dup unless current.ram_constraint.nil?
       copy.preferred_region_area_constraint = current.preferred_region_area_constraint.dup if current.preferred_region_area_constraint.present?
+      copy.ram_workload = current.ram_workload.dup if current.ram_workload.present?
+      copy.cpu_workload = current.cpu_workload.dup if current.cpu_workload.present?
       copy.is_template = template
       copy.template = current unless !instance
       copies_hash[current.id] = copy
