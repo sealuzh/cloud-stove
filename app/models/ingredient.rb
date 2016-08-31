@@ -177,27 +177,6 @@ class Ingredient < Base
 
   private
 
-    def deep_dup(copies_hash,current)
-      copy = current.dup
-      copy.cpu_constraint = current.cpu_constraint.dup if current.cpu_constraint.present?
-      copy.ram_constraint = current.ram_constraint.dup if current.ram_constraint.present?
-      copies_hash[current.id] = copy
-
-      current.children.each do |child|
-        copies_hash.merge(deep_dup(copies_hash,child)[0])
-      end
-
-      if !copies_hash.empty? && !current.parent.nil?
-        if copies_hash[current.parent.id]
-          copy.parent = copies_hash[current.parent.id]
-        end
-      end
-
-      copy.save!
-
-      return copies_hash,copy
-    end
-
     # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
     def dependency_constraints_rec(current_ingredient, constraint_hash)
         current_ingredient.children.all.each do |child|
