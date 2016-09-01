@@ -39,7 +39,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     load_seed 'ingredient_instance_rails_app'
     rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
     build(:user_workload, ingredient: rails_app)
-    rails_app.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
+    rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
     create(:amazon_provider)
     create(:google_provider)
     create(:azure_provider)
@@ -65,9 +65,9 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     load_seed 'ingredient_instance_rails_app'
     rails_app = Ingredient.find_by_name('Rails Application with PostgreSQL Backend')
     build(:user_workload, ingredient: rails_app)
-    rails_app.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
+    rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
     lb = Ingredient.find_by_name('NGINX')
-    lb.constraints << PreferredRegionAreaConstraint.create(preferred_region_area: 'EU')
+    lb.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'EU')
     create(:amazon_provider)
     create(:google_provider)
     create(:azure_provider)
