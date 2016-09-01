@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
 
+
+  # token auth routes available at /api/v1/auth
+  namespace :api do
+    mount_devise_token_auth_for 'User', at: 'auth'
+  end
+
   devise_for :users
+
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end

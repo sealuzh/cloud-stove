@@ -42,6 +42,7 @@ gem 'font-awesome-sass', '~> 4.5.0'
 
 # Devise for User Authentication
 gem 'devise', '~> 3.4.1'
+gem 'devise_token_auth'
 
 # Tether for bootstrap tooltips and popovers
 source 'https://rails-assets.org' do
