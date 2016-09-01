@@ -17,6 +17,12 @@ HERE
 rails_app_instance.user_workload = UserWorkload.create(
   num_simultaneous_users: 200
 )
+rails_app_instance.provider_constraint = ProviderConstraint.create(
+  preferred_providers: ['Amazon', 'Google']
+)
+rails_app_instance.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(
+  preferred_region_area: 'EU'
+)
 
 db = rails_app_instance.children.create(
   name: 'PostgreSQL',
