@@ -40,6 +40,9 @@ Frontend: https://github.com/inz/cloud-stove-ui
 
     export PATH=/path/to/or-tools-minizinc/vendor/minizinc/bin:$PATH
 
+* Install dependencies
+    bundle install
+
 * Start the Rails server and job worker
     rails s
     rake jobs:work
