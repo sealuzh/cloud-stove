@@ -14,12 +14,23 @@ A traditional wep application, let's say a web shop with
     * categories
 HERE
 )
+rails_app_instance.user_workload = UserWorkload.create(
+  num_simultaneous_users: 200
+)
 
 db = rails_app_instance.children.create(
   name: 'PostgreSQL',
   body: <<HERE
 Specific things about the PostgreSQL db.
 HERE
+)
+db.ram_workload = RamWorkload.create(
+  ram_mb_required: 1500,
+  ram_mb_required_user_capacity: 200,
+  ram_mb_growth_per_user: 0.007)
+db.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 1500,
+  parallelism: 0.9
 )
 db.constraints << RamConstraint.create(
   min_ram: 2048
@@ -33,6 +44,14 @@ app = rails_app_instance.children.create(
   body: <<HERE
 Specific things about the Rails app.
 HERE
+)
+app.ram_workload = RamWorkload.create(
+  ram_mb_required: 450,
+  ram_mb_required_user_capacity: 100,
+  ram_mb_growth_per_user: 1)
+app.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 500,
+  parallelism: 0.97
 )
 app.constraints << RamConstraint.create(
   min_ram: 4096
@@ -51,6 +70,14 @@ lb = rails_app_instance.children.create(
 Specific things about the NGINX load balancer.
 HERE
 )
+lb.ram_workload = RamWorkload.create(
+  ram_mb_required: 2000,
+  ram_mb_required_user_capacity: 2400,
+  ram_mb_growth_per_user: 0.008)
+lb.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 3500,
+  parallelism: 0.8
+)
 lb.constraints << RamConstraint.create(
   min_ram: 1024
 )
@@ -67,6 +94,14 @@ cdn = rails_app_instance.children.create(
     body: <<HERE
 Specific things about the CDN.
 HERE
+)
+cdn.ram_workload = RamWorkload.create(
+  ram_mb_required: 2000,
+  ram_mb_required_user_capacity: 300000,
+  ram_mb_growth_per_user: 0.008)
+cdn.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 400000,
+  parallelism: 0.996
 )
 cdn.constraints << RamConstraint.create(
   min_ram: 2048
