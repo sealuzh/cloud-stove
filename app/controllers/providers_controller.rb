@@ -1,4 +1,7 @@
 class ProvidersController < ApplicationController
+
+  before_action :authenticate_user!
+
   def index
     @providers = Provider.includes(:resources)
     respond_to do |format|
