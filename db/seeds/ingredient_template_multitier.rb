@@ -133,36 +133,3 @@ lb.constraints << DependencyConstraint.create(
   source: lb,
   target: app
 )
-
-cdn = multitier_template.children.create(
-  name: 'Content Distribution Network',
-  is_template: true,
-  body: <<HERE
-The **CDN** caches content close to users.
-
-Use CDN service like [Cloudflare], [Incapsula], [Fastly], [Akamai],
-[MaxCDN], [Amazon Cloudfront], [Google CDN].
-
-[Cloudflare]: https://cloudflare.com
-[Incapsula]: https://incapsula.com
-[Fastly]: https://fastly.com
-[Akamai]: https://akamai.com
-[MaxCDN]: https://maxcdn.com
-[Amazon Cloudfront]: https://aws.amazon.com/cloudfront
-[Google CDN]: https://cloud.google.com/compute/docs/load-balancing/http/cdn
-
-# Performance Considerations
-
-You don't roll your own CDN unless you're Netflix.
-HERE
-)
-cdn.constraints << RamConstraint.create(
-  min_ram: 2048
-)
-cdn.constraints << CpuConstraint.create(
-  min_cpus: 1
-)
-cdn.constraints << DependencyConstraint.create(
-  source: cdn,
-  target: lb
-)

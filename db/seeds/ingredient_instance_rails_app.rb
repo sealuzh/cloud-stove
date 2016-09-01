@@ -94,28 +94,3 @@ lb.constraints << DependencyConstraint.create(
   source: lb,
   target: app
 )
-
-cdn = rails_app_instance.children.create(
-    name: 'CDN',
-    body: <<HERE
-Specific things about the CDN.
-HERE
-)
-cdn.ram_workload = RamWorkload.create(
-  ram_mb_required: 2000,
-  ram_mb_required_user_capacity: 300000,
-  ram_mb_growth_per_user: 0.008)
-cdn.cpu_workload = CpuWorkload.create(
-  cspu_user_capacity: 400000,
-  parallelism: 0.996
-)
-cdn.constraints << RamConstraint.create(
-  min_ram: 2048
-)
-cdn.constraints << CpuConstraint.create(
-  min_cpus: 1
-)
-cdn.constraints << DependencyConstraint.create(
-  source: cdn,
-  target: lb
-)
