@@ -29,6 +29,11 @@ class Ingredient < Base
 
   has_many :deployment_recommendations
 
+  # Workloads
+  has_one :cpu_workload, class_name: 'CpuWorkload'
+  has_one :ram_workload, class_name: 'RamWorkload'
+  has_one :user_workload, class_name: 'UserWorkload'
+
   # Associated generic constraints
   has_many :constraints, dependent: :destroy
 
@@ -103,7 +108,16 @@ class Ingredient < Base
     hash[:updated_at] = self.updated_at
     hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
     hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:constraints] == false
+    hash[:workloads] = workload_jsons unless options[:workloads] == false || workload_jsons.empty?
     hash
+  end
+
+  def workload_jsons
+    workloads = {}
+    workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
+    workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
+    workloads[:user_workload] = self.user_workload.as_json if self.user_workload.present?
+    workloads
   end
 
   def copy
@@ -122,6 +136,7 @@ class Ingredient < Base
   end
 
   def schedule_recommendation_job
+    update_constraints
     preferred_providers = self.provider_constraint.provider_list rescue [nil]
     jobs = []
     preferred_providers.each do |provider_name|
@@ -130,6 +145,15 @@ class Ingredient < Base
     end
     # TODO: Adjust API to return a list of job ids for each job
     jobs.last
+  end
+
+  def update_constraints
+    all_leafs.each do |leaf|
+      leaf.ram_workload.to_constraint
+      leaf.cpu_workload.to_constraint
+    end
+  rescue => e
+    raise 'Missing a workload definition for a leaf ingredient. ' + e.message
   end
 
   # Returns the root ingredient in the application hierarchy
@@ -145,28 +169,13 @@ class Ingredient < Base
     (self.parent.nil? && self.children.count > 0)
   end
 
+  def num_simultaneous_users
+    application_root.user_workload.num_simultaneous_users
+  rescue => e
+    raise 'User workload not specified for application root. ' + e.message
+  end
+
   private
-
-    def deep_dup(copies_hash,current)
-      copy = current.dup
-      copy.cpu_constraint = current.cpu_constraint.dup if current.cpu_constraint.present?
-      copy.ram_constraint = current.ram_constraint.dup if current.ram_constraint.present?
-      copies_hash[current.id] = copy
-
-      current.children.each do |child|
-        copies_hash.merge(deep_dup(copies_hash,child)[0])
-      end
-
-      if !copies_hash.empty? && !current.parent.nil?
-        if copies_hash[current.parent.id]
-          copy.parent = copies_hash[current.parent.id]
-        end
-      end
-
-      copy.save!
-
-      return copies_hash,copy
-    end
 
     # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
     def dependency_constraints_rec(current_ingredient, constraint_hash)

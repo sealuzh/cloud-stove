@@ -174,6 +174,8 @@ class IngredientsController < ApplicationController
     def ingredient_params
       if @ingredient.application_root?
         params.require(:ingredient).permit(:name,:body,:parent_id,
+                                           cpu_workload_attributes: [:id, :ingredient_id, :cspu_user_capacity, :parallelism, :_destroy],
+                                           ram_workload_attributes: [:id, :ingredient_id, :ram_mb_required, :ram_mb_required_user_capacity, :ram_mb_growth_per_user, :_destroy],
                                            constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
                                            ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],
                                            cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy],
@@ -181,6 +183,8 @@ class IngredientsController < ApplicationController
                                            provider_constraint_attributes:[:id, :ingredient_id, :preferred_providers, :_destroy])
       else
         params.require(:ingredient).permit(:name,:body,:parent_id,
+                                           cpu_workload_attributes: [:id, :ingredient_id, :cspu_user_capacity, :parallelism, :_destroy],
+                                           ram_workload_attributes: [:id, :ingredient_id, :ram_mb_required, :ram_mb_required_user_capacity, :ram_mb_growth_per_user, :_destroy],
                                            constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
                                            ram_constraint_attributes:[:id, :ingredient_id, :min_ram, :_destroy],
                                            cpu_constraint_attributes:[:id, :ingredient_id, :min_cpus, :_destroy],

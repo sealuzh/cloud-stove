@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714113957) do
+ActiveRecord::Schema.define(version: 20160831112536) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -30,6 +30,16 @@ ActiveRecord::Schema.define(version: 20160714113957) do
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
   add_index "constraints", ["source_id"], name: "index_constraints_on_source_id"
   add_index "constraints", ["target_id"], name: "index_constraints_on_target_id"
+
+  create_table "cpu_workloads", force: :cascade do |t|
+    t.integer  "cspu_user_capacity"
+    t.float    "parallelism"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "cpu_workloads", ["ingredient_id"], name: "index_cpu_workloads_on_ingredient_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -52,9 +62,10 @@ ActiveRecord::Schema.define(version: 20160714113957) do
     t.text     "ingredients_data"
     t.text     "resources_data"
     t.integer  "ingredient_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.string   "status"
+    t.integer  "num_simultaneous_users"
   end
 
   add_index "deployment_recommendations", ["ingredient_id"], name: "index_deployment_recommendations_on_ingredient_id"
@@ -81,6 +92,17 @@ ActiveRecord::Schema.define(version: 20160714113957) do
     t.datetime "updated_at",                     null: false
   end
 
+  create_table "ram_workloads", force: :cascade do |t|
+    t.integer  "ram_mb_required"
+    t.float    "ram_mb_growth_per_user"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "ram_mb_required_user_capacity"
+  end
+
+  add_index "ram_workloads", ["ingredient_id"], name: "index_ram_workloads_on_ingredient_id"
+
   create_table "resources", force: :cascade do |t|
     t.string   "name"
     t.text     "more_attributes",           default: "{}", null: false
@@ -95,5 +117,25 @@ ActiveRecord::Schema.define(version: 20160714113957) do
   end
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
+
+  create_table "traffic_workloads", force: :cascade do |t|
+    t.integer  "visits_per_month"
+    t.integer  "requests_per_visit"
+    t.integer  "request_size_kb"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "traffic_workloads", ["ingredient_id"], name: "index_traffic_workloads_on_ingredient_id"
+
+  create_table "user_workloads", force: :cascade do |t|
+    t.integer  "num_simultaneous_users"
+    t.integer  "ingredient_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "user_workloads", ["ingredient_id"], name: "index_user_workloads_on_ingredient_id"
 
 end
