@@ -11,6 +11,8 @@ deployment strategies. Deployment recommendations are created by optimizing the
 use of available provider offerings with respect to the captured application
 specifications and requirements.
 
+Frontend: https://github.com/inz/cloud-stove-ui
+
 == Contributing to the Cloud Stove
 
 === Setting Up a Development Environment
@@ -37,6 +39,9 @@ specifications and requirements.
   and add <code>vendor/minizinc/bin</code> to your PATH:
 
     export PATH=/path/to/or-tools-minizinc/vendor/minizinc/bin:$PATH
+
+* Start the Rails server
+    rails s
 
 === Making Changes
 
