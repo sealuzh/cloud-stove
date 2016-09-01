@@ -47,10 +47,10 @@ class DeploymentRecommendation < Base
     ingredients.write self.ingredients_data
     ingredients.close
 
-    command = "minizinc -G or-tools -f fzn-or-tools #{Rails.root}/lib/stove.mzn #{resources.path} #{ingredients.path}"
+    command = "minizinc -G or-tools -f fzn-or-tools #{minizinc_model} #{resources.path} #{ingredients.path}"
     stdout, stderr, status = Open3.capture3(command)
     if status.success?
-      parse_result(stdout)
+      parse_result(stdout, stderr)
     else
       fail [ 'Error executing MiniZinc!',
              '----------stdout----------',
@@ -65,7 +65,11 @@ class DeploymentRecommendation < Base
     ingredients.unlink
   end
 
-  def parse_result(stdout)
+  def minizinc_model
+    "#{Rails.root}/lib/stove.mzn"
+  end
+
+  def parse_result(stdout, stderr)
     result = extract_result(stdout)
     if satisfiable?(result)
       self.more_attributes = result
@@ -85,8 +89,25 @@ class DeploymentRecommendation < Base
       self.save!
     else
       self.status = UNSATISFIABLE
+      self.more_attributes = unsatisfiable_msg(stderr)
       self.save!
     end
+  end
+
+  def unsatisfiable_msg(stderr)
+      line = line_with_error(stderr)
+    { unsatisfiable_message: line_from_minizinc_model(line) }
+  rescue NoMethodError
+    { unsatisfiable_message: 'Could not localize MiniZinc error!' }
+  end
+
+  def line_from_minizinc_model(line)
+    File.readlines(minizinc_model)[line - 1].strip
+  end
+
+  MINIZINC_ERROR_REGEX = /lib\/stove\.mzn:(\d+):/
+  def line_with_error(stderr)
+    MINIZINC_ERROR_REGEX.match(stderr)[1].to_i
   end
 
   def extract_result(output)

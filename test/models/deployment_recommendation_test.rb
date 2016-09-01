@@ -98,5 +98,6 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
     recommendation = DeploymentRecommendation.construct(rails_app)
     # Google provider factories have no instance available to satisfy the 4G RAM constraint
     assert_equal 'unsatisfiable', recommendation.status
+    assert_equal 'constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);', recommendation.more_attributes['unsatisfiable_message']
   end
 end
