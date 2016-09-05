@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
 
-
-  # token auth routes available at /api/v1/auth
+  # MUST come first (before the `api` namespace):
+  # https://github.com/lynndylanhurley/devise_token_auth#can-i-use-this-gem-alongside-standard-devise
+  devise_for :users
+  # Token auth routes available at `/api/auth`
   namespace :api do
     mount_devise_token_auth_for 'User', at: 'auth'
   end
-
-  devise_for :users
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
