@@ -17,7 +17,7 @@ module Requests
     end
 
     def json_parse(body)
-      MultiJson.load(body, symbolize_keys: false)
+      JSON.parse(body)
     end
   end
 end
