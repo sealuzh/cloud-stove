@@ -18,6 +18,9 @@ DatabaseCleaner.clean_with :deletion
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
+  # Required to setup Devise and Warden environment for authentication
+  include Devise::Test::IntegrationHelpers
+
   # Provide request shortcuts and JSON parsing helpers
   require 'helpers/request_helpers'
   include Requests::JsonHelpers
