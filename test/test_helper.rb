@@ -18,6 +18,10 @@ DatabaseCleaner.clean_with :deletion
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
+  # Provide request shortcuts and JSON parsing helpers
+  require 'helpers/request_helpers'
+  include Requests::JsonHelpers
+
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
 
