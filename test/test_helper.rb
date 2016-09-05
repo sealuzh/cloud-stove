@@ -57,6 +57,14 @@ class ActionDispatch::IntegrationTest
   end
 end
 
+class ActionController::TestCase
+  # Required to setup Devise and Warden environment for authentication
+  include Devise::Test::ControllerHelpers
+
+  require 'helpers/auth_helpers'
+  include AuthHelpers
+end
+
 class ActiveSupport::TestCase
   # Consistently use FactoryGirl instead of fixtures
   include FactoryGirl::Syntax::Methods
