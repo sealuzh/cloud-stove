@@ -1,7 +1,7 @@
 class IngredientsController < ApplicationController
   before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:templates]
-  before_action :allow_admin_only, only: [:copy, :template, :new, :create, :instances]
+  before_action :allow_admin_only, only: [:template, :new, :create, :instances]
 
   # Returns all ingredients (irrespective if template, instance, application) of the current user
   def index
