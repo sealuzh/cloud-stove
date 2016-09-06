@@ -27,9 +27,10 @@ class AuthStoriesTest < ActionDispatch::IntegrationTest
     assert page.has_content?('Finely crafted Cloud Application Deployments')
   end
 
-  test 'logout (sign out)' do
-    skip 'Implement this functionality'
-    sign_in create(:user)
-    click_button 'Logout'
-  end
+  # TODO: Fix issue that Capybara cannot find the signout button:
+  # `Capybara::ElementNotFound: Unable to find button "signout_btn_id"`
+  # test 'logout (sign out)' do
+  #   sign_in create(:user)
+  #   click_button('signout_btn_id')
+  # end
 end
