@@ -89,11 +89,9 @@ class IngredientCopyEngine
         copy.cpu_constraint.user = new_user if copy.cpu_constraint.present?
         copy.ram_constraint.user = new_user if copy.ram_constraint.present?
         copy.preferred_region_area_constraint.user = new_user if copy.preferred_region_area_constraint.present?
-        copy.ram_workload.user = new_user if current.ram_workload.present?
-        copy.cpu_workload.user = new_user if current.cpu_workload.present?
-        copy.user_workload.user = new_user if current.user_workload.present?
-
-
+        copy.ram_workload.user = new_user if copy.ram_workload.present?
+        copy.cpu_workload.user = new_user if copy.cpu_workload.present?
+        copy.user_workload.user = new_user if copy.user_workload.present?
       end
 
       copy.save!
