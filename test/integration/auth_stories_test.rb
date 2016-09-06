@@ -28,7 +28,7 @@ class AuthStoriesTest < ActionDispatch::IntegrationTest
   end
 
   test 'logout (sign out)' do
-    skip 'Fix `sign_in` with Devise 4 and Devise Token Auth and implement this functionality'
+    skip 'Implement this functionality'
     sign_in create(:user)
     click_button 'Logout'
   end

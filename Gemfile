@@ -41,8 +41,8 @@ gem 'delayed-web'
 gem 'font-awesome-sass', '~> 4.5.0'
 
 # Devise for Web and token authentication for API
-gem 'devise', '~> 4.2'
-gem 'devise_token_auth', '~> 0.1.39'
+gem 'devise', '3.5.1'
+gem 'devise_token_auth', '~> 0.1.34'
 
 # Tether for bootstrap tooltips and popovers
 source 'https://rails-assets.org' do
