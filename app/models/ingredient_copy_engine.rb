@@ -13,14 +13,13 @@ class IngredientCopyEngine
   end
 
 
-
   private
 
     def instance_copy(original_ingredient,new_user)
       base_copy(original_ingredient, false, true, new_user)
     end
 
-    def base_copy(original_ingredient, template=false, instance=false, new_user=NIL)
+    def base_copy(original_ingredient, template=false, instance=false, new_user = original_ingredient.user)
       # copies_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
       # root_copy: the root ingredient of the new (copied) hierarchy
       copies_hash, root_copy = deep_dup({},original_ingredient, template, instance, new_user)
@@ -55,11 +54,10 @@ class IngredientCopyEngine
         end
       end
       root_copy.name = copy_ingredient_name(root_copy, template,instance)
-      root_copy.user = new_user unless new_user.nil?
+      root_copy.user = new_user
       root_copy.save!
       root_copy
     end
-
 
     def deep_dup(copies_hash,current, template=false, instance=false, new_user=NIL)
       copy = current.dup
