@@ -17,6 +17,15 @@ static content close to users. Find out more [on Wikipedia][1].
 - Database Backend'
 HERE
 )
+multitier_template.user_workload = UserWorkload.create(
+  num_simultaneous_users: 200
+)
+multitier_template.provider_constraint = ProviderConstraint.create(
+  preferred_providers: ['Amazon', 'Google']
+)
+multitier_template.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(
+  preferred_region_area: 'EU'
+)
 
 db = multitier_template.children.create(
   name: 'Database',
@@ -34,6 +43,14 @@ deployments).
   high I/O instance. For initial deployments, regular compute may be ok
   as well.
 HERE
+)
+db.ram_workload = RamWorkload.create(
+  ram_mb_required: 1500,
+  ram_mb_required_user_capacity: 200,
+  ram_mb_growth_per_user: 0.007)
+db.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 1500,
+  parallelism: 0.9
 )
 db.constraints << RamConstraint.create(
   min_ram: 2048
@@ -61,6 +78,14 @@ O’Reilly Media, 2009, ISBN 978-0-596-15636-7, e.g., on
 
 [1]: http://proquest.tech.safaribooksonline.de/book/software-engineering-and-development/9780596157647/7dot-scaling-a-cloud-infrastructure/id3143621
 HERE
+)
+app.ram_workload = RamWorkload.create(
+  ram_mb_required: 450,
+  ram_mb_required_user_capacity: 100,
+  ram_mb_growth_per_user: 1)
+app.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 500,
+  parallelism: 0.97
 )
 app.constraints << RamConstraint.create(
   min_ram: 3064
@@ -90,6 +115,14 @@ or roll your own with Apache HTTPD/nginx/HAproxy/Pound.
 Typically Network I/O, CPU bound.
 HERE
 )
+lb.ram_workload = RamWorkload.create(
+  ram_mb_required: 2000,
+  ram_mb_required_user_capacity: 2400,
+  ram_mb_growth_per_user: 0.008)
+lb.cpu_workload = CpuWorkload.create(
+  cspu_user_capacity: 3500,
+  parallelism: 0.8
+)
 lb.constraints << RamConstraint.create(
   min_ram: 1024
 )
@@ -99,37 +132,4 @@ lb.constraints << CpuConstraint.create(
 lb.constraints << DependencyConstraint.create(
   source: lb,
   target: app
-)
-
-cdn = multitier_template.children.create(
-  name: 'Content Distribution Network',
-  is_template: true,
-  body: <<HERE
-The **CDN** caches content close to users.
-
-Use CDN service like [Cloudflare], [Incapsula], [Fastly], [Akamai],
-[MaxCDN], [Amazon Cloudfront], [Google CDN].
-
-[Cloudflare]: https://cloudflare.com
-[Incapsula]: https://incapsula.com
-[Fastly]: https://fastly.com
-[Akamai]: https://akamai.com
-[MaxCDN]: https://maxcdn.com
-[Amazon Cloudfront]: https://aws.amazon.com/cloudfront
-[Google CDN]: https://cloud.google.com/compute/docs/load-balancing/http/cdn
-
-# Performance Considerations
-
-You don't roll your own CDN unless you're Netflix.
-HERE
-)
-cdn.constraints << RamConstraint.create(
-  min_ram: 2048
-)
-cdn.constraints << CpuConstraint.create(
-  min_cpus: 1
-)
-cdn.constraints << DependencyConstraint.create(
-  source: cdn,
-  target: lb
 )
