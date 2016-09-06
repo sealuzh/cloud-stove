@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   # MUST come first (before the `api` namespace):
   # https://github.com/lynndylanhurley/devise_token_auth#can-i-use-this-gem-alongside-standard-devise
   devise_for :users
+  # Required for Devise
+  root 'welcome#index'
   # Token auth routes available at `/api/auth`
   namespace :api, defaults: { format: :json } do
     mount_devise_token_auth_for 'User', at: 'auth'
@@ -52,9 +54,6 @@ Rails.application.routes.draw do
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
   get 'workloads/new/:ingredient_id' => 'workloads#new'
-
-  # You can have the root of your site routed with "root"
-  root 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
