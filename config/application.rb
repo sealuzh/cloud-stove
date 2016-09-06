@@ -35,6 +35,7 @@ module CloudStove
         origins 'localhost:1232', '127.0.0.1:1232', /\Ahttps:\/\/serene-garden-85460-pr-\d+\.herokuapp\.com.*\z/, 'serene-garden-85460.herokuapp.com' , 'staging.frontend.thestove.io'
         resource '*',
                  :headers => :any,
+                 :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
                  :methods => [:get, :post, :delete, :put, :patch, :options, :head],
                  :max_age => 0
       end
