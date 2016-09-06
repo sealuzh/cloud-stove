@@ -1,5 +1,7 @@
 class ResourcesController < ApplicationController
 
+  before_action :authenticate_user!
+
   def index
     @resources = Resource.page(params[:page])
     respond_to do |format|

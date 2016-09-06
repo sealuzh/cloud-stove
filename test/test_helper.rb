@@ -18,6 +18,13 @@ DatabaseCleaner.clean_with :deletion
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
+  # Required to setup Devise and Warden environment for authentication
+  # include Devise::TestHelpers
+
+  # Provide request shortcuts and JSON parsing helpers
+  require 'helpers/request_helpers'
+  include Requests::JsonHelpers
+
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
 
@@ -53,7 +60,19 @@ class ActionDispatch::IntegrationTest
   end
 end
 
+class ActionController::TestCase
+  # Required to setup Devise and Warden environment for authentication
+  include Devise::TestHelpers
+
+  require 'helpers/auth_helpers'
+  include AuthHelpers
+end
+
 class ActiveSupport::TestCase
+  # Login helper for integration tests:
+  # https://github.com/plataformatec/devise/wiki/How-To:-Test-with-Capybara
+  include Warden::Test::Helpers
+
   # Consistently use FactoryGirl instead of fixtures
   include FactoryGirl::Syntax::Methods
   self.use_transactional_fixtures = false
@@ -70,6 +89,11 @@ class ActiveSupport::TestCase
   teardown do
     WebMock.disable!
     DatabaseCleaner.clean
+    Warden.test_reset!
+  end
+
+  def sign_in(user)
+    login_as(user, :scope => :user)
   end
 
   def is_integration_test?

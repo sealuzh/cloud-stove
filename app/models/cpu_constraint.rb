@@ -1,5 +1,6 @@
 class CpuConstraint < Constraint
-  
+
+  belongs_to :user
 
   def as_json(options={})
     hash = super

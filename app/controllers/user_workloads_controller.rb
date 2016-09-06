@@ -1,8 +1,10 @@
 class UserWorkloadsController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_user_workload, only: [:show, :update, :destroy]
 
   def index
-    @user_workloads = UserWorkload.page(params[:page])
+    @user_workloads = current_user.user_workloads.page(params[:page])
     respond_to do |format|
       format.html
       format.json {render json: @user_workloads, status: :ok}
@@ -27,6 +29,7 @@ class UserWorkloadsController < ApplicationController
   def create
     @user_workload = UserWorkload.new
     @user_workload.update_attributes(user_workload_params)
+    @user_workload.user = current_user
     respond_to do |format|
       if @user_workload.save!
         format.html {redirect_to @user_workload, success: 'User Workload was successfully created!'}
@@ -64,7 +67,7 @@ class UserWorkloadsController < ApplicationController
 
   private
     def set_user_workload
-      @user_workload = UserWorkload.find(params[:id])
+      @user_workload = current_user.user_workloads.find(params[:id])
     end
 
     def user_workload_params

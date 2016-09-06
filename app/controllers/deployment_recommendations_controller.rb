@@ -1,7 +1,9 @@
 class DeploymentRecommendationsController < ApplicationController
 
+  before_action :authenticate_user!
+
   def show
-    @recommendation = DeploymentRecommendation.find_by(ingredient_id: params[:ingredient_id])
+    @recommendation = current_user.deployment_recommendations.find_by(ingredient_id: params[:ingredient_id])
 
     respond_to do |format|
       format.html
@@ -11,7 +13,7 @@ class DeploymentRecommendationsController < ApplicationController
   end
 
   def index
-    @recommendations = DeploymentRecommendation.where(ingredient_id: params[:ingredient_id])
+    @recommendations = current_user.deployment_recommendations.where(ingredient_id: params[:ingredient_id])
 
     respond_to do |format|
       format.html
@@ -21,7 +23,7 @@ class DeploymentRecommendationsController < ApplicationController
   end
 
   def trigger
-    ingredient = Ingredient.find_by_id(params[:ingredient_id])
+    ingredient = current_user.ingredients.find_by_id(params[:ingredient_id])
 
     if !ingredient
       respond_to do |format|

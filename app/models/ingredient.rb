@@ -1,4 +1,5 @@
 class Ingredient < Base
+  belongs_to :user
 
   # Each ingredient can have a template that was used as a blueprint at instantiation
   belongs_to :parent, class_name: 'Ingredient'
@@ -130,9 +131,9 @@ class Ingredient < Base
     engine.make_template(self)
   end
 
-  def instantiate
+  def instantiate(new_user)
     engine = IngredientCopyEngine.new
-    engine.instantiate(self)
+    engine.instantiate(self, new_user)
   end
 
   def schedule_recommendation_job

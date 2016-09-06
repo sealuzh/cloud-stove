@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160831112536) do
+ActiveRecord::Schema.define(version: 20160901114720) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.integer  "min_cpus"
     t.string   "preferred_region_area"
     t.string   "preferred_providers"
+    t.integer  "user_id"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
@@ -37,6 +38,7 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.integer  "ingredient_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "user_id"
   end
 
   add_index "cpu_workloads", ["ingredient_id"], name: "index_cpu_workloads_on_ingredient_id"
@@ -66,6 +68,7 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.datetime "updated_at",             null: false
     t.string   "status"
     t.integer  "num_simultaneous_users"
+    t.integer  "user_id"
   end
 
   add_index "deployment_recommendations", ["ingredient_id"], name: "index_deployment_recommendations_on_ingredient_id"
@@ -79,6 +82,7 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.integer  "parent_id"
     t.integer  "template_id"
     t.boolean  "is_template",     default: false
+    t.integer  "user_id"
   end
 
   add_index "ingredients", ["is_template"], name: "index_ingredients_on_is_template"
@@ -99,6 +103,7 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.integer  "ram_mb_required_user_capacity"
+    t.integer  "user_id"
   end
 
   add_index "ram_workloads", ["ingredient_id"], name: "index_ram_workloads_on_ingredient_id"
@@ -125,6 +130,7 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.integer  "ingredient_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "user_id"
   end
 
   add_index "traffic_workloads", ["ingredient_id"], name: "index_traffic_workloads_on_ingredient_id"
@@ -134,8 +140,40 @@ ActiveRecord::Schema.define(version: 20160831112536) do
     t.integer  "ingredient_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "user_id"
   end
 
   add_index "user_workloads", ["ingredient_id"], name: "index_user_workloads_on_ingredient_id"
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  default: "",      null: false
+    t.string   "encrypted_password",     default: "",      null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,       null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_admin"
+    t.string   "provider",               default: "email", null: false
+    t.string   "uid",                    default: "",      null: false
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.string   "name"
+    t.string   "nickname"
+    t.string   "image"
+    t.text     "tokens"
+  end
+
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
 
 end

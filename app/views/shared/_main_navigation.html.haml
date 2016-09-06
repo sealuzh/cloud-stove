@@ -24,4 +24,4 @@
             .dropdown-menu.dropdown-menu-right
               = link_to icon('user', t('.my_account')), root_path, class: 'dropdown-item'
               .dropdown-divider
-              = link_to icon('sign-out', t('.logout')), root_path, class: 'dropdown-item'
+              = button_to(destroy_user_session_path, {method: :delete, class: 'dropdown-item', id: 'signout_btn_id'} ) { icon('sign-out', t('.logout')) }

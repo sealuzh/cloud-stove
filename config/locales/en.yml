@@ -33,6 +33,8 @@ en:
       templates: "Templates"
       ingredients: "Ingredients"
       jobs: "Jobs"
+      my_account: "My Account"
+      logout: "Logout"
     footer:
       about: "About"
       faq: "FAQ"

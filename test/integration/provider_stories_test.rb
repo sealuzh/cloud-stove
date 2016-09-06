@@ -2,6 +2,7 @@ require 'test_helper'
 
 class ProviderStoriesTest < ActionDispatch::IntegrationTest
   test 'listing providers' do
+    sign_in create(:user)
     amazon = create(:amazon_provider)
     google = create(:google_provider)
 
