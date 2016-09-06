@@ -40,6 +40,7 @@ class IngredientCopyEngine
           d.source = (copies_hash[dependency_constraint.source.id]) ? copies_hash[dependency_constraint.source.id] : Ingredient.find(dependency_constraint.source.id)
           d.ingredient = (copies_hash[dependency_constraint.source.id]) ? copies_hash[dependency_constraint.source.id] : Ingredient.find(dependency_constraint.source.id)
           d.target = (copies_hash[dependency_constraint.target.id]) ? copies_hash[dependency_constraint.target.id] : Ingredient.find(dependency_constraint.target.id)
+          d.user = new_user
           d.save!
         end
 
@@ -49,6 +50,7 @@ class IngredientCopyEngine
           d.source = copies_hash[dependency_constraint.source.id]
           d.ingredient = copies_hash[dependency_constraint.source.id]
           d.target = copies_hash[dependency_constraint.target.id]
+          d.user = new_user
           d.save!
         end
       end
@@ -87,11 +89,6 @@ class IngredientCopyEngine
         copy.cpu_constraint.user = new_user if copy.cpu_constraint.present?
         copy.ram_constraint.user = new_user if copy.ram_constraint.present?
         copy.preferred_region_area_constraint.user = new_user if copy.preferred_region_area_constraint.present?
-        copy.dependency_constraints.each do |d|
-          d.user = new_user
-          d.save!
-        end
-
         copy.ram_workload.user = new_user if current.ram_workload.present?
         copy.cpu_workload.user = new_user if current.cpu_workload.present?
         copy.user_workload.user = new_user if current.user_workload.present?
