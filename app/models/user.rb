@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :ram_constraints
   has_many :dependency_constraints
   has_many :preferred_region_area_constraints
+  has_many :provider_constraints
 
   has_many :cpu_workloads
   has_many :ram_workloads

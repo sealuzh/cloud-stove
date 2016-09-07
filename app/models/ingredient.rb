@@ -182,18 +182,22 @@ class Ingredient < Base
     self.children.each do |child|
       child.assign_user!(new_user)
     end
+    self.save!
   end
 
   def assign_user_to_attachments!(new_user)
-    self.user_workload.user = new_user if self.user_workload.present?
-    self.ram_workload.user = new_user if self.ram_workload.present?
-    self.cpu_workload.user = new_user if self.cpu_workload.present?
+    (self.user_workload.user = new_user; user_workload.save!) if self.user_workload.present?
+    (self.ram_workload.user = new_user; ram_workload.save!) if self.ram_workload.present?
+    (self.cpu_workload.user = new_user; cpu_workload.save!) if self.cpu_workload.present?
     self.constraints.each do |constraint|
       constraint.user = new_user
+      constraint.save!
     end
     self.deployment_recommendations.each do |recommendation|
       recommendation.user = new_user
+      recommendation.save!
     end
+    self.save!
   end
 
   private
