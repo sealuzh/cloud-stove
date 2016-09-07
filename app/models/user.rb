@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :ram_constraints
   has_many :dependency_constraints
   has_many :preferred_region_area_constraints
+  has_many :provider_constraints
 
   has_many :cpu_workloads
   has_many :ram_workloads
@@ -23,4 +24,6 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  scope :admin, -> { where(is_admin: true) }
 end

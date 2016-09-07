@@ -64,6 +64,7 @@ class IngredientCopyEngine
       copy.cpu_constraint = current.cpu_constraint.dup if current.cpu_constraint.present?
       copy.ram_constraint = current.ram_constraint.dup if current.ram_constraint.present?
       copy.preferred_region_area_constraint = current.preferred_region_area_constraint.dup if current.preferred_region_area_constraint.present?
+      copy.provider_constraint = current.provider_constraint.dup if current.provider_constraint.present?
       copy.user_workload = current.user_workload.dup if current.user_workload.present?
       copy.ram_workload = current.ram_workload.dup if current.ram_workload.present?
       copy.cpu_workload = current.cpu_workload.dup if current.cpu_workload.present?
@@ -87,6 +88,7 @@ class IngredientCopyEngine
         copy.cpu_constraint.user = new_user if copy.cpu_constraint.present?
         copy.ram_constraint.user = new_user if copy.ram_constraint.present?
         copy.preferred_region_area_constraint.user = new_user if copy.preferred_region_area_constraint.present?
+        copy.provider_constraint.user = new_user if copy.provider_constraint.present?
         copy.ram_workload.user = new_user if copy.ram_workload.present?
         copy.cpu_workload.user = new_user if copy.cpu_workload.present?
         copy.user_workload.user = new_user if copy.user_workload.present?

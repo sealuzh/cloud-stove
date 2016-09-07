@@ -26,7 +26,15 @@ module ActiveRecord
   end
 end
 
-Dir.glob(SEEDS_ROOT + 'ingredient_template_*.rb').each { |f| require f }
-Dir.glob(SEEDS_ROOT + 'ingredient_instance_*.rb').each { |f| require f }
+# User MUST be loaded first
+require_seed 'admin_user'
+
+# Template MUST be loaded before instances
+require_seed 'ingredient_template_multitier'
+require_seed 'ingredient_instance_rails_app'
+
+# Selectively load seeds for demo instead of loading them all
+# Dir.glob(SEEDS_ROOT + 'ingredient_template_*.rb').each { |f| require f }
+# Dir.glob(SEEDS_ROOT + 'ingredient_instance_*.rb').each { |f| require f }
 
 require_seed 'update_provider'

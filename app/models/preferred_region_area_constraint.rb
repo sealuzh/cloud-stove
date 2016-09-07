@@ -1,7 +1,4 @@
 class PreferredRegionAreaConstraint < Constraint
-  belongs_to :ingredient
-  belongs_to :user
-
   def region_codes
     Resource.region_codes(self.preferred_region_area)
   end
