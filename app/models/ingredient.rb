@@ -176,6 +176,26 @@ class Ingredient < Base
     raise 'User workload not specified for application root. ' + e.message
   end
 
+  def assign_user!(new_user)
+    self.user = new_user
+    self.assign_user_to_attachments!(new_user)
+    self.children.each do |child|
+      child.assign_user!(new_user)
+    end
+  end
+
+  def assign_user_to_attachments!(new_user)
+    self.user_workload.user = new_user if self.user_workload.present?
+    self.ram_workload.user = new_user if self.ram_workload.present?
+    self.cpu_workload.user = new_user if self.cpu_workload.present?
+    self.constraints.each do |constraint|
+      constraint.user = new_user
+    end
+    self.deployment_recommendations.each do |recommendation|
+      recommendation.user = new_user
+    end
+  end
+
   private
 
     # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
