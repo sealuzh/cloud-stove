@@ -21,7 +21,7 @@ multitier_template.user_workload = UserWorkload.create(
   num_simultaneous_users: 200
 )
 multitier_template.provider_constraint = ProviderConstraint.create(
-  preferred_providers: 'Amazon,Google'
+  preferred_providers: 'Amazon'
 )
 multitier_template.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(
   preferred_region_area: 'EU'
