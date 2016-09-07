@@ -27,9 +27,10 @@ class UserWorkloadsController < ApplicationController
   end
 
   def create
-    @user_workload = UserWorkload.new
-    @user_workload.update_attributes(user_workload_params)
+    ingredient = Ingredient.find(user_workload_params[:ingredient_id])
+    @user_workload = UserWorkload.new(user_workload_params)
     @user_workload.user = current_user
+    ingredient.user_workload = @user_workload
     respond_to do |format|
       if @user_workload.save!
         format.html {redirect_to @user_workload, success: 'User Workload was successfully created!'}
