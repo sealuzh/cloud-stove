@@ -23,6 +23,7 @@ class DeploymentRecommendation < Base
 
   # Status
   UNSATISFIABLE = 'unsatisfiable'
+  SATISFIABLE = 'satisfiable'
 
   belongs_to :ingredient
   belongs_to :user
@@ -74,6 +75,7 @@ class DeploymentRecommendation < Base
   def parse_result(stdout, stderr)
     result = extract_result(stdout)
     if satisfiable?(result)
+      self.status = SATISFIABLE
       self.more_attributes = result
       unless self.save # serializes `more_attributes` result string into a hash
         err_msg = self.errors.full_messages
@@ -265,6 +267,8 @@ class DeploymentRecommendation < Base
     hash[:recommendation] = ingredients
     hash[:num_simultaneous_users] = self.num_simultaneous_users
     hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
+    hash[:status] = self.status
+    hash[:unsatisfiable_message] = self.more_attributes['unsatisfiable_message'] if self.status == UNSATISFIABLE
     hash
   end
 
@@ -281,6 +285,8 @@ class DeploymentRecommendation < Base
 
     hash[:recommendation] = ingredients
     hash[:num_simultaneous_users] = self.num_simultaneous_users
+    hash[:status] = self.status
+    hash[:unsatisfiable_message] = self.more_attributes['unsatisfiable_message'] if self.status == UNSATISFIABLE
     hash
   end
 
