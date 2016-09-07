@@ -82,7 +82,7 @@ HERE
 app.ram_workload = RamWorkload.create(
   ram_mb_required: 450,
   ram_mb_required_user_capacity: 100,
-  ram_mb_growth_per_user: 1)
+  ram_mb_growth_per_user: 0.8)
 app.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 500,
   parallelism: 0.97
@@ -133,3 +133,5 @@ lb.constraints << DependencyConstraint.create(
   source: lb,
   target: app
 )
+multitier_template.assign_user!(User.admin.first)
+multitier_template.save!

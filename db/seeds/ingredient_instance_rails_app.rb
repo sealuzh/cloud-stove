@@ -94,3 +94,5 @@ lb.constraints << DependencyConstraint.create(
   source: lb,
   target: app
 )
+rails_app_instance.assign_user!(User.admin.first)
+rails_app_instance.save!
