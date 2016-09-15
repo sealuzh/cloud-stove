@@ -7,7 +7,6 @@ class IngredientsControllerTest < ActionController::TestCase
   end
 
   test 'listing applications' do
-    auth_request(create(:user))
     get :index
     assert_response :success
   end
