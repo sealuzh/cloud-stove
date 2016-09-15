@@ -6,6 +6,9 @@ require 'rails/test_help'
 require 'webmock/minitest'
 require 'database_cleaner'
 
+# Test helpers
+Dir[Rails.root.join("test/helpers/**/*.rb")].each { |f| require f }
+
 require 'minitest/reporters'
 Minitest::Reporters.use!(
     Minitest::Reporters::DefaultReporter.new(color: true),
