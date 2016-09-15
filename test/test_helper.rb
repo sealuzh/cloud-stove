@@ -84,7 +84,7 @@ class ActiveSupport::TestCase
     if is_integration_test?
       setup_integration_test
     else
-      setup_general_test
+      setup_non_integration_test
     end
     DatabaseCleaner.start
   end
@@ -118,7 +118,7 @@ class ActiveSupport::TestCase
     DatabaseCleaner.strategy = :deletion
   end
 
-  def setup_general_test
+  def setup_non_integration_test
     if ENV['ENABLE_NET_CONNECT']
       Rails.logger.warn 'WebMock is disabled. External services will be used.'
     else
