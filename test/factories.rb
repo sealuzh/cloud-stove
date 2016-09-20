@@ -116,6 +116,8 @@ FactoryGirl.define do
   factory :resource do
     sequence(:name) { |n| "Resource#{n}"}
     resource_type 'compute'
+    region 'eu-central-1'
+    association :provider, factory: :amazon_provider
 
     trait :amazon_c1 do
       name 't2.nano'
