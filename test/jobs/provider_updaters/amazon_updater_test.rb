@@ -18,6 +18,7 @@ class AmazonUpdaterTest < ActiveJob::TestCase
   end
 
   test 'creates resources in db' do
+    skip 'Too slow taking ~3s'
     assert_empty Provider.where(name: 'Amazon')
 
     AmazonUpdater.perform_now
