@@ -139,5 +139,7 @@ class ActiveSupport::TestCase
     File.read(Rails.root + 'test/fixtures/webmock' + filename)
   end
 
-  def response_from(filename); self.class.response_from(filename); end
+  def response_from(filename)
+    self.class.response_from(filename)
+  end
 end
