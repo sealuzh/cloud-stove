@@ -32,6 +32,9 @@ require_seed 'admin_user'
 # Template MUST be loaded before instances
 require_seed 'ingredient_template_multitier'
 require_seed 'ingredient_instance_rails_app'
+require_seed 'ingredient_template_rails_app'
+require_seed 'ingredient_template_django_app'
+require_seed 'ingredient_template_node_app'
 
 # Selectively load seeds for demo instead of loading them all
 # Dir.glob(SEEDS_ROOT + 'ingredient_template_*.rb').each { |f| require f }
