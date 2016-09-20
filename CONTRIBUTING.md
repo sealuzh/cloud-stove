@@ -52,12 +52,6 @@ working on.
   * Automatically runs affected tests on file edit. Type `all` to manually run all tests.
   * Automatically reloads a page on asset modification via the following browser plugin: http://livereload.com/extensions/
 
-* Save a snapshot of the page during an integration test:
-
-  ```
-  show_page
-  ```
-
 * Lint factories
 
     ```
@@ -73,3 +67,41 @@ working on.
   * Requires wercker CLI: http://wercker.com/cli/
   * Use `--attach-on-error` to debug failing builds
   * Use `--docker-local` to use locally cached containers
+
+## Writing Tests
+
+### Authentication
+
+* Controller tests using `ActionController::TestCase` automatically create the `@user` and
+  set the authentication headers for each request
+* Integration tests can use the `sign_in(user)` helper method
+
+### Controller Tests
+
+* Access response as parsed JSON (e.g., `json_response['num_simultaneous_users']`)
+
+   ```
+   json_response
+   ```
+
+### Integration Tests
+
+* Login a certain user:
+
+   ```
+   sign_in(user)
+   ```
+
+* Save a snapshot of the page during an integration test:
+
+  ```
+  show_page
+  ```
+
+  This will even sideload assets if a Rails server is running.
+
+* Reload the current page:
+
+  ```
+  reload_page(page)
+  ```
