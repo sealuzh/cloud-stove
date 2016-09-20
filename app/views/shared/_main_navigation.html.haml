@@ -17,7 +17,7 @@
       .navbar-right
         .nav.navbar-nav
           .btn-group
-            %button.btn.btn-link.nav-link.dropdown-toggle{data: { toggle: 'dropdown' }}
+            %button.btn.btn-link.nav-link.dropdown-toggle{data: { toggle: 'dropdown' }, id: 'user_dropdown_id'}
               -# = icon 'user'
               %span.hidden-sm-down Arthur Dent
               = image_tag "//#{Rails.configuration.x.gravatar_host}/avatar/#{Digest::MD5.hexdigest('inzinger@gmail.com')}", class: 'avatar'
