@@ -11,17 +11,17 @@ A traditional wep application, let's say a web shop with
 * PostgreSQL as database
 HERE
 )
-django_app_template.user_workload = UserWorkload.create(
+django_app_template.user_workload = UserWorkload.create!(
   num_simultaneous_users: 200
 )
-django_app_template.provider_constraint = ProviderConstraint.create(
+django_app_template.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon,Google'
 )
-django_app_template.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(
+django_app_template.preferred_region_area_constraint = PreferredRegionAreaConstraint.create!(
   preferred_region_area: 'EU'
 )
 
-db = django_app_template.children.create(
+db = django_app_template.children.create!(
   is_template: true,
   name: 'PostgreSQL',
   body: <<-HERE
@@ -30,32 +30,32 @@ To speed up db access, sensible indices are defined on commonly
 queried attributes.
 HERE
 )
-db.ram_workload = RamWorkload.create(
+db.ram_workload = RamWorkload.create!(
   ram_mb_required: 600,
   ram_mb_required_user_capacity: 200,
   ram_mb_growth_per_user: 0.3)
-db.cpu_workload = CpuWorkload.create(
+db.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 1500,
   parallelism: 0.9
 )
 
-queue = django_app_template.children.create(
+queue = django_app_template.children.create!(
   is_template: true,
   name: 'RabbitMQ',
   body: <<-HERE
 The message queue is used to schedule background jobs with Celery.
 HERE
 )
-queue.ram_workload = RamWorkload.create(
+queue.ram_workload = RamWorkload.create!(
   ram_mb_required: 512,
   ram_mb_required_user_capacity: 900,
   ram_mb_growth_per_user: 0.1)
-queue.cpu_workload = CpuWorkload.create(
+queue.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 900,
   parallelism: 0.9
 )
 
-app = django_app_template.children.create(
+app = django_app_template.children.create!(
   is_template: true,
   name: 'Django Application Server',
   body: <<-HERE
@@ -63,44 +63,44 @@ The Gunicorn application server running the Django application.
 
 HERE
 )
-app.ram_workload = RamWorkload.create(
+app.ram_workload = RamWorkload.create!(
   ram_mb_required: 350,
   ram_mb_required_user_capacity: 200,
   ram_mb_growth_per_user: 0.025)
-app.cpu_workload = CpuWorkload.create(
+app.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 600,
   parallelism: 0.97
 )
-app.constraints << DependencyConstraint.create(
+app.constraints << DependencyConstraint.create!(
   source: app,
   target: db
 )
-app.constraints << DependencyConstraint.create(
+app.constraints << DependencyConstraint.create!(
   source: app,
   target: queue
 )
 
-worker = django_app_template.children.create(
+worker = django_app_template.children.create!(
     is_template: true,
     name: 'Celery Workers',
     body: <<-HERE
 The Celery workers get new tasks via RabbitMQ and execute them asynchronously.
 HERE
 )
-worker.ram_workload = RamWorkload.create(
+worker.ram_workload = RamWorkload.create!(
   ram_mb_required: 600,
   ram_mb_required_user_capacity: 3000,
   ram_mb_growth_per_user: 0.007)
-worker.cpu_workload = CpuWorkload.create(
+worker.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 1700,
   parallelism: 0.9
 )
 
-worker.constraints << DependencyConstraint.create(
+worker.constraints << DependencyConstraint.create!(
   source: queue,
   target: worker
 )
-worker.constraints << DependencyConstraint.create(
+worker.constraints << DependencyConstraint.create!(
   source: worker,
   target: db
 )

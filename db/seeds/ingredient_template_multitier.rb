@@ -1,5 +1,5 @@
 begin
-multitier_template = Ingredient.create(
+multitier_template = Ingredient.create!(
   name: 'Multitier Architecture',
   is_template: true,
   body: <<HERE
@@ -18,17 +18,17 @@ static content close to users. Find out more [on Wikipedia][1].
 - Database Backend'
 HERE
 )
-multitier_template.user_workload = UserWorkload.create(
+multitier_template.user_workload = UserWorkload.create!(
   num_simultaneous_users: 200
 )
-multitier_template.provider_constraint = ProviderConstraint.create(
+multitier_template.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon'
 )
-multitier_template.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(
+multitier_template.preferred_region_area_constraint = PreferredRegionAreaConstraint.create!(
   preferred_region_area: 'EU'
 )
 
-db = multitier_template.children.create(
+db = multitier_template.children.create!(
   name: 'Database',
   is_template: true,
   body: <<HERE
@@ -45,22 +45,22 @@ deployments).
   as well.
 HERE
 )
-db.ram_workload = RamWorkload.create(
+db.ram_workload = RamWorkload.create!(
   ram_mb_required: 1500,
   ram_mb_required_user_capacity: 200,
   ram_mb_growth_per_user: 0.007)
-db.cpu_workload = CpuWorkload.create(
+db.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 1500,
   parallelism: 0.9
 )
-db.constraints << RamConstraint.create(
+db.constraints << RamConstraint.create!(
   min_ram: 2048
 )
-db.constraints << CpuConstraint.create(
+db.constraints << CpuConstraint.create!(
   min_cpus: 1
 )
 
-app = multitier_template.children.create(
+app = multitier_template.children.create!(
   name: 'Application Server',
   is_template: true,
   body: <<HERE
@@ -80,20 +80,20 @@ O’Reilly Media, 2009, ISBN 978-0-596-15636-7, e.g., on
 [1]: http://proquest.tech.safaribooksonline.de/book/software-engineering-and-development/9780596157647/7dot-scaling-a-cloud-infrastructure/id3143621
 HERE
 )
-app.ram_workload = RamWorkload.create(
+app.ram_workload = RamWorkload.create!(
   ram_mb_required: 450,
   ram_mb_required_user_capacity: 100,
   ram_mb_growth_per_user: 0.8)
-app.cpu_workload = CpuWorkload.create(
+app.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 500,
   parallelism: 0.97
 )
-app.constraints << DependencyConstraint.create(
+app.constraints << DependencyConstraint.create!(
   source: app,
   target: db
 )
 
-lb = multitier_template.children.create(
+lb = multitier_template.children.create!(
   name: 'Load Balancer',
   is_template: true,
   body: <<HERE
@@ -110,15 +110,15 @@ or roll your own with Apache HTTPD/nginx/HAproxy/Pound.
 Typically Network I/O, CPU bound.
 HERE
 )
-lb.ram_workload = RamWorkload.create(
+lb.ram_workload = RamWorkload.create!(
   ram_mb_required: 2000,
   ram_mb_required_user_capacity: 2400,
   ram_mb_growth_per_user: 0.008)
-lb.cpu_workload = CpuWorkload.create(
+lb.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 3500,
   parallelism: 0.8
 )
-lb.constraints << DependencyConstraint.create(
+lb.constraints << DependencyConstraint.create!(
   source: lb,
   target: app
 )
