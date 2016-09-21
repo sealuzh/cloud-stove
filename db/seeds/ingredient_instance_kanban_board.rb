@@ -1,3 +1,4 @@
+begin
 kanban_app_instance = Ingredient.seed_with!(name: 'Real-time, multi-user Kanban Board') do |i|
   i.body = <<-EOT
 *Lifted from https://github.com/eventuate-examples/es-kanban-board*
@@ -127,4 +128,5 @@ There are the following services:
     # Query compnents -> MongoDB
     c.constraints_as_source.seed_with!(type: DependencyConstraint.to_s, target_id: db.id)
   end
+end
 end

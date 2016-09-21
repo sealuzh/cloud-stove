@@ -178,10 +178,11 @@ class Ingredient < Base
 
   def assign_user!(new_user)
     self.user = new_user
-    self.assign_user_to_attachments!(new_user)
     self.children.each do |child|
       child.assign_user!(new_user)
+      child.save!
     end
+    self.assign_user_to_attachments!(new_user)
     self.save!
   end
 

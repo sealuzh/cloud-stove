@@ -1,4 +1,5 @@
-batch_template = Ingredient.create(
+begin
+batch_template = Ingredient.create!(
   name: 'Batch Processing',
   is_template: true,
   body: <<HERE
@@ -29,7 +30,7 @@ Architecture][awsbatch].)*
 HERE
 )
 
-mgr = batch_template.children.create(
+mgr = batch_template.children.create!(
   name: 'Job Manager',
   is_template: true,
   body: <<HERE
@@ -44,14 +45,14 @@ information.
 * add some
 HERE
 )
-mgr.constraints << RamConstraint.create(
+mgr.constraints << RamConstraint.create!(
     min_ram: 4096
 )
-mgr.constraints << CpuConstraint.create(
+mgr.constraints << CpuConstraint.create!(
     min_cpus: 1
 )
 
-ds = batch_template.children.create(
+ds = batch_template.children.create!(
   name: 'Job Data Store',
   is_template: true,
   body: <<HERE
@@ -64,14 +65,14 @@ Also, job results can be uploaded to the object store.
 * add some
 HERE
 )
-ds.constraints << RamConstraint.create(
+ds.constraints << RamConstraint.create!(
     min_ram: 1024
 )
-ds.constraints << CpuConstraint.create(
+ds.constraints << CpuConstraint.create!(
     min_cpus: 1
 )
 
-queue = batch_template.children.create(
+queue = batch_template.children.create!(
   name: 'Input Queue',
   is_template: true,
   body: <<HERE
@@ -86,14 +87,14 @@ second processing stage.
 * add some
 HERE
 )
-queue.constraints << RamConstraint.create(
+queue.constraints << RamConstraint.create!(
     min_ram: 6144
 )
-queue.constraints << CpuConstraint.create(
+queue.constraints << CpuConstraint.create!(
     min_cpus: 1
 )
 
-worker = batch_template.children.create(
+worker = batch_template.children.create!(
   name: 'Worker',
   is_template: true,
   body: <<HERE
@@ -108,9 +109,10 @@ steps.
 * add some
 HERE
 )
-worker.constraints << RamConstraint.create(
+worker.constraints << RamConstraint.create!(
     min_ram: 2048
 )
-worker.constraints << CpuConstraint.create(
+worker.constraints << CpuConstraint.create!(
     min_cpus: 1
 )
+end
