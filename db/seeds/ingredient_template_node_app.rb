@@ -1,3 +1,4 @@
+begin
 node_app_template = Ingredient.create!(
   is_template: true,
   name: 'NodeJS Application with MongoDB Backend',
@@ -55,3 +56,4 @@ app.constraints << DependencyConstraint.create(
   target: db
 )
 node_app_template.assign_user!(User.admin.first)
+end

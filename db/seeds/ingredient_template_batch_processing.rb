@@ -1,3 +1,4 @@
+begin
 batch_template = Ingredient.create(
   name: 'Batch Processing',
   is_template: true,
@@ -114,3 +115,4 @@ worker.constraints << RamConstraint.create(
 worker.constraints << CpuConstraint.create(
     min_cpus: 1
 )
+end

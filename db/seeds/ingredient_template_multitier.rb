@@ -1,3 +1,4 @@
+begin
 multitier_template = Ingredient.create(
   name: 'Multitier Architecture',
   is_template: true,
@@ -122,3 +123,4 @@ lb.constraints << DependencyConstraint.create(
   target: app
 )
 multitier_template.assign_user!(User.admin.first)
+end

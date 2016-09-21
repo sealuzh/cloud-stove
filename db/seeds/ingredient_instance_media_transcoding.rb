@@ -1,3 +1,4 @@
+begin
 batch_template = Ingredient.find_by_name!('Batch Processing')
 media_instance = Ingredient.create(
     template_id: batch_template,
@@ -59,3 +60,4 @@ worker.constraints << RamConstraint.create(
 worker.constraints << CpuConstraint.create(
     min_cpus: 1
 )
+end

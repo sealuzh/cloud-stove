@@ -1,3 +1,4 @@
+begin
 django_app_template = Ingredient.create!(
   is_template: true,
   name: 'Django Application with PostgreSQL Backend',
@@ -104,3 +105,4 @@ worker.constraints << DependencyConstraint.create(
   target: db
 )
 django_app_template.assign_user!(User.admin.first)
+end

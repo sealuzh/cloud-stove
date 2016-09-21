@@ -1,3 +1,4 @@
+begin
 # Add an initial admin user
 admin_password = 'stove-admin'
 User.create!({
@@ -6,3 +7,4 @@ User.create!({
   password_confirmation: admin_password,
   is_admin: true
 })
+end

@@ -1,3 +1,4 @@
+begin
 rails_app_template = Ingredient.find_by_name!('Rails Application with PostgreSQL Backend')
 rails_app_instance = Ingredient.create(
   template_id: rails_app_template.id,
@@ -77,3 +78,4 @@ lb.constraints << DependencyConstraint.create(
   target: app
 )
 rails_app_instance.assign_user!(User.admin.first)
+end
