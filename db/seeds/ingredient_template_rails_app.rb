@@ -1,9 +1,5 @@
-begin
-# multitier_template = Ingredient.find_by_name!('Multitier Architecture')
 rails_app_template = Ingredient.create!(
-  # template_id: multitier_template,
   is_template: true,
-  user: User.admin.first,
   name: 'Rails Application with PostgreSQL Backend',
   body: <<-HERE
 A traditional wep application, let's say a web shop with
@@ -29,6 +25,7 @@ rails_app_template.preferred_region_area_constraint = PreferredRegionAreaConstra
 )
 
 db = rails_app_template.children.create(
+  is_template: true,
   name: 'PostgreSQL',
   body: <<-HERE
 The typical RDBMS backend of a Rails application stores all data and is used 
@@ -46,6 +43,7 @@ db.cpu_workload = CpuWorkload.create(
 )
 
 app = rails_app_template.children.create(
+  is_template: true,
   name: 'Rails Application Server',
   body: <<-HERE
 The Puma application server running the Rails application.
@@ -66,8 +64,9 @@ app.constraints << DependencyConstraint.create(
 )
 
 worker = rails_app_template.children.create(
-    name: 'Delayed Job Workers',
-    body: <<-HERE
+  is_template: true,
+  name: 'Delayed Job Workers',
+  body: <<-HERE
 The Delayed Job workers periodically query the database for new tasks and
 execute them asynchronously.
 HERE
@@ -80,9 +79,8 @@ worker.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 1500,
   parallelism: 0.9
 )
-
 worker.constraints << DependencyConstraint.create(
   source: worker,
   target: db
 )
-end
+rails_app_template.assign_user!(User.admin.first)

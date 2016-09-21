@@ -1,9 +1,5 @@
-begin
-# multitier_template = Ingredient.find_by_name!('Multitier Architecture')
 node_app_template = Ingredient.create!(
-  # template_id: multitier_template,
   is_template: true,
-  user: User.admin.first,
   name: 'NodeJS Application with MongoDB Backend',
   body: <<-HERE
 A wep application, let's say a web shop with
@@ -23,6 +19,7 @@ node_app_template.preferred_region_area_constraint = PreferredRegionAreaConstrai
 )
 
 db = node_app_template.children.create(
+  is_template: true,
   name: 'MongoDB',
   body: <<-HERE
 The MongoDB backend stores all data.
@@ -38,6 +35,7 @@ db.cpu_workload = CpuWorkload.create(
 )
 
 app = node_app_template.children.create(
+  is_template: true,
   name: 'NodeJS Application Server',
   body: <<-HERE
 The NodeJS application server hosting the application.
@@ -56,4 +54,4 @@ app.constraints << DependencyConstraint.create(
   source: app,
   target: db
 )
-end
+node_app_template.assign_user!(User.admin.first)

@@ -87,12 +87,6 @@ app.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 500,
   parallelism: 0.97
 )
-app.constraints << RamConstraint.create(
-  min_ram: 3064
-)
-app.constraints << CpuConstraint.create(
-  min_cpus: 1
-)
 app.constraints << DependencyConstraint.create(
   source: app,
   target: db
@@ -122,12 +116,6 @@ lb.ram_workload = RamWorkload.create(
 lb.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 3500,
   parallelism: 0.8
-)
-lb.constraints << RamConstraint.create(
-  min_ram: 1024
-)
-lb.constraints << CpuConstraint.create(
-  min_cpus: 1
 )
 lb.constraints << DependencyConstraint.create(
   source: lb,

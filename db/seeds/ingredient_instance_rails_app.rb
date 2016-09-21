@@ -1,6 +1,6 @@
-multitier_template = Ingredient.find_by_name!('Multitier Architecture')
+rails_app_template = Ingredient.find_by_name!('Rails Application with PostgreSQL Backend')
 rails_app_instance = Ingredient.create(
-  template_id: multitier_template,
+  template_id: rails_app_template.id,
   name: 'Rails Application with PostgreSQL Backend',
   body: <<HERE
 A traditional wep application, let's say a web shop with
@@ -38,12 +38,6 @@ db.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 1500,
   parallelism: 0.9
 )
-db.constraints << RamConstraint.create(
-  min_ram: 2048
-)
-db.constraints << CpuConstraint.create(
-  min_cpus: 1
-)
 
 app = rails_app_instance.children.create(
   name: 'Rails App',
@@ -58,12 +52,6 @@ app.ram_workload = RamWorkload.create(
 app.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 500,
   parallelism: 0.97
-)
-app.constraints << RamConstraint.create(
-  min_ram: 4096
-)
-app.constraints << CpuConstraint.create(
-  min_cpus: 1
 )
 app.constraints << DependencyConstraint.create(
   source: app,
@@ -83,12 +71,6 @@ lb.ram_workload = RamWorkload.create(
 lb.cpu_workload = CpuWorkload.create(
   cspu_user_capacity: 3500,
   parallelism: 0.8
-)
-lb.constraints << RamConstraint.create(
-  min_ram: 1024
-)
-lb.constraints << CpuConstraint.create(
-  min_cpus: 1
 )
 lb.constraints << DependencyConstraint.create(
   source: lb,

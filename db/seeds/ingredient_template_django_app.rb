@@ -1,9 +1,5 @@
-begin
-# multitier_template = Ingredient.find_by_name!('Multitier Architecture')
 django_app_template = Ingredient.create!(
-  # template_id: multitier_template,
   is_template: true,
-  user: User.admin.first,
   name: 'Django Application with PostgreSQL Backend',
   body: <<-HERE
 A traditional wep application, let's say a web shop with
@@ -25,6 +21,7 @@ django_app_template.preferred_region_area_constraint = PreferredRegionAreaConstr
 )
 
 db = django_app_template.children.create(
+  is_template: true,
   name: 'PostgreSQL',
   body: <<-HERE
 The typical RDBMS backend of a Django application stores all data. 
@@ -42,6 +39,7 @@ db.cpu_workload = CpuWorkload.create(
 )
 
 queue = django_app_template.children.create(
+  is_template: true,
   name: 'RabbitMQ',
   body: <<-HERE
 The message queue is used to schedule background jobs with Celery.
@@ -57,6 +55,7 @@ queue.cpu_workload = CpuWorkload.create(
 )
 
 app = django_app_template.children.create(
+  is_template: true,
   name: 'Django Application Server',
   body: <<-HERE
 The Gunicorn application server running the Django application.
@@ -81,6 +80,7 @@ app.constraints << DependencyConstraint.create(
 )
 
 worker = django_app_template.children.create(
+    is_template: true,
     name: 'Celery Workers',
     body: <<-HERE
 The Celery workers get new tasks via RabbitMQ and execute them asynchronously.
@@ -103,4 +103,4 @@ worker.constraints << DependencyConstraint.create(
   source: worker,
   target: db
 )
-end
+django_app_template.assign_user!(User.admin.first)
