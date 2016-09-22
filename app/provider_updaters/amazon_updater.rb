@@ -1,3 +1,5 @@
+require 'v8'
+
 class AmazonUpdater < ProviderUpdater
   def perform
     provider = update_provider
