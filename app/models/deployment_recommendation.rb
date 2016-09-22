@@ -294,6 +294,7 @@ class DeploymentRecommendation < Base
 
     def extract_params(recommendation)
       hash = {}
+      hash[:id] = self.id
       hash[:vm_cost] = recommendation.more_attributes['vm_cost']
       hash[:total_cost] = recommendation.more_attributes['total_cost']
       hash[:recommendation] = (recommendation.more_attributes['ingredients']) ? recommendation.more_attributes['ingredients'] : []

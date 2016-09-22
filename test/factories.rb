@@ -16,6 +16,38 @@ FactoryGirl.define do
     trait :template do
       is_template true
     end
+
+    factory :rails_app do
+      name 'Rails app with Postgres backend'
+      user
+      after(:create) do |rails_app|
+        create(:ingredient, name: 'Postgres', parent: rails_app, user: rails_app.user)
+        create(:ingredient, name: 'Rails app', parent: rails_app, user: rails_app.user)
+        create(:ingredient, name: 'NGINX', parent: rails_app, user: rails_app.user)
+      end
+    end
+  end
+
+  factory :deployment_recommendation do
+    status 'satisfiable'
+    num_simultaneous_users 200
+    association :ingredient, factory: :rails_app
+    after(:create) do |recommendation|
+      children = recommendation.ingredient.children
+      c2 = create(:resource, :amazon_c2)
+      c3 = create(:resource, :amazon_c3)
+      more_attributes = {}
+      more_attributes['ingredients'] = {
+          children[0].id => c2.id,
+          children[1].id => c3.id,
+          children[2].id => c2.id,
+      }
+      more_attributes['regions'] = [c2.region_code, c3.region_code, c2.region_code]
+      more_attributes['vm_cost'] = '52.08'
+      more_attributes['total_cost'] = '52080'
+      recommendation.more_attributes = more_attributes
+      recommendation.save!
+    end
   end
 
   factory :user_workload do
