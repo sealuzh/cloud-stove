@@ -1,5 +1,6 @@
 class IngredientsController < ApplicationController
   before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :require_login, only: :templates
   before_action :authenticate_user!, except: [:templates]
   before_action :allow_admin_only, only: [:template, :new, :create, :instances]
 
