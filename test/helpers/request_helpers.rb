@@ -20,4 +20,15 @@ module Requests
       JSON.parse(body)
     end
   end
+
+  module HeadersHelpers
+    def api_header(format = Mime::JSON)
+      request.headers['Accept'] = format
+      request.headers['Content-Type'] = format
+    end
+
+    def api_auth_header(user)
+      request.headers.merge!(user.create_new_auth_token)
+    end
+  end
 end

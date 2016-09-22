@@ -6,9 +6,12 @@ require 'rails/test_help'
 require 'webmock/minitest'
 require 'database_cleaner'
 
+# Test helpers
+Dir[Rails.root.join("test/helpers/**/*.rb")].each { |f| require f }
+
 require 'minitest/reporters'
 Minitest::Reporters.use!(
-    Minitest::Reporters::DefaultReporter.new(color: true),
+    Minitest::Reporters::ProgressReporter.new(color: true),
     ENV,
     Minitest.backtrace_filter)
 
@@ -18,13 +21,6 @@ DatabaseCleaner.clean_with :deletion
 require 'capybara/rails'
 require 'capybara/poltergeist'
 class ActionDispatch::IntegrationTest
-  # Required to setup Devise and Warden environment for authentication
-  # include Devise::TestHelpers
-
-  # Provide request shortcuts and JSON parsing helpers
-  require 'helpers/request_helpers'
-  include Requests::JsonHelpers
-
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
 
@@ -63,9 +59,16 @@ end
 class ActionController::TestCase
   # Required to setup Devise and Warden environment for authentication
   include Devise::TestHelpers
+  # Provide request shortcuts and JSON parsing helpers
+  include Requests::JsonHelpers
+  # API and authentication headers
+  include Requests::HeadersHelpers
 
-  require 'helpers/auth_helpers'
-  include AuthHelpers
+  setup do
+    @user = create(:user)
+    api_header
+    api_auth_header(@user)
+  end
 end
 
 class ActiveSupport::TestCase
@@ -81,7 +84,7 @@ class ActiveSupport::TestCase
     if is_integration_test?
       setup_integration_test
     else
-      setup_general_test
+      setup_non_integration_test
     end
     DatabaseCleaner.start
   end
@@ -115,7 +118,7 @@ class ActiveSupport::TestCase
     DatabaseCleaner.strategy = :deletion
   end
 
-  def setup_general_test
+  def setup_non_integration_test
     if ENV['ENABLE_NET_CONNECT']
       Rails.logger.warn 'WebMock is disabled. External services will be used.'
     else
@@ -136,5 +139,7 @@ class ActiveSupport::TestCase
     File.read(Rails.root + 'test/fixtures/webmock' + filename)
   end
 
-  def response_from(filename); self.class.response_from(filename); end
+  def response_from(filename)
+    self.class.response_from(filename)
+  end
 end

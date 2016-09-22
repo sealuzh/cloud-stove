@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ApiAuthStoriesTest < ActionDispatch::IntegrationTest
+  include Requests::JsonHelpers
+
   test '[API] create new user (sign up)' do
     user = build_stubbed(:user)
     post api_user_registration_path, { email: user.email, password: user.password }

@@ -14,6 +14,7 @@ class AzureUpdaterTest < ActiveJob::TestCase
   end
 
   test 'creates resources in db' do
+    skip 'Too slow taking ~6s'
     assert_empty Provider.where(name: 'Microsoft Azure')
 
     AzureUpdater.new.perform
