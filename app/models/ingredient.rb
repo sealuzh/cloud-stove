@@ -136,13 +136,17 @@ class Ingredient < Base
     engine.instantiate(self, new_user)
   end
 
-  def schedule_recommendation_job
+  def schedule_recommendation_job(perform_later = true)
     update_constraints
     preferred_providers = self.provider_constraint.provider_list rescue [nil]
     jobs = []
     preferred_providers.each do |provider_name|
       provider_id = Provider.find_by_name(provider_name)
-      jobs << ComputeRecommendationJob.perform_later(self, provider_id)
+      if perform_later
+        jobs << ComputeRecommendationJob.perform_later(self, provider_id)
+      else
+        DeploymentRecommendation.construct(self, provider_id)
+      end
     end
     # TODO: Adjust API to return a list of job ids for each job
     jobs.last
