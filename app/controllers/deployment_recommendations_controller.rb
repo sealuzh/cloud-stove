@@ -22,6 +22,16 @@ class DeploymentRecommendationsController < ApplicationController
 
   end
 
+  def has_recommendations
+    root_ingredient = current_user.ingredients.find(params[:ingredient_id]).application_root
+    @has_recommendations = current_user.deployment_recommendations.where(ingredient_id: root_ingredient.id).any?
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @has_recommendations, status: :ok}
+    end
+  end
+
   def trigger
     ingredient = current_user.ingredients.find_by_id(params[:ingredient_id])
 

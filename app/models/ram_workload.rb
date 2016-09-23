@@ -2,6 +2,10 @@ class RamWorkload < ActiveRecord::Base
   belongs_to :ingredient
   belongs_to :user
 
+  before_update do
+    self.ingredient.application_root.deployment_recommendations.delete_all
+  end
+
   def as_json(options={})
     hash = {}
     hash[:id] = self.id
@@ -22,4 +26,9 @@ class RamWorkload < ActiveRecord::Base
   def min_ram(num_simultaneous_users)
     self.ram_mb_required + (num_simultaneous_users * self.ram_mb_growth_per_user).ceil
   end
+
+
+
+  private
+
 end
