@@ -28,20 +28,20 @@ class Ingredient < Base
   # Reverse relationship: each template ingredient can have derived instance ingredients
   has_many :instances, class_name: 'Ingredient', foreign_key: 'template_id'
 
-  has_many :deployment_recommendations
+  has_many :deployment_recommendations, dependent: :destroy
 
   # Workloads
-  has_one :cpu_workload, class_name: 'CpuWorkload'
-  has_one :ram_workload, class_name: 'RamWorkload'
-  has_one :user_workload, class_name: 'UserWorkload'
+  has_one :cpu_workload, class_name: 'CpuWorkload', dependent: :destroy
+  has_one :ram_workload, class_name: 'RamWorkload', dependent: :destroy
+  has_one :user_workload, class_name: 'UserWorkload', dependent: :destroy
 
   # Associated generic constraints
   has_many :constraints, dependent: :destroy
 
   # Generic constraints
-  has_many :constraints
+  has_many :constraints, dependent: :destroy
   ## Dependency constraints
-  has_many :dependency_constraints, class_name: 'DependencyConstraint'
+  has_many :dependency_constraints, class_name: 'DependencyConstraint', dependent: :destroy
   has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
   has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
   ## Ram constraints
