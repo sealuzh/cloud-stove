@@ -38,3 +38,4 @@ require_seed 'ingredient_template_node_app'
 require_seed 'ingredient_instance_rails_app'
 
 require_seed 'update_provider'
+require_seed 'generate_recommendations'
