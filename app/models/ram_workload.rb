@@ -3,7 +3,6 @@ class RamWorkload < ActiveRecord::Base
   belongs_to :user
 
   before_update do
-    binding.pry
     self.ingredient.application_root.deployment_recommendations.delete_all
   end
 
