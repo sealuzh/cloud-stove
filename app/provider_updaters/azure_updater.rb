@@ -25,10 +25,12 @@ class AzureUpdater < ProviderUpdater
   def get_vm_json
     uri = URI('https://azure.microsoft.com/api/v1/pricing/virtual-machines/calculator/?culture=en-us')
     response = Net::HTTP.get_response(uri)
-    # if response.is_a?(Net::HTTPSuccess)
+    # Raises error if response is not 2xx, see http://ruby-doc.org/stdlib-2.1.2/libdoc/net/http/rdoc/Net/HTTPResponse.html#method-i-value
+    response.value
     JSON.parse(response.body)
   end
 
+  # Using a transaction speeds up creating 878 resources by about 1 second
   def create_compute_resources_batch(azure, vm_json)
     ActiveRecord::Base.transaction do
       create_compute_resources(azure, vm_json)
