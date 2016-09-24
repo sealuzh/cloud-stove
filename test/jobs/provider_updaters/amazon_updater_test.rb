@@ -14,7 +14,7 @@ class AmazonUpdaterTest < ActiveJob::TestCase
     # Assert that resources are present
     provider = Provider.find_by(name: 'Amazon')
     assert_not_nil provider
-    assert_equal 428, provider.resources.where(resource_type: 'compute').count
+    assert_equal 428, provider.resources.compute.count
     assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
 
     # Assert that a sample resource is stored correctly

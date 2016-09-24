@@ -19,7 +19,7 @@ class GoogleUpdaterTest < ActiveJob::TestCase
 
     provider = Provider.find_by(name: 'Google')
     assert_not_nil provider
-    assert_equal 54, provider.resources.where(resource_type: 'compute').count
+    assert_equal 54, provider.resources.compute.count
     assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
   end
 end

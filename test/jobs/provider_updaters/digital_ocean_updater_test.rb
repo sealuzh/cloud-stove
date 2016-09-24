@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DigitalOceanUpdaterTest < ActiveJob::TestCase
   setup do
-    WebMock.stub_request(:get, "https://api.digitalocean.com/v2/sizes").
+    WebMock.stub_request(:get, 'https://api.digitalocean.com/v2/sizes').
         to_return(response_from('digital-ocean-pricing.txt'))
   end
 
@@ -13,7 +13,7 @@ class DigitalOceanUpdaterTest < ActiveJob::TestCase
 
     provider = Provider.find_by(name: 'Digital Ocean')
     assert_not_nil provider
-    assert_not_empty provider.resources
+    assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
+    assert_equal 96, provider.resources.compute.count
   end
-
 end

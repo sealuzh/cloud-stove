@@ -2,12 +2,16 @@ require 'v8'
 
 class AmazonUpdater < ProviderUpdater
   include RegionArea
-  RegionArea::PREFIXES = {
-      'us' => 'US',
-      'eu' => 'EU',
-      'ap' => 'ASIA',
-      'sa' => 'SA',
-  }
+
+  def initialize
+    super
+    @prefixes = {
+        'us' => 'US',
+        'eu' => 'EU',
+        'ap' => 'ASIA',
+        'sa' => 'SA',
+    }
+  end
 
   def perform
     @provider = Provider.find_or_create_by(name: 'Amazon')

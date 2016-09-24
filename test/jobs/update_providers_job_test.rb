@@ -17,6 +17,4 @@ class UpdateProvidersJobTest < ActiveJob::TestCase
       assert_includes(enqueued_jobs, updater)
     end
   end
-
-
 end

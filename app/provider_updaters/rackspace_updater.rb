@@ -2,19 +2,23 @@ require 'open-uri'
 
 class RackspaceUpdater < ProviderUpdater
   include RegionArea
-  RegionArea::PREFIXES = {
-      'DFW' => 'US',
-      'IAD' => 'US',
-      'ORD' => 'US',
-      'LON' => 'EU',
-      'HKG' => 'ASIA',
-      'SYD' => 'ASIA'
-  }
+
+  def initialize
+    super
+    @prefixes = {
+        'DFW' => 'US',
+        'IAD' => 'US',
+        'ORD' => 'US',
+        'LON' => 'EU',
+        'HKG' => 'ASIA',
+        'SYD' => 'ASIA'
+    }
+  end
 
   def perform
     doc = get_pricing_doc
     update_provider
-    update_compute(doc)
+    update_compute_batch(doc)
     # update_storage(doc)
   end
 
@@ -60,6 +64,12 @@ class RackspaceUpdater < ProviderUpdater
     provider = Provider.find_by(name: 'Rackspace')
     provider.more_attributes['pricelist']['storage'] = pricelist
     provider.save!
+  end
+
+  def update_compute_batch(doc)
+    ActiveRecord::Base.transaction do
+      update_compute(doc)
+    end
   end
 
   def update_compute(doc)

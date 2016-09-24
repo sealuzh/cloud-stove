@@ -1,14 +1,18 @@
 class GoogleUpdater < ProviderUpdater
   include RegionArea
-  RegionArea::PREFIXES = {
-      'us' => 'US',
-      'europe' => 'EU',
-      'asia' => 'ASIA',
-  }
+
+  def initialize
+    super
+    @prefixes = {
+        'us' => 'US',
+        'europe' => 'EU',
+        'asia' => 'ASIA',
+    }
+  end
 
   def perform
     pricelist = update_provider
-    update_compute(pricelist)
+    update_compute_batch(pricelist)
     # update_storage(pricelist)
   end
 
@@ -26,6 +30,12 @@ class GoogleUpdater < ProviderUpdater
       # provider.more_attributes['sla']['storage'] = extract_sla('https://cloud.google.com/storage/sla',%r{(\d+(?:\.\d+)?)%}im)
       provider.save!
       pricelist
+    end
+
+    def update_compute_batch(pricelist)
+      ActiveRecord::Base.transaction do
+        update_compute(pricelist)
+      end
     end
 
     def update_compute(pricelist)

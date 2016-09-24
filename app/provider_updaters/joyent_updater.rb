@@ -1,13 +1,17 @@
 class JoyentUpdater < ProviderUpdater
   include RegionArea
-  RegionArea::PREFIXES = {
-      'us' => 'US',
-      'eu' => 'EU',
-  }
+
+  def initialize
+    super
+    @prefixes = {
+        'us' => 'US',
+        'eu' => 'EU',
+    }
+  end
 
   def perform
     update_provider
-    update_compute
+    update_compute_batch
     # update_storage
   end
 
@@ -20,6 +24,12 @@ class JoyentUpdater < ProviderUpdater
       provider = Provider.find_or_create_by(name: 'Joyent')
       provider.more_attributes['pricelist'] = {}
       provider.save!
+    end
+
+    def update_compute_batch
+      ActiveRecord::Base.transaction do
+        update_compute
+      end
     end
 
     def update_compute

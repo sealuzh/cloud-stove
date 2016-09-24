@@ -14,10 +14,9 @@ class AtlanticNetUpdaterTest < ActiveJob::TestCase
 
     provider = Provider.find_by(name: 'Atlantic.net')
     assert_not_nil provider
-    assert_not_empty provider.resources
+    assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
     # As of 2016-07-05 there are 48 different instance types.
     # see https://www.atlantic.net/cloud-hosting/pricing/
     assert_equal 48, provider.resources.count
   end
-
 end

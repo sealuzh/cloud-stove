@@ -14,7 +14,7 @@ class RackspaceUpdaterTest < ActiveJob::TestCase
     provider = Provider.find_by(name: 'Rackspace')
     assert_not_nil provider
     assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
-    assert_equal 114, provider.resources.where(resource_type: 'compute').count
+    assert_equal 114, provider.resources.compute.count
     # assert_not_empty provider.resources.where(resource_type: 'storage')
   end
 end

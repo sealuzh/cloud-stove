@@ -7,15 +7,15 @@ class AzureUpdaterTest < ActiveJob::TestCase
   end
 
   test 'creates resources in db' do
-    skip 'Too slow taking ~3s'
+    # skip 'Too slow taking ~3s'
     assert_empty Provider.where(name: 'Microsoft Azure')
 
-    AzureUpdater.new.perform
+    AzureUpdater.perform_now
 
     # Assert that resources are present
     provider = Provider.find_by(name: 'Microsoft Azure')
     assert_not_nil provider
-    assert_equal 878, provider.resources.where(resource_type: 'compute').count
+    assert_equal 878, provider.resources.compute.count
     assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
 
     # Assert that a sample resource is stored correctly
