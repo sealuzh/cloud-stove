@@ -71,10 +71,6 @@ gem 'delayed_job_active_record'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Provider updaters
-gem 'azure_mgmt_resources', '~> 0.6.0'
-gem 'azure_mgmt_compute', '~> 0.6.0'
-
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

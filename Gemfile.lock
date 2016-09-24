@@ -42,10 +42,6 @@ GEM
     arel (6.0.3)
     autoprefixer-rails (6.4.0)
       execjs
-    azure_mgmt_compute (0.6.0)
-      ms_rest_azure (~> 0.5.0)
-    azure_mgmt_resources (0.6.0)
-      ms_rest_azure (~> 0.5.0)
     bcrypt (3.1.11)
     bcrypt (3.1.11-x64-mingw32)
     benchmark-ips (2.3.0)
@@ -98,8 +94,6 @@ GEM
       devise (= 3.5.1)
       rails (~> 4.2)
     docile (1.1.5)
-    domain_name (0.5.20160826)
-      unf (>= 0.0.5, < 1.0.0)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -111,11 +105,6 @@ GEM
     factory_girl_rails (4.6.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faraday (0.9.2)
-      multipart-post (>= 1.2, < 3)
-    faraday-cookie_jar (0.0.6)
-      faraday (>= 0.7.4)
-      http-cookie (~> 1.0.0)
     ffi (1.9.10)
     ffi (1.9.10-x64-mingw32)
     font-awesome-sass (4.5.0)
@@ -161,8 +150,6 @@ GEM
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
-    http-cookie (1.0.2)
-      domain_name (~> 0.5)
     http_parser.rb (0.6.0)
     i18n (0.7.0)
     inline_svg (0.6.2)
@@ -197,19 +184,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    ms_rest (0.5.0)
-      concurrent-ruby (~> 1.0)
-      faraday (~> 0.9)
-      json (~> 1.7)
-      timeliness (~> 0.3)
-    ms_rest_azure (0.5.0)
-      concurrent-ruby (~> 1.0)
-      faraday (~> 0.9)
-      faraday-cookie_jar (~> 0.0.6)
-      json (~> 1.7)
-      ms_rest (~> 0.5.0)
     multi_json (1.11.2)
-    multipart-post (2.0.0)
     nenv (0.3.0)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -333,7 +308,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
-    timeliness (0.3.8)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -343,10 +317,6 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.7.2)
-    unf_ext (0.0.7.2-x64-mingw32)
     warden (1.2.6)
       rack (>= 1.0)
     web-console (2.3.0)
@@ -370,8 +340,6 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  azure_mgmt_compute (~> 0.6.0)
-  azure_mgmt_resources (~> 0.6.0)
   benchmark-ips
   bootstrap (~> 4.0.0.alpha3)
   bourbon
