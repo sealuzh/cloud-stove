@@ -1,11 +1,16 @@
 class GoogleUpdater < ProviderUpdater
+  include RegionArea
+  RegionArea::PREFIXES = {
+      'us' => 'US',
+      'europe' => 'EU',
+      'asia' => 'ASIA',
+  }
 
   def perform
     pricelist = update_provider
     update_compute(pricelist)
-    update_storage(pricelist)
+    # update_storage(pricelist)
   end
-
 
   private
 
@@ -17,15 +22,13 @@ class GoogleUpdater < ProviderUpdater
       provider = Provider.find_or_create_by(name: 'Google')
       provider.more_attributes['pricelist'] = pricelist
       provider.more_attributes['sla'] = {}
-      provider.more_attributes['sla']['compute'] = extract_sla('https://cloud.google.com/compute/sla')
-      provider.more_attributes['sla']['storage'] = extract_sla('https://cloud.google.com/storage/sla',%r{(\d+(?:\.\d+)?)%}im)
+      # provider.more_attributes['sla']['compute'] = extract_sla('https://cloud.google.com/compute/sla')
+      # provider.more_attributes['sla']['storage'] = extract_sla('https://cloud.google.com/storage/sla',%r{(\d+(?:\.\d+)?)%}im)
       provider.save!
       pricelist
     end
 
-
     def update_compute(pricelist)
-
       provider = Provider.find_or_create_by(name: 'Google')
 
       gcp_price_list = pricelist['gcp_price_list']
@@ -60,7 +63,6 @@ class GoogleUpdater < ProviderUpdater
       end
     end
 
-
     def update_storage(pricelist)
       bigstore_storage_prefix = 'CP-BIGSTORE-STORAGE'
       nearline_storage_prefix = 'CP-NEARLINE-STORAGE'
@@ -80,18 +82,5 @@ class GoogleUpdater < ProviderUpdater
         resource.save!
 
       end
-
     end
-
-
-    def extract_region_area(region)
-      if (region.downcase().include? 'us')
-        return 'US'
-      elsif (region.downcase().include? 'europe')
-        return 'EU'
-      elsif (region.downcase().include? 'asia')
-        return 'ASIA'
-      end
-    end
-
 end

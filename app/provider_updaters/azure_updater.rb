@@ -2,7 +2,8 @@ require 'net/http'
 
 class AzureUpdater < ProviderUpdater
   OS_FLAVOR = '-linux'
-  REGION_AREA_PREFIXES = {
+  include RegionArea
+  RegionArea::PREFIXES = {
       'us' => 'US',
       'canada' => 'US',
       'usgov' => 'US',
@@ -59,15 +60,4 @@ class AzureUpdater < ProviderUpdater
   def region(region_os)
     region_os.chomp(OS_FLAVOR)
   end
-
-  private
-
-    def extract_region_area(region)
-      REGION_AREA_PREFIXES.each do |prefix, region_area|
-        return region_area if region.start_with?(prefix)
-      end
-      puts "WARNING: Could not match region `#{region}` to a region area.
-                     Check `REGION_AREA_PREFIXES` in `AzureUpdater`!"
-      'UNKNOWN'
-    end
 end
