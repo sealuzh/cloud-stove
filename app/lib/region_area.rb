@@ -11,8 +11,7 @@ module RegionArea
     PREFIXES.each do |prefix, region_area|
       return region_area if region.start_with?(prefix)
     end
-    puts "WARNING: Could not match region `#{region}` to a region area.
-                     Check `REGION_AREA_PREFIXES` in `AzureUpdater`!"
+    puts "WARNING: Could not match region `#{region}` to a region area. Check `PREFIXES` in `#{self.class}`!"
     UNKNOWN
   end
 end
