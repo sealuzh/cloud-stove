@@ -3,7 +3,7 @@ require 'test_helper'
 class AzureUpdaterTest < ActiveJob::TestCase
   setup do
     WebMock.stub_request(:get, 'https://azure.microsoft.com/api/v1/pricing/virtual-machines/calculator/?culture=en-us').
-        to_return(body: response_from('azure-pricing.txt'), status: :ok)
+        to_return(body: response_from('azure-pricing.txt'), status: 200)
   end
 
   test 'creates resources in db' do
@@ -16,6 +16,7 @@ class AzureUpdaterTest < ActiveJob::TestCase
     provider = Provider.find_by(name: 'Microsoft Azure')
     assert_not_nil provider
     assert_equal 878, provider.resources.where(resource_type: 'compute').count
+    assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
 
     # Assert that a sample resource is stored correctly
     standard_a0 = provider.resources.where(name: 'standard-a0', region: 'us-east').first
