@@ -4,7 +4,6 @@ class AmazonUpdater < ProviderUpdater
   def perform
     provider = update_provider
     update_compute(provider)
-    update_storage(provider)
   end
 
   private
@@ -42,40 +41,6 @@ class AmazonUpdater < ProviderUpdater
   rescue Net::HTTPError, JSON::ParserError => e
     logger.error "Error, #{e.inspect}"
   end
-
-
-  def update_storage(provider)
-    response = make_request('http://a0.awsstatic.com/pricing/1/s3/pricing-storage-s3.min.js')
-    pricelist = parse_callback(response.body)
-
-
-    provider.more_attributes['pricelist'][:storage] = pricelist
-    provider.save!
-    pricelist['config']['regions'].each do |region_json|
-      region = region_json['region']
-
-      region_json['tiers'].each do |tier|
-        tier_name = tier['name']
-        tier['storageTypes'].each do |storageType|
-          storage_name = storageType['type']
-          resource_name = tier_name + "_" + storage_name
-          resource = provider.resources.find_or_create_by(name: resource_name, region: region)
-          resource.resource_type = 'storage'
-          resource.region = region
-          resource.more_attributes['price_per_gb'] = storageType['prices']['USD']
-          resource.region_area = extract_region_area(region)
-          resource.save!
-        end
-      end
-
-    end
-
-
-  rescue Net::HTTPError, JSON::ParserError => e
-    logger.error "Error, #{e.inspect}"
-  end
-
-
 
   #update general Amazon provider data
   def update_provider
