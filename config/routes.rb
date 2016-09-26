@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
   get 'applications' =>'ingredients#applications', as: :applications
   get 'templates' =>'ingredients#templates', as: :templates
+  delete 'recommendations/:recommendation_id' => 'deployment_recommendations#destroy', as: :delete_recommendation
 
   resources :ingredients, concerns: [:paginatable] do
     put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
