@@ -27,8 +27,8 @@
     { "process": "worker", "quantity": 1}
   ],
   "buildpacks": [
+    { "url": "https://github.com/peterkeen/heroku-buildpack-vendorbinaries" },
     { "url": "https://github.com/heroku/heroku-buildpack-ruby" },
-    { "url": "https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks" },
-    { "url": "https://github.com/peterkeen/heroku-buildpack-vendorbinaries" }
+    { "url": "https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks" }
   ]
 }
