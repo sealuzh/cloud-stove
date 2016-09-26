@@ -22,6 +22,21 @@ class DeploymentRecommendationsController < ApplicationController
 
   end
 
+
+  def destroy
+    recommendation = current_user.deployment_recommendations.find(params[:recommendation_id])
+    if recommendation.present?
+      recommendation.delete
+      respond_to do |format|
+        format.json {render json:  'Recommendation deleted successfully!', status: :ok}
+      end
+    else
+      respond_to do |format|
+        format.json {render json:  'Recommendation could not be found!', status: :not_found}
+      end
+    end
+  end
+
   def has_recommendations
     root_ingredient = current_user.ingredients.find(params[:ingredient_id]).application_root
     @has_recommendations = current_user.deployment_recommendations.where(ingredient_id: root_ingredient.id).any?
