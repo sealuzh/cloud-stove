@@ -2,31 +2,25 @@ require 'test_helper'
 
 class AmazonUpdaterTest < ActiveJob::TestCase
   setup do
-
-    #EC2 compute
     WebMock.stub_request(:get, 'https://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js').
         to_return(response_from('amazon-ec2-pricing.txt'))
-    WebMock.stub_request(:get, 'https://aws.amazon.com/ec2/sla/').
-        to_return(response_from('amazon-ec2-sla.txt'))
-
-    #S3 storage
-    WebMock.stub_request(:get, 'http://a0.awsstatic.com/pricing/1/s3/pricing-storage-s3.min.js').
-        to_return(response_from('amazon-s3-storage-pricing.txt'))
-    WebMock.stub_request(:get, 'https://aws.amazon.com/s3/sla/').
-        to_return(response_from('amazon-s3-sla.txt'))
-
   end
 
   test 'creates resources in db' do
-    skip 'Too slow taking ~3s'
     assert_empty Provider.where(name: 'Amazon')
 
     AmazonUpdater.perform_now
 
+    # Assert that resources are present
     provider = Provider.find_by(name: 'Amazon')
     assert_not_nil provider
-    assert_not_empty provider.resources.where(resource_type: 'compute')
-    assert_not_empty provider.resources.where(resource_type: 'storage')
-  end
+    assert_equal 428, provider.resources.compute.count
+    assert_equal 0, provider.resources.where(region_area: RegionArea::UNKNOWN).count
 
+    # Assert that a sample resource is stored correctly
+    t2_nano = provider.resources.where(name: 't2.nano', region: 'eu-central-1').first
+    assert_not_nil t2_nano
+    assert_equal ({ 'cores' => '1', 'mem_gb' => '0.5', 'price_per_hour' => '0.0075' }), t2_nano.more_attributes
+    assert_equal 'EU', t2_nano.region_area
+  end
 end

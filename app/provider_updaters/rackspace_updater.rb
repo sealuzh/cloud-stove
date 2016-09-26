@@ -1,14 +1,26 @@
 require 'open-uri'
 
 class RackspaceUpdater < ProviderUpdater
+  include RegionArea
+
+  def initialize
+    super
+    @prefixes = {
+        'DFW' => 'US',
+        'IAD' => 'US',
+        'ORD' => 'US',
+        'LON' => 'EU',
+        'HKG' => 'ASIA',
+        'SYD' => 'ASIA'
+    }
+  end
 
   def perform
     doc = get_pricing_doc
     update_provider
-    update_compute(doc)
-    update_storage(doc)
+    update_compute_batch(doc)
+    # update_storage(doc)
   end
-
 
   private
 
@@ -19,7 +31,6 @@ class RackspaceUpdater < ProviderUpdater
         uri: 'https://www.rackspace.com/information/legal/cloud/sla'
     }
     provider.save!
-
   end
 
   def update_storage(doc)
@@ -28,10 +39,7 @@ class RackspaceUpdater < ProviderUpdater
 
     # Rackspace does not differentiate prices between different regions, hence the regions are not crawble from the pricing tables
     # We hardcode the regions here, taken from https://www.rackspace.com/about/datacenters
-
     regions = ['LON','SYD','DFW','IAD','ORD','HKG']
-
-
 
     price_per_month_gb =  number_from(table.css('.pricing-col-monthly')[0])
     price_per_hour_gb = number_from(table.css('.pricing-col-hourly')[0])
@@ -53,19 +61,21 @@ class RackspaceUpdater < ProviderUpdater
 
     end
 
-
     provider = Provider.find_by(name: 'Rackspace')
     provider.more_attributes['pricelist']['storage'] = pricelist
     provider.save!
+  end
 
+  def update_compute_batch(doc)
+    ActiveRecord::Base.transaction do
+      update_compute(doc)
+    end
   end
 
   def update_compute(doc)
     # Rackspace does not differentiate prices between different regions, hence the regions are not crawble from the pricing tables
     # We hardcode the regions here, taken from https://www.rackspace.com/about/datacenters
-
     regions = ['LON','SYD','DFW','IAD','ORD','HKG']
-
     pricelist = {}
 
     pricing_rows = doc.css('[data-currency="USD"]').css('.pricing-row-linux')
@@ -85,7 +95,6 @@ class RackspaceUpdater < ProviderUpdater
           'bandwidth_mbps' => number_from(data[5]).to_s,
       }
     end
-
 
     provider = Provider.find_by(name: 'Rackspace')
     provider.more_attributes['pricelist']['compute'] = pricelist
@@ -111,19 +120,7 @@ class RackspaceUpdater < ProviderUpdater
     doc
   end
 
-
   def number_from(field)
     field.text.delete('^0-9.').to_d
   end
-
-  def extract_region_area(region)
-    if (region =='DFW') || (region == 'IAD') || (region == 'ORD')
-      return 'US'
-    elsif region == 'LON'
-      return 'EU'
-    elsif region =='HKG' || (region == 'SYD')
-      return 'ASIA'
-    end
-  end
-
 end

@@ -1,10 +1,19 @@
 class JoyentUpdater < ProviderUpdater
-  def perform
-    update_provider
-    update_compute
-    update_storage
+  include RegionArea
+
+  def initialize
+    super
+    @prefixes = {
+        'us' => 'US',
+        'eu' => 'EU',
+    }
   end
 
+  def perform
+    update_provider
+    update_compute_batch
+    # update_storage
+  end
 
   private
 
@@ -17,6 +26,11 @@ class JoyentUpdater < ProviderUpdater
       provider.save!
     end
 
+    def update_compute_batch
+      ActiveRecord::Base.transaction do
+        update_compute
+      end
+    end
 
     def update_compute
       provider = Provider.find_or_create_by(name: 'Joyent')
@@ -45,7 +59,6 @@ class JoyentUpdater < ProviderUpdater
           resource.save!
         end
       end
-
     end
 
     def update_storage
@@ -59,7 +72,6 @@ class JoyentUpdater < ProviderUpdater
       # there is no region info on the crawled pricing site, hence we hardcode it. Taken from https://docs.joyent.com/public-cloud/data-centers
       regions = ['us-east-1','us-east-2','us-east-3','us-east-3b','us-sw-1','us-west-1','eu-ams-1']
 
-
       rows.each do |storage_element|
         regions.each do |region|
           resource_name = storage_element.css('td')[0].text
@@ -72,18 +84,7 @@ class JoyentUpdater < ProviderUpdater
       end
     end
 
-
     def number_from(string)
       Float(string.delete('^0-9.').to_d)
     end
-
-    def extract_region_area(region)
-      if (region.downcase().include? 'us')
-        return 'US'
-      elsif (region.downcase().include? 'eu')
-        return 'EU'
-      end
-    end
-
-
 end

@@ -1,7 +1,29 @@
 class AtlanticNetUpdater < ProviderUpdater
+  include RegionArea
+
+  def initialize
+    super
+    @prefixes = {
+        'US' => 'US',
+        'CA' => 'US',
+        'EU' => 'EU',
+    }
+  end
+
   # Get pricing data from Atlantic.net API
   # see https://www.atlantic.net/docs/api/#describe-plans
   def perform
+    @provider = Provider.find_or_create_by(name: 'Atlantic.net')
+    update_compute_batch
+  end
+
+  def update_compute_batch
+    ActiveRecord::Base.transaction do
+      update_compute
+    end
+  end
+
+  def update_compute
     uri = URI('https://cloudapi.atlantic.net/?Action=describe-plan')
     access_key_id = ENV['ANC_ACCESS_KEY_ID']
     private_key = ENV['ANC_PRIVATE_KEY']
@@ -19,12 +41,12 @@ class AtlanticNetUpdater < ProviderUpdater
 
     request = Net::HTTP::Post.new(uri)
     request.set_form_data(
-      'Version' => version,
-      'ACSAccessKeyId' => access_key_id,
-      'Format' => format,
-      'Timestamp' => timestamp,
-      'Rndguid' => rndguid,
-      'Signature' => Base64.strict_encode64(signature),
+        'Version' => version,
+        'ACSAccessKeyId' => access_key_id,
+        'Format' => format,
+        'Timestamp' => timestamp,
+        'Rndguid' => rndguid,
+        'Signature' => Base64.strict_encode64(signature),
     )
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(request) }
     response.value
@@ -34,23 +56,22 @@ class AtlanticNetUpdater < ProviderUpdater
 
     pricelist = response_json['describe-planresponse']['plans']
 
-    provider = Provider.find_or_create_by(name: 'Atlantic.net')
-    provider.more_attributes['pricelist'] = pricelist
-    provider.more_attributes['sla'] = {
-      uri: 'https://www.atlantic.net/service-policies/cloud-service-level-agreement/',
-      availability: '1'
+    @provider.more_attributes['pricelist'] = pricelist
+    @provider.more_attributes['sla'] = {
+        uri: 'https://www.atlantic.net/service-policies/cloud-service-level-agreement/',
+        availability: '1'
     }
-    provider.save!
+    @provider.save!
 
     pricelist.each_pair do |key, instance_type|
       next unless instance_type['platform'] == platform
       resource_id = instance_type['plan_name']
 
       #TODO: use real regions instead of default EUWEST region
-      regions = ['EUWEST1','USEAST1','USEAST2','USCENTRAL1','USWEST1','CAEAST1']
+      regions = ['EUWEST1', 'USEAST1', 'USEAST2', 'USCENTRAL1', 'USWEST1', 'CAEAST1']
 
       regions.each do |region|
-        resource = provider.resources.find_or_create_by(name: resource_id, region: region)
+        resource = @provider.resources.find_or_create_by(name: resource_id, region: region)
 
         resource.resource_type = 'compute'
         resource.more_attributes['cores'] = instance_type['num_cpu']
@@ -62,18 +83,5 @@ class AtlanticNetUpdater < ProviderUpdater
         resource.save!
       end
     end
-  rescue Net::HTTPError, JSON::ParserError, ProviderUpdater::Error => e
-    logger.error "Error, #{e.inspect}"
   end
-
-
-  private
-    def extract_region_area(region)
-      if (region.downcase().include? 'us') || (region.downcase().include? 'ca')
-        return 'US'
-      elsif region.downcase().include? 'eu'
-        return 'EU'
-      end
-    end
-
 end

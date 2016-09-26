@@ -12,6 +12,7 @@ Dir[Rails.root.join("test/helpers/**/*.rb")].each { |f| require f }
 require 'minitest/reporters'
 Minitest::Reporters.use!(
     Minitest::Reporters::ProgressReporter.new(color: true),
+    # Minitest::Reporters::MeanTimeReporter.new(color: true),
     ENV,
     Minitest.backtrace_filter)
 

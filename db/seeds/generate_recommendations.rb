@@ -8,4 +8,6 @@ num_simultaneous_users_list.each do |num_simultaneous_users|
   rails_app.reload
   rails_app.schedule_recommendation_job(false)
 end
+rescue => e
+  puts "[WARNING] Error while generating initial deployment recommendations. #{e.message}"
 end
