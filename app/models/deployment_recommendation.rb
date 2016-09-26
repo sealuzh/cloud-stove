@@ -149,11 +149,11 @@ class DeploymentRecommendation < Base
     resources_data << "regions = #{resources.map(&:region_code).to_json};"
     resources_data << "\n"
 
-    prices = resources.map { |r| (r.price_per_month * 1000).to_i }
+    prices = resources.map { |r| (r.price_per_month.to_f * 1000).to_i }
     resources_data << "costs = #{prices.to_json};"
     resources_data << "\n"
 
-    ram_mb = resources.map { |r| (BigDecimal.new(r.ma['mem_gb']) * 1024).to_i rescue 0 }
+    ram_mb = resources.map { |r| ((r.ma['mem_gb'].to_f) * 1024).to_i }
     resources_data << "ram = #{ram_mb.to_json};"
     resources_data << "\n"
 
