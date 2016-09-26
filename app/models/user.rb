@@ -53,11 +53,15 @@ class User < ActiveRecord::Base
       new_more_attributes = more_attributes
       new_leaf_ids = ingredient.all_leafs.sort_by(&:id).map(&:id)
       new_mappings = {}
-      more_attributes['ingredients'].values.each_with_index do |resource, index|
-        new_id = new_leaf_ids[index]
-        new_mappings[new_id] = resource
+      if more_attributes['ingredients'].present?
+        more_attributes['ingredients'].values.each_with_index do |resource, index|
+          new_id = new_leaf_ids[index]
+          new_mappings[new_id] = resource
+        end
+        new_more_attributes['ingredients'] = new_mappings
+        new_more_attributes
+      else
+        more_attributes
       end
-      new_more_attributes['ingredients'] = new_mappings
-      new_more_attributes
     end
 end
