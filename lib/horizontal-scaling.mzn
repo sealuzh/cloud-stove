@@ -94,13 +94,13 @@ constraint forall(i in Ingredients)(sum(r in Resources)(assignments[i,r] * ram[r
 constraint forall(i in Ingredients)(sum(r in Resources)(assignments[i,r] * cpu[r]) >= min_cpus[i]);
 
 output [ "{" ]
-    ++ [ "\"ingredients\" :[" ] 
-    ++ [ "\"" ++ "{ \"ingredient\": " ++ show(i)
-          ++ ", \"resource: " ++ show(resources[r]) 
-                ++ ", \"num_resources\":" ++ show(assignments[i, r]) 
-                ++ ", \"region\":" ++ show(regions[r])
-                ++ "},"
-    ++ "\", " | i in Ingredients, r in Resources ] ++ [ "]," ]
+    ++ [ "\"ingredients\": [ {}" ] 
+    ++ [ ", { \"ingredient\": \"" ++ show(i) ++ "\""
+          ++ ", \"resource\": \"" ++ show(resources[r]) ++ "\""
+          ++ ", \"num_resources\": \"" ++ show(assignments[i, r]) ++ "\""
+          ++ ", \"region\": \"" ++ show(regions[r]) ++ "\""
+          ++ "}"
+    | i in Ingredients, r in Resources ] ++ [ "]," ]
     ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients, r in Resources)(assignments[i,r] * costs[r]) / 1000.0) ++ "\", " ]
     ++ [ " \"total_cost\": " ++ show(total_cost) ]
     ++ [ "}" ];
