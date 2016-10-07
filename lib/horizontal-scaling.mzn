@@ -48,8 +48,9 @@ array[Ingredients, Resources] of bool: preferred_regions;
 %
 
 % Component assignment
-int: max_num_assignments = ceil(max(max(min_ram) / min(ram), max(min_cpus) / min(cpu)));
-array[Ingredients, Resources] of var 0..max_num_assignments: assignments;
+int: max_num_assignments = ceil(max(max(min_ram) / max(1, min(ram)), max(min_cpus) / max(1, min(cpu))));
+array[Ingredients] of var Resources: assigned_resources;
+array[Ingredients] of var 1..max_num_assignments: num_assigned_resources;
 
 int: max_costs = max_num_assignments * max(costs);
 array[Ingredients] of var min(costs)..max_costs: assignment_costs;
@@ -58,7 +59,7 @@ array[Ingredients] of var min(costs)..max_costs: assignment_costs;
 var min(costs)..(num_ingredients * max_costs): total_cost;
 
 % Minimize total cost
-solve %:: int_search(assignment_costs ++ ingredient_ram ++ ingredient_cpu ++ [assignments[i,r] | i in Ingredients, r in Resources], smallest, indomain_min, complete)
+solve %:: int_search(num_assigned_resources ++ assignment_costs ++ ingredient_ram ++ ingredient_cpu, smallest, indomain_min, complete)
   minimize total_cost;
 
 %
@@ -67,78 +68,93 @@ solve %:: int_search(assignment_costs ++ ingredient_ram ++ ingredient_cpu ++ [as
 
 % Cost of resource assignment per ingredient
 constraint forall(i in Ingredients)(
-  assignment_costs[i] == sum(r in Resources)(assignments[i,r] * costs[r])
+  assignment_costs[i] == num_assigned_resources[i] * costs[assigned_resources[i]]
 );
 
 % Calculate total cost
 constraint total_cost =
   % Resource cost
-  sum(i in Ingredients)(assignment_costs[i] %+ traffic_costs[i]
+  sum(i in Ingredients)(
+    assignment_costs[i] + traffic_costs[i] + num_assigned_resources[i]
+    % num_assigned_resources is part of the objective function as a tie breaker.
+    % If multiple optimal solutions exist, we prefer the one with the least resources.
   );
 
 % Chosen resources must be in the preferred region
-constraint forall(i in Ingredients, r in Resources where preferred_regions[i,r] == false)(
-  assignments[i,r] == 0
-);
+% constraint forall(i in Ingredients, r in Resources where preferred_regions[i,r] == false)(
+%   assigned_resources[i] != r
+% );
+constraint forall(i in Ingredients)(preferred_regions[i, assigned_resources[i]] == true);
+
 
 % Chosen resources must have enough RAM
-array[Ingredients] of var 1..(max(ram)*max_num_assignments): ingredient_ram;
+array[Ingredients] of var min(ram)..(max(ram)*max_num_assignments): ingredient_ram;
 constraint forall(i in Ingredients)(
-  ingredient_ram[i] == sum(r in Resources)(assignments[i,r] * ram[r]) 
+  ingredient_ram[i] == num_assigned_resources[i] * ram[assigned_resources[i]]
   /\ ingredient_ram[i] >= min_ram[i]
 );
 
 % Chosen resources must have enough CPU cores
-array[Ingredients] of var 1..max(cpu)*max_num_assignments: ingredient_cpu;
+array[Ingredients] of var min(cpu)..max(cpu)*max_num_assignments: ingredient_cpu;
 constraint forall(i in Ingredients)(
-  ingredient_cpu[i] == sum(r in Resources)(assignments[i,r] * cpu[r]
-) /\ ingredient_cpu[i] >= min_cpus[i]);
-
-% constraint forall(i in Ingredients)(
-%   forall(r in Resources where assignments[i,r] > 0)(
-%     assignments[i,r] = ceil(max(min_ram[i] / ram[r], min_cpus[i] / cpu[r]))
-%   )
-% );
+  ingredient_cpu[i] == num_assigned_resources[i] * cpu[assigned_resources[i]]
+  /\ ingredient_cpu[i] >= min_cpus[i]
+);
 
 % Transfer costs
-% array[Ingredients] of var int: traffic_costs;
-% constraint forall(i in Ingredients)(
-%   traffic_costs[i] == sum(ri in Resources where assignments[i,ri] > 0)(
-%     sum(j in Ingredients where inter_ingredient_traffic[i,j] > 0)(
-%       inter_ingredient_traffic[i,j] * sum(rj in Resources where assignments[j,rj] > 0)(transfer_costs[ri,rj])
-%     )
-%   )
-% );
+array[Ingredients] of var int: traffic_costs;
+constraint forall(i in Ingredients)(
+  traffic_costs[i] == sum(j in Ingredients where inter_ingredient_traffic[i,j] > 0)(
+    inter_ingredient_traffic[i,j] * transfer_costs[assigned_resources[i], assigned_resources[j]]
+  )
+);
+
+% Always assign at least two resources 
+%   (could also be enabled using an additional parameter, e.g. 
+%     array[Ingredients] of bool: force_distributed
+% constraint forall(i in Ingredients where force_distributed[i])(num_assigned_resources[i] > 1);
 
 % All resources in the same region
-array[Resources] of var min(lb_array(regions), 0)..ub_array(regions): selected_regions;
-constraint forall(r in Resources)(
-  selected_regions[r] == if (max(col(assignments, r)) > 0) then regions[r] else 0 endif
-) /\ nvalue(selected_regions) <= 2;
+% array[Resources] of var min(lb_array(regions), 0)..ub_array(regions): selected_regions;
+% constraint forall(r in [ assigned_resources[i] | i in Ingredients])(
+%   selected_regions[r] == regions[r]
+% ) /\ nvalue(selected_regions) <= 2;
+% var dom_array(regions): selected_region;
+% constraint forall(r in [ assigned_resources[i] | i in Ingredients])(
+%   regions[r] == selected_region
+% );
+% constraint all_equal([ regions[assigned_resources[i]] | i in Ingredients]);
 
-% Only a limited number of different resource per ingredient?
-constraint forall(i in Ingredients)(nvalue(row(assignments, i)) <= 2);
+% output [ "{" ]
+%     ++ [ "\"ingredients\": [ {}" ] 
+%     ++ [ ", \n{ \"ingredient\": \"" ++ show(i) ++ "\""
+%           ++ ", \"count\": \"" ++ show(num_assigned_resources[i]) ++ "\""
+%           ++ ", \"resource\": \"" ++ show(resources[assigned_resources[i]]) ++ "\""
+%           ++ ", \"region\": \"" ++ show(regions[assigned_resources[i]]) ++ "\""
+%           ++ "}"
+%     | i in Ingredients ] ++ [ "]," ]
+%     ++ [ "\n"]
+%     ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(assignment_costs[i]) / 1000.0) ++ "\", " ]
+%     ++ [ " \"total_cost\": " ++ show(total_cost) ]
+%     ++ [ " \"total_ram\":" ++ show(sum(i in Ingredients)(ingredient_ram[i])) ]
+%     ++ [ " \"total_cpu\":" ++ show(sum(i in Ingredients)(ingredient_cpu[i])) ]
+%     ++ [ "}" ] ++ [ 
+%     "\ningredient: " ++ show(i)
+%     ++ ", cpu: " ++ show(ingredient_cpu[i])
+%     ++ ", ram: " ++ show(ingredient_ram[i])
+%     ++ ", min_cpu: " ++ show(min_cpus[i])
+%     ++ ", min_ram: " ++ show(min_ram[i])
+%     ++ ", traffic_costs: " ++ show(traffic_costs[i])
+%     ++ ", costs: " ++ show_float(1, 2, assignment_costs[i] / 1000.0)
+%     | i in Ingredients ]
+%     ++ [ ",\nmax_num_assignments: " ++ show(max_num_assignments) 
+%     ++ ", max_costs: " ++ show(max_costs)
+%     ];
 
 output [ "{" ]
-    ++ [ "\"ingredients\": [ {}" ] 
-    ++ [ ", \n{ \"ingredient\": \"" ++ show(i) ++ "\""
-          ++ ", \"count\": \"" ++ show(assignments[i, r]) ++ "\""
-          ++ ", \"resource\": \"" ++ show(resources[r]) ++ "\""
-          ++ ", \"region\": \"" ++ show(regions[r]) ++ "\""
-          ++ "}"
-    | i in Ingredients, r in Resources ] ++ [ "]," ]
-    ++ [ "\n"]
-    ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients, r in Resources)(assignments[i,r] * costs[r]) / 1000.0) ++ "\", " ]
+    ++ [ "\"ingredients\" :[" ] ++ [ "\"" ++ show(resources[assigned_resources[i]]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "\"num_resources\" :[" ] ++ [ "\"" ++ show(num_assigned_resources[i]) ++ "\", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "\"regions\" :[" ] ++ [ show(regions[assigned_resources[i]]) ++ ", " | i in Ingredients ] ++ [ "]," ]
+    ++ [ "\"vm_cost\": \"" ++ show_float(-1,2,sum(i in Ingredients)(assignment_costs[i]) / 1000.0) ++ "\", " ]
     ++ [ " \"total_cost\": " ++ show(total_cost) ]
-    ++ [ " \"total_ram\":" ++ show(sum(i in Ingredients, r in Resources)(assignments[i,r] * ram[r])) ]
-    ++ [ " \"total_cpu\":" ++ show(sum(i in Ingredients, r in Resources)(assignments[i,r] * cpu[r])) ]
-    ++ [ "}" ] ++ [ 
-    "\ningredient: " ++ show(i)
-    ++ ", cpu: " ++ show(ingredient_cpu[i])
-    ++ ", ram: " ++ show(ingredient_ram[i])
-    ++ ", min_cpu: " ++ show(min_cpus[i])
-    ++ ", min_ram: " ++ show(min_ram[i])
-    | i in Ingredients ]
-    ++ [ ",\nmax_num_assignments: " ++ show(max_num_assignments) 
-    ++ ", max_costs: " ++ show(max_costs)
-    ];
+    ++ [ "}" ];
