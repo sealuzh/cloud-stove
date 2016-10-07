@@ -151,7 +151,7 @@ class DeploymentRecommendation < Base
     resources_data << "ram = #{ram_mb.to_json};"
     resources_data << "\n"
 
-    cores = resources.map { |r| r.ma['cores'].to_i rescue 0 }
+    cores = resources.map { |r| (r.ma['cores'].to_f * 100).to_i rescue 0 }
     resources_data << "cpu = #{cores};"
     resources_data << "\n"
 
@@ -203,7 +203,7 @@ class DeploymentRecommendation < Base
     ingredients_data << "\n"
 
     min_cpus = all_leafs.collect do |i|
-      i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS
+      100 * (i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS)
     end
     ingredients_data << "min_cpus = #{min_cpus.to_json};"
     ingredients_data << "\n"

@@ -58,6 +58,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
       'vm_cost' => '475.42',
       'total_cost' => 475416
     }
+    puts recommendation.more_attributes['ingredients'].map { |i, res| Resource.find(res).name }
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
