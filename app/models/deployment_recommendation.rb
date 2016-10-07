@@ -69,7 +69,7 @@ class DeploymentRecommendation < Base
   end
 
   def minizinc_model
-    "#{Rails.root}/lib/stove.mzn"
+    "#{Rails.root}/lib/horizontal-scaling.mzn"
   end
 
   def parse_result(stdout, stderr)
@@ -255,6 +255,7 @@ class DeploymentRecommendation < Base
       entry = {}
       entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
       entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({:children => false, :constraints => false})
+      entry[:resource_count] = self.more_attributes['num_resources'][ingredients.count] rescue 1
       ingredients << entry
     end
 
