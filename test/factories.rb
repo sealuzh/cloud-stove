@@ -38,9 +38,9 @@ FactoryGirl.define do
       c3 = create(:resource, :amazon_c3)
       more_attributes = {}
       more_attributes['ingredients'] = {
-          children[0].id => c2.id,
-          children[1].id => c3.id,
-          children[2].id => c2.id,
+          children[0].id => c2.resource_code,
+          children[1].id => c3.resource_code,
+          children[2].id => c2.resource_code,
       }
       more_attributes['regions'] = [c2.region_code, c3.region_code, c2.region_code]
       more_attributes['vm_cost'] = '52.08'
