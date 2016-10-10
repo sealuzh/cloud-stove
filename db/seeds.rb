@@ -38,4 +38,9 @@ require_seed 'ingredient_template_node_app'
 require_seed 'ingredient_instance_rails_app'
 
 require_seed 'update_provider'
-require_seed 'generate_recommendations'
+begin
+  RecommendationSeeds.update_admin_recommendations
+# Do not abort DB setup due to recommendation errors
+rescue => e
+  puts "[WARNING] Error while generating initial deployment recommendation seeds. #{e.inspect}"
+end
