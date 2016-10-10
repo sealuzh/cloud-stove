@@ -124,12 +124,6 @@ ActiveRecord::Schema.define(version: 20161009185011) do
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
   add_index "resources", ["resource_code"], name: "index_resources_on_resource_code"
 
-# Could not dump table "sqlite_stat1" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
-
-# Could not dump table "sqlite_stat4" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
-
   create_table "traffic_workloads", force: :cascade do |t|
     t.integer  "visits_per_month"
     t.integer  "requests_per_visit"
