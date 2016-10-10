@@ -22,8 +22,8 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
     expected_resources = %w(c3.2xlarge c3.2xlarge t2.micro).collect { |n|  Resource.find_by_name(n) }
     ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_ids = expected_resources.collect(&:id)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    resource_codes = expected_resources.collect(&:resource_code)
+    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
     region_codes = expected_resources.collect(&:region_code)
     expected_recommendation =  {
       'ingredients' => ingredients_hash,
@@ -32,10 +32,10 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
       'total_cost' => 634632
     }
     # Example JSON:
-    # {"ingredients"=>{3=>123, 4=>123, 5=>122, 6=>123},
-    #  "regions"=>[3005993341, 3005993341, 3005993341, 3005993341],
-    #  "vm_cost"=>"947.11",
-    #  "total_cost"=>947112}
+    # {"ingredients"=>{3=>1207022094, 4=>1207022094, 5=>3159946989},
+    #  "regions"=>[3005993341, 3005993341, 3005993341],
+    #  "vm_cost"=>"634.63",
+    #  "total_cost"=>634632}
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
@@ -49,8 +49,8 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
     expected_resources = %w(A2 A3 A1).collect { |n|  Resource.find_by_name(n) }
     ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_ids = expected_resources.collect(&:id)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    resource_codes = expected_resources.collect(&:resource_code)
+    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
     region_codes = expected_resources.collect(&:region_code)
     expected_recommendation = {
       'ingredients' => ingredients_hash,
@@ -73,8 +73,8 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
     expected_resources = %w(A2 A3 t2.micro).collect { |n|  Resource.find_by_name(n) }
     ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_ids = expected_resources.collect(&:id)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_ids)]
+    resource_codes = expected_resources.collect(&:resource_code)
+    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
     region_codes = expected_resources.collect(&:region_code)
     expected_recommendation = {
         'ingredients' => ingredients_hash,

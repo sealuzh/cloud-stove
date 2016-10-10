@@ -126,14 +126,8 @@ class DeploymentRecommendation < Base
 
   def ingredient_resource_mapping(ingredient_resources)
     ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
-    resource_ids = lookup_resource_ids(ingredient_resources)
-    Hash[ingredient_ids.zip(resource_ids)]
-  end
-
-  # Maps an array resource codes into an array of resource ids
-  # Example: ["-1960662187398715820", "-1960662187398715820", "-1110787312779595262", "-1960662187398715820"] => [120, 120, 119, 120]
-  def lookup_resource_ids(resource_codes)
-    resource_codes.map { |rc| Resource.find_by_resource_code(rc).id }
+    resource_codes = ingredient_resources.map(&:to_i)
+    Hash[ingredient_ids.zip(resource_codes)]
   end
 
   def generate_resources_data(provider_id)
@@ -257,10 +251,10 @@ class DeploymentRecommendation < Base
     hash = extract_params(self)
 
     ingredients = []
-    hash[:recommendation].each do |ingredient_id, resource_id|
+    hash[:recommendation].each do |ingredient_id, resource_code|
       entry = {}
       entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
-      entry[:resource] = Resource.find(resource_id).as_json({:children => false, :constraints => false})
+      entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({:children => false, :constraints => false})
       ingredients << entry
     end
 
@@ -276,10 +270,10 @@ class DeploymentRecommendation < Base
     hash = extract_params(self)
 
     ingredients = []
-    hash[:recommendation].each do |ingredient_id, resource_id|
+    hash[:recommendation].each do |ingredient_id, resource_code|
       entry = {}
       entry[:ingredient] = Ingredient.find(ingredient_id.to_i)
-      entry[:resource] = Resource.find(resource_id)
+      entry[:resource] = Resource.find_by_resource_code(resource_code)
       ingredients << entry
     end
 

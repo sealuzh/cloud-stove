@@ -49,7 +49,7 @@ class Resource < Base
 
   def as_json(options={})
     hash = {}
-    hash[:id] = self.id
+    hash[:resource_code] = self.resource_code
     hash[:resource_type] = self.resource_type
     hash[:name] = self.name
     hash[:provider] = self.provider.name
