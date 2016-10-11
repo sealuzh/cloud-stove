@@ -143,17 +143,12 @@ class IngredientsController < ApplicationController
   end
 
   def destroy
-    if @ingredient.is_template
-      respond_to do |format|
-        format.html { redirect_to ingredients_url, notice: "Can't destroy a template ingredient." }
-        format.json { render json: "Can't destroy a template ingredient.", status: :forbidden}
-      end
-    else
-      @ingredient.destroy
-      respond_to do |format|
-        format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
-        format.json { head :no_content }
-      end
+    ensure_no_template; return if performed?
+
+    @ingredient.destroy
+    respond_to do |format|
+      format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
 
@@ -195,8 +190,8 @@ class IngredientsController < ApplicationController
     def ensure_no_template
       if @ingredient.is_template
         respond_to do |format|
-          format.html {redirect_to :back, notice: 'Ingredient must not be a template.'}
-          format.json {render json: 'Ingredient must not be a template.', status: :unprocessable_entity}
+          format.html {redirect_to :back, notice: 'Ingredient must be a non-template.'}
+          format.json {render json: 'Ingredient must be a non-template.', status: :unprocessable_entity}
         end
       end
     end
