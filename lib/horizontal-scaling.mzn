@@ -43,6 +43,9 @@ array[Ingredients] of int: min_cpus;
 % Region constraints for each ingredient
 array[Ingredients, Resources] of bool: preferred_regions;
 
+% Maximum number of resources for each ingredient
+array[Ingredients] of int: max_num_resources;
+
 %
 % Decision variables
 %
@@ -107,6 +110,11 @@ constraint forall(i in Ingredients)(
   traffic_costs[i] == sum(j in Ingredients where inter_ingredient_traffic[i,j] > 0)(
     inter_ingredient_traffic[i,j] * transfer_costs[assigned_resources[i], assigned_resources[j]]
   )
+);
+
+% Restrict number of assigned resources
+constraint forall(i in Ingredients)(
+  max_num_resources[i] == 0 \/ num_assigned_resources[i] <= max_num_resources[i]
 );
 
 % Always assign at least two resources 

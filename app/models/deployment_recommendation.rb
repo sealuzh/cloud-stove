@@ -212,6 +212,13 @@ class DeploymentRecommendation < Base
                           #{preferred_regions(self.ingredient, provider_id).to_json});"
     ingredients_data << "\n"
 
+    max_num_resources = all_leafs.collect do |i|
+      # TODO: Get actual number of max allowed resources from ingredient here.
+      0
+    end
+    ingredients_data << "max_num_resources = #{max_num_resources.to_json}"
+    ingredients_data << "\n"
+
     self.ingredients_data = ingredients_data
   end
 
