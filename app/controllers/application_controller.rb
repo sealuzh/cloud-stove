@@ -4,8 +4,22 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
 
-  # Never redirect to sign in page for JSON API
-  before_filter :require_login, unless: :json_request?
+  protected
+
+    def authenticate_user!
+      if user_signed_in?
+        super
+      else
+        unauthorized_response
+      end
+    end
+
+    def unauthorized_response
+      respond_to do |format|
+        format.html { flash[:error] = 'Only registered users are allowed to perform this action.'; redirect_to new_user_session_path }
+        format.json { render json: { errors: ['Authorized users only.'] }, status: :unauthorized }
+      end
+    end
 
   private
 
@@ -20,10 +34,6 @@ class ApplicationController < ActionController::Base
         format.html { flash[:error] = 'Only admin users are allowed to perform this action.'; redirect_to :back }
         format.json { render json: { errors: ['Authorized admins only.'] }, status: :forbidden }
       end
-    end
-
-    def require_login
-      redirect_to new_user_session_url unless (devise_controller? || user_signed_in?)
     end
 
     def json_request?
