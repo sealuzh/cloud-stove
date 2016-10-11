@@ -30,5 +30,19 @@ module Requests
     def api_auth_header(user)
       request.headers.merge!(user.create_new_auth_token)
     end
+
+    def api_non_auth_header
+      request.headers.merge!(non_auth_header)
+    end
+
+    def non_auth_header
+      {
+          'access-token' => 'invalid-access-token',
+          'token-type' => 'Bearer',
+          'client' => 'invalid-client',
+          'expiry' => '1000000000',
+          'uid' => 'invalid-user'
+      }
+    end
   end
 end
