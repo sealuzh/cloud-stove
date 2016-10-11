@@ -55,4 +55,15 @@ module ApplicationHelper
     end
   end
 
+  # http://getbootstrap.com/components/#alerts-examples
+  BOOTSTRAP_FLASH_MSG = {
+      notice: 'alert-info',
+      success: 'alert-success',
+      error: 'alert-danger',
+      alert: 'alert-warning'
+  }
+
+  def flash_class(type)
+    BOOTSTRAP_FLASH_MSG.fetch(type.to_sym, :notice)
+  end
 end
