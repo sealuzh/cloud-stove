@@ -27,6 +27,11 @@ class AuthStoriesTest < ActionDispatch::IntegrationTest
     assert page.has_content?('Finely crafted Cloud Application Deployments')
   end
 
+  test 'redirect unauthenticated user to login page' do
+    visit applications_path
+    assert_equal new_user_session_path, current_path
+  end
+
   test 'logout (sign out)' do
     sign_in create(:user)
     visit root_path
