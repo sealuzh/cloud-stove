@@ -1,4 +1,9 @@
 class JobsController < ApplicationController
+  # TODO: Provide an endpoint for the frontend to check whether the recommendation is already completed
+  # Currently, the frontend simply polls until it gets an 404 (not found) for the job id
+  # Challenge: List of recommendations
+  before_action :authenticate_admin!, except: [:show]
+
   def index
     respond_to do |format|
       format.html{
@@ -31,8 +36,6 @@ class JobsController < ApplicationController
     @job ||= Delayed::Web::Job.find params[:id]
   end
 
-
-
   def destroy
     @job ||= Delayed::Web::Job.find params[:id]
     @job.destroy
@@ -48,5 +51,4 @@ class JobsController < ApplicationController
       redirect_to jobs_path, notice: 'Job could not be queued.'
     end
   end
-
 end
