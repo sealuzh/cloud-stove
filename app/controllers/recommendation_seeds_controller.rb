@@ -1,6 +1,5 @@
 class RecommendationSeedsController < ApplicationController
   # TODO: ensure that only admin users can use this action
-  before_action :authenticate_user!
 
   def update_admin_recommendations
     # Wait a couple of seconds to serve the current page first as immediate page reloads results in DB locking error.

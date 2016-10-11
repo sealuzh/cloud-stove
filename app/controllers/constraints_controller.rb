@@ -1,7 +1,5 @@
 class ConstraintsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_constraint, only: [:show, :destroy, :update]
-
 
   def show
     respond_to do |format|

@@ -1,6 +1,6 @@
 class IngredientsController < ApplicationController
   before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:templates]
+  skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
   # Returns all ingredients (irrespective if template, instance, application) of the current user

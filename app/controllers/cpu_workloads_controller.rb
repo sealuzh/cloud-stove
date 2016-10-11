@@ -1,8 +1,5 @@
 class CpuWorkloadsController < ApplicationController
-
-  before_action :authenticate_user!
   before_action :set_cpu_workload, only: [:show, :destroy, :update]
-
 
   def show
     respond_to do |format|

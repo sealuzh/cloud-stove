@@ -1,7 +1,4 @@
 class DeploymentRecommendationsController < ApplicationController
-
-  before_action :authenticate_user!
-
   def show
     @recommendation = current_user.deployment_recommendations.find_by(ingredient_id: params[:ingredient_id])
 

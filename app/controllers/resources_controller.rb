@@ -1,7 +1,4 @@
 class ResourcesController < ApplicationController
-
-  before_action :authenticate_user!
-
   def index
     @resources = Resource.page(params[:page])
     respond_to do |format|
@@ -15,6 +12,4 @@ class ResourcesController < ApplicationController
       format.json {render json: @resource, status: :ok}
     end
   end
-
-
 end
