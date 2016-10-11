@@ -17,6 +17,16 @@ class IngredientsControllerTest < ActionController::TestCase
     assert_equal a1.name, json_response[0]['name']
   end
 
+  test 'listing template instances (admin only)' do
+    @user.update_attribute :is_admin, true
+    t1 = create(:ingredient, :template, user: @user)
+    i1 = t1.instantiate
+    get :instances, ingredient_id: t1.id
+    assert_response :success
+    assert_equal 1, json_response.count
+    assert_equal i1.name, json_response[0]['name']
+  end
+
   ### Authentication and authorization
   test 'open access to listing templates' do
     api_non_auth_header

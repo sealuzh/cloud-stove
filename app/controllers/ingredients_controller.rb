@@ -1,5 +1,5 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy]
+  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy, :instances]
   skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
@@ -34,24 +34,26 @@ class IngredientsController < ApplicationController
 
   # Returns instances of the template with root ingredient given by params[:ingredient_id]
   def instances
-    i = Ingredient.find_by(id: params[:ingredient_id])
-    if i
-      if i.application_root? && i.is_template
-        @instances = i.instances
-        respond_to do |format|
-          format.html
-          format.json {render json: @instances}
-        end
-      else
-        respond_to do |format|
-          format.html {redirect_to :back, notice: 'Ingredient must be root and a template.'}
-          format.json {render json: 'Ingredient must be root and a template.', status: :forbidden}
-        end
-      end
-    else
+    if @ingredient.nil?
       respond_to do |format|
         format.html {redirect_to :templates, notice: 'Template not found.'}
         format.json {render json: 'Template not found.', status: :not_found}
+      end
+    elsif !@ingredient.application_root?
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Ingredient must be an application root.'}
+        format.json {render json: 'Ingredient must be an application root.', status: :forbidden}
+      end
+    elsif !@ingredient.is_template
+      respond_to do |format|
+        format.html {redirect_to :back, notice: 'Ingredient must be a template.'}
+        format.json {render json: 'Ingredient must be a template.', status: :forbidden}
+      end
+    else
+      @instances = @ingredient.instances
+      respond_to do |format|
+        format.html
+        format.json {render json: @instances}
       end
     end
   end
