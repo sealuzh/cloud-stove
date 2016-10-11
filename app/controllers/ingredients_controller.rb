@@ -1,5 +1,5 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
+  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy]
   skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
@@ -72,10 +72,17 @@ class IngredientsController < ApplicationController
 
   # copies an entire hierarchy starting at the root determined by params[:ingredient_id]
   def copy
-    i = Ingredient.find(params[:ingredient_id]).copy
-    respond_to do |format|
-      format.html {redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'}
-      format.json {render json: i, status: :ok}
+    if @ingredient.present?
+      copy = @ingredient.copy
+      respond_to do |format|
+        format.html {redirect_to copy, notice: 'Ingredient hierarchy was successfully copied.'}
+        format.json {render json: copy, status: :ok}
+      end
+    else
+      respond_to do |format|
+        format.html {flash[:error] = 'Could not find ingredient to copy.'; redirect_to :back}
+        format.json {render json: copy, status: :not_found}
+      end
     end
   end
 
@@ -173,7 +180,8 @@ class IngredientsController < ApplicationController
   private
 
     def set_ingredient
-      @ingredient = Ingredient.find(params[:id])
+      id = params[:id] || params[:ingredient_id]
+      @ingredient = current_user.ingredients.find_by_id(id)
     end
 
     def ingredient_params

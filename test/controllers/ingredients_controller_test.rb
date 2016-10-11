@@ -2,16 +2,22 @@ require 'test_helper'
 
 class IngredientsControllerTest < ActionController::TestCase
   test 'listing templates' do
+    t1 = create(:ingredient, :template)
     get :templates
     assert_response :success
+    assert_equal 1, json_response.count
+    assert_equal t1.name, json_response[0]['name']
   end
 
   test 'listing applications' do
+    a1 = create(:ingredient, user: @user)
     get :index
     assert_response :success
+    assert_equal 1, json_response.count
+    assert_equal a1.name, json_response[0]['name']
   end
 
-  ### Authentication
+  ### Authentication and authorization
   test 'open access to listing templates' do
     api_non_auth_header
     get :templates
@@ -36,5 +42,12 @@ class IngredientsControllerTest < ActionController::TestCase
     api_auth_header(admin)
     get :template, ingredient_id: create(:ingredient, user: admin).id
     assert_response :success
+  end
+
+  test 'users can only copy their own ingredients' do
+    stranger = create(:user)
+    ingredient = create(:ingredient, user: stranger)
+    get :copy, ingredient_id: ingredient.id
+    assert_response :not_found
   end
 end
