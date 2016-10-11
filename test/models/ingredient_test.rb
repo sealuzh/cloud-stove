@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class IngredientTest < ActiveSupport::TestCase
+  test 'childless ingredient is application root' do
+    ingredient = create(:ingredient)
+    assert ingredient.application_root?
+  end
+
   test 'instantiation' do
     ingredient = create(:ingredient, name: 'Sample Ingredient', body: '# Sample Ingredient')
 

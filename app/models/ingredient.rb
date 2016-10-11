@@ -171,7 +171,7 @@ class Ingredient < Base
   end
 
   def application_root?
-    (self.parent.nil? && self.children.count > 0)
+    self.parent.nil?
   end
 
   def num_simultaneous_users
