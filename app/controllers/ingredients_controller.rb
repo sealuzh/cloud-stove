@@ -84,11 +84,16 @@ class IngredientsController < ApplicationController
   end
 
   def instance
-    i = Ingredient.find(params[:ingredient_id]).instantiate(current_user)
-    if i
+    @ingredient = set_ingredient || User.stove_admin.ingredients.find_by_id(params[:ingredient_id])
+    ensure_ingredient_present; return if performed?
+    ensure_application_root; return if performed?
+    ensure_template; return if performed?
+
+    new_instance = @ingredient.instantiate(current_user)
+    if new_instance
       respond_to do |format|
-        format.html {redirect_to i, notice: 'Template was successfully instantiated.'}
-        format.json {render json: i, status: :ok}
+        format.html {redirect_to new_instance, notice: 'Template was successfully instantiated.'}
+        format.json {render json: new_instance, status: :ok}
       end
     else
       respond_to do |format|

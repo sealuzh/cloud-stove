@@ -29,6 +29,10 @@ class User < ActiveRecord::Base
 
   after_create :seed_user
 
+  def self.stove_admin
+    self.admin.first
+  end
+
   private
 
     def seed_user
