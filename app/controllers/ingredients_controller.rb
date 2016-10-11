@@ -112,7 +112,7 @@ class IngredientsController < ApplicationController
   end
 
   def create
-    @ingredients = Ingredient.all
+    @ingredients = current_user.ingredients
     @ingredient = Ingredient.new
     @ingredient.update_attributes(ingredient_params)
 
