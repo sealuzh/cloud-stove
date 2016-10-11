@@ -1,5 +1,5 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy, :instances]
+  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy, :instances, :template]
   skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
@@ -61,33 +61,25 @@ class IngredientsController < ApplicationController
 
   # copies an entire hierarchy starting at the root determined by params[:ingredient_id]
   def copy
-    if @ingredient.present?
-      copy = @ingredient.copy
-      respond_to do |format|
-        format.html {redirect_to copy, notice: 'Ingredient hierarchy was successfully copied.'}
-        format.json {render json: copy, status: :ok}
-      end
-    else
-      respond_to do |format|
-        format.html {flash[:error] = 'Could not find ingredient to copy.'; redirect_to :back}
-        format.json {render json: copy, status: :not_found}
-      end
+    ensure_ingredient_present; return if performed?
+
+    copy = @ingredient.copy
+    respond_to do |format|
+      format.html {redirect_to copy, notice: 'Ingredient hierarchy was successfully copied.'}
+      format.json {render json: copy, status: :ok}
     end
   end
 
   # makes a template out of an hierarchy starting at the root determined by params[:ingredient_id]
   def template
-    i = Ingredient.find(params[:ingredient_id]).make_template
-    if i
-      respond_to do |format|
-        format.html {redirect_to i, notice: 'Template was successfully created.'}
-        format.json {render json: i, status: :ok}
-      end
-    else
-      respond_to do |format|
-        format.html {redirect_to :back, notice: 'Can only make templates out of root non-template ingredients.'}
-        format.json {render json: 'Can only make templates out of root non-template ingredients..', status: :forbidden}
-      end
+    ensure_ingredient_present; return if performed?
+    ensure_application_root; return if performed?
+    ensure_no_template; return if performed?
+
+    template = @ingredient.make_template
+    respond_to do |format|
+      format.html {redirect_to template, notice: 'Template was successfully created.'}
+      format.json {render json: template, status: :ok}
     end
   end
 

@@ -27,6 +27,14 @@ class IngredientsControllerTest < ActionController::TestCase
     assert_equal i1.name, json_response[0]['name']
   end
 
+  test 'create a template from an application instance (admin only)' do
+    use_admin
+    a1 = create(:ingredient, user: @user)
+    get :template, ingredient_id: a1.id
+    assert_response :success
+    assert_equal "[TEMPLATE] #{a1.name}", json_response['name']
+  end
+
   ### Authentication and authorization
   test 'open access to listing templates' do
     api_non_auth_header
