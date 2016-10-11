@@ -32,7 +32,6 @@ class IngredientsController < ApplicationController
     end
   end
 
-  # (ADMIN only)
   # Returns instances of the template with root ingredient given by params[:ingredient_id]
   def instances
     i = Ingredient.find_by(id: params[:ingredient_id])
@@ -71,7 +70,6 @@ class IngredientsController < ApplicationController
     end
   end
 
-  # (ADMIN only)
   # copies an entire hierarchy starting at the root determined by params[:ingredient_id]
   def copy
     i = Ingredient.find(params[:ingredient_id]).copy
@@ -81,8 +79,6 @@ class IngredientsController < ApplicationController
     end
   end
 
-
-  # (ADMIN only)
   # makes a template out of an hierarchy starting at the root determined by params[:ingredient_id]
   def template
     i = Ingredient.find(params[:ingredient_id]).make_template
@@ -99,7 +95,6 @@ class IngredientsController < ApplicationController
     end
   end
 
-
   def instance
     i = Ingredient.find(params[:ingredient_id]).instantiate(current_user)
     if i
@@ -115,9 +110,6 @@ class IngredientsController < ApplicationController
     end
   end
 
-
-  # (ADMIN only)
-
   def new
    @ingredients = Ingredient.all
    @ingredient = if params[:copy]
@@ -131,7 +123,6 @@ class IngredientsController < ApplicationController
     @ingredients = current_user.ingredients.all # the list of ingredients usable as a parent
   end
 
-  # (ADMIN only)
   def create
     @ingredients = Ingredient.all
     @ingredient = Ingredient.new
@@ -177,6 +168,7 @@ class IngredientsController < ApplicationController
       end
     end
   end
+
 
   private
 
