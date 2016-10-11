@@ -18,7 +18,7 @@ class IngredientsControllerTest < ActionController::TestCase
   end
 
   test 'listing template instances (admin only)' do
-    @user.update_attribute :is_admin, true
+    use_admin
     t1 = create(:ingredient, :template, user: @user)
     i1 = t1.instantiate
     get :instances, ingredient_id: t1.id
