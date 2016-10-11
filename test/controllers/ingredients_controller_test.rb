@@ -77,4 +77,13 @@ class IngredientsControllerTest < ActionController::TestCase
     get :copy, ingredient_id: ingredient.id
     assert_response :not_found
   end
+
+  # This behavior is used to display templates (which are public)
+  test 'user can show admin ingredients' do
+    admin = create(:user, :admin)
+    admin_ingredient = create(:ingredient, user: admin)
+    get :show, id: admin_ingredient.id
+    assert_response :success
+    assert_equal admin_ingredient.name, json_response['name']
+  end
 end

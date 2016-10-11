@@ -1,6 +1,6 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient_from_admin, only: [:instance, :instances]
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy, :template]
+  before_action :set_ingredient_from_admin, only: [:show, :instance, :instances]
+  before_action :set_ingredient, only: [:edit, :update, :destroy, :copy, :template]
   skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
