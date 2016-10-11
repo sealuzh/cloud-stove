@@ -22,11 +22,13 @@ class IngredientsControllerTest < ActionController::TestCase
     api_non_auth_header
     get :index
     assert_response :unauthorized
+    assert_equal 'Authorized users only.', json_response['errors'][0]
   end
 
   test 'non-admin user cannot create an ingredient' do
     get :template, ingredient_id: create(:ingredient).id
     assert_response :forbidden
+    assert_equal 'Authorized admins only.', json_response['errors'][0]
   end
 
   test 'admin user can create an ingredient' do

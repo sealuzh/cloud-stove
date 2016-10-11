@@ -2,7 +2,7 @@ class IngredientsController < ApplicationController
   before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
   skip_before_filter :require_login, only: :templates
   before_action :authenticate_user!, except: [:templates]
-  before_action :allow_admin_only, only: [:template, :new, :create, :instances]
+  before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
   # Returns all ingredients (irrespective if template, instance, application) of the current user
   def index
@@ -181,15 +181,6 @@ class IngredientsController < ApplicationController
 
   private
 
-    def allow_admin_only
-      if !current_user.is_admin
-        respond_to do |format|
-          format.html {redirect_to :back, notice: 'Only admin is allowed to perform this action.'}
-          format.json {render json: 'Only admin is allowed to perform this action.', status: :forbidden}
-        end
-      end
-    end
-
     def set_ingredient
       @ingredient = Ingredient.find(params[:id])
     end
@@ -214,5 +205,4 @@ class IngredientsController < ApplicationController
                                            preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy])
       end
     end
-
 end
