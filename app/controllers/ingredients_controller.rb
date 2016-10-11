@@ -1,5 +1,6 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy, :instances, :template]
+  before_action :set_ingredient_from_admin, only: [:instance, :instances]
+  before_action :set_ingredient, only: [:show, :edit, :update, :destroy, :copy, :template]
   skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
@@ -84,7 +85,6 @@ class IngredientsController < ApplicationController
   end
 
   def instance
-    @ingredient = set_ingredient || User.stove_admin.ingredients.find_by_id(params[:ingredient_id])
     ensure_ingredient_present; return if performed?
     ensure_application_root; return if performed?
     ensure_template; return if performed?
@@ -98,7 +98,7 @@ class IngredientsController < ApplicationController
     else
       respond_to do |format|
         format.html {redirect_to :back, notice: 'Can only instantiate root template ingredients.'}
-        format.json {render json: 'Can only instantiate root template ingredients.', status: :forbidden}
+        format.json {render json: 'Can only instantiate root template ingredients.', status: :unprocessable_entity}
       end
     end
   end
@@ -159,6 +159,11 @@ class IngredientsController < ApplicationController
 
 
   private
+
+    def set_ingredient_from_admin
+      id = params[:id] || params[:ingredient_id]
+      @ingredient = set_ingredient || User.stove_admin.ingredients.find_by_id(id)
+    end
 
     def set_ingredient
       id = params[:id] || params[:ingredient_id]
