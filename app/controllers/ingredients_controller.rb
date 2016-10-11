@@ -99,9 +99,9 @@ class IngredientsController < ApplicationController
   end
 
   def new
-   @ingredients = Ingredient.all
+   @ingredients = current_user.ingredients
    @ingredient = if params[:copy]
-     Ingredient.find(params[:copy]).deep_dup
+     current_user.ingredients.find(params[:copy]).deep_dup
    else
      Ingredient.new
    end
