@@ -48,6 +48,8 @@ class IngredientsController < ApplicationController
 
   # returns the details of the ingredient determined by params[:id]
   def show
+    ensure_ingredient_present; return if performed?
+
     @cpu_constraint = @ingredient.cpu_constraint
     @ram_constraint = @ingredient.ram_constraint
     @region_constraint = @ingredient.preferred_region_area_constraint
