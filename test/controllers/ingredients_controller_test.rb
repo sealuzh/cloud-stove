@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class IngredientsControllerTest < ActionController::TestCase
+  test 'delete an application' do
+    i1 = create(:ingredient, user: @user)
+    delete :destroy, id: i1.id
+    assert_response :no_content
+    assert_nil Ingredient.find_by_name(i1.name)
+  end
+
   test 'listing templates' do
     t1 = create(:ingredient, :template)
     get :templates
