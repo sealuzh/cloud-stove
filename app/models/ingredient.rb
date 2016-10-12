@@ -34,6 +34,7 @@ class Ingredient < Base
   has_one :cpu_workload, class_name: 'CpuWorkload', dependent: :destroy
   has_one :ram_workload, class_name: 'RamWorkload', dependent: :destroy
   has_one :user_workload, class_name: 'UserWorkload', dependent: :destroy
+  has_one :scaling_workload, class_name: 'ScalingWorkload', dependent: :destroy
 
   # Associated generic constraints
   has_many :constraints, dependent: :destroy
@@ -52,11 +53,14 @@ class Ingredient < Base
   has_one :preferred_region_area_constraint, class_name: 'PreferredRegionAreaConstraint', dependent: :destroy
   ## Provider constraints
   has_one :provider_constraint, class_name: 'ProviderConstraint', dependent: :destroy
+  ## Scaling constraint
+  has_one :scaling_constraint, class_name: 'ScalingConstraint', dependent: :destroy
 
   accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
   accepts_nested_attributes_for :constraints, allow_destroy: true
   accepts_nested_attributes_for :cpu_constraint, allow_destroy: true
   accepts_nested_attributes_for :ram_constraint, allow_destroy: true
+  accepts_nested_attributes_for :scaling_constraint, allow_destroy: true
   accepts_nested_attributes_for :preferred_region_area_constraint, allow_destroy: true
   accepts_nested_attributes_for :provider_constraint, allow_destroy: true
 
@@ -118,6 +122,7 @@ class Ingredient < Base
     workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
     workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
     workloads[:user_workload] = self.user_workload.as_json if self.user_workload.present?
+    workloads[:scaling_workload] = self.scaling_workload.as_json if self.scaling_workload.present?
     workloads
   end
 
@@ -152,10 +157,15 @@ class Ingredient < Base
     jobs.last
   end
 
+  def scaling_workload
+    super || create_scaling_workload(scale_ingredient: true, user_id: user_id)
+  end
+
   def update_constraints
     all_leafs.each do |leaf|
       leaf.ram_workload.to_constraint
       leaf.cpu_workload.to_constraint
+      leaf.scaling_workload.to_constraint
     end
   rescue => e
     raise 'Missing a workload definition for a leaf ingredient. ' + e.message

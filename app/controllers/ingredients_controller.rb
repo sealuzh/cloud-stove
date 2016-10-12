@@ -55,6 +55,7 @@ class IngredientsController < ApplicationController
     @region_constraint = @ingredient.preferred_region_area_constraint
     @dependency_constraints = @ingredient.all_dependency_constraints
     @provider_constraint = @ingredient.provider_constraint
+    @scaling_constraint = @ingredient.scaling_constraint
     @deployment_recommendation = @ingredient.deployment_recommendations.last.embed_ingredients unless @ingredient.deployment_recommendations.empty?
     respond_to do |format|
       format.html

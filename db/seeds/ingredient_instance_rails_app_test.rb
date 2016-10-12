@@ -45,6 +45,9 @@ db.constraints << RamConstraint.create(
 db.constraints << CpuConstraint.create(
     min_cpus: 1
 )
+db.constraints << ScalingConstraint.create(
+  max_num_instances: 0
+)
 
 app = rails_app_instance.children.create!(
   name: 'Rails App',
@@ -70,6 +73,9 @@ app.constraints << RamConstraint.create(
 app.constraints << CpuConstraint.create(
     min_cpus: 1
 )
+app.constraints << ScalingConstraint.create(
+  max_num_instances: 0
+)
 
 lb = rails_app_instance.children.create!(
     name: 'NGINX',
@@ -94,6 +100,9 @@ lb.constraints << RamConstraint.create(
 )
 lb.constraints << CpuConstraint.create(
     min_cpus: 1
+)
+lb.constraints << ScalingConstraint.create(
+  max_num_instances: 0
 )
 rails_app_instance.assign_user!(User.admin.first)
 end

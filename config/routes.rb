@@ -54,6 +54,8 @@ Rails.application.routes.draw do
 
   resources :user_workloads, concerns: [:paginatable]
 
+  resources :scaling_workloads, concerns: [:paginatable]
+
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
   get 'workloads/new/:ingredient_id' => 'workloads#new'

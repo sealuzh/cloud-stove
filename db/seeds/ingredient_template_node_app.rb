@@ -34,6 +34,9 @@ db.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 2500,
   parallelism: 0.9
 )
+db.scaling_workload = ScalingWorkload.create!(
+  scale_ingredient: true
+)
 
 app = node_app_template.children.create!(
   is_template: true,
@@ -50,6 +53,9 @@ app.ram_workload = RamWorkload.create!(
 app.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 500,
   parallelism: 0.97
+)
+app.scaling_workload = ScalingWorkload.create!(
+  scale_ingredient: true
 )
 app.constraints << DependencyConstraint.create!(
   source: app,

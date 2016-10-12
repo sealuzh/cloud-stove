@@ -9,6 +9,7 @@ class DeploymentRecommendation < Base
   DEFAULT_MIN_CPUS = 1
   DEFAULT_DEPENDENCY_WEIGHT = 100
   DEFAULT_REGION_AREAS = %w(EU)
+  DEFAULT_MAX_NUM_INSTANCES = 0
 
   # Transfer costs
   INTRA_REGION_TRANSFER = 0
@@ -109,7 +110,7 @@ class DeploymentRecommendation < Base
     File.readlines(minizinc_model)[line - 1].strip
   end
 
-  MINIZINC_ERROR_REGEX = /lib\/stove\.mzn:(\d+):/
+  MINIZINC_ERROR_REGEX = /lib\/.+\.mzn:(\d+):/
   def line_with_error(stderr)
     MINIZINC_ERROR_REGEX.match(stderr)[1].to_i
   end
@@ -213,8 +214,7 @@ class DeploymentRecommendation < Base
     ingredients_data << "\n"
 
     max_num_resources = all_leafs.collect do |i|
-      # TODO: Get actual number of max allowed resources from ingredient here.
-      0
+      i.scaling_constraint.max_num_instances rescue DEFAULT_MAX_NUM_INSTANCES
     end
     ingredients_data << "max_num_resources = #{max_num_resources.to_json}"
     ingredients_data << "\n"
