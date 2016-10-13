@@ -1,6 +1,13 @@
 %h1 Providers
-%p 
-  All supported providers and the resources they offer in one place.
-  = link_to "Update Provider Data", update_all_providers_path, method: :put, data: { confirm: 'Updating provider data will take some time. Are you sure you want this?' }
+
+%div{class: 'row'}
+  %div{class: 'panel panel-default col-sm-6'}
+    = button_to 'Update Provider Data', update_all_providers_path, method: :put, class: 'btn btn-default',
+        data: { confirm: 'Updating provider data will take some time. Are you sure you want this?' }
+
+  %div{class: 'panel panel-default col-sm-6'}
+    = button_to 'Update Admin Recommendation Seeds', update_admin_recommendations_path, method: :post, class: 'btn btn-default',
+        data: { confirm: 'This will update the recommendation seeds for newly created users. Are you sure you want this?' }
+    The deployment recommendations of the admin user are used to seed newly created users.
 
 = render @providers

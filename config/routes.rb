@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get 'run' => 'jobs#run', as: :run
   end
 
+  post 'recommendations/update_admin_seeds' => 'recommendation_seeds#update_admin_recommendations', as: :update_admin_recommendations
 
   put 'providers/update_all' => 'providers#update_all', as: :update_all_providers
   get 'providers/names' => 'providers#names', as: :provider_names
