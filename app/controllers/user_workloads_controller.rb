@@ -1,6 +1,4 @@
 class UserWorkloadsController < ApplicationController
-
-  before_action :authenticate_user!
   before_action :set_user_workload, only: [:show, :update, :destroy]
 
   def index

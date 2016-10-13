@@ -70,6 +70,10 @@ class ActionController::TestCase
     api_header
     api_auth_header(@user)
   end
+
+  def use_admin
+    @user.update_attribute :is_admin, true
+  end
 end
 
 class ActiveSupport::TestCase

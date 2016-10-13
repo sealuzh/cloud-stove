@@ -1,8 +1,5 @@
 class RamWorkloadsController < ApplicationController
-
-  before_action :authenticate_user!
   before_action :set_ram_workload, only: [:show, :destroy, :update]
-
 
   def show
     respond_to do |format|

@@ -1,8 +1,8 @@
 class IngredientsController < ApplicationController
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
-  skip_before_filter :require_login, only: :templates
-  before_action :authenticate_user!, except: [:templates]
-  before_action :allow_admin_only, only: [:template, :new, :create, :instances]
+  before_action :set_ingredient_from_admin, only: [:show, :instance, :instances]
+  before_action :set_ingredient, only: [:edit, :update, :destroy, :copy, :template]
+  skip_before_action :authenticate_user!, only: [:templates]
+  before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
   # Returns all ingredients (irrespective if template, instance, application) of the current user
   def index
@@ -33,33 +33,23 @@ class IngredientsController < ApplicationController
     end
   end
 
-  # (ADMIN only)
   # Returns instances of the template with root ingredient given by params[:ingredient_id]
   def instances
-    i = Ingredient.find_by(id: params[:ingredient_id])
-    if i
-      if i.application_root? && i.is_template
-        @instances = i.instances
-        respond_to do |format|
-          format.html
-          format.json {render json: @instances}
-        end
-      else
-        respond_to do |format|
-          format.html {redirect_to :back, notice: 'Ingredient must be root and a template.'}
-          format.json {render json: 'Ingredient must be root and a template.', status: :forbidden}
-        end
-      end
-    else
-      respond_to do |format|
-        format.html {redirect_to :templates, notice: 'Template not found.'}
-        format.json {render json: 'Template not found.', status: :not_found}
-      end
+    ensure_ingredient_present; return if performed?
+    ensure_application_root; return if performed?
+    ensure_template; return if performed?
+
+    @instances = @ingredient.instances
+    respond_to do |format|
+      format.html
+      format.json {render json: @instances}
     end
   end
 
   # returns the details of the ingredient determined by params[:id]
   def show
+    ensure_ingredient_present; return if performed?
+
     @cpu_constraint = @ingredient.cpu_constraint
     @ram_constraint = @ingredient.ram_constraint
     @region_constraint = @ingredient.preferred_region_area_constraint
@@ -72,57 +62,53 @@ class IngredientsController < ApplicationController
     end
   end
 
-  # (ADMIN only)
   # copies an entire hierarchy starting at the root determined by params[:ingredient_id]
   def copy
-    i = Ingredient.find(params[:ingredient_id]).copy
+    ensure_ingredient_present; return if performed?
+
+    copy = @ingredient.copy
     respond_to do |format|
-      format.html {redirect_to i, notice: 'Ingredient hierarchy was successfully copied.'}
-      format.json {render json: i, status: :ok}
+      format.html {redirect_to copy, notice: 'Ingredient hierarchy was successfully copied.'}
+      format.json {render json: copy, status: :ok}
     end
   end
 
-
-  # (ADMIN only)
   # makes a template out of an hierarchy starting at the root determined by params[:ingredient_id]
   def template
-    i = Ingredient.find(params[:ingredient_id]).make_template
-    if i
-      respond_to do |format|
-        format.html {redirect_to i, notice: 'Template was successfully created.'}
-        format.json {render json: i, status: :ok}
-      end
-    else
-      respond_to do |format|
-        format.html {redirect_to :back, notice: 'Can only make templates out of root non-template ingredients.'}
-        format.json {render json: 'Can only make templates out of root non-template ingredients..', status: :forbidden}
-      end
+    ensure_ingredient_present; return if performed?
+    ensure_application_root; return if performed?
+    ensure_no_template; return if performed?
+
+    template = @ingredient.make_template
+    respond_to do |format|
+      format.html {redirect_to template, notice: 'Template was successfully created.'}
+      format.json {render json: template, status: :ok}
     end
   end
 
-
   def instance
-    i = Ingredient.find(params[:ingredient_id]).instantiate(current_user)
-    if i
+    ensure_ingredient_present; return if performed?
+    ensure_application_root; return if performed?
+    ensure_template; return if performed?
+
+    new_instance = @ingredient.instantiate(current_user)
+    if new_instance
       respond_to do |format|
-        format.html {redirect_to i, notice: 'Template was successfully instantiated.'}
-        format.json {render json: i, status: :ok}
+        format.html {redirect_to new_instance, notice: 'Template was successfully instantiated.'}
+        format.json {render json: new_instance, status: :ok}
       end
     else
       respond_to do |format|
         format.html {redirect_to :back, notice: 'Can only instantiate root template ingredients.'}
-        format.json {render json: 'Can only instantiate root template ingredients.', status: :forbidden}
+        format.json {render json: 'Can only instantiate root template ingredients.', status: :unprocessable_entity}
       end
     end
   end
 
-
-  # (ADMIN only)
-
   def new
-   @ingredients = Ingredient.all
+   @ingredients = current_user.ingredients
    @ingredient = if params[:copy]
-     Ingredient.find(params[:copy]).deep_dup
+     current_user.ingredients.find(params[:copy]).deep_dup
    else
      Ingredient.new
    end
@@ -132,9 +118,8 @@ class IngredientsController < ApplicationController
     @ingredients = current_user.ingredients.all # the list of ingredients usable as a parent
   end
 
-  # (ADMIN only)
   def create
-    @ingredients = Ingredient.all
+    @ingredients = current_user.ingredients
     @ingredient = Ingredient.new
     @ingredient.update_attributes(ingredient_params)
 
@@ -165,33 +150,62 @@ class IngredientsController < ApplicationController
   end
 
   def destroy
-    if @ingredient.is_template
-      respond_to do |format|
-        format.html { redirect_to ingredients_url, notice: "Can't destroy a template ingredient." }
-        format.json { render json: "Can't destroy a template ingredient.", status: :forbidden}
-      end
-    else
-      @ingredient.destroy
-      respond_to do |format|
-        format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
-        format.json { head :no_content }
-      end
+    ensure_no_template; return if performed?
+
+    @ingredient.destroy
+    respond_to do |format|
+      format.html { redirect_to ingredients_url, notice: 'Ingredient and its subtree was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
 
+
   private
 
-    def allow_admin_only
-      if !current_user.is_admin
+    def set_ingredient_from_admin
+      id = params[:id] || params[:ingredient_id]
+      @ingredient = set_ingredient || User.stove_admin.ingredients.find_by_id(id)
+    end
+
+    def set_ingredient
+      id = params[:id] || params[:ingredient_id]
+      @ingredient = current_user.ingredients.find_by_id(id)
+    end
+
+    def ensure_ingredient_present
+      if @ingredient.nil?
         respond_to do |format|
-          format.html {redirect_to :back, notice: 'Only admin is allowed to perform this action.'}
-          format.json {render json: 'Only admin is allowed to perform this action.', status: :forbidden}
+          format.html {redirect_to :templates, notice: 'Ingredient not found.'}
+          format.json {render json: 'Ingredient not found.', status: :not_found}
         end
       end
     end
 
-    def set_ingredient
-      @ingredient = Ingredient.find(params[:id])
+    def ensure_application_root
+      unless @ingredient.application_root?
+        respond_to do |format|
+          format.html { redirect_to :back, notice: 'Ingredient must be an application root.' }
+          format.json { render json: 'Ingredient must be an application root.', status: :unprocessable_entity }
+        end
+      end
+    end
+
+    def ensure_template
+      unless @ingredient.is_template
+        respond_to do |format|
+          format.html {redirect_to :back, notice: 'Ingredient must be a template.'}
+          format.json {render json: 'Ingredient must be a template.', status: :unprocessable_entity}
+        end
+      end
+    end
+
+    def ensure_no_template
+      if @ingredient.is_template
+        respond_to do |format|
+          format.html {redirect_to :back, notice: 'Ingredient must be a non-template.'}
+          format.json {render json: 'Ingredient must be a non-template.', status: :unprocessable_entity}
+        end
+      end
     end
 
     def ingredient_params
@@ -214,5 +228,4 @@ class IngredientsController < ApplicationController
                                            preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy])
       end
     end
-
 end

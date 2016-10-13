@@ -1,6 +1,5 @@
 class ProvidersController < ApplicationController
-
-  before_action :authenticate_user!
+  before_action :authenticate_admin!, only: [:index, :update_all]
 
   def index
     @providers = Provider.includes(:resources)

@@ -4,6 +4,9 @@ FactoryGirl.define do
   factory :user do
     sequence(:email) { |n| "stove_user#{n}@example.com" }
     password '12345678'
+    trait :admin do
+      is_admin true
+    end
   end
 
   factory :ingredient do

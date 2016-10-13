@@ -131,7 +131,7 @@ class Ingredient < Base
     engine.make_template(self)
   end
 
-  def instantiate(new_user)
+  def instantiate(new_user = self.user)
     engine = IngredientCopyEngine.new
     engine.instantiate(self, new_user)
   end
@@ -171,7 +171,7 @@ class Ingredient < Base
   end
 
   def application_root?
-    (self.parent.nil? && self.children.count > 0)
+    self.parent.nil?
   end
 
   def num_simultaneous_users

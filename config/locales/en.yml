@@ -35,6 +35,7 @@ en:
       jobs: "Jobs"
       my_account: "My Account"
       logout: "Logout"
+      login: "Login"
     footer:
       about: "About"
       faq: "FAQ"
