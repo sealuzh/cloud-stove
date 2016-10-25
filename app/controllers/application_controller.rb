@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
       end
     end
 
+  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+
   private
 
     def authenticate_admin!
@@ -40,5 +42,15 @@ class ApplicationController < ActionController::Base
 
     def json_request?
       request.format.json?
+    end
+
+    def record_not_found(error)
+      # Clear response_body to prevent DoubleRenderError
+      # see http://stackoverflow.com/a/23351928/1498084 for details.
+      self.response_body = nil
+      respond_to do |format|
+        format.html { render file: Rails.root + 'public/404.html', layout: false }
+        format.json { render json: { error: error.message }, status: :not_found }
+      end
     end
 end
