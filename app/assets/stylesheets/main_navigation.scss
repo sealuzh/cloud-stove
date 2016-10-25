@@ -17,7 +17,7 @@
 }
 
 .navbar-right {
-  @extend .pull-xs-right;
+  @extend .float-xs-right;
   
   .btn-link {
     &:hover, &:focus {
@@ -35,7 +35,7 @@
     // height: $img-height;
     $img-height: 2rem;
     height: $img-height;
-    @extend .img-circle;
+    @extend .rounded-circle;
     position: absolute;
     top: .1rem;
     right: 0;

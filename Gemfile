@@ -7,7 +7,7 @@ gem 'rails', '~> 4.2.4'
 # Use Haml for templates
 gem 'haml-rails', '~> 0.9'
 # Use Bootstrap, https://github.com/twbs/bootstrap-rubygem#a-ruby-on-rails
-gem 'bootstrap', '~> 4.0.0.alpha3'
+gem 'bootstrap', '~> 4.0.0.alpha5'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use bourbon for Sass mixins
