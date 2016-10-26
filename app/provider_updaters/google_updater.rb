@@ -64,9 +64,10 @@ class GoogleUpdater < ProviderUpdater
           # FIXME: 744 hours/month assumes a 31 day month. Same as above.
           price_per_month = BigDecimal.new(value[region].to_s) * 744 * full_month_discount
           resource.more_attributes['price_per_month'] = price_per_month
+          # vCPU Quotas from https://cloud.google.com/compute/pricing#sharedcore
           resource.more_attributes['cores'] = case resource_id 
           when 'f1-micro'
-            '0.1'
+            '0.2'
           when 'g1-small'
             '0.5'
           else
