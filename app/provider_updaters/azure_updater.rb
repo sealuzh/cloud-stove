@@ -11,6 +11,7 @@ class AzureUpdater < ProviderUpdater
         'canada' => 'US',
         'usgov' => 'US',
         'europe' => 'EU',
+        'germany' => 'EU',
         'united-kingdom' => 'EU',
         'asia' => 'ASIA',
         'japan' => 'ASIA',
