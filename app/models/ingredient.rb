@@ -201,6 +201,7 @@ class Ingredient < Base
   end
 
   def assign_user_to_attachments!(new_user)
+    (self.scaling_workload.user = new_user; scaling_workload.save!) if self.scaling_workload.present?
     (self.user_workload.user = new_user; user_workload.save!) if self.user_workload.present?
     (self.ram_workload.user = new_user; ram_workload.save!) if self.ram_workload.present?
     (self.cpu_workload.user = new_user; cpu_workload.save!) if self.cpu_workload.present?
