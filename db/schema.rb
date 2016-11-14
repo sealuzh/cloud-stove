@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161012083917) do
+ActiveRecord::Schema.define(version: 20161114115736) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
