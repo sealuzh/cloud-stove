@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161009185011) do
+ActiveRecord::Schema.define(version: 20161012083917) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20161009185011) do
     t.string   "preferred_region_area"
     t.string   "preferred_providers"
     t.integer  "user_id"
+    t.integer  "max_num_instances"
   end
 
   add_index "constraints", ["ingredient_id"], name: "index_constraints_on_ingredient_id"
@@ -123,6 +124,17 @@ ActiveRecord::Schema.define(version: 20161009185011) do
 
   add_index "resources", ["provider_id"], name: "index_resources_on_provider_id"
   add_index "resources", ["resource_code"], name: "index_resources_on_resource_code"
+
+  create_table "scaling_workloads", force: :cascade do |t|
+    t.boolean  "scale_ingredient"
+    t.integer  "ingredient_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "scaling_workloads", ["ingredient_id"], name: "index_scaling_workloads_on_ingredient_id"
+  add_index "scaling_workloads", ["user_id"], name: "index_scaling_workloads_on_user_id"
 
   create_table "traffic_workloads", force: :cascade do |t|
     t.integer  "visits_per_month"

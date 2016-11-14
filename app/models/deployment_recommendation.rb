@@ -9,6 +9,7 @@ class DeploymentRecommendation < Base
   DEFAULT_MIN_CPUS = 1
   DEFAULT_DEPENDENCY_WEIGHT = 100
   DEFAULT_REGION_AREAS = %w(EU)
+  DEFAULT_MAX_NUM_INSTANCES = 0
 
   # Transfer costs
   INTRA_REGION_TRANSFER = 0
@@ -69,7 +70,7 @@ class DeploymentRecommendation < Base
   end
 
   def minizinc_model
-    "#{Rails.root}/lib/stove.mzn"
+    "#{Rails.root}/lib/horizontal-scaling.mzn"
   end
 
   def parse_result(stdout, stderr)
@@ -109,7 +110,7 @@ class DeploymentRecommendation < Base
     File.readlines(minizinc_model)[line - 1].strip
   end
 
-  MINIZINC_ERROR_REGEX = /lib\/stove\.mzn:(\d+):/
+  MINIZINC_ERROR_REGEX = /lib\/.+\.mzn:(\d+):/
   def line_with_error(stderr)
     MINIZINC_ERROR_REGEX.match(stderr)[1].to_i
   end
@@ -151,7 +152,7 @@ class DeploymentRecommendation < Base
     resources_data << "ram = #{ram_mb.to_json};"
     resources_data << "\n"
 
-    cores = resources.map { |r| r.ma['cores'].to_i rescue 0 }
+    cores = resources.map { |r| (r.ma['cores'].to_f * 100).to_i rescue 0 }
     resources_data << "cpu = #{cores};"
     resources_data << "\n"
 
@@ -203,13 +204,19 @@ class DeploymentRecommendation < Base
     ingredients_data << "\n"
 
     min_cpus = all_leafs.collect do |i|
-      i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS
+      100 * (i.cpu_constraint.min_cpus rescue DEFAULT_MIN_CPUS)
     end
     ingredients_data << "min_cpus = #{min_cpus.to_json};"
     ingredients_data << "\n"
 
     ingredients_data << "preferred_regions = array2d(Ingredients, Resources,
                           #{preferred_regions(self.ingredient, provider_id).to_json});"
+    ingredients_data << "\n"
+
+    max_num_resources = all_leafs.collect do |i|
+      i.scaling_constraint.max_num_instances rescue DEFAULT_MAX_NUM_INSTANCES
+    end
+    ingredients_data << "max_num_resources = #{max_num_resources.to_json}"
     ingredients_data << "\n"
 
     self.ingredients_data = ingredients_data
@@ -255,6 +262,7 @@ class DeploymentRecommendation < Base
       entry = {}
       entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
       entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({:children => false, :constraints => false})
+      entry[:resource_count] = self.more_attributes['num_resources'][ingredients.count] rescue 1
       ingredients << entry
     end
 

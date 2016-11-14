@@ -68,6 +68,7 @@ class IngredientCopyEngine
       copy.user_workload = current.user_workload.dup if current.user_workload.present?
       copy.ram_workload = current.ram_workload.dup if current.ram_workload.present?
       copy.cpu_workload = current.cpu_workload.dup if current.cpu_workload.present?
+      copy.scaling_workload = current.scaling_workload.dup if current.scaling_workload.present?
       copy.is_template = template
       copy.template = current if instance
       copies_hash[current.id] = copy
@@ -92,6 +93,7 @@ class IngredientCopyEngine
         copy.ram_workload.user = new_user if copy.ram_workload.present?
         copy.cpu_workload.user = new_user if copy.cpu_workload.present?
         copy.user_workload.user = new_user if copy.user_workload.present?
+        copy.scaling_workload.user = new_user if current.scaling_workload.present?
       end
 
       copy.save!

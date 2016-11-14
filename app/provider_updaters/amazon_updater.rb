@@ -40,11 +40,26 @@ class AmazonUpdater < ProviderUpdater
     end
 
     def create_instance(region, instance)
-      resource = @provider.resources.find_or_create_by(name: instance['size'], region: region)
+      resource_id = instance['size']
+      resource = @provider.resources.find_or_create_by(name: resource_id, region: region)
       resource.resource_type = 'compute'
       resource.region = region
       resource.region_area = extract_region_area(region)
-      resource.more_attributes['cores'] = instance['vCPU']
+      resource.more_attributes['cores'] = case resource_id
+      # CPU core equivalent from https://aws.amazon.com/ec2/instance-types/
+      when 't2.nano'
+        '0.05'
+      when 't2.micro'
+        '0.1'
+      when 't2.small'
+        '0.2'
+      when 't2.medium'
+        '0.4'
+      when 't2.large'
+        '0.6'
+      else
+        instance['vCPU']
+      end
       resource.more_attributes['mem_gb'] = BigDecimal.new(instance['memoryGiB'])
       resource.more_attributes['price_per_hour'] = instance['valueColumns'].first['prices']['USD']
       resource.save!

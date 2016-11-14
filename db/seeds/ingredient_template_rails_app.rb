@@ -27,7 +27,7 @@ rails_app_template.preferred_region_area_constraint = PreferredRegionAreaConstra
 
 db = rails_app_template.children.create!(
   is_template: true,
-  name: 'PostgreSQL',
+  name: 'PostgreSQL Master',
   body: <<-HERE
 The typical RDBMS backend of a Rails application stores all data and is used 
 by Delayed Job to schedule background tasks. To speed up db access, sensible
@@ -41,6 +41,30 @@ db.ram_workload = RamWorkload.create!(
 db.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 1500,
   parallelism: 0.9
+)
+db.scaling_workload = ScalingWorkload.create!(
+  scale_ingredient: false
+)
+
+db_slave = rails_app_template.children.create!(
+  is_template: true,
+  name: 'PostgreSQL Slave',
+  body: <<-HERE
+The typical RDBMS backend of a Rails application stores all data and is used 
+by Delayed Job to schedule background tasks. To speed up db access, sensible
+indices are defined on commonly queried attributes.
+HERE
+)
+db_slave.ram_workload = RamWorkload.create!(
+  ram_mb_required: 600,
+  ram_mb_required_user_capacity: 200,
+  ram_mb_growth_per_user: 0.3)
+db_slave.cpu_workload = CpuWorkload.create!(
+  cspu_user_capacity: 1500,
+  parallelism: 0.9
+)
+db_slave.scaling_workload = ScalingWorkload.create!(
+  scale_ingredient: true
 )
 
 app = rails_app_template.children.create!(
@@ -59,9 +83,16 @@ app.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 500,
   parallelism: 0.97
 )
+app.scaling_workload = ScalingWorkload.create!(
+  scale_ingredient: true
+)
 app.constraints << DependencyConstraint.create!(
   source: app,
   target: db
+)
+app.constraints << DependencyConstraint.create!(
+  source: app,
+  target: db_slave
 )
 
 worker = rails_app_template.children.create!(
@@ -79,6 +110,9 @@ worker.ram_workload = RamWorkload.create!(
 worker.cpu_workload = CpuWorkload.create!(
   cspu_user_capacity: 1500,
   parallelism: 0.9
+)
+worker.scaling_workload = ScalingWorkload.create!(
+  scale_ingredient: true
 )
 worker.constraints << DependencyConstraint.create!(
   source: worker,

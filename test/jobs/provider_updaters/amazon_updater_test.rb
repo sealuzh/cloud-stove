@@ -20,7 +20,7 @@ class AmazonUpdaterTest < ActiveJob::TestCase
     # Assert that a sample resource is stored correctly
     t2_nano = provider.resources.where(name: 't2.nano', region: 'eu-central-1').first
     assert_not_nil t2_nano
-    assert_equal ({ 'cores' => '1', 'mem_gb' => '0.5', 'price_per_hour' => '0.0075' }), t2_nano.more_attributes
+    assert_equal ({ 'cores' => '0.05', 'mem_gb' => '0.5', 'price_per_hour' => '0.0075' }), t2_nano.more_attributes
     assert_equal 'EU', t2_nano.region_area
   end
 end

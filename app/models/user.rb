@@ -14,11 +14,13 @@ class User < ActiveRecord::Base
   has_many :dependency_constraints
   has_many :preferred_region_area_constraints
   has_many :provider_constraints
+  has_many :scaling_constraints
 
   has_many :cpu_workloads
   has_many :ram_workloads
   has_many :user_workloads
   has_many :traffic_workloads
+  has_many :scaling_workloads
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

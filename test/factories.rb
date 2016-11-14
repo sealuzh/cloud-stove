@@ -156,11 +156,11 @@ FactoryGirl.define do
 
     trait :amazon_c1 do
       name 't2.nano'
-      more_attributes(JSON.parse '{"cores":"1","mem_gb":"0.5","price_per_hour":"0.0065"}')
+      more_attributes(JSON.parse '{"cores":"0.05","mem_gb":"0.5","price_per_hour":"0.0065"}')
     end
     trait :amazon_c2 do
       name 't2.micro'
-      more_attributes(JSON.parse '{"cores":"1", "mem_gb":"1.0", "price_per_hour":"0.013"}')
+      more_attributes(JSON.parse '{"cores":"0.1", "mem_gb":"1.0", "price_per_hour":"0.013"}')
     end
     trait :amazon_c3 do
       name 'c3.2xlarge'
@@ -196,11 +196,11 @@ FactoryGirl.define do
 
     trait :google_c1 do
       name 'f1-micro'
-      more_attributes(JSON.parse '{"price_per_hour":0.009,"price_per_month":"4.6872","cores":"shared","mem_gb":"0.6"}')
+      more_attributes(JSON.parse '{"price_per_hour":0.009,"price_per_month":"4.6872","cores":"0.1","mem_gb":"0.6"}')
     end
     trait :google_c2 do
       name 'g1-small'
-      more_attributes(JSON.parse '{"price_per_hour":0.03,"price_per_month":"15.624","cores":"shared","mem_gb":"1.7"}')
+      more_attributes(JSON.parse '{"price_per_hour":0.03,"price_per_month":"15.624","cores":"0.5","mem_gb":"1.7"}')
     end
     trait :google_s1 do
       name 'CP-BIGSTORE-STORAGE'

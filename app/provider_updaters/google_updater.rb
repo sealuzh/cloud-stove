@@ -60,11 +60,19 @@ class GoogleUpdater < ProviderUpdater
         regions = ['europe','us','asia']
         regions.each do |region|
           resource = provider.resources.find_or_create_by(name: resource_id, region:region)
-          resource.more_attributes['price_per_hour'] = value[region]
+          resource.more_attributes['price_per_hour'] = value[region].to_s
           # FIXME: 744 hours/month assumes a 31 day month. Same as above.
           price_per_month = BigDecimal.new(value[region].to_s) * 744 * full_month_discount
           resource.more_attributes['price_per_month'] = price_per_month
-          resource.more_attributes['cores'] = value['cores']
+          # vCPU Quotas from https://cloud.google.com/compute/pricing#sharedcore
+          resource.more_attributes['cores'] = case resource_id 
+          when 'f1-micro'
+            '0.2'
+          when 'g1-small'
+            '0.5'
+          else
+            value['cores']
+          end
           resource.more_attributes['mem_gb'] = value['memory']
           resource.resource_type = 'compute'
           resource.region_area = extract_region_area(region)
