@@ -1,5 +1,6 @@
 begin
-rails_app_template = Ingredient.find_by_name!('Rails Application with PostgreSQL Backend')
+admin_user = User.stove_admin
+rails_app_template = Ingredient.where(name: 'Rails Application with PostgreSQL Backend', user: admin_user, is_template: true).first
 rails_app_instance = Ingredient.create!(
   template_id: rails_app_template.id,
   name: 'Rails Application with PostgreSQL Backend',
