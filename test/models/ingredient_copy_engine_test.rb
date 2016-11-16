@@ -45,25 +45,47 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     assert_equal root.user, copy_child_1_1.dependency_constraints.first.user
   end
 
-  def assert_basic_copy(original, copy)
+  test 'instantiate single ingredient' do
+    template = create(:ingredient, :template)
+    create(:user_workload, ingredient: template)
+    create(:preferred_region_area_constraint, ingredient: template)
+    create(:ram_constraint, ingredient: template)
+    create(:cpu_constraint, ingredient: template)
+    create(:ram_workload, ingredient: template)
+    create(:cpu_workload, ingredient: template)
+    new_user = create(:user)
+
+    instance = template.instantiate(new_user)
+
+    assert_equal new_user, instance.user
+    assert_equal template, instance.template
+    assert_constraint_copy(template, instance, new_user)
+    assert_workload_copy(template, instance, new_user)
+    assert_equal template.user_workload.num_simultaneous_users, instance.user_workload.num_simultaneous_users
+    # Lookup via `UserWorkload` checks whether the changes are actually saved to the db!
+    assert_equal new_user, UserWorkload.find(instance.user_workload.id).user
+  end
+
+  def assert_basic_copy(original, copy, user=original.user)
     assert copy.name.start_with?(original.name)
     assert_equal original.children.count, copy.children.count
-    assert_equal original.user, copy.user
+    assert_equal user, copy.user
   end
 
-  def assert_constraint_copy(original, copy)
+  def assert_constraint_copy(original, copy, user=original.user)
     assert_equal original.ram_constraint.min_ram, copy.ram_constraint.min_ram
-    assert_equal original.ram_constraint.user, copy.ram_constraint.user
+    assert_equal user, copy.ram_constraint.user
     assert_equal original.cpu_constraint.min_cpus, copy.cpu_constraint.min_cpus
-    assert_equal original.cpu_constraint.user, copy.cpu_constraint.user
+    assert_equal user, copy.cpu_constraint.user
     assert_equal original.preferred_region_area_constraint.preferred_region_area, copy.preferred_region_area_constraint.preferred_region_area
-    assert_equal original.preferred_region_area_constraint.user, copy.preferred_region_area_constraint.user
+    assert_equal user, copy.preferred_region_area_constraint.user
   end
 
-  def assert_workload_copy(original, copy)
+  def assert_workload_copy(original, copy, user=original.user)
     assert_equal original.ram_workload.ram_mb_required, copy.ram_workload.ram_mb_required
-    assert_equal original.ram_workload.user, copy.ram_workload.user
+    assert_equal user, copy.ram_workload.user
     assert_equal original.cpu_workload.cspu_user_capacity, copy.cpu_workload.cspu_user_capacity
-    assert_equal original.cpu_workload.user, copy.cpu_workload.user
+    # Lookup via `CpuWorkload` checks whether the changes are actually saved to the db!
+    assert_equal user, CpuWorkload.find(copy.cpu_workload.id).user
   end
 end
