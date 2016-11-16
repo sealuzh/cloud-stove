@@ -86,14 +86,14 @@ class IngredientCopyEngine
       if new_user.present?
         copy.user = new_user
 
-        copy.cpu_constraint.user = new_user if copy.cpu_constraint.present?
-        copy.ram_constraint.user = new_user if copy.ram_constraint.present?
-        copy.preferred_region_area_constraint.user = new_user if copy.preferred_region_area_constraint.present?
-        copy.provider_constraint.user = new_user if copy.provider_constraint.present?
-        copy.ram_workload.user = new_user if copy.ram_workload.present?
-        copy.cpu_workload.user = new_user if copy.cpu_workload.present?
-        copy.user_workload.user = new_user if copy.user_workload.present?
-        copy.scaling_workload.user = new_user if current.scaling_workload.present?
+        (copy.cpu_constraint.user = new_user; copy.cpu_constraint.save!) if copy.cpu_constraint.present?
+        (copy.ram_constraint.user = new_user; copy.ram_constraint.save!) if copy.ram_constraint.present?
+        (copy.preferred_region_area_constraint.user = new_user; copy.preferred_region_area_constraint.save!) if copy.preferred_region_area_constraint.present?
+        (copy.provider_constraint.user = new_user; copy.provider_constraint.save!) if copy.provider_constraint.present?
+        (copy.ram_workload.user = new_user; copy.ram_workload.save!) if copy.ram_workload.present?
+        (copy.cpu_workload.user = new_user; copy.cpu_workload.save!) if copy.cpu_workload.present?
+        (copy.user_workload.user = new_user; copy.user_workload.save!) if copy.user_workload.present?
+        (copy.scaling_workload.user = new_user; copy.scaling_workload.save!) if current.scaling_workload.present?
       end
 
       copy.save!
