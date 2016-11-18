@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
 
     def remap_more_attributes(more_attributes, ingredient)
       new_more_attributes = more_attributes
-      new_leaf_ids = ingredient.all_leafs.sort_by(&:id).map(&:id)
+      new_leaf_ids = ingredient.all_leafs.map(&:id)
       new_mappings = {}
       if more_attributes['ingredients'].present?
         more_attributes['ingredients'].values.each_with_index do |resource, index|
