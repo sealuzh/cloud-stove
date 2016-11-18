@@ -126,7 +126,7 @@ class DeploymentRecommendation < Base
   end
 
   def ingredient_resource_mapping(ingredient_resources)
-    ingredient_ids = self.ingredient.all_leafs.sort_by(&:id).map(&:id)
+    ingredient_ids = self.ingredient.all_leafs.map(&:id)
     resource_codes = ingredient_resources.map(&:to_i)
     Hash[ingredient_ids.zip(resource_codes)]
   end
