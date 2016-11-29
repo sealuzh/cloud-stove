@@ -1,5 +1,5 @@
 class ResourcesController < ApplicationController
-  before_action :authenticate_admin!
+  #before_action :authenticate_admin!
 
   def index
     @resources = Resource.page(params[:page])
