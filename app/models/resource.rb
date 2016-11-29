@@ -77,10 +77,10 @@ class Resource < Base
 
     def compute_as_json(resource)
       hash = {}
-      hash[:cores] = resource.cores
-      hash[:mem_gb] = resource.mem_gb
-      hash[:price_per_hour] = resource.price_per_hour
-      hash[:price_per_month] = resource.price_per_month
+      hash[:cores] = resource.cores.to_f
+      hash[:mem_gb] = resource.mem_gb.to_f
+      hash[:price_per_hour] = resource.price_per_hour.to_f
+      hash[:price_per_month] = resource.price_per_month.to_f
       hash[:region] = resource.region
       hash[:region_area] = resource.region_area
       hash[:bandwidth_mpbs] = resource.bandwidth_mbps if resource.bandwidth_mbps
