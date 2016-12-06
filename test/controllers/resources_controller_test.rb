@@ -22,4 +22,11 @@ class ResourcesControllerTest < ActionController::TestCase
     get :index, region_area: 'US'
     assert_equal ['US'], json_response.map { |r| r['region_area'] }.uniq
   end
+
+  test 'listing unique region areas' do
+    create(:resource, region_area: 'EU')
+    create(:resource, region_area: 'US')
+    get :region_areas
+    assert_equal ['EU', 'US'], json_response
+  end
 end

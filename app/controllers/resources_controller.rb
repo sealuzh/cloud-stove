@@ -14,4 +14,12 @@ class ResourcesController < ApplicationController
       format.json {render json: @resource, status: :ok}
     end
   end
+
+  def region_areas
+    @region_areas = Resource.uniq.pluck(:region_area)
+    respond_to do |format|
+      format.html
+      format.json {render json: @region_areas, status: :ok}
+    end
+  end
 end
