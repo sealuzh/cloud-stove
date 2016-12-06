@@ -56,8 +56,8 @@ Rails.application.routes.draw do
 
   resources :scaling_workloads, concerns: [:paginatable]
 
+  get 'resources_region_areas' => 'resources#region_areas', as: :region_areas
   resources :resources, only: [:show, :index], concerns: [:paginatable]
-  get 'resources/region_areas' => 'resources#region_areas', as: :region_areas
 
   get 'workloads/new/:ingredient_id' => 'workloads#new'
 
