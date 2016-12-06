@@ -6,6 +6,7 @@ class Resource < Base
   before_create :generate_resource_code
   scope :compute, -> { where(resource_type: 'compute') }
   scope :region_area, ->(region_area) { where(region_area: region_area) }
+  scope :provider_name, ->(provider_name) { where(provider_id: Provider.find_by_name(provider_name)) }
 
   validates :resource_type, presence: true
 
