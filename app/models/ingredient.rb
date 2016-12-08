@@ -141,9 +141,33 @@ class Ingredient < Base
     engine.instantiate(self, new_user)
   end
 
+  def schedule_recommendation_jobs(num_users_list)
+    ConstructRecommendationsJob.perform_later(self, num_users_list)
+  end
+
+  def construct_recommendations(num_users_list)
+    providers = self.provider_constraint.providers rescue [nil]
+    num_users_list.each do |num_simultaneous_users|
+      providers.each do |provider|
+        recommendation = self.deployment_recommendations.create(
+            num_simultaneous_users: num_simultaneous_users,
+            status: DeploymentRecommendation::UNCONSTRUCTED,
+            user: self.user
+        )
+        self.user_workload.num_simultaneous_users = num_simultaneous_users
+        self.user_workload.save!
+        #TODO: necessary?
+        self.reload
+        update_constraints
+        recommendation.construct(provider)
+        recommendation.schedule_evaluation
+      end
+    end
+  end
+
   def schedule_recommendation_job(perform_later = true)
     update_constraints
-    preferred_providers = self.provider_constraint.provider_list rescue [nil]
+    preferred_providers = self.provider_constraint.provider_names rescue [nil]
     jobs = []
     preferred_providers.each do |provider_name|
       provider_id = Provider.find_by_name(provider_name)

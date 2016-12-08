@@ -22,28 +22,44 @@ class DeploymentRecommendation < Base
   SEARCH_COMPLETE_MSG = '==========' # '--search-complete-msg'
   UNSATISFIABLE_MSG = '=====UNSATISFIABLE====='
 
-  # Status
+  # Intermediate status
+  UNCONSTRUCTED = 'unconstructed'
+  UNEVALUATED = 'unevaluated'
+  # Final status
   UNSATISFIABLE = 'unsatisfiable'
   SATISFIABLE = 'satisfiable'
+  EVALUATION_ERROR = 'evaluation_error'
 
   belongs_to :ingredient
   belongs_to :user
 
-  scope :satisfiable, -> { where("deployment_recommendations.status != ? or deployment_recommendations.status IS NULL", UNSATISFIABLE) }
+  scope :satisfiable, -> { where(status: SATISFIABLE) }
   scope :unsatisfiable, -> { where(status: UNSATISFIABLE) }
 
   def self.construct(ingredient, provider_id = nil)
     recommendation = DeploymentRecommendation.create(ingredient: ingredient, num_simultaneous_users: ingredient.num_simultaneous_users)
     recommendation.generate_resources_data(provider_id)
     recommendation.generate_ingredients_data(provider_id)
-    recommendation.generate
+    recommendation.evaluate
     recommendation.user = recommendation.ingredient.user
     recommendation.save!
     recommendation
   end
 
-  # @pre providers and resources must already exist
-  def generate
+  def construct(provider)
+    self.generate_resources_data(provider.id)
+    self.generate_ingredients_data(provider.id)
+    self.status = DeploymentRecommendation::UNEVALUATED
+    self.save!
+  end
+
+  def schedule_evaluation
+    EvaluateRecommendationJob.perform_later(self)
+  end
+
+  # @pre recommendation must be constructed &&
+  #      providers and resources must already exist
+  def evaluate
     resources = Tempfile.new(%w(resources .dzn))
     resources.write self.resources_data
     resources.close
@@ -64,7 +80,9 @@ class DeploymentRecommendation < Base
              '--------------------------' ].join("\n")
     end
 
-    ensure
+  rescue
+    self.status = EVALUATION_ERROR
+  ensure
     resources.unlink
     ingredients.unlink
   end

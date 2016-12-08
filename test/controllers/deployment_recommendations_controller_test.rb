@@ -25,4 +25,18 @@ class DeploymentRecommendationsControllerTest < ActionController::TestCase
     assert_response :ok
     assert_equal ' ComputeRecommendationJob', JobWrapper.find_by_uuid(json_response['job_id']).job_type
   end
+
+  test 'trigger range' do
+    rails_app = create(:rails_app, user: @user)
+    rails_app.user_workload = create(:user_workload, user: @user)
+    rails_app.children.each do |child|
+      child.cpu_workload = create(:cpu_workload, user: @user)
+      child.ram_workload = create(:ram_workload, user: @user)
+    end
+
+    post :trigger_range, ingredient_id: rails_app.id, min: 1000, max: 2000, step: 500
+    assert_response :ok
+    assert_equal 1, Delayed::Job.count
+    assert_equal ' ConstructRecommendationsJob', JobWrapper.new(Delayed::Job.first).job_type
+  end
 end

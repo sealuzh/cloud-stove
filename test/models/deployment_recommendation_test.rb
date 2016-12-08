@@ -87,7 +87,7 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
     recommendation = DeploymentRecommendation.construct(@rails_app)
     # No instance available with more than 15GB RAM
-    assert_equal 'unsatisfiable', recommendation.status
+    assert_equal DeploymentRecommendation::UNSATISFIABLE, recommendation.status
     # assert_equal 'constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);', recommendation.more_attributes['unsatisfiable_message']
   end
   

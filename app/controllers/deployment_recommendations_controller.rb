@@ -44,6 +44,21 @@ class DeploymentRecommendationsController < ApplicationController
     end
   end
 
+  def trigger_range
+    ingredient = current_user.ingredients.find(params[:ingredient_id])
+    min = params[:min].to_i || 100
+    max = params[:max].to_i || 500
+    step = params[:step].to_i || 50
+    range = (min..max).step(step).to_a
+    job_ids = ingredient.schedule_recommendation_jobs(range)
+
+    # TODO: Handle error case
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'DeploymentRecommendation has been scheduled!' }
+      format.json { render json: {job_ids: job_ids}, status: :ok}
+    end
+  end
+
   def trigger
     ingredient = current_user.ingredients.find_by_id(params[:ingredient_id])
 
@@ -65,5 +80,4 @@ class DeploymentRecommendationsController < ApplicationController
       end
     end
   end
-
 end
