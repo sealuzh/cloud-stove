@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   resources :ingredients, concerns: [:paginatable] do
     put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
     post 'trigger_range' => 'deployment_recommendations#trigger_range', as: :trigger_range
+    get 'recommendations_completed' => 'ingredients#recommendations_completed', as: :recommendations_completed
     get 'recommendations' => 'deployment_recommendations#index', as: :recommendations
     get 'has_recommendations' => 'deployment_recommendations#has_recommendations', as: :has_recommendations
     get 'copy' => 'ingredients#copy', as: :copy_ingredient

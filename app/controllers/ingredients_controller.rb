@@ -1,6 +1,6 @@
 class IngredientsController < ApplicationController
   before_action :set_ingredient_from_admin, only: [:show, :instance, :instances]
-  before_action :set_ingredient, only: [:edit, :update, :destroy, :copy, :template]
+  before_action :set_ingredient, only: [:edit, :update, :destroy, :copy, :template, :recommendations_completed]
   skip_before_action :authenticate_user!, only: [:templates]
   before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
 
@@ -160,6 +160,13 @@ class IngredientsController < ApplicationController
     end
   end
 
+  def recommendations_completed
+    are_recommendations_completed = @ingredient.constructions_completed? && @ingredient.evaluations_completed?
+    respond_to do |format|
+      format.html { render json: are_recommendations_completed }
+      format.json { render json: are_recommendations_completed }
+    end
+  end
 
   private
 

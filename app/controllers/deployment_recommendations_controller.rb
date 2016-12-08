@@ -50,12 +50,12 @@ class DeploymentRecommendationsController < ApplicationController
     max = params[:max].to_i || 500
     step = params[:step].to_i || 50
     range = (min..max).step(step).to_a
-    job_ids = ingredient.schedule_recommendation_jobs(range)
+    job_id = ingredient.schedule_recommendation_jobs(range).job_id
 
     # TODO: Handle error case
     respond_to do |format|
       format.html { redirect_to :back, notice: 'DeploymentRecommendation has been scheduled!' }
-      format.json { render json: {job_ids: job_ids}, status: :ok}
+      format.json { render json: {job_id: job_id}, status: :ok}
     end
   end
 

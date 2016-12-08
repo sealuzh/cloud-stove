@@ -272,6 +272,14 @@ class DeploymentRecommendation < Base
     regions.flatten
   end
 
+  def constructed?
+    self.status != UNCONSTRUCTED || self.status.nil?
+  end
+
+  def evaluated?
+    (self.status != UNCONSTRUCTED && self.status != UNEVALUATED) || self.status.nil?
+  end
+
   def as_json(options={})
     hash = extract_params(self)
 

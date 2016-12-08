@@ -142,7 +142,9 @@ class Ingredient < Base
   end
 
   def schedule_recommendation_jobs(num_users_list)
-    ConstructRecommendationsJob.perform_later(self, num_users_list)
+    job = ConstructRecommendationsJob.perform_later(self, num_users_list)
+    self.add_job(job.job_id)
+    job
   end
 
   def construct_recommendations(num_users_list)
@@ -179,6 +181,25 @@ class Ingredient < Base
     end
     # TODO: Adjust API to return a list of job ids for each job
     jobs.last
+  end
+
+  def add_job(job_id)
+    # Notice that the `more_attributes` serialization mechanism converts the set into an array
+    ma['construction_jobs'].present? ? ma['construction_jobs'] = Set.new(ma['construction_jobs']).add(job_id) : ma['construction_jobs'] = Set.new([job_id])
+    self.save!
+  end
+
+  def remove_job(job_id)
+    self.more_attributes['construction_jobs'].delete(job_id)
+    self.save!
+  end
+
+  def constructions_completed?
+    self.more_attributes['construction_jobs'].size == 0 rescue true
+  end
+
+  def evaluations_completed?
+    self.deployment_recommendations.select {|r| !r.evaluated? }.count == 0
   end
 
   def scaling_workload
