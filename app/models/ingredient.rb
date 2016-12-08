@@ -156,12 +156,13 @@ class Ingredient < Base
             status: DeploymentRecommendation::UNCONSTRUCTED,
             user: self.user
         )
-        self.user_workload.num_simultaneous_users = num_simultaneous_users
-        self.user_workload.save!
-        #TODO: necessary?
-        self.reload
-        update_constraints
-        recommendation.construct(provider)
+        ActiveRecord::Base.transaction do
+          self.user_workload.num_simultaneous_users = num_simultaneous_users
+          self.user_workload.save!
+          self.reload
+          update_constraints
+          recommendation.construct(provider)
+        end
         recommendation.schedule_evaluation
       end
     end
