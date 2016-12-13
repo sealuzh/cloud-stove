@@ -1,0 +1,9 @@
+--protected
+--private
+--readme README.md
+--asset docs/images:images
+--load ./docs/yard_plugin.rb
+-
+LICENSE
+*.md
+docs/*.md
