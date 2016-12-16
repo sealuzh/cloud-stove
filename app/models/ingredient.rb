@@ -142,6 +142,7 @@ class Ingredient < Base
   end
 
   def schedule_recommendation_jobs(num_users_list)
+    fail 'Recommendations can only be generated for root ingredients!' unless self.application_root?
     job = ConstructRecommendationsJob.perform_later(self, num_users_list)
     self.add_job(job.job_id)
     job

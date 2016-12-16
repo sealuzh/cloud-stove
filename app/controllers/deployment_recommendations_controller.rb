@@ -19,7 +19,6 @@ class DeploymentRecommendationsController < ApplicationController
 
   end
 
-
   def destroy
     recommendation = current_user.deployment_recommendations.find(params[:recommendation_id])
     if recommendation.present?
@@ -52,10 +51,14 @@ class DeploymentRecommendationsController < ApplicationController
     range = (min..max).step(step).to_a
     job_id = ingredient.schedule_recommendation_jobs(range).job_id
 
-    # TODO: Handle error case
     respond_to do |format|
-      format.html { redirect_to :back, notice: 'DeploymentRecommendation has been scheduled!' }
+      format.html { redirect_to :back, notice: 'Deployment recommendation range has been scheduled!' }
       format.json { render json: {job_id: job_id}, status: :ok}
+    end
+  rescue => e
+    respond_to do |format|
+      format.html { redirect_to :back, notice: "Error while scheduling deployment recommendation range:\n#{e.message}" }
+      format.json { render json: e.message, status: :internal_server_error}
     end
   end
 
