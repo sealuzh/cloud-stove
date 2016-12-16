@@ -5,6 +5,7 @@ class AmazonUpdater < ProviderUpdater
     super
     @prefixes = {
         'us' => 'US',
+        'ca' => 'US',
         'eu' => 'EU',
         'ap' => 'ASIA',
         'sa' => 'SA',
