@@ -35,7 +35,6 @@ Rails.application.routes.draw do
   delete 'recommendations/:recommendation_id' => 'deployment_recommendations#destroy', as: :delete_recommendation
 
   resources :ingredients, concerns: [:paginatable] do
-    put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
     post 'trigger_range' => 'deployment_recommendations#trigger_range', as: :trigger_range
     get 'recommendations_completed' => 'ingredients#recommendations_completed', as: :recommendations_completed
     get 'recommendations' => 'deployment_recommendations#index', as: :recommendations

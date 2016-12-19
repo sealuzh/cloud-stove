@@ -148,7 +148,7 @@ class Ingredient < Base
     job
   end
 
-  def construct_recommendations(num_users_list)
+  def construct_recommendations(num_users_list, args = {perform_later: true})
     providers = self.provider_constraint.providers rescue [nil]
     num_users_list.each do |num_simultaneous_users|
       providers.each do |provider|
@@ -164,25 +164,13 @@ class Ingredient < Base
           update_constraints
           recommendation.construct(provider)
         end
-        recommendation.schedule_evaluation
+        if args[:perform_later]
+          recommendation.schedule_evaluation
+        else
+          recommendation.evaluate
+        end
       end
     end
-  end
-
-  def schedule_recommendation_job(perform_later = true)
-    update_constraints
-    preferred_providers = self.provider_constraint.provider_names rescue [nil]
-    jobs = []
-    preferred_providers.each do |provider_name|
-      provider_id = Provider.find_by_name(provider_name)
-      if perform_later
-        jobs << ComputeRecommendationJob.perform_later(self, provider_id)
-      else
-        DeploymentRecommendation.construct(self, provider_id)
-      end
-    end
-    # TODO: Adjust API to return a list of job ids for each job
-    jobs.last
   end
 
   def add_job(job_id)

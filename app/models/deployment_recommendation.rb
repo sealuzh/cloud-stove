@@ -36,16 +36,6 @@ class DeploymentRecommendation < Base
   scope :satisfiable, -> { where(status: SATISFIABLE) }
   scope :unsatisfiable, -> { where(status: UNSATISFIABLE) }
 
-  def self.construct(ingredient, provider_id = nil)
-    recommendation = DeploymentRecommendation.create(ingredient: ingredient, num_simultaneous_users: ingredient.num_simultaneous_users)
-    recommendation.generate_resources_data(provider_id)
-    recommendation.generate_ingredients_data(provider_id)
-    recommendation.evaluate
-    recommendation.user = recommendation.ingredient.user
-    recommendation.save!
-    recommendation
-  end
-
   def construct(provider)
     self.generate_resources_data(provider.id)
     self.generate_ingredients_data(provider.id)
@@ -112,16 +102,8 @@ class DeploymentRecommendation < Base
       self.save!
     else
       self.status = UNSATISFIABLE
-      self.more_attributes = unsatisfiable_msg(stderr)
       self.save!
     end
-  end
-
-  def unsatisfiable_msg(stderr)
-      line = line_with_error(stderr)
-    { unsatisfiable_message: line_from_minizinc_model(line) }
-  rescue NoMethodError
-    { unsatisfiable_message: 'Could not localize MiniZinc error!' }
   end
 
   def line_from_minizinc_model(line)

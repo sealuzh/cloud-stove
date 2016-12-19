@@ -16,173 +16,73 @@ class DeploymentRecommendationTest < ActiveSupport::TestCase
 
   test 'generate deployment recommendation' do
     create(:amazon_provider)
-    create(:google_provider)
 
-    recommendation = DeploymentRecommendation.construct(@rails_app)
+    @rails_app.construct_recommendations([200], perform_later: false)
+    recommendation = @rails_app.deployment_recommendations.first
 
-    expected_resources = %w(g1-small g1-small g1-small).collect { |n|  Resource.find_by_name(n) }
-    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
+    expected_resources = %w(t2.micro t2.micro c3.2xlarge).collect { |n|  Resource.find_by_name(n) }
+    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id).map(&:to_s)
     resource_codes = expected_resources.collect(&:resource_code)
     ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
     region_codes = expected_resources.collect(&:region_code)
     expected_recommendation =  {
       'ingredients' => ingredients_hash,
       'regions' => region_codes,
-      'num_resources' => [ '2', '3', '2' ],
-      'vm_cost' => '109.37',
-      'total_cost' => 109375
+      'num_resources' => %w(10 10 1),
+      'vm_cost' => '505.92',
+      'total_cost' => 505941
     }
     # Example JSON:
-    # {"ingredients"=>{3=>1207022094, 4=>1207022094, 5=>3159946989},
-    #  "regions"=>[3005993341, 3005993341, 3005993341],
-    #  "vm_cost"=>"634.63",
-    #  "total_cost"=>634632}
+    # { "ingredients": {"3":3159946989,"4":3159946989,"5":1207022094}
+    #   "num_resources":["10","10","1"],
+    #   "regions":[3005993341,3005993341,3005993341],
+    #   "vm_cost":"505.92",
+    #   "total_cost":505941
+    # }
     assert_equal expected_recommendation, recommendation.more_attributes
   end
 
   test 'region constraint on root ingredient' do
     @rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
-    create(:amazon_provider)
-    create(:google_provider)
-    create(:azure_provider)
+    azure_provider = create(:azure_provider)
+    # Populate good and cheap resource in other region that should be favored without region constraint
+    create(:resource, :azure_c0, region: 'North Europe', region_area: 'EU', provider: azure_provider)
+    @rails_app.provider_constraint.preferred_providers = azure_provider.name
 
-    recommendation = DeploymentRecommendation.construct(@rails_app)
+    @rails_app.construct_recommendations([200], perform_later: false)
+    recommendation = @rails_app.deployment_recommendations.first
 
     expected_resources = %w(A0 A0 A0).collect { |n|  Resource.find_by_name(n) }
-    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_codes = expected_resources.collect(&:resource_code)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
     region_codes = expected_resources.collect(&:region_code)
     assert_equal region_codes, recommendation.more_attributes['regions']
   end
 
   test 'hierarchical region constraint' do
     @rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
+    @rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
+    azure_provider = create(:azure_provider)
+    # Populate good and cheap resource in other region that should be favored without region constraint
+    create(:resource, :azure_c0, region: 'North Europe', region_area: 'EU', provider: azure_provider)
+    @rails_app.provider_constraint.preferred_providers = azure_provider.name
     lb = Ingredient.find_by_name('NGINX')
     lb.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'EU')
-    create(:amazon_provider)
-    create(:google_provider)
     create(:azure_provider)
 
-    recommendation = DeploymentRecommendation.construct(@rails_app)
+    @rails_app.construct_recommendations([200], perform_later: false)
+    recommendation = @rails_app.deployment_recommendations.first
 
-    expected_resources = %w(A2 A3 g1-small).collect { |n|  Resource.find_by_name(n) }
-    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_codes = expected_resources.collect(&:resource_code)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
+    expected_resources = %w(A2 A3 Ax).collect { |n|  Resource.find_by_name(n) }
     region_codes = expected_resources.collect(&:region_code)
     assert_equal region_codes, recommendation.more_attributes['regions']
   end
 
-  # Tests for vertically scaled apps
-
-  test '[vertical scaling] unsatisfiable constraint' do
+  # NGINX ingredient does scale vertically
+  test 'unsatisfiable constraint' do
     create(:amazon_provider)
-    rc = @rails_app.children.first.ram_constraint
-    rc.min_ram = 16_000_000
-    rc.save!
-    sc = @rails_app.children.first.scaling_constraint
-    sc.max_num_instances = 1
-    sc.save!
 
-    recommendation = DeploymentRecommendation.construct(@rails_app)
-    # No instance available with more than 15GB RAM
+    @rails_app.construct_recommendations([200_000], perform_later: false)
+    recommendation = @rails_app.deployment_recommendations.first
+
     assert_equal DeploymentRecommendation::UNSATISFIABLE, recommendation.status
-    # assert_equal 'constraint forall(i in Ingredients)(ram[assignments[i]] >= min_ram[i]);', recommendation.more_attributes['unsatisfiable_message']
-  end
-  
-  test '[vertical scaling] generate deployment recommendation' do
-    create(:amazon_provider)
-    create(:google_provider)
-    @rails_app.children.each do |c|
-      sc = c.scaling_constraint
-      sc.max_num_instances = 1
-      sc.save!
-      cc = c.cpu_constraint
-      cc.min_cpus = 0.01
-      cc.save!
-    end
-
-    recommendation = DeploymentRecommendation.construct(@rails_app)
-
-    expected_resources = %w(c3.2xlarge c3.2xlarge t2.micro).collect { |n|  Resource.find_by_name(n) }
-    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_codes = expected_resources.collect(&:resource_code)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
-    region_codes = expected_resources.collect(&:region_code)
-    expected_recommendation =  {
-      'ingredients' => ingredients_hash,
-      'num_resources' => ['1'] * ingredient_ids.count,
-      'regions' => region_codes,
-      'vm_cost' => '634.63',
-      'total_cost' => 634635
-    }
-    # Example JSON:
-    # {"ingredients"=>{3=>123, 4=>123, 5=>122, 6=>123},
-    #  "regions"=>[3005993341, 3005993341, 3005993341, 3005993341],
-    #  "vm_cost"=>"947.11",
-    #  "total_cost"=>947112}
-    assert_equal expected_recommendation, recommendation.more_attributes
-  end
-
-  test '[vertical scaling] region constraint on root ingredient' do
-    @rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
-    create(:amazon_provider)
-    create(:google_provider)
-    create(:azure_provider)
-    @rails_app.children.each do |c|
-      sc = c.scaling_constraint
-      sc.max_num_instances = 1
-      sc.save!
-    end
-
-    recommendation = DeploymentRecommendation.construct(@rails_app)
-
-    expected_resources = %w(A2 A3 A1).collect { |n|  Resource.find_by_name(n) }
-    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_codes = expected_resources.collect(&:resource_code)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
-    region_codes = expected_resources.collect(&:region_code)
-    expected_recommendation = {
-      'ingredients' => ingredients_hash,
-      'num_resources' => ['1'] * ingredient_ids.count,
-      'regions' => region_codes,
-      'vm_cost' => '475.42',
-      'total_cost' => 475419
-    }
-    assert_equal expected_recommendation, recommendation.more_attributes
-  end
-
-  test '[vertical scaling] hierarchical region constraint' do
-    @rails_app.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'US')
-    lb = Ingredient.find_by_name('NGINX')
-    lb.preferred_region_area_constraint = PreferredRegionAreaConstraint.create(preferred_region_area: 'EU')
-    create(:amazon_provider)
-    create(:google_provider)
-    create(:azure_provider)
-    @rails_app.children.each do |c|
-      sc = c.scaling_constraint
-      sc.max_num_instances = 1
-      sc.save!
-      cc = c.cpu_constraint
-      cc.min_cpus = 0.01
-      cc.save!
-    end
-
-    recommendation = DeploymentRecommendation.construct(@rails_app)
-
-    expected_resources = %w(A2 A3 t2.micro).collect { |n|  Resource.find_by_name(n) }
-    ingredient_ids = @rails_app.children.sort_by(&:id).map(&:id)
-    resource_codes = expected_resources.collect(&:resource_code)
-    ingredients_hash = Hash[ingredient_ids.zip(resource_codes)]
-    region_codes = expected_resources.collect(&:region_code)
-    expected_recommendation = {
-        'ingredients' => ingredients_hash,
-        'num_resources' => ['1'] * ingredient_ids.count,
-        'regions' => region_codes,
-        'vm_cost' => '414.41',
-        'total_cost' => 434411
-    }
-    assert_equal expected_recommendation, recommendation.more_attributes
   end
 end

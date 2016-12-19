@@ -19,12 +19,6 @@ class RecommendationSeeds
 
   def self.generate_recommendations(app)
     num_simultaneous_users_list = (500..5_000).step(500).to_a
-    num_simultaneous_users_list.each do |num_simultaneous_users|
-      workload = app.user_workload
-      workload.num_simultaneous_users = num_simultaneous_users
-      workload.save!
-      app.reload
-      app.schedule_recommendation_job(false)
-    end
+    app.construct_recommendations(num_simultaneous_users_list, perform_later: false)
   end
 end
