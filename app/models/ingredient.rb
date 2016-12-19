@@ -33,7 +33,6 @@ class Ingredient < Base
   # Workloads
   has_one :cpu_workload, class_name: 'CpuWorkload', dependent: :destroy
   has_one :ram_workload, class_name: 'RamWorkload', dependent: :destroy
-  has_one :user_workload, class_name: 'UserWorkload', dependent: :destroy
   has_one :scaling_workload, class_name: 'ScalingWorkload', dependent: :destroy
 
   # Associated generic constraints
@@ -121,7 +120,6 @@ class Ingredient < Base
     workloads = {}
     workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
     workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
-    workloads[:user_workload] = self.user_workload.as_json if self.user_workload.present?
     workloads[:scaling_workload] = self.scaling_workload.as_json if self.scaling_workload.present?
     workloads
   end
@@ -150,18 +148,15 @@ class Ingredient < Base
 
   def construct_recommendations(num_users_list, args = {perform_later: true})
     providers = self.provider_constraint.providers rescue [nil]
-    num_users_list.each do |num_simultaneous_users|
+    num_users_list.each do |num_users|
       providers.each do |provider|
         recommendation = self.deployment_recommendations.create(
-            num_simultaneous_users: num_simultaneous_users,
+            num_simultaneous_users: num_users,
             status: DeploymentRecommendation::UNCONSTRUCTED,
             user: self.user
         )
         ActiveRecord::Base.transaction do
-          self.user_workload.num_simultaneous_users = num_simultaneous_users
-          self.user_workload.save!
-          self.reload
-          update_constraints
+          update_constraints(num_users)
           recommendation.construct(provider)
         end
         if args[:perform_later]
@@ -196,11 +191,11 @@ class Ingredient < Base
     super || create_scaling_workload(scale_ingredient: true, user_id: user_id)
   end
 
-  def update_constraints
+  def update_constraints(num_users)
     all_leafs.each do |leaf|
-      leaf.ram_workload.to_constraint
-      leaf.cpu_workload.to_constraint
-      leaf.scaling_workload.to_constraint
+      leaf.ram_workload.to_constraint(num_users)
+      leaf.cpu_workload.to_constraint(num_users)
+      leaf.scaling_workload.to_constraint(num_users)
     end
   rescue => e
     raise 'Missing a workload definition for a leaf ingredient. ' + e.message
@@ -219,12 +214,6 @@ class Ingredient < Base
     self.parent.nil?
   end
 
-  def num_simultaneous_users
-    application_root.user_workload.num_simultaneous_users
-  rescue => e
-    raise 'User workload not specified for application root. ' + e.message
-  end
-
   def assign_user!(new_user)
     self.user = new_user
     self.children.each do |child|
@@ -237,7 +226,6 @@ class Ingredient < Base
 
   def assign_user_to_attachments!(new_user)
     (self.scaling_workload.user = new_user; scaling_workload.save!) if self.scaling_workload.present?
-    (self.user_workload.user = new_user; user_workload.save!) if self.user_workload.present?
     (self.ram_workload.user = new_user; ram_workload.save!) if self.ram_workload.present?
     (self.cpu_workload.user = new_user; cpu_workload.save!) if self.cpu_workload.present?
     self.constraints.each do |constraint|

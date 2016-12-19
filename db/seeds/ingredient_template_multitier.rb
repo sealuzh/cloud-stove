@@ -18,9 +18,6 @@ static content close to users. Find out more [on Wikipedia][1].
 - Database Backend'
 HERE
 )
-multitier_template.user_workload = UserWorkload.create!(
-  num_simultaneous_users: 200
-)
 multitier_template.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon'
 )

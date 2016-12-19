@@ -15,7 +15,6 @@ class DeploymentRecommendationsControllerTest < ActionController::TestCase
 
   test 'trigger range' do
     rails_app = create(:rails_app, user: @user)
-    rails_app.user_workload = create(:user_workload, user: @user)
     rails_app.children.each do |child|
       child.cpu_workload = create(:cpu_workload, user: @user)
       child.ram_workload = create(:ram_workload, user: @user)

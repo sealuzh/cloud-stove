@@ -3,7 +3,6 @@ require 'test_helper'
 class IngredientCopyEngineTest < ActiveSupport::TestCase
   test 'application instance copy with single ingredient' do
     original = create(:ingredient)
-    create(:user_workload, ingredient: original)
     create(:preferred_region_area_constraint, ingredient: original)
     create(:ram_constraint, ingredient: original)
     create(:cpu_constraint, ingredient: original)
@@ -12,7 +11,6 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     copy = original.copy
 
     assert_basic_copy(original, copy)
-    assert_equal original.user_workload.num_simultaneous_users, copy.user_workload.num_simultaneous_users
     assert_constraint_copy(original, copy)
     assert_workload_copy(original, copy)
   end
@@ -25,7 +23,6 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     child_2 = create(:ingredient, user: user, parent: root)
 
     create(:dependency_constraint, user: user, ingredient: child_1_1, source: child_1_1, target: child_2)
-    create(:user_workload, user: user, ingredient: child_1_1)
     create(:preferred_region_area_constraint, user: user, ingredient: child_1_1)
     create(:ram_constraint, user: user, ingredient: child_1_1)
     create(:cpu_constraint, user: user, ingredient: child_1_1)
@@ -47,7 +44,6 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
 
   test 'instantiate single ingredient' do
     template = create(:ingredient, :template)
-    create(:user_workload, ingredient: template)
     create(:preferred_region_area_constraint, ingredient: template)
     create(:ram_constraint, ingredient: template)
     create(:cpu_constraint, ingredient: template)
@@ -61,9 +57,6 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     assert_equal template, instance.template
     assert_constraint_copy(template, instance, new_user)
     assert_workload_copy(template, instance, new_user)
-    assert_equal template.user_workload.num_simultaneous_users, instance.user_workload.num_simultaneous_users
-    # Lookup via `UserWorkload` checks whether the changes are actually saved to the db!
-    assert_equal new_user, UserWorkload.find(instance.user_workload.id).user
   end
 
   def assert_basic_copy(original, copy, user=original.user)

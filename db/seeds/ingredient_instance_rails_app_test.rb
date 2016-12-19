@@ -15,9 +15,6 @@ A traditional wep application, let's say a web shop with
     * categories
 HERE
 )
-rails_app_instance.user_workload = UserWorkload.create!(
-  num_simultaneous_users: 200
-)
 rails_app_instance.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon'
 )

@@ -53,10 +53,6 @@ FactoryGirl.define do
     end
   end
 
-  factory :user_workload do
-    num_simultaneous_users 300
-  end
-
   factory :ram_workload do
     ram_mb_required 1000
     ram_mb_required_user_capacity 100

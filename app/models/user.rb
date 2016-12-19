@@ -18,7 +18,6 @@ class User < ActiveRecord::Base
 
   has_many :cpu_workloads
   has_many :ram_workloads
-  has_many :user_workloads
   has_many :traffic_workloads
   has_many :scaling_workloads
 
