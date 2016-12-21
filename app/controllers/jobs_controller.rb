@@ -1,8 +1,5 @@
 class JobsController < ApplicationController
-  # TODO: Provide an endpoint for the frontend to check whether the recommendation is already completed
-  # Currently, the frontend simply polls until it gets an 404 (not found) for the job id
-  # Challenge: List of recommendations
-  before_action :authenticate_admin!, except: [:show]
+  before_action :authenticate_admin!
 
   def index
     respond_to do |format|

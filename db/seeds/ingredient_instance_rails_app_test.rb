@@ -15,9 +15,6 @@ A traditional wep application, let's say a web shop with
     * categories
 HERE
 )
-rails_app_instance.user_workload = UserWorkload.create!(
-  num_simultaneous_users: 200
-)
 rails_app_instance.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon'
 )
@@ -45,8 +42,8 @@ db.constraints << RamConstraint.create(
 db.constraints << CpuConstraint.create(
     min_cpus: 1
 )
-db.constraints << ScalingConstraint.create(
-  max_num_instances: 0
+db.scaling_workload = ScalingWorkload.create(
+    scale_ingredient: true
 )
 
 app = rails_app_instance.children.create!(
@@ -73,8 +70,8 @@ app.constraints << RamConstraint.create(
 app.constraints << CpuConstraint.create(
     min_cpus: 1
 )
-app.constraints << ScalingConstraint.create(
-  max_num_instances: 0
+app.scaling_workload = ScalingWorkload.create(
+    scale_ingredient: true
 )
 
 lb = rails_app_instance.children.create!(
@@ -101,8 +98,8 @@ lb.constraints << RamConstraint.create(
 lb.constraints << CpuConstraint.create(
     min_cpus: 1
 )
-lb.constraints << ScalingConstraint.create(
-  max_num_instances: 0
+lb.scaling_workload = ScalingWorkload.create(
+    scale_ingredient: false
 )
 rails_app_instance.assign_user!(User.admin.first)
 end

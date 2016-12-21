@@ -53,10 +53,6 @@ FactoryGirl.define do
     end
   end
 
-  factory :user_workload do
-    num_simultaneous_users 300
-  end
-
   factory :ram_workload do
     ram_mb_required 1000
     ram_mb_required_user_capacity 100
@@ -177,6 +173,11 @@ FactoryGirl.define do
       resource_type 'storage'
     end
 
+    # Good and cheap
+    trait :azure_c0 do
+      name 'Ax'
+      more_attributes(JSON.parse '{"cores":"16","mem_gb":"32","price_per_hour":0.002,"regions":{"japan-east":0.024,"japan-west":0.021,"canada-central":0.024,"canada-east":0.022,"brazil-south":0.024,"australia-southeast":0.029,"australia-east":0.029,"central-india":0.02,"south-india":0.018,"west-india":0.024,"usgov-virginia":0.018,"usgov-iowa":0.018}}')
+    end
     trait :azure_c1 do
       name 'A0'
       more_attributes(JSON.parse '{"cores":"1","mem_gb":"0.75","price_per_hour":0.024,"regions":{"japan-east":0.024,"japan-west":0.021,"canada-central":0.024,"canada-east":0.022,"brazil-south":0.024,"australia-southeast":0.029,"australia-east":0.029,"central-india":0.02,"south-india":0.018,"west-india":0.024,"usgov-virginia":0.018,"usgov-iowa":0.018}}')

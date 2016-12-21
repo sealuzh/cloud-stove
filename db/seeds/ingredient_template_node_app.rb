@@ -9,9 +9,6 @@ A wep application, let's say a web shop with
 * MongoDB as database
 HERE
 )
-node_app_template.user_workload = UserWorkload.create!(
-  num_simultaneous_users: 200
-)
 node_app_template.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon,Google'
 )

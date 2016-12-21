@@ -96,8 +96,18 @@
     = render :partial => 'ingredient',:collection => @ingredient.children
 
 .actions
-  = link_to 'Generate Recommendation', ingredient_trigger_recommendation_path(@ingredient), :method => :put,class: 'btn btn-danger' if @ingredient.application_root?
   = link_to 'Edit', edit_ingredient_path(@ingredient), class: 'btn btn-warning'
   = link_to 'Destroy', @ingredient, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'
   = link_to 'Back', ingredients_path, class: 'btn btn-link'
   = link_to 'Application Root', @ingredient.application_root, class: 'btn btn-info' unless @ingredient.parent.nil?
+
+%br
+%br
+= form_tag ingredient_trigger_range_path(@ingredient, method: :post) do
+  = label_tag 'Min:'
+  = number_field_tag 'min', 1000
+  = label_tag 'Max:'
+  = number_field_tag 'max', 5000
+  = label_tag 'Step:'
+  = number_field_tag 'step', 1000
+  = submit_tag 'Trigger Range Recommendation', class: 'btn btn-danger'

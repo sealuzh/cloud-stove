@@ -6,6 +6,17 @@ class RamWorkload < ActiveRecord::Base
     self.ingredient.application_root.deployment_recommendations.delete_all
   end
 
+  def to_constraint(num_users)
+    self.ingredient.ram_constraint.destroy if self.ingredient.ram_constraint.present?
+    self.ingredient.ram_constraint = RamConstraint.create(
+      min_ram: min_ram(num_users)
+    )
+  end
+
+  def min_ram(num_users)
+    self.ram_mb_required + (num_users * self.ram_mb_growth_per_user).ceil
+  end
+
   def as_json(options={})
     hash = {}
     hash[:id] = self.id
@@ -15,20 +26,4 @@ class RamWorkload < ActiveRecord::Base
     hash[:ingredient_id] = self.ingredient_id
     hash
   end
-
-  def to_constraint
-    self.ingredient.ram_constraint.destroy if self.ingredient.ram_constraint.present?
-    self.ingredient.ram_constraint = RamConstraint.create(
-      min_ram: min_ram(self.ingredient.num_simultaneous_users)
-    )
-  end
-
-  def min_ram(num_simultaneous_users)
-    self.ram_mb_required + (num_simultaneous_users * self.ram_mb_growth_per_user).ceil
-  end
-
-
-
-  private
-
 end

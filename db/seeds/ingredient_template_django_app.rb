@@ -11,9 +11,6 @@ A traditional wep application, let's say a web shop with
 * PostgreSQL as database
 HERE
 )
-django_app_template.user_workload = UserWorkload.create!(
-  num_simultaneous_users: 200
-)
 django_app_template.provider_constraint = ProviderConstraint.create!(
   preferred_providers: 'Amazon,Google'
 )

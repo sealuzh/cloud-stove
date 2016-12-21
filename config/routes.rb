@@ -35,7 +35,8 @@ Rails.application.routes.draw do
   delete 'recommendations/:recommendation_id' => 'deployment_recommendations#destroy', as: :delete_recommendation
 
   resources :ingredients, concerns: [:paginatable] do
-    put 'trigger_recommendation' => 'deployment_recommendations#trigger', as: :trigger_recommendation
+    post 'trigger_range' => 'deployment_recommendations#trigger_range', as: :trigger_range
+    get 'recommendations_completed' => 'ingredients#recommendations_completed', as: :recommendations_completed
     get 'recommendations' => 'deployment_recommendations#index', as: :recommendations
     get 'has_recommendations' => 'deployment_recommendations#has_recommendations', as: :has_recommendations
     get 'copy' => 'ingredients#copy', as: :copy_ingredient
@@ -52,14 +53,11 @@ Rails.application.routes.draw do
 
   resources :traffic_workloads, only: [:show, :index, :destroy, :create, :update, :new], concerns: [:paginatable]
 
-  resources :user_workloads, concerns: [:paginatable]
-
   resources :scaling_workloads, concerns: [:paginatable]
 
   get 'resources_region_areas' => 'resources#region_areas', as: :region_areas
   resources :resources, only: [:show, :index], concerns: [:paginatable]
 
-  get 'workloads/new/:ingredient_id' => 'workloads#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
