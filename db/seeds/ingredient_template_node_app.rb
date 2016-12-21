@@ -2,6 +2,7 @@ begin
 node_app_template = Ingredient.create!(
   is_template: true,
   name: 'NodeJS Application with MongoDB Backend',
+  icon: 'server',
   body: <<-HERE
 A wep application, let's say a web shop with
 
@@ -19,6 +20,7 @@ node_app_template.preferred_region_area_constraint = PreferredRegionAreaConstrai
 db = node_app_template.children.create!(
   is_template: true,
   name: 'MongoDB',
+  icon: 'database',
   body: <<-HERE
 The MongoDB backend stores all data.
 HERE
@@ -38,6 +40,7 @@ db.scaling_workload = ScalingWorkload.create!(
 app = node_app_template.children.create!(
   is_template: true,
   name: 'NodeJS Application Server',
+  icon: 'server',
   body: <<-HERE
 The NodeJS application server hosting the application.
 

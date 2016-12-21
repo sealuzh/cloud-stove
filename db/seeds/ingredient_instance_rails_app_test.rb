@@ -24,6 +24,7 @@ rails_app_instance.preferred_region_area_constraint = PreferredRegionAreaConstra
 
 db = rails_app_instance.children.create!(
   name: 'PostgreSQL',
+  icon: 'database',
   body: <<HERE
 Specific things about the PostgreSQL db.
 HERE
@@ -48,6 +49,7 @@ db.scaling_workload = ScalingWorkload.create(
 
 app = rails_app_instance.children.create!(
   name: 'Rails App',
+  icon: 'server',
   body: <<HERE
 Specific things about the Rails app.
 HERE
@@ -76,6 +78,7 @@ app.scaling_workload = ScalingWorkload.create(
 
 lb = rails_app_instance.children.create!(
     name: 'NGINX',
+    icon: 'sitemap',
     body: <<HERE
 Specific things about the NGINX load balancer.
 HERE

@@ -21,6 +21,7 @@ django_app_template.preferred_region_area_constraint = PreferredRegionAreaConstr
 db = django_app_template.children.create!(
   is_template: true,
   name: 'PostgreSQL Master',
+  icon: 'database',
   body: <<-HERE
 The typical RDBMS backend of a Django application stores all data. 
 To speed up db access, sensible indices are defined on commonly 
@@ -41,6 +42,7 @@ db.scaling_workload = ScalingWorkload.create!(
 
 db_slave = django_app_template.children.create!(
   is_template: true,
+  icon: 'database',
   name: 'PostgreSQL Slave',
   body: <<-HERE
 The typical RDBMS backend of a Django application stores all data. 
@@ -63,6 +65,7 @@ db_slave.scaling_workload = ScalingWorkload.create!(
 queue = django_app_template.children.create!(
   is_template: true,
   name: 'RabbitMQ',
+  icon: 'ellipsis-h',
   body: <<-HERE
 The message queue is used to schedule background jobs with Celery.
 HERE
@@ -82,6 +85,7 @@ queue.scaling_workload = ScalingWorkload.create!(
 app = django_app_template.children.create!(
   is_template: true,
   name: 'Django Application Server',
+  icon: 'server',
   body: <<-HERE
 The Gunicorn application server running the Django application.
 
@@ -110,6 +114,7 @@ app.constraints << DependencyConstraint.create!(
 worker = django_app_template.children.create!(
     is_template: true,
     name: 'Celery Workers',
+    icon: 'cog',
     body: <<-HERE
 The Celery workers get new tasks via RabbitMQ and execute them asynchronously.
 HERE

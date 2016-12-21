@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219130230) do
+ActiveRecord::Schema.define(version: 20161221124611) do
 
   create_table "constraints", force: :cascade do |t|
     t.integer  "ingredient_id"
@@ -78,12 +78,13 @@ ActiveRecord::Schema.define(version: 20161219130230) do
     t.string   "name"
     t.text     "body"
     t.text     "more_attributes"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "parent_id"
     t.integer  "template_id"
     t.boolean  "is_template",     default: false
     t.integer  "user_id"
+    t.string   "icon",            default: "server"
   end
 
   add_index "ingredients", ["is_template"], name: "index_ingredients_on_is_template"

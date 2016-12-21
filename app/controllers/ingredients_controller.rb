@@ -218,7 +218,7 @@ class IngredientsController < ApplicationController
 
     def ingredient_params
       if @ingredient.application_root?
-        params.require(:ingredient).permit(:name,:body,:parent_id,
+        params.require(:ingredient).permit(:name,:icon,:body,:parent_id,
                                            cpu_workload_attributes: [:id, :ingredient_id, :cspu_user_capacity, :parallelism, :_destroy],
                                            ram_workload_attributes: [:id, :ingredient_id, :ram_mb_required, :ram_mb_required_user_capacity, :ram_mb_growth_per_user, :_destroy],
                                            constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],
@@ -227,7 +227,7 @@ class IngredientsController < ApplicationController
                                            preferred_region_area_constraint_attributes:[:id, :ingredient_id, :preferred_region_area, :_destroy],
                                            provider_constraint_attributes:[:id, :ingredient_id, :preferred_providers, :_destroy])
       else
-        params.require(:ingredient).permit(:name,:body,:parent_id,
+        params.require(:ingredient).permit(:name,:icon,:body,:parent_id,
                                            cpu_workload_attributes: [:id, :ingredient_id, :cspu_user_capacity, :parallelism, :_destroy],
                                            ram_workload_attributes: [:id, :ingredient_id, :ram_mb_required, :ram_mb_required_user_capacity, :ram_mb_growth_per_user, :_destroy],
                                            constraints_as_source_attributes: [:id, :ingredient_id, :target_id, :_destroy],

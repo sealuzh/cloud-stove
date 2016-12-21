@@ -11,6 +11,10 @@
     = f.text_field :name, class: 'form-control'
 
   .form-group
+    = f.label 'Icon (Fontawesome)'
+    = f.text_field :icon, class: 'form-control'
+
+  .form-group
     = f.label :parent
     %br
     = f.select :parent_id, (@ingredients - [@ingredient]).map { |i| [i.name, i.id] }, { include_blank: true }
