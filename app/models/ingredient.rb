@@ -191,6 +191,14 @@ class Ingredient < Base
     super || create_scaling_workload(scale_ingredient: true, user_id: user_id)
   end
 
+  def cpu_workload
+    super || create_cpu_workload(cspu_user_capacity: 1500, parallelism: 0.9, user_id: user_id)
+  end
+
+  def ram_workload
+    super || create_ram_workload(ram_mb_required: 600, ram_mb_required_user_capacity: 200, ram_mb_growth_per_user: 0.3, user_id: user_id)
+  end
+
   def update_constraints(num_users)
     all_leafs.each do |leaf|
       leaf.ram_workload.to_constraint(num_users)
