@@ -45,7 +45,11 @@ class DeploymentRecommendation < Base
   end
 
   def schedule_evaluation
-    EvaluateRecommendationJob.perform_later(self)
+    ActiveRecord::Base.transaction do
+      job = EvaluateRecommendationJob.perform_later(self)
+      self.ingredient.add_job(job.job_id)
+      job
+    end
   end
 
   # @pre recommendation must be constructed &&
