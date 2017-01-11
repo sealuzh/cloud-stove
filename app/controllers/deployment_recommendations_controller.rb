@@ -31,6 +31,16 @@ class DeploymentRecommendationsController < ApplicationController
     end
   end
 
+  def destroy_all
+    ingredient = current_user.ingredients.find(params[:ingredient_id])
+
+    ingredient.deployment_recommendations.destroy_all
+    respond_to do |format|
+      format.html
+      format.json {render json: {'message' => "Destroyed all recommendations for ingredient with id #{ingredient.id}!"}, status: :ok}
+    end
+  end
+
   def has_recommendations
     root_ingredient = current_user.ingredients.find(params[:ingredient_id]).application_root
     @has_recommendations = current_user.deployment_recommendations.where(ingredient_id: root_ingredient.id).any?

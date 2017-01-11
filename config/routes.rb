@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     post 'trigger_range' => 'deployment_recommendations#trigger_range', as: :trigger_range
     get 'recommendations_completed' => 'ingredients#recommendations_completed', as: :recommendations_completed
     get 'recommendations' => 'deployment_recommendations#index', as: :recommendations
+    delete 'recommendations' => 'deployment_recommendations#destroy_all', as: :destroy_all_recommendations
     get 'has_recommendations' => 'deployment_recommendations#has_recommendations', as: :has_recommendations
     get 'copy' => 'ingredients#copy', as: :copy_ingredient
     get 'template' => 'ingredients#template', as: :make_template
