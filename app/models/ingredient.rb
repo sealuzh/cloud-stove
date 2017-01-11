@@ -63,6 +63,9 @@ class Ingredient < Base
   accepts_nested_attributes_for :preferred_region_area_constraint, allow_destroy: true
   accepts_nested_attributes_for :provider_constraint, allow_destroy: true
 
+  def self.leafs
+    Ingredient.select { |i| i.leaf? }
+  end
 
   # traverses the ingredients subtree and collects all dependency constraints in it
   def all_dependency_constraints
@@ -105,6 +108,7 @@ class Ingredient < Base
     hash = {}
     hash[:id] = self.id
     hash[:name] = self.name
+    hash[:icon] = self.icon
     hash[:body] = self.body
     hash[:parent_id] = self.parent.id unless self.parent.nil?
     hash[:template_id] = self.template.id unless self.template.nil?
@@ -220,6 +224,10 @@ class Ingredient < Base
 
   def application_root?
     self.parent.nil?
+  end
+
+  def leaf?
+    self.children.none?
   end
 
   def assign_user!(new_user)

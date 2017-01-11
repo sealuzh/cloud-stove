@@ -26,8 +26,9 @@ multitier_template.preferred_region_area_constraint = PreferredRegionAreaConstra
 )
 
 db = multitier_template.children.create!(
-  name: 'Database',
   is_template: true,
+  name: 'Database',
+  icon: 'database',
   body: <<HERE
 Database backend (usually [MySQL](http://mysql.org/) or PostgreSQL)
 deployed on *single master instance* with hot standby (initial deployment)
@@ -58,8 +59,9 @@ db.constraints << CpuConstraint.create!(
 )
 
 app = multitier_template.children.create!(
-  name: 'Application Server',
   is_template: true,
+  name: 'Application Server',
+  icon: 'server',
   body: <<HERE
 Rails/Spring Boot/JSF/Django/Yaws/Revel app deployed on **app server
 group** using (puma|unicorn|passenger|...) to serve content (static and
@@ -91,8 +93,9 @@ app.constraints << DependencyConstraint.create!(
 )
 
 lb = multitier_template.children.create!(
-  name: 'Load Balancer',
   is_template: true,
+  name: 'Load Balancer',
+  icon: 'sitemap',
   body: <<HERE
 Load balancer distributes requests to app server group.
 

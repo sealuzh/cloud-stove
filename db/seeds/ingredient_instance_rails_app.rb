@@ -25,6 +25,7 @@ rails_app_instance.preferred_region_area_constraint = PreferredRegionAreaConstra
 
 db = rails_app_instance.children.create!(
   name: 'PostgreSQL Master',
+  icon: 'database',
   body: <<-HERE
 The typical RDBMS backend of a Rails application stores all data and is used 
 by Delayed Job to schedule background tasks. To speed up db access, sensible
@@ -45,6 +46,7 @@ db.scaling_workload = ScalingWorkload.create!(
 
 db_slave = rails_app_instance.children.create!(
   name: 'PostgreSQL Slave',
+  icon: 'database',
   body: <<-HERE
 The typical RDBMS backend of a Rails application stores all data and is used 
 by Delayed Job to schedule background tasks. To speed up db access, sensible
@@ -65,6 +67,7 @@ db_slave.scaling_workload = ScalingWorkload.create!(
 
 app = rails_app_instance.children.create!(
   name: 'Rails Application Server',
+  icon: 'server',
   body: <<-HERE
 The Puma application server running the Rails application.
 
@@ -92,6 +95,7 @@ app.constraints << DependencyConstraint.create!(
 
 worker = rails_app_instance.children.create!(
   name: 'Delayed Job Workers',
+  icon: 'cog',
   body: <<-HERE
 The Delayed Job workers periodically query the database for new tasks and
 execute them asynchronously.
