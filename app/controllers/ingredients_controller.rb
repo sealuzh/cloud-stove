@@ -161,10 +161,10 @@ class IngredientsController < ApplicationController
   end
 
   def recommendations_completed
-    are_recommendations_completed = @ingredient.constructions_completed? && @ingredient.evaluations_completed?
+    are_recommendations_completed = @ingredient.jobs_completed?
     respond_to do |format|
       format.html { render json: are_recommendations_completed }
-      format.json { render json: are_recommendations_completed }
+      format.json { render json: are_recommendations_completed, status: :ok }
     end
   end
 

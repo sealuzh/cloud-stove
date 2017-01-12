@@ -25,6 +25,7 @@ class DeploymentRecommendation < Base
   # Intermediate status
   UNCONSTRUCTED = 'unconstructed'
   UNEVALUATED = 'unevaluated'
+  EVALUATING = 'evaluating'
   # Final status
   UNSATISFIABLE = 'unsatisfiable'
   SATISFIABLE = 'satisfiable'
@@ -44,12 +45,18 @@ class DeploymentRecommendation < Base
   end
 
   def schedule_evaluation
-    EvaluateRecommendationJob.perform_later(self)
+    ActiveRecord::Base.transaction do
+      job = EvaluateRecommendationJob.perform_later(self)
+      self.ingredient.add_job(job.job_id)
+      job
+    end
   end
 
   # @pre recommendation must be constructed &&
   #      providers and resources must already exist
   def evaluate
+    self.status = EVALUATING
+    self.save!
     resources = Tempfile.new(%w(resources .dzn))
     resources.write self.resources_data
     resources.close
@@ -69,9 +76,9 @@ class DeploymentRecommendation < Base
              stderr,
              '--------------------------' ].join("\n")
     end
-
   rescue
     self.status = EVALUATION_ERROR
+    self.save!
   ensure
     resources.unlink
     ingredients.unlink
@@ -255,11 +262,11 @@ class DeploymentRecommendation < Base
   end
 
   def constructed?
-    self.status != UNCONSTRUCTED || self.status.nil?
+    self.status != UNCONSTRUCTED
   end
 
   def evaluated?
-    (self.status != UNCONSTRUCTED && self.status != UNEVALUATED) || self.status.nil?
+    self.status == SATISFIABLE || self.status == UNSATISFIABLE || self.status == EVALUATION_ERROR
   end
 
   def as_json(options={})
