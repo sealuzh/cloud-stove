@@ -7,7 +7,9 @@ gem 'rails', '~> 4.2.4'
 # Use Haml for templates
 gem 'haml-rails', '~> 0.9'
 # Use Bootstrap, https://github.com/twbs/bootstrap-rubygem#a-ruby-on-rails
-gem 'bootstrap', '~> 4.0.0.alpha5'
+# alpha6 has incompatible changes breaking the font variables in `_type.scss.erb`
+# Diff: https://github.com/twbs/bootstrap-rubygem/commit/f82164992580fca0c3e3dde7d6d097784a514e5b
+gem 'bootstrap', '= 4.0.0.alpha5'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use bourbon for Sass mixins
