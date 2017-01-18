@@ -4,6 +4,14 @@ class IngredientCopyEngine
     base_copy(original)
   end
 
+  # Attaches a copy of a subtree to its parent and
+  # duplicates its dependency constraints by remapping source/target
+  # outside the subtree to its original
+  # @pre `parent` MUST exist
+  def duplicate_subtree(original)
+    base_copy(original)
+  end
+
   def make_template(original)
     (!original.is_template && original.application_root?) ? base_copy(original, true, false) : NIL
   end
@@ -26,27 +34,15 @@ class IngredientCopyEngine
       if original.parent
         # attach to parent of origin if there is any
         root_copy.parent = original.parent
-
-        # if only a subtree is copied (e.g. the root_copy has a parent), there may be dependency constraints to ingredients that did not get copied
-        # because they were outside the subtree being copied (e.g. they have no entry in the copies_hash)
-        # then we use the original ingredient as source/target instead of the non-existing copy
-        dependency_constraints.each do |dependency_constraint|
-          d = DependencyConstraint.new
-          d.source = (copies_hash[dependency_constraint.source.id]) ? copies_hash[dependency_constraint.source.id] : Ingredient.find(dependency_constraint.source.id)
-          d.ingredient = (copies_hash[dependency_constraint.source.id]) ? copies_hash[dependency_constraint.source.id] : Ingredient.find(dependency_constraint.source.id)
-          d.target = (copies_hash[dependency_constraint.target.id]) ? copies_hash[dependency_constraint.target.id] : Ingredient.find(dependency_constraint.target.id)
-          d.save!
-        end
-
-      else
-        dependency_constraints.each do |dependency_constraint|
-          d = DependencyConstraint.new
-          d.source = copies_hash[dependency_constraint.source.id]
-          d.ingredient = copies_hash[dependency_constraint.source.id]
-          d.target = copies_hash[dependency_constraint.target.id]
-          d.save!
-        end
       end
+      dependency_constraints.each do |dependency_constraint|
+        d = DependencyConstraint.new
+        d.source = copies_hash[dependency_constraint.source.id] || Ingredient.find(dependency_constraint.source.id)
+        d.ingredient = copies_hash[dependency_constraint.ingredient.id] || Ingredient.find(dependency_constraint.ingredient.id)
+        d.target = copies_hash[dependency_constraint.target.id] || Ingredient.find(dependency_constraint.target.id)
+        d.save!
+      end
+
       root_copy.name = copy_ingredient_name(root_copy, template,instance)
       root_copy.assign_user!(new_user)
       root_copy.save!

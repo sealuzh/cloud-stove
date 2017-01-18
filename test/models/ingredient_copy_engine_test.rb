@@ -59,6 +59,21 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     assert_workload_copy(template, instance, new_user)
   end
 
+  test 'duplicate subtree' do
+    user = create(:user)
+    root = create(:ingredient, user: user)
+    child_1 = create(:ingredient, user: user, parent: root)
+    child_2 = create(:ingredient, user: user, parent: root)
+    create(:dependency_constraint, source: child_1, target: child_2)
+
+    child_1_dup = child_1.copy
+
+    # Attach copy to parent
+    assert_equal root, child_1_dup.parent
+    # Remap dependency constraint to ingredient outside of the subtree
+    assert_equal child_2, child_1_dup.dependency_constraints.first.target
+  end
+
   def assert_basic_copy(original, copy, user=original.user)
     assert copy.name.start_with?(original.name)
     assert_equal original.children.count, copy.children.count
