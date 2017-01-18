@@ -22,12 +22,12 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     child_1_1 = create(:ingredient, user: user, parent: child_1)
     child_2 = create(:ingredient, user: user, parent: root)
 
-    create(:dependency_constraint, user: user, ingredient: child_1_1, source: child_1_1, target: child_2)
-    create(:preferred_region_area_constraint, user: user, ingredient: child_1_1)
-    create(:ram_constraint, user: user, ingredient: child_1_1)
-    create(:cpu_constraint, user: user, ingredient: child_1_1)
-    create(:ram_workload, user: user, ingredient: child_1_1)
-    create(:cpu_workload, user: user, ingredient: child_1_1)
+    create(:dependency_constraint, source: child_1_1, target: child_2)
+    create(:preferred_region_area_constraint, ingredient: child_1_1)
+    create(:ram_constraint, ingredient: child_1_1)
+    create(:cpu_constraint, ingredient: child_1_1)
+    create(:ram_workload, ingredient: child_1_1)
+    create(:cpu_workload, ingredient: child_1_1)
     copy_root = root.copy
     copy_child_1_1 = copy_root.children.first.children.first
     copy_child_2 = copy_root.children.last
