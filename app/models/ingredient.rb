@@ -7,9 +7,61 @@ class Ingredient < Base
   belongs_to :parent, class_name: 'Ingredient'
   validates_with SameIsTemplateValidator
   validates_with NoCyclesValidator
-
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
+
+  # Each ingredient can have a parent that allows nesting composite ingredients
+  belongs_to :template, class_name: 'Ingredient'
+  validates_with TemplateInstantiationValidator
+  # Reverse relationship: each template ingredient can have derived instance ingredients
+  has_many :instances, class_name: 'Ingredient', foreign_key: 'template_id'
+
+  has_many :deployment_recommendations, dependent: :destroy
+
+  # Workloads
+  has_one :cpu_workload, class_name: 'CpuWorkload', dependent: :destroy
+  has_one :ram_workload, class_name: 'RamWorkload', dependent: :destroy
+  has_one :scaling_workload, class_name: 'ScalingWorkload', dependent: :destroy
+
+  # Constraints
+  has_many :constraints, dependent: :destroy
+  has_many :dependency_constraints, class_name: 'DependencyConstraint', dependent: :destroy
+  has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
+  has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
+  has_one :ram_constraint, class_name: 'RamConstraint', dependent: :destroy
+  has_one :cpu_constraint, class_name: 'CpuConstraint', dependent: :destroy
+  has_one :preferred_region_area_constraint, class_name: 'PreferredRegionAreaConstraint', dependent: :destroy
+  has_one :provider_constraint, class_name: 'ProviderConstraint', dependent: :destroy
+  has_one :scaling_constraint, class_name: 'ScalingConstraint', dependent: :destroy
+
+  accepts_nested_attributes_for :constraints, allow_destroy: true
+  accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
+  accepts_nested_attributes_for :ram_constraint, allow_destroy: true
+  accepts_nested_attributes_for :cpu_constraint, allow_destroy: true
+  accepts_nested_attributes_for :preferred_region_area_constraint, allow_destroy: true
+  accepts_nested_attributes_for :provider_constraint, allow_destroy: true
+  accepts_nested_attributes_for :scaling_constraint, allow_destroy: true
+
+  def self.leafs
+    Ingredient.select { |i| i.leaf? }
+  end
+
+  def leaf?
+    self.children.none?
+  end
+
+  # Returns the root ingredient in the application hierarchy
+  def application_root
+    if application_root?
+      self
+    else
+      self.parent.application_root
+    end
+  end
+
+  def application_root?
+    self.parent.nil?
+  end
 
   # NOTICE: MUST ensure same traversal order than `region_constraints_rec`
   def all_leafs(leafs = [])
@@ -21,68 +73,6 @@ class Ingredient < Base
       end
     end
     leafs
-  end
-
-  # Each ingredient can have a template that was used as a blueprint at instantiation
-  belongs_to :template, class_name: 'Ingredient'
-  validates_with TemplateInstantiationValidator
-
-  # Reverse relationship: each template ingredient can have derived instance ingredients
-  has_many :instances, class_name: 'Ingredient', foreign_key: 'template_id'
-
-  has_many :deployment_recommendations, dependent: :destroy
-
-  # Workloads
-  has_one :cpu_workload, class_name: 'CpuWorkload', dependent: :destroy
-  has_one :ram_workload, class_name: 'RamWorkload', dependent: :destroy
-  has_one :scaling_workload, class_name: 'ScalingWorkload', dependent: :destroy
-
-  # Associated generic constraints
-  has_many :constraints, dependent: :destroy
-
-  # Generic constraints
-  has_many :constraints, dependent: :destroy
-  ## Dependency constraints
-  has_many :dependency_constraints, class_name: 'DependencyConstraint', dependent: :destroy
-  has_many :constraints_as_source, class_name: 'DependencyConstraint', foreign_key: 'source_id', dependent: :destroy
-  has_many :constraints_as_target, class_name: 'DependencyConstraint', foreign_key: 'target_id', dependent: :destroy
-  ## Ram constraints
-  has_one :ram_constraint, class_name: 'RamConstraint', dependent: :destroy
-  ## Cpu constraints
-  has_one :cpu_constraint, class_name: 'CpuConstraint', dependent: :destroy
-  ## Preferred region constraints
-  has_one :preferred_region_area_constraint, class_name: 'PreferredRegionAreaConstraint', dependent: :destroy
-  ## Provider constraints
-  has_one :provider_constraint, class_name: 'ProviderConstraint', dependent: :destroy
-  ## Scaling constraint
-  has_one :scaling_constraint, class_name: 'ScalingConstraint', dependent: :destroy
-
-  accepts_nested_attributes_for :constraints_as_source, allow_destroy: true
-  accepts_nested_attributes_for :constraints, allow_destroy: true
-  accepts_nested_attributes_for :cpu_constraint, allow_destroy: true
-  accepts_nested_attributes_for :ram_constraint, allow_destroy: true
-  accepts_nested_attributes_for :scaling_constraint, allow_destroy: true
-  accepts_nested_attributes_for :preferred_region_area_constraint, allow_destroy: true
-  accepts_nested_attributes_for :provider_constraint, allow_destroy: true
-
-  def self.leafs
-    Ingredient.select { |i| i.leaf? }
-  end
-
-  # traverses the ingredients subtree and collects all dependency constraints in it
-  def all_dependency_constraints
-    dependency_constraints_rec(self, {}).values
-  end
-
-  # Lists all region areas present in the model
-  def preferred_region_areas
-    region_constraints.uniq
-  end
-
-  # Lists the region area for each leaf ingredient
-  def region_constraints
-    current_constraint = current_region(self, 'EU')
-    region_constraints_rec(self, [], current_constraint)
   end
 
   # NOTICE: MUST ensure same traversal order than `all_leafs`
@@ -106,28 +96,20 @@ class Ingredient < Base
     end
   end
 
-  def as_json(options={})
-    hash = {}
-    hash[:id] = self.id
-    hash[:name] = self.name
-    hash[:icon] = self.icon
-    hash[:body] = self.body
-    hash[:parent_id] = self.parent.id unless self.parent.nil?
-    hash[:template_id] = self.template.id unless self.template.nil?
-    hash[:created_at] = self.created_at
-    hash[:updated_at] = self.updated_at
-    hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
-    hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:constraints] == false
-    hash[:workloads] = workload_jsons unless options[:workloads] == false || workload_jsons.empty?
-    hash
+  # traverses the ingredients subtree and collects all dependency constraints in it
+  def all_dependency_constraints
+    dependency_constraints_rec(self, {}).values
   end
 
-  def workload_jsons
-    workloads = {}
-    workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
-    workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
-    workloads[:scaling_workload] = self.scaling_workload.as_json if self.scaling_workload.present?
-    workloads
+  # Lists all region areas present in the model
+  def preferred_region_areas
+    region_constraints.uniq
+  end
+
+  # Lists the region area for each leaf ingredient
+  def region_constraints
+    current_constraint = current_region(self, 'EU')
+    region_constraints_rec(self, [], current_constraint)
   end
 
   def copy
@@ -176,18 +158,6 @@ class Ingredient < Base
     end
   end
 
-  def scaling_workload
-    super || create_scaling_workload(scale_ingredient: true, user_id: user_id)
-  end
-
-  def cpu_workload
-    super || create_cpu_workload(cspu_user_capacity: 1500, parallelism: 0.9, user_id: user_id)
-  end
-
-  def ram_workload
-    super || create_ram_workload(ram_mb_required: 600, ram_mb_required_user_capacity: 200, ram_mb_growth_per_user: 0.3, user_id: user_id)
-  end
-
   def update_constraints(num_users)
     all_leafs.each do |leaf|
       leaf.ram_workload.to_constraint(num_users)
@@ -196,23 +166,6 @@ class Ingredient < Base
     end
   rescue => e
     raise 'Missing a workload definition for a leaf ingredient. ' + e.message
-  end
-
-  # Returns the root ingredient in the application hierarchy
-  def application_root
-    if application_root?
-      self
-    else
-      self.parent.application_root
-    end
-  end
-
-  def application_root?
-    self.parent.nil?
-  end
-
-  def leaf?
-    self.children.none?
   end
 
   def assign_user!(new_user)
@@ -238,6 +191,42 @@ class Ingredient < Base
       recommendation.save!
     end
     self.save!
+  end
+
+  def scaling_workload
+    super || create_scaling_workload(scale_ingredient: true, user_id: user_id)
+  end
+
+  def cpu_workload
+    super || create_cpu_workload(cspu_user_capacity: 1500, parallelism: 0.9, user_id: user_id)
+  end
+
+  def ram_workload
+    super || create_ram_workload(ram_mb_required: 600, ram_mb_required_user_capacity: 200, ram_mb_growth_per_user: 0.3, user_id: user_id)
+  end
+
+  def as_json(options={})
+    hash = {}
+    hash[:id] = self.id
+    hash[:name] = self.name
+    hash[:icon] = self.icon
+    hash[:body] = self.body
+    hash[:parent_id] = self.parent.id unless self.parent.nil?
+    hash[:template_id] = self.template.id unless self.template.nil?
+    hash[:created_at] = self.created_at
+    hash[:updated_at] = self.updated_at
+    hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
+    hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:constraints] == false
+    hash[:workloads] = workload_jsons unless options[:workloads] == false || workload_jsons.empty?
+    hash
+  end
+
+  def workload_jsons
+    workloads = {}
+    workloads[:cpu_workload] = self.cpu_workload.as_json if self.cpu_workload.present?
+    workloads[:ram_workload] = self.ram_workload.as_json if self.ram_workload.present?
+    workloads[:scaling_workload] = self.scaling_workload.as_json if self.scaling_workload.present?
+    workloads
   end
 
   private
