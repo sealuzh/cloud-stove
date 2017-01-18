@@ -53,9 +53,9 @@ class IngredientCopyEngine
       end
       dependency_constraints.each do |dependency_constraint|
         d = DependencyConstraint.new
-        d.source = copies_hash[dependency_constraint.source.id] || Ingredient.find(dependency_constraint.source.id)
-        d.ingredient = copies_hash[dependency_constraint.ingredient.id] || Ingredient.find(dependency_constraint.ingredient.id)
-        d.target = copies_hash[dependency_constraint.target.id] || Ingredient.find(dependency_constraint.target.id)
+        d.source = copies_hash[dependency_constraint.source] || dependency_constraint.source
+        d.ingredient = copies_hash[dependency_constraint.ingredient] || dependency_constraint.ingredient
+        d.target = copies_hash[dependency_constraint.target] || dependency_constraint.target
         d.save!
       end
 
@@ -77,15 +77,15 @@ class IngredientCopyEngine
       copy.scaling_workload = current.scaling_workload.dup if current.scaling_workload.present?
       copy.is_template = template
       copy.template = current if instance
-      copies_hash[current.id] = copy
+      copies_hash[current] = copy
 
       current.children.each do |child|
         copies_hash.merge(deep_dup(copies_hash,child,template,instance)[0])
       end
 
       if !copies_hash.empty? && !current.parent.nil?
-        if copies_hash[current.parent.id]
-          copy.parent = copies_hash[current.parent.id]
+        if copies_hash[current.parent]
+          copy.parent = copies_hash[current.parent]
         end
       end
       copy.save!
