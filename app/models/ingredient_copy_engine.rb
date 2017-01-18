@@ -13,15 +13,31 @@ class IngredientCopyEngine
   end
 
   def make_template(original)
-    (!original.is_template && original.application_root?) ? base_copy(original, true, false) : NIL
+    ensure_application_root(original)
+    ensure_non_template(original)
+    base_copy(original, true, false)
   end
 
   def instantiate(original, new_user)
-    (original.is_template && original.application_root?) ? base_copy(original, false, true, new_user) : NIL
+    ensure_application_root(original)
+    ensure_template(original)
+    base_copy(original, false, true, new_user)
   end
 
 
   private
+
+    def ensure_application_root(original)
+      fail 'Ingredient must be an application root.' unless original.application_root?
+    end
+
+    def ensure_template(original)
+      fail 'Ingredient must be a template.' unless original.is_template
+    end
+
+    def ensure_non_template(original)
+      fail 'Ingredient must be a non-template.' if original.is_template
+    end
 
     def base_copy(original, template=false, instance=false, new_user = original.user)
       # copies_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
