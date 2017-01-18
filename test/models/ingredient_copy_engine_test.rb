@@ -42,6 +42,21 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
     assert_equal root.user, copy_child_1_1.dependency_constraints.first.user
   end
 
+  test 'application subtree copy (i.e., duplicate subtree)' do
+    user = create(:user)
+    root = create(:ingredient, user: user)
+    child_1 = create(:ingredient, user: user, parent: root)
+    child_2 = create(:ingredient, user: user, parent: root)
+    create(:dependency_constraint, source: child_1, target: child_2)
+
+    child_1_dup = child_1.copy
+
+    # Attach copy to parent
+    assert_equal root, child_1_dup.parent
+    # Remap dependency constraint to ingredient outside of the subtree
+    assert_equal child_2, child_1_dup.dependency_constraints.first.target
+  end
+
   test 'instantiate single ingredient' do
     template = create(:ingredient, :template)
     create(:preferred_region_area_constraint, ingredient: template)
@@ -55,23 +70,24 @@ class IngredientCopyEngineTest < ActiveSupport::TestCase
 
     assert_equal new_user, instance.user
     assert_equal template, instance.template
+    assert_equal "[INSTANCE OF] #{template.name}", instance.name
     assert_constraint_copy(template, instance, new_user)
     assert_workload_copy(template, instance, new_user)
   end
 
-  test 'duplicate subtree' do
-    user = create(:user)
-    root = create(:ingredient, user: user)
-    child_1 = create(:ingredient, user: user, parent: root)
-    child_2 = create(:ingredient, user: user, parent: root)
-    create(:dependency_constraint, source: child_1, target: child_2)
+  test 'make template of single ingredient' do
+    instance = create(:ingredient, :instance)
+    create(:preferred_region_area_constraint, ingredient: instance)
+    create(:ram_constraint, ingredient: instance)
+    create(:cpu_constraint, ingredient: instance)
+    create(:ram_workload, ingredient: instance)
+    create(:cpu_workload, ingredient: instance)
 
-    child_1_dup = child_1.copy
+    template = instance.make_template
 
-    # Attach copy to parent
-    assert_equal root, child_1_dup.parent
-    # Remap dependency constraint to ingredient outside of the subtree
-    assert_equal child_2, child_1_dup.dependency_constraints.first.target
+    assert_equal "[TEMPLATE] #{instance.name}", template.name
+    assert_constraint_copy instance, template
+    assert_workload_copy instance, template
   end
 
   def assert_basic_copy(original, copy, user=original.user)

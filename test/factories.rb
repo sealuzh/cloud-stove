@@ -21,6 +21,11 @@ FactoryGirl.define do
       is_template true
     end
 
+    trait :instance do
+      is_template false
+      template
+    end
+
     factory :rails_app do
       name 'Rails app with Postgres backend'
       after(:create) do |rails_app|

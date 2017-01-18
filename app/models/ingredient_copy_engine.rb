@@ -1,29 +1,26 @@
 class IngredientCopyEngine
-
-  def copy(original)
-    base_copy(original)
-  end
-
-  # Attaches a copy of a subtree to its parent and
+  # Copies an ingredient tree or subtree
+  # The subtree copy attaches a copy of a subtree to its parent and
   # duplicates its dependency constraints by remapping source/target
   # outside the subtree to its original
-  # @pre `parent` MUST exist
-  def duplicate_subtree(original)
-    base_copy(original)
+  def copy(original)
+    num_copies = Ingredient.where(user: original.user, name: original.name).count + 1
+    deep_dup(original).set_name_suffix!("[V#{num_copies}] ")
   end
 
-  def make_template(original)
-    ensure_application_root(original)
-    ensure_non_template(original)
-    base_copy(original, true, false)
-  end
-
+  # Instantiates an ingredient application template into an ingredient application
   def instantiate(original, new_user)
     ensure_application_root(original)
     ensure_template(original)
-    base_copy(original, false, true, new_user)
+    deep_dup(original, instance: true, user: new_user).set_name_prefix!('[INSTANCE OF] ')
   end
 
+  # Creates a template from an ingredient application
+  def make_template(original)
+    ensure_application_root(original)
+    ensure_non_template(original)
+    deep_dup(original, template: true).set_name_prefix!('[TEMPLATE] ')
+  end
 
   private
 
@@ -39,72 +36,57 @@ class IngredientCopyEngine
       fail 'Ingredient must be a non-template.' if original.is_template
     end
 
-    def base_copy(original, template=false, instance=false, new_user = original.user)
-      # copies_hash: hash that maps ingredient ids (keys) of the original ingredients to the newly created copies (values)
-      # root_copy: the root ingredient of the new (copied) hierarchy
-      copies_hash, root_copy = deep_dup({},original, template, instance)
+    # @param `opts` [Hash] copy option (defaults)
+    # * `template` [Boolean] whether the copied ingredients  (original.is_template)
+    # * `instance` [Boolean] whether to instantiate by setting the template relationship (false)
+    # * `user` [String] the user the new copy belongs to (original.user)
+    def deep_dup(original, opts = {})
+      defaults = { template: original.is_template, instance: false, user: original.user }
+      opts = defaults.merge(opts)
 
-      # get all dependency constraints of the original root ingredient, to copy them onto the new structure
+      copies = deep_dup_rec(original, opts)
+      copy_root = copies.values.first
       dependency_constraints = original.all_dependency_constraints
-
-      if original.parent
-        # attach to parent of origin if there is any
-        root_copy.parent = original.parent
-      end
       dependency_constraints.each do |dependency_constraint|
-        d = DependencyConstraint.new
-        d.source = copies_hash[dependency_constraint.source] || dependency_constraint.source
-        d.ingredient = copies_hash[dependency_constraint.ingredient] || dependency_constraint.ingredient
-        d.target = copies_hash[dependency_constraint.target] || dependency_constraint.target
-        d.save!
+        DependencyConstraint.create(
+            ingredient: copies[dependency_constraint.ingredient] || dependency_constraint.ingredient,
+            source: copies[dependency_constraint.source] || dependency_constraint.source,
+            target: copies[dependency_constraint.target] || dependency_constraint.target
+        )
       end
 
-      root_copy.name = copy_ingredient_name(root_copy, template,instance)
-      root_copy.assign_user!(new_user)
-      root_copy.save!
+      copy_root.assign_user!(opts[:user])
+      copy_root.save!
       # Necessary to reflect the latest changes (e.g. from, `assign_user`) in the return value
-      root_copy.reload
+      copy_root.reload
     end
 
-    def deep_dup(copies_hash,current, template=false, instance=false)
-      copy = current.dup
-      copy.cpu_constraint = current.cpu_constraint.dup if current.cpu_constraint.present?
-      copy.ram_constraint = current.ram_constraint.dup if current.ram_constraint.present?
-      copy.preferred_region_area_constraint = current.preferred_region_area_constraint.dup if current.preferred_region_area_constraint.present?
-      copy.provider_constraint = current.provider_constraint.dup if current.provider_constraint.present?
-      copy.ram_workload = current.ram_workload.dup if current.ram_workload.present?
-      copy.cpu_workload = current.cpu_workload.dup if current.cpu_workload.present?
-      copy.scaling_workload = current.scaling_workload.dup if current.scaling_workload.present?
-      copy.is_template = template
-      copy.template = current if instance
-      copies_hash[current] = copy
-
-      current.children.each do |child|
-        copies_hash.merge(deep_dup(copies_hash,child,template,instance)[0])
-      end
-
-      if !copies_hash.empty? && !current.parent.nil?
-        if copies_hash[current.parent]
-          copy.parent = copies_hash[current.parent]
-        end
+    # @param `copies` [Hash] the mapping from original ingredients to newly created copies: [original] => [copy]
+    def deep_dup_rec(original, opts, copies = {})
+      copy = original.dup
+      copy.cpu_constraint = original.cpu_constraint.dup if original.cpu_constraint.present?
+      copy.ram_constraint = original.ram_constraint.dup if original.ram_constraint.present?
+      copy.preferred_region_area_constraint = original.preferred_region_area_constraint.dup if original.preferred_region_area_constraint.present?
+      copy.provider_constraint = original.provider_constraint.dup if original.provider_constraint.present?
+      copy.ram_workload = original.ram_workload.dup if original.ram_workload.present?
+      copy.cpu_workload = original.cpu_workload.dup if original.cpu_workload.present?
+      copy.scaling_workload = original.scaling_workload.dup if original.scaling_workload.present?
+      copy.is_template = opts[:template]
+      copy.template = original if opts[:instance]
+      # Remap `parent` association if existing for copy
+      if copies[original.parent]
+        copy.parent = copies[original.parent]
+      elsif original.parent
+        copy.parent = original.parent
+      else
+        # application root
       end
       copy.save!
 
-      return copies_hash,copy
-    end
-
-    def copy_ingredient_name(ingredient,template,instance)
-
-      if template
-        name = "[TEMPLATE] " + ingredient.name
-        return name
-      elsif instance
-        name = "[INSTANCE OF] " + ingredient.name
-        return name
-      else
-        num_copies = Ingredient.where(name: ingredient.name).length
-        name = ingredient.name + " [v#{num_copies}]"
-        return name
+      copies[original] = copy
+      original.children.each do |child|
+        copies.merge(deep_dup_rec(child, opts, copies))
       end
+      copies
     end
 end

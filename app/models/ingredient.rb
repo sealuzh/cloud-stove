@@ -168,6 +168,18 @@ class Ingredient < Base
     raise 'Missing a workload definition for a leaf ingredient. ' + e.message
   end
 
+  def set_name_prefix!(prefix)
+    self.name = prefix + self.name
+    self.save!
+    self
+  end
+
+  def set_name_suffix!(suffix)
+    self.name = self.name + suffix
+    self.save!
+    self
+  end
+
   def assign_user!(new_user)
     self.user = new_user
     self.children.each do |child|
