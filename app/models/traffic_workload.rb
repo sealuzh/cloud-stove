@@ -11,5 +11,4 @@ class TrafficWorkload < ActiveRecord::Base
     hash[:ingredient_id] = self.ingredient_id
     hash
   end
-
 end

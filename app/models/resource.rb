@@ -54,19 +54,22 @@ class Resource < Base
     hash[:resource_type] = self.resource_type
     hash[:name] = self.name
     hash[:provider] = self.provider.name
-
-    params = case self.resource_type
-                 when 'compute'
-                   compute_as_json(self)
-
-                 when 'storage'
-                   storage_as_json(self)
-               end
-    hash = hash.merge(params)
-    hash
+    hash.merge(params_for_resource_type)
   end
 
   private
+
+    def params_for_resource_type
+      case self.resource_type
+        when 'compute'
+          compute_as_json(self)
+        when 'storage'
+          storage_as_json(self)
+        else
+          Logger.warn "Resource (id=#{self.id}) with invalid type!"
+          {}
+      end
+    end
 
     def generate_region_code
       self.region_code = derive_region_code
