@@ -64,70 +64,6 @@ class Ingredient < Base
     self.parent.nil?
   end
 
-  # NOTICE: MUST ensure same traversal order than `region_constraints_rec`
-  def all_leafs(leafs = [])
-    children.each do |child|
-      if child.children.any?
-        leafs.push *child.all_leafs
-      else
-        leafs.push child
-      end
-    end
-    leafs
-  end
-
-  # NOTICE: MUST ensure same traversal order than `all_leafs`
-  def region_constraints_rec(current_ingredient, constraints, current_constraint)
-    current_ingredient.children.each do |child|
-      new_current_constraint = current_region(child, current_constraint)
-      if child.children.any?
-        child.region_constraints_rec(child, constraints, new_current_constraint)
-      else
-        constraints.push(new_current_constraint)
-      end
-    end
-    constraints
-  end
-
-  def current_region(current_ingredient, current_constraint)
-    if current_ingredient.preferred_region_area_constraint.present?
-      current_ingredient.preferred_region_area_constraint.preferred_region_area
-    else
-      current_constraint
-    end
-  end
-
-  # traverses the ingredients subtree and collects all dependency constraints in it
-  def all_dependency_constraints
-    dependency_constraints_rec.values
-  end
-
-  # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
-  def dependency_constraints_rec(constraint_hash = {})
-    self.children.all.each do |child|
-      constraint_hash.merge(child.dependency_constraints_rec(constraint_hash))
-    end
-
-    self.constraints_as_source.all.each do |constraint|
-      constraint_hash[constraint.id] = constraint
-    end
-    self.constraints_as_target.all.each do |constraint|
-      constraint_hash[constraint.id] = constraint
-    end
-    constraint_hash
-  end
-
-  # Lists all region areas present in the model
-  def preferred_region_areas
-    region_constraints.uniq
-  end
-
-  # Lists the region area for each leaf ingredient
-  def region_constraints
-    current_constraint = current_region(self, 'EU')
-    region_constraints_rec(self, [], current_constraint)
-  end
-
   def schedule_recommendation_jobs(num_users_list)
     fail 'Recommendations can only be generated for root ingredients!' unless self.application_root?
     ActiveRecord::Base.transaction do
@@ -169,16 +105,68 @@ class Ingredient < Base
     raise 'Missing a workload definition for a leaf ingredient. ' + e.message
   end
 
-  def set_name_prefix!(prefix)
-    self.name = prefix + self.name
-    self.save!
-    self
+  # Lists all region areas present in the model
+  def preferred_region_areas
+    region_constraints.uniq
   end
 
-  def set_name_suffix!(suffix)
-    self.name = self.name + suffix
-    self.save!
-    self
+  # Lists the region area for each leaf ingredient
+  def region_constraints
+    current_constraint = current_region(self, 'EU')
+    region_constraints_rec(self, [], current_constraint)
+  end
+
+  def current_region(current_ingredient, current_constraint)
+    if current_ingredient.preferred_region_area_constraint.present?
+      current_ingredient.preferred_region_area_constraint.preferred_region_area
+    else
+      current_constraint
+    end
+  end
+
+  # NOTICE: MUST ensure same traversal order than `all_leafs`
+  def region_constraints_rec(current_ingredient, constraints, current_constraint)
+    current_ingredient.children.each do |child|
+      new_current_constraint = current_region(child, current_constraint)
+      if child.children.any?
+        child.region_constraints_rec(child, constraints, new_current_constraint)
+      else
+        constraints.push(new_current_constraint)
+      end
+    end
+    constraints
+  end
+
+  # NOTICE: MUST ensure same traversal order than `region_constraints_rec`
+  def all_leafs(leafs = [])
+    children.each do |child|
+      if child.children.any?
+        leafs.push *child.all_leafs
+      else
+        leafs.push child
+      end
+    end
+    leafs
+  end
+
+  # traverses the ingredients subtree and collects all dependency constraints in it
+  def all_dependency_constraints
+    dependency_constraints_rec.values
+  end
+
+  # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
+  def dependency_constraints_rec(constraint_hash = {})
+    self.children.all.each do |child|
+      constraint_hash.merge(child.dependency_constraints_rec(constraint_hash))
+    end
+
+    self.constraints_as_source.all.each do |constraint|
+      constraint_hash[constraint.id] = constraint
+    end
+    self.constraints_as_target.all.each do |constraint|
+      constraint_hash[constraint.id] = constraint
+    end
+    constraint_hash
   end
 
   def assign_user!(new_user)
@@ -204,6 +192,18 @@ class Ingredient < Base
       recommendation.save!
     end
     self.save!
+  end
+
+  def set_name_prefix!(prefix)
+    self.name = prefix + self.name
+    self.save!
+    self
+  end
+
+  def set_name_suffix!(suffix)
+    self.name = self.name + suffix
+    self.save!
+    self
   end
 
   def scaling_workload
