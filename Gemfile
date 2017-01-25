@@ -93,6 +93,7 @@ group :development, :test do
   gem 'database_cleaner'
   # Fixtures replacement for integration tests
   gem 'factory_girl_rails'
+  gem 'rails-erd'
 end
 
 group :development do

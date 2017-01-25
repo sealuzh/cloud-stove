@@ -1,13 +1,14 @@
-# Define the region area mappings in a field called `prefixes`
+# Define the region area mappings in a field called +prefixes+.
+# 
 # Example:
-# include RegionArea
-# def initialize
-#   super
-#   @prefixes = {
-#       'us' => 'US',
-#       'eu' => 'EU',
-#   }
-# end
+#    include RegionArea
+#    def initialize
+#      super
+#      @prefixes = {
+#          'us' => 'US',
+#          'eu' => 'EU',
+#      }
+#    end
 module RegionArea
   UNKNOWN = 'UNKNOWN'
   def extract_region_area(region)

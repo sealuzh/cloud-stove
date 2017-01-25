@@ -1,7 +1,7 @@
 class Ingredient < Base
   belongs_to :user
 
-  # Each ingredient can have a template that was used as a blueprint at instantiation
+  # Each ingredient can have a parent that allows nesting composite ingredients
   belongs_to :parent, class_name: 'Ingredient'
   validates_with SameIsTemplateValidator
   validates_with NoCyclesValidator
@@ -21,7 +21,7 @@ class Ingredient < Base
     leafs
   end
 
-  # Each ingredient can have a parent that allows nesting composite ingredients
+  # Each ingredient can have a template that was used as a blueprint at instantiation
   belongs_to :template, class_name: 'Ingredient'
   validates_with TemplateInstantiationValidator
 

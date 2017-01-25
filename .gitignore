@@ -31,3 +31,6 @@
 # Ignore vendored MiniZinc distribution
 /vendor/minizinc
 /.project
+
+# Ignore generated documentation
+/doc
