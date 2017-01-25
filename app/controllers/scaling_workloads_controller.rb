@@ -1,7 +1,5 @@
 class ScalingWorkloadsController < ApplicationController
-
   before_action :set_scaling_workload, only: [:show, :destroy, :update]
-
 
   def show
     respond_to do |format|
@@ -70,5 +68,4 @@ class ScalingWorkloadsController < ApplicationController
     def scaling_workload_params
       params.require(:scaling_workload).permit(:ingredient_id, :scale_ingredient)
     end
-
 end

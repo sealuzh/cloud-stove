@@ -15,14 +15,19 @@ FactoryGirl.define do
     more_attributes '{}'
     template nil
     parent nil
+    user
 
     trait :template do
       is_template true
     end
 
+    trait :instance do
+      is_template false
+      template
+    end
+
     factory :rails_app do
       name 'Rails app with Postgres backend'
-      user
       after(:create) do |rails_app|
         create(:ingredient, name: 'Postgres', parent: rails_app, user: rails_app.user)
         create(:ingredient, name: 'Rails app', parent: rails_app, user: rails_app.user)
@@ -66,23 +71,32 @@ FactoryGirl.define do
 
   factory :constraint do
     association :ingredient, factory: :ingredient
+    user { ingredient.user }
   end
 
   factory :preferred_region_area_constraint do
     preferred_region_area 'EU'
+    user { ingredient.user }
   end
 
   factory :ram_constraint do
     min_ram 2000
+    user { ingredient.user }
   end
 
   factory :cpu_constraint do
     min_cpus 2
+    user { ingredient.user }
   end
 
   factory :dependency_constraint do
     association :source, factory: :ingredient
     association :target, factory: :ingredient
+    user { source.user }
+
+    after(:create) do |dc, evaluator|
+      dc.ingredient = dc.source
+    end
   end
 
   factory :provider do

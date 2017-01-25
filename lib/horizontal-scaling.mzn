@@ -25,7 +25,6 @@ array[Resources] of int: costs;
 array[Resources] of int: ram;
 
 % CPU cores/usage per resource
-% FIXME: ideally should be something we can fairly compare across providers
 array[Resources] of int: cpu;
 
 % Network transfer costs between resources

@@ -18,7 +18,7 @@ class JoyentUpdater < ProviderUpdater
   private
 
     def update_provider
-      #TODO:  Add SLA for provider. CAUTION! Joyent has no 'actual' availability SLA, they claim 100%, but in reality it's around 0.9993, if you follow their example.
+      # NOTICE: Joyent has no 'actual' availability SLA, they claim 100%, but in reality it's around 0.9993, if you follow their example.
       # See here: https://www.joyent.com/about/policies/cloud-hosting-service-level-agreement
 
       provider = Provider.find_or_create_by(name: 'Joyent')

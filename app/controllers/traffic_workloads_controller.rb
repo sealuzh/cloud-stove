@@ -68,5 +68,4 @@ class TrafficWorkloadsController < ApplicationController
     def traffic_workload_params
       params.require(:traffic_workload).permit(:ingredient_id, :requests_per_visit, :request_size_kb, :visits_per_month)
     end
-
 end

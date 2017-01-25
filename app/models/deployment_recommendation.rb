@@ -11,7 +11,7 @@ class DeploymentRecommendation < Base
   DEFAULT_REGION_AREAS = %w(EU)
   DEFAULT_MAX_NUM_INSTANCES = 0
 
-  # Transfer costs
+  # Transfer costs (assumed)
   INTRA_REGION_TRANSFER = 0
   INTER_REGION_SAME_PROVIDER_TRANSFER = 10
   INTER_REGION_DIFFERENT_PROVIDER_TRANSFER = 30
@@ -175,9 +175,10 @@ class DeploymentRecommendation < Base
     end
   end
 
+  # NOTICE: Currently, these transfer costs are only a heuristic and
+  # do not reflect actual tranfer cost from real cloud providers
   def transfer_costs(resources)
     Matrix.build(resources.count, resources.count) do |row, col|
-      # FIXME: use actual transfer costs!
       if resources[row].region_code == resources[col].region_code
         INTRA_REGION_TRANSFER
       elsif resources[row].region_area == resources[col].region_area
@@ -270,27 +271,27 @@ class DeploymentRecommendation < Base
   end
 
   def as_json(options={})
-    hash = extract_params(self)
+    hash = extract_params
 
     ingredients = []
     hash[:recommendation].each do |ingredient_id, resource_code|
       entry = {}
-      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
-      entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({:children => false, :constraints => false})
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({skip_children: true, skip_constraints: true})
+      entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({skip_children: true, skip_constraints: true})
       entry[:resource_count] = self.more_attributes['num_resources'][ingredients.count] rescue 1
       ingredients << entry
     end
 
     hash[:recommendation] = ingredients
     hash[:num_simultaneous_users] = self.num_simultaneous_users
-    hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
+    hash[:application] = self.ingredient.as_json({skip_children: true, skip_constraints: true})
     hash[:status] = self.status
     hash[:unsatisfiable_message] = self.more_attributes['unsatisfiable_message'] if self.status == UNSATISFIABLE
     hash
   end
 
   def embed_ingredients
-    hash = extract_params(self)
+    hash = extract_params
 
     ingredients = []
     hash[:recommendation].each do |ingredient_id, resource_code|
@@ -309,14 +310,14 @@ class DeploymentRecommendation < Base
 
   private
 
-    def extract_params(recommendation)
+    def extract_params
       hash = {}
       hash[:id] = self.id
-      hash[:vm_cost] = recommendation.more_attributes['vm_cost']
-      hash[:total_cost] = recommendation.more_attributes['total_cost']
-      hash[:recommendation] = (recommendation.more_attributes['ingredients']) ? recommendation.more_attributes['ingredients'] : []
-      hash[:created_at] = recommendation.created_at
-      hash[:updated_at] = recommendation.updated_at
+      hash[:vm_cost] = self.more_attributes['vm_cost']
+      hash[:total_cost] = self.more_attributes['total_cost']
+      hash[:recommendation] = (self.more_attributes['ingredients']) ? self.more_attributes['ingredients'] : []
+      hash[:created_at] = self.created_at
+      hash[:updated_at] = self.updated_at
       hash
     end
 end

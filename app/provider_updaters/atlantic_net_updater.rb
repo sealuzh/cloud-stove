@@ -23,6 +23,7 @@ class AtlanticNetUpdater < ProviderUpdater
     end
   end
 
+  # Atlantic.Net API docs: https://www.atlantic.net/docs/api/?shell#describe-plans
   def update_compute
     uri = URI('https://cloudapi.atlantic.net/?Action=describe-plan')
     access_key_id = ENV['ANC_ACCESS_KEY_ID']
@@ -67,7 +68,8 @@ class AtlanticNetUpdater < ProviderUpdater
       next unless instance_type['platform'] == platform
       resource_id = instance_type['plan_name']
 
-      #TODO: use real regions instead of default EUWEST region
+      # NOTICE: Currently hardcoded data center list. Looks like pricing is identical for all regions:
+      # https://www.atlantic.net/cloud-hosting/pricing/
       regions = ['EUWEST1', 'USEAST1', 'USEAST2', 'USCENTRAL1', 'USWEST1', 'CAEAST1']
 
       regions.each do |region|

@@ -22,6 +22,8 @@ class IngredientsControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal 1, json_response.count
     assert_equal a1.name, json_response[0]['name']
+    assert_equal a1.cpu_workload.cspu_user_capacity,
+                 json_response[0]['workloads']['cpu_workload']['cspu_user_capacity']
   end
 
   test 'listing template instances (admin only)' do

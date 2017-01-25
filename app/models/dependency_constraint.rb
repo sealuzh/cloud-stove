@@ -9,7 +9,6 @@ class DependencyConstraint < Constraint
   # in the form, only source and target can be set, this ensures that the :ingredient association is also set correctly
   before_save :attach_source_ingredient
 
-
   def as_json(options={})
     hash = super
     hash[:ingredient_id] = self.ingredient.id
