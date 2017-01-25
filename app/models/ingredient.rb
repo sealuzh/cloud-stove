@@ -99,7 +99,22 @@ class Ingredient < Base
 
   # traverses the ingredients subtree and collects all dependency constraints in it
   def all_dependency_constraints
-    dependency_constraints_rec(self, {}).values
+    dependency_constraints_rec.values
+  end
+
+  # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
+  def dependency_constraints_rec(constraint_hash = {})
+    self.children.all.each do |child|
+      constraint_hash.merge(child.dependency_constraints_rec(constraint_hash))
+    end
+
+    self.constraints_as_source.all.each do |constraint|
+      constraint_hash[constraint.id] = constraint
+    end
+    self.constraints_as_target.all.each do |constraint|
+      constraint_hash[constraint.id] = constraint
+    end
+    constraint_hash
   end
 
   # Lists all region areas present in the model
@@ -226,21 +241,4 @@ class Ingredient < Base
     workloads[:scaling_workload] = self.scaling_workload.as_json if self.scaling_workload.present?
     workloads
   end
-
-  private
-
-    # recursive postorder tree traversal method that returns a hash with all dependency constraints found in the subtree
-    def dependency_constraints_rec(current_ingredient, constraint_hash)
-        current_ingredient.children.all.each do |child|
-          constraint_hash.merge(dependency_constraints_rec(child, constraint_hash))
-        end
-
-        current_ingredient.constraints_as_source.all.each do |constraint|
-          constraint_hash[constraint.id] = constraint
-        end
-        current_ingredient.constraints_as_target.all.each do |constraint|
-          constraint_hash[constraint.id] = constraint
-        end
-        constraint_hash
-    end
 end
