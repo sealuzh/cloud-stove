@@ -11,7 +11,7 @@ class Ingredient < Base
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
 
-  # Each ingredient can have a parent that allows nesting composite ingredients
+  # Each ingredient can have a template that was used as a blueprint at instantiation
   belongs_to :template, class_name: 'Ingredient'
   validates_with TemplateInstantiationValidator
   # Reverse relationship: each template ingredient can have derived instance ingredients
