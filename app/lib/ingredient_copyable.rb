@@ -22,8 +22,6 @@ module IngredientCopyable
     deep_dup(template: true).set_name_prefix!('[TEMPLATE] ')
   end
 
-  private
-
   def ensure_application_root
     fail 'Ingredient must be an application root.' unless self.application_root?
   end
@@ -44,7 +42,7 @@ module IngredientCopyable
     defaults = { template: self.is_template, instance: false, user: self.user }
     opts = defaults.merge(opts)
 
-    copies = deep_dup_rec(self, opts)
+    copies = self.deep_dup_rec(opts)
     copy_root = copies.values.first
     dependency_constraints = self.all_dependency_constraints
     dependency_constraints.each do |dependency_constraint|
@@ -62,30 +60,30 @@ module IngredientCopyable
   end
 
   # @param `copies` [Hash] the mapping from original ingredients to newly created copies: [original] => [copy]
-  def deep_dup_rec(original, opts, copies = {})
-    copy = original.dup
-    copy.cpu_constraint = original.cpu_constraint.dup if original.cpu_constraint.present?
-    copy.ram_constraint = original.ram_constraint.dup if original.ram_constraint.present?
-    copy.preferred_region_area_constraint = original.preferred_region_area_constraint.dup if original.preferred_region_area_constraint.present?
-    copy.provider_constraint = original.provider_constraint.dup if original.provider_constraint.present?
-    copy.ram_workload = original.ram_workload.dup if original.ram_workload.present?
-    copy.cpu_workload = original.cpu_workload.dup if original.cpu_workload.present?
-    copy.scaling_workload = original.scaling_workload.dup if original.scaling_workload.present?
+  def deep_dup_rec(opts, copies = {})
+    copy = self.dup
+    copy.cpu_constraint = self.cpu_constraint.dup if self.cpu_constraint.present?
+    copy.ram_constraint = self.ram_constraint.dup if self.ram_constraint.present?
+    copy.preferred_region_area_constraint = self.preferred_region_area_constraint.dup if self.preferred_region_area_constraint.present?
+    copy.provider_constraint = self.provider_constraint.dup if self.provider_constraint.present?
+    copy.ram_workload = self.ram_workload.dup if self.ram_workload.present?
+    copy.cpu_workload = self.cpu_workload.dup if self.cpu_workload.present?
+    copy.scaling_workload = self.scaling_workload.dup if self.scaling_workload.present?
     copy.is_template = opts[:template]
-    copy.template = original if opts[:instance]
+    copy.template = self if opts[:instance]
     # Remap `parent` association if existing for copy
-    if copies[original.parent]
-      copy.parent = copies[original.parent]
-    elsif original.parent
-      copy.parent = original.parent
+    if copies[self.parent]
+      copy.parent = copies[self.parent]
+    elsif self.parent
+      copy.parent = self.parent
     else
       # application root
     end
     copy.save!
 
-    copies[original] = copy
-    original.children.each do |child|
-      copies.merge(deep_dup_rec(child, opts, copies))
+    copies[self] = copy
+    self.children.each do |child|
+      copies.merge(child.deep_dup_rec(opts, copies))
     end
     copies
   end
