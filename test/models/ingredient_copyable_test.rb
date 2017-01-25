@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class IngredientCopyEngineTest < ActiveSupport::TestCase
+class IngredientCopyableTest < ActiveSupport::TestCase
   test 'application instance copy with single ingredient' do
     original = create(:ingredient)
     create(:preferred_region_area_constraint, ingredient: original)

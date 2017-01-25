@@ -1,5 +1,6 @@
 class Ingredient < Base
   include JobTracking
+  include IngredientCopyable
 
   belongs_to :user
 
@@ -110,21 +111,6 @@ class Ingredient < Base
   def region_constraints
     current_constraint = current_region(self, 'EU')
     region_constraints_rec(self, [], current_constraint)
-  end
-
-  def copy
-    engine = IngredientCopyEngine.new
-    engine.copy(self)
-  end
-
-  def make_template
-    engine = IngredientCopyEngine.new
-    engine.make_template(self)
-  end
-
-  def instantiate(new_user = self.user)
-    engine = IngredientCopyEngine.new
-    engine.instantiate(self, new_user)
   end
 
   def schedule_recommendation_jobs(num_users_list)
