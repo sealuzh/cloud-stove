@@ -224,13 +224,13 @@ class Ingredient < Base
     hash[:name] = self.name
     hash[:icon] = self.icon
     hash[:body] = self.body
-    hash[:parent_id] = self.parent.id unless self.parent.nil?
-    hash[:template_id] = self.template.id unless self.template.nil?
+    hash[:parent_id] = self.parent.id if self.parent.present?
+    hash[:template_id] = self.template.id if self.template.present?
     hash[:created_at] = self.created_at
     hash[:updated_at] = self.updated_at
-    hash[:children] = self.children.collect {|c| c.as_json} unless options[:children] == false
-    hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:constraints] == false
-    hash[:workloads] = workload_jsons unless options[:workloads] == false || workload_jsons.empty?
+    hash[:children] = self.children.collect {|c| c.as_json} unless options[:skip_children]
+    hash[:constraints] = self.constraints.collect {|c| c.as_json} unless options[:skip_constraints]
+    hash[:workloads] = workload_jsons unless options[:skip_workloads]
     hash
   end
 

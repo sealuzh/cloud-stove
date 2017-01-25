@@ -275,15 +275,15 @@ class DeploymentRecommendation < Base
     ingredients = []
     hash[:recommendation].each do |ingredient_id, resource_code|
       entry = {}
-      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({:children => false, :constraints => false})
-      entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({:children => false, :constraints => false})
+      entry[:ingredient] = Ingredient.find(ingredient_id.to_i).as_json({skip_children: true, skip_constraints: true})
+      entry[:resource] = Resource.find_by_resource_code(resource_code).as_json({skip_children: true, skip_constraints: true})
       entry[:resource_count] = self.more_attributes['num_resources'][ingredients.count] rescue 1
       ingredients << entry
     end
 
     hash[:recommendation] = ingredients
     hash[:num_simultaneous_users] = self.num_simultaneous_users
-    hash[:application] = self.ingredient.as_json({:children => false, :constraints => false})
+    hash[:application] = self.ingredient.as_json({skip_children: true, skip_constraints: true})
     hash[:status] = self.status
     hash[:unsatisfiable_message] = self.more_attributes['unsatisfiable_message'] if self.status == UNSATISFIABLE
     hash
