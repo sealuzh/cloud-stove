@@ -11,7 +11,7 @@ class DeploymentRecommendation < Base
   DEFAULT_REGION_AREAS = %w(EU)
   DEFAULT_MAX_NUM_INSTANCES = 0
 
-  # Transfer costs
+  # Transfer costs (assumed)
   INTRA_REGION_TRANSFER = 0
   INTER_REGION_SAME_PROVIDER_TRANSFER = 10
   INTER_REGION_DIFFERENT_PROVIDER_TRANSFER = 30
@@ -175,9 +175,10 @@ class DeploymentRecommendation < Base
     end
   end
 
+  # NOTICE: Currently, these transfer costs are only a heuristic and
+  # do not reflect actual tranfer cost from real cloud providers
   def transfer_costs(resources)
     Matrix.build(resources.count, resources.count) do |row, col|
-      # FIXME: use actual transfer costs!
       if resources[row].region_code == resources[col].region_code
         INTRA_REGION_TRANSFER
       elsif resources[row].region_area == resources[col].region_area

@@ -17,7 +17,6 @@ puts "cpu = #{cores};"
 
 require 'matrix'
 transfer_costs = Matrix.build(resources.count, resources.count) do |row, col|
-  # FIXME: use actual transfer costs!
   (resources[row].provider_id - resources[col].provider_id).abs * 100
 end.to_a.flatten
 
