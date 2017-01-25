@@ -43,7 +43,17 @@ module IngredientCopyable
     opts = defaults.merge(opts)
 
     copies = self.deep_dup_rec(opts)
+    remap_dependencies(copies)
+
+    # The first value is the application root
     copy_root = copies.values.first
+    copy_root.assign_user!(opts[:user])
+    copy_root.save!
+    # Necessary to reflect the latest changes (e.g. from, `assign_user`) in the return value
+    copy_root.reload
+  end
+
+  def remap_dependencies(copies)
     dependency_constraints = self.all_dependency_constraints
     dependency_constraints.each do |dependency_constraint|
       DependencyConstraint.create(
@@ -52,11 +62,6 @@ module IngredientCopyable
           target: copies[dependency_constraint.target] || dependency_constraint.target
       )
     end
-
-    copy_root.assign_user!(opts[:user])
-    copy_root.save!
-    # Necessary to reflect the latest changes (e.g. from, `assign_user`) in the return value
-    copy_root.reload
   end
 
   # @param `copies` [Hash] the mapping from original ingredients to newly created copies: [original] => [copy]
