@@ -12,7 +12,7 @@ module IngredientCopyable
   def instantiate(new_user = self.user)
     ensure_application_root
     ensure_template
-    deep_dup(instance: true, user: new_user).set_name_prefix!('[INSTANCE OF] ')
+    deep_dup(template: false, instance: true, user: new_user).set_name_prefix!('[INSTANCE OF] ')
   end
 
   # Creates a template from an ingredient application

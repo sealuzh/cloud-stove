@@ -70,6 +70,7 @@ class IngredientCopyableTest < ActiveSupport::TestCase
 
     assert_equal new_user, instance.user
     assert_equal template, instance.template
+    assert !instance.is_template
     assert_equal "[INSTANCE OF] #{template.name}", instance.name
     assert_constraint_copy(template, instance, new_user)
     assert_workload_copy(template, instance, new_user)
@@ -85,6 +86,7 @@ class IngredientCopyableTest < ActiveSupport::TestCase
 
     template = instance.make_template
 
+    assert template.is_template
     assert_equal "[TEMPLATE] #{instance.name}", template.name
     assert_constraint_copy instance, template
     assert_workload_copy instance, template
