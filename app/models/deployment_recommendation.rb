@@ -270,7 +270,7 @@ class DeploymentRecommendation < Base
   end
 
   def as_json(options={})
-    hash = extract_params(self)
+    hash = extract_params
 
     ingredients = []
     hash[:recommendation].each do |ingredient_id, resource_code|
@@ -290,7 +290,7 @@ class DeploymentRecommendation < Base
   end
 
   def embed_ingredients
-    hash = extract_params(self)
+    hash = extract_params
 
     ingredients = []
     hash[:recommendation].each do |ingredient_id, resource_code|
@@ -309,14 +309,14 @@ class DeploymentRecommendation < Base
 
   private
 
-    def extract_params(recommendation)
+    def extract_params
       hash = {}
       hash[:id] = self.id
-      hash[:vm_cost] = recommendation.more_attributes['vm_cost']
-      hash[:total_cost] = recommendation.more_attributes['total_cost']
-      hash[:recommendation] = (recommendation.more_attributes['ingredients']) ? recommendation.more_attributes['ingredients'] : []
-      hash[:created_at] = recommendation.created_at
-      hash[:updated_at] = recommendation.updated_at
+      hash[:vm_cost] = self.more_attributes['vm_cost']
+      hash[:total_cost] = self.more_attributes['total_cost']
+      hash[:recommendation] = (self.more_attributes['ingredients']) ? self.more_attributes['ingredients'] : []
+      hash[:created_at] = self.created_at
+      hash[:updated_at] = self.updated_at
       hash
     end
 end
