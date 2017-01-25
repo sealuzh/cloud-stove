@@ -112,24 +112,24 @@ class Ingredient < Base
 
   # Lists the region area for each leaf ingredient
   def region_constraints
-    current_constraint = current_region(self, 'EU')
-    region_constraints_rec(self, [], current_constraint)
+    current_constraint = current_region('EU')
+    region_constraints_rec([], current_constraint)
   end
 
-  def current_region(current_ingredient, current_constraint)
-    if current_ingredient.preferred_region_area_constraint.present?
-      current_ingredient.preferred_region_area_constraint.preferred_region_area
+  def current_region(current_constraint)
+    if self.preferred_region_area_constraint.present?
+      self.preferred_region_area_constraint.preferred_region_area
     else
       current_constraint
     end
   end
 
   # NOTICE: MUST ensure same traversal order than `all_leafs`
-  def region_constraints_rec(current_ingredient, constraints, current_constraint)
-    current_ingredient.children.each do |child|
-      new_current_constraint = current_region(child, current_constraint)
+  def region_constraints_rec(constraints, current_constraint)
+    self.children.each do |child|
+      new_current_constraint = child.current_region(current_constraint)
       if child.children.any?
-        child.region_constraints_rec(child, constraints, new_current_constraint)
+        child.region_constraints_rec(constraints, new_current_constraint)
       else
         constraints.push(new_current_constraint)
       end
