@@ -3,6 +3,8 @@
 --readme README.md
 --asset docs/images:images
 --load ./docs/yard_plugin.rb
+--markup-provider=redcarpet
+--markup=markdown
 -
 LICENSE
 *.md
