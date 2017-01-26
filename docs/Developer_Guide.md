@@ -117,9 +117,7 @@ To ease the creation of idempotent seed records, we provide the `ActiveRecord::R
 
 ## Authentication
 
-devise_token_auth
-
-angular2-token
+Backend authentication is managed using [Devise Token Auth](https://github.com/lynndylanhurley/devise_token_auth). The front end authenticates with the backend using [Angular2-Token](https://github.com/neroniaky/angular2-token).
 
 ## API
 
