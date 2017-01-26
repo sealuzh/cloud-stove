@@ -54,6 +54,14 @@ heroku config:set \
 
 As you can see, you will need API keys for Digital Ocean, Microsoft Azure, and Atlantic.net to successfully retrieve pricing data from these providers.
 
+### Change admin password
+
+An admin user with the email `admin@thestove.io` and the password `admin` is created while seeding the database.
+Change the default password with the rake task:
+```shell
+rake user:update_admin[new_password]
+```
+
 ## Communication & Organization
 
 Planning and development of the Cloud Stove is coordinated using GitHub [wiki](https://github.com/inz/cloud-stove/wiki), [issues](https://github.com/inz/cloud-stove/issues), [milestones](https://github.com/inz/cloud-stove/milestones), and [pull requests](https://github.com/inz/cloud-stove/pulls). 
