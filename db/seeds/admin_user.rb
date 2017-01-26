@@ -1,6 +1,6 @@
 begin
 # Add an initial admin user
-admin_password = 'stove-admin'
+admin_password = 'admin'
 User.create!({
   email: 'admin@thestove.io',
   password: admin_password,
