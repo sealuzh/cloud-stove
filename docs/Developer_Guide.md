@@ -108,6 +108,12 @@ command = "minizinc -G g12-fd #{minizinc_model} #{resources.path} #{ingredients.
 
 As mentioned above, the Cloud Stove optimization model can be found at `lib/horizontal-scaling.mzn`. If you want to change or replace this model, make sure that the structure of the `output` statement is not changed. You can change the active optimization model by modifying the path in {DeploymentRecommendation#minizinc_model}. The data files necessary for performing the optimization are generated in {DeploymentRecommendation#generate_resources_data} and {DeploymentRecommendation#generate_ingredients_data}, creating MiniZinc data representations of available provider resources and the modeled application respectively. If you change the model to expect additional parameters from the application topology, you will have to make sure to generate them in {DeploymentRecommendation#generate_ingredients_data}.
 
+### Seed Records
+
+To seed the database with sensible defaults, we slightly extend the Rails seeds mechanism. Since seed records for applications and application templates involve multiple dependent objects, we create complete application (and template) topologies using encapsulated seed files in `db/seeds/`. To add a new seed record, create a file in `db/seeds/` and load it in `db/seeds.rb` using `require_seed`.
+
+To ease the creation of idempotent seed records, we provide the `ActiveRecord::Relation#seed_with!` method (available only for seeds, see `db/seeds.rb`) that will search for a seed record using the given attributes and then yield the found (or created) record to the given block. See it in use, e.g. in `db/seeds/ingredient_kanban_board.rb`.
+
 
 ## Authentication
 
