@@ -57,3 +57,14 @@ build:
         - script:
             name: test
             code: bundle exec rake test
+
+trigger_docs:
+    steps:
+        - script:
+            name: Trigger docs collector
+            code: |
+              curl -H "Authorization: Bearer $WERCKER_TOKEN" \
+                   -H "Content-Type: application/json" \
+                   -X POST \
+                   -d "{\"pipelineId\":\"5885d76e50c9930100a025f4\"}" \
+                   "https://app.wercker.com/api/v3/runs"
