@@ -26,6 +26,16 @@ class IngredientsControllerTest < ActionController::TestCase
                  json_response[0]['workloads']['cpu_workload']['cspu_user_capacity']
   end
 
+  test 'add a new ingredient' do
+    i1 = attributes_for(:ingredient).merge(icon: 'database')
+    post :create, ingredient: i1
+    assert_response :success
+    assert_equal i1[:name], json_response['name']
+    assert_equal 'database', json_response['icon']
+    assert_equal i1[:body], json_response['body']
+  end
+
+  ## Admin only actions
   test 'listing template instances (admin only)' do
     use_admin
     t1 = create(:ingredient, :template, user: @user)

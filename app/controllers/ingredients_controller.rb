@@ -2,7 +2,7 @@ class IngredientsController < ApplicationController
   before_action :set_ingredient_from_admin, only: [:show, :instance, :instances]
   before_action :set_ingredient, only: [:edit, :update, :destroy, :copy, :template, :recommendations_completed]
   skip_before_action :authenticate_user!, only: [:templates]
-  before_action :authenticate_admin!, only: [:template, :new, :create, :instances]
+  before_action :authenticate_admin!, only: [:template, :new, :instances]
 
   # Returns all ingredients (irrespective if template, instance, application) of the current user
   def index
@@ -121,7 +121,7 @@ class IngredientsController < ApplicationController
 
   def create
     @ingredients = current_user.ingredients
-    @ingredient = Ingredient.new
+    @ingredient = Ingredient.new(user: current_user)
     @ingredient.update_attributes(ingredient_params)
 
     respond_to do |format|
