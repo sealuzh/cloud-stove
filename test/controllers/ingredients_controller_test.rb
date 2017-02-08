@@ -35,6 +35,14 @@ class IngredientsControllerTest < ActionController::TestCase
     assert_equal i1[:body], json_response['body']
   end
 
+  test 'validate parent belongs to same user' do
+    parent = create(:ingredient, user: create(:user))
+    child_attr = attributes_for(:ingredient, parent_id: parent.id)
+    post :create, ingredient: child_attr
+    assert_response :error
+    assert_equal 'Parent ingredient belongs to another user.', json_response['errors']['parent_user_mismatch'][0]
+  end
+
   ## Admin only actions
   test 'listing template instances (admin only)' do
     use_admin

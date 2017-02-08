@@ -125,12 +125,12 @@ class IngredientsController < ApplicationController
     @ingredient.update_attributes(ingredient_params)
 
     respond_to do |format|
-      if @ingredient.save
+      if @ingredient.save(context: :user_check) # Perform same parent user validation here
         format.html { redirect_to @ingredient, notice: 'Ingredient was successfully created.' }
         format.json { render json: @ingredient, status: :created}
       else
         format.html { render :new }
-        format.json { render json: @ingredient.errors, status: :unprocessable_entity }
+        format.json { render json: {errors: @ingredient.errors}, status: :internal_server_error }
       end
     end
   end
@@ -140,12 +140,12 @@ class IngredientsController < ApplicationController
     @ingredient.update_attributes(ingredient_params)
 
     respond_to do |format|
-      if @ingredient.save
+      if @ingredient.save(context: :user_check)
         format.html { redirect_to @ingredient, notice: 'Ingredient was successfully updated.' }
         format.json { render json: @ingredient, status: :ok}
       else
         format.html { render :edit }
-        format.json { render json: @ingredient.errors, status: :unprocessable_entity }
+        format.json { render json: {errors: @ingredient.errors}, status: :internal_server_error }
       end
     end
   end
