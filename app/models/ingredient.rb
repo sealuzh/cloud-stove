@@ -8,6 +8,7 @@ class Ingredient < Base
   belongs_to :parent, class_name: 'Ingredient'
   validates_with SameIsTemplateValidator
   validates_with NoCyclesValidator
+  validates_with ParentBelongsToSameUserValidator, on: :user_check
   # Reverse relationship: each parent ingredient can have children ingredients
   has_many :children, class_name: 'Ingredient', foreign_key: 'parent_id', dependent: :destroy
 

@@ -26,6 +26,24 @@ class IngredientsControllerTest < ActionController::TestCase
                  json_response[0]['workloads']['cpu_workload']['cspu_user_capacity']
   end
 
+  test 'add a new ingredient' do
+    i1 = attributes_for(:ingredient).merge(icon: 'database')
+    post :create, ingredient: i1
+    assert_response :success
+    assert_equal i1[:name], json_response['name']
+    assert_equal 'database', json_response['icon']
+    assert_equal i1[:body], json_response['body']
+  end
+
+  test 'validate parent belongs to same user' do
+    parent = create(:ingredient, user: create(:user))
+    child_attr = attributes_for(:ingredient, parent_id: parent.id)
+    post :create, ingredient: child_attr
+    assert_response :error
+    assert_equal 'Parent ingredient belongs to another user.', json_response['errors']['parent_user_mismatch'][0]
+  end
+
+  ## Admin only actions
   test 'listing template instances (admin only)' do
     use_admin
     t1 = create(:ingredient, :template, user: @user)
@@ -67,13 +85,13 @@ class IngredientsControllerTest < ActionController::TestCase
     assert_equal 'Authorized users only.', json_response['errors'][0]
   end
 
-  test 'non-admin user cannot create an ingredient' do
+  test 'non-admin user cannot create a template' do
     get :template, ingredient_id: create(:ingredient).id
     assert_response :forbidden
     assert_equal 'Authorized admins only.', json_response['errors'][0]
   end
 
-  test 'admin user can create an ingredient' do
+  test 'admin user can create a template' do
     admin = create(:user, :admin)
     api_auth_header(admin)
     get :template, ingredient_id: create(:ingredient, user: admin).id
