@@ -85,6 +85,15 @@ A provider updater is a background job that initiates fetching and parsing of pr
 
 *Note:* There is no versioning mechanism for stored provider resources. Only the current state of provider offerings should be stored. To preserve resource states when deployment recommendations are generated, recommendations store the generated MiniZinc data files on creation.
 
+#### Resource and Region Codes
+
+The following codes were introduced to reliably identify individual resources even when the resources have to updated (or regenerated) by the provider crawlers:
+
+* `resource_code := deterministic_hash(resource_code, resource_name)`
+* `region_code := deterministic_hash(provider_name, region_name)`
+
+Thus, a resource is identified by the composite keys: `provider_name`, `region_name`, `resource_name`.
+
 ### Deployment Recommendations
 
 ![deployment recommendations](images/erd-deploymentrecommendation.svg)
