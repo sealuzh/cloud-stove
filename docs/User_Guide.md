@@ -97,3 +97,18 @@ Enter the desired number of users you want to generate deployment recommendation
 ![recommendations list](images/recommendations-list.png)
 
 If you click on a recommendation in the list, you see a detailed description of the generated deployment recommendation next to the recommendation list (or below, depending on your browser window size). Here you can easily identify cost drivers for your application deployment and get a feel for how much each component will cost in production.
+
+
+## Pricing Overview
+
+The [pricing overview](https://app.thestove.io/pricing) ![pricing](images/nav-pricing-overview.png) allows to filter and sort the compute resources. Use the dropdowns to filter by region and provider. Click on individual columns (e.g., *Memory (GB)*) to toggle sorting between ascending and descending.
+
+![pricing overview](images/pricing-overview.png)
+
+### Updating Provider Data
+
+Notice: Currently, provider data can only be updated in the backend by the admin user.
+
+Login in the [backend](http://api.thestove.io) as `admin@thestove.io` and navigate to [/providers](http://api.thestove.io/providers). Use the `Update Provider Data` button to run all provider crawler and update their pricing information. Whenever you have updated the provider data, the admin user might hold outdated seeds. Therefore, you might want to hit the `Update Admin Recommendation Seeds` to regenerate these outdated recommendations. You can always check the status of these jobs under [/jobs](http://api.thestove.io/jobs).
+
+![update providers](images/backend-update-providers.png)
