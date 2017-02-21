@@ -1033,30 +1033,8 @@ Fetch all stored provider resources and their pricing data.
 
 ---
 
-Update the figures in this guide using the following commands:
+Update the figures in this guide using the following command:
 
 ```shell
-bundle exec erd --notation=uml --polymorphism=true --inheritance \
-  --attributes=false --exclude="User,Delayed::Backend::ActiveRecord::Job" \
-  --filename=./docs/images/erd --filetype=svg
-bundle exec erd --notation=uml --title='Ingredients' --only="Ingredient" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-ingredient --filetype=svg
-bundle exec erd --notation=uml --title='Ingredients and Constraints' \
-  --only="Ingredient,Constraint,DependencyConstraint,CpuConstraint,RamConstraint,PreferredRegionAreaConstraint,ProviderConstraint,ScalingConstraint" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-ingredient-constraint --filetype=svg
-bundle exec erd --notation=uml --title='Ingredients and Workloads' \
-  --only="Ingredient,CpuWorkload,RamWorkload,TrafficWorkload,ScalingWorkload" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-ingredient-workload --filetype=svg
-bundle exec erd --notation=uml --title='Providers and Resources' \
-  --only="Provider,Resource" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-provider-resource --filetype=svg
-bundle exec erd --notation=uml --title='Deployment Recommendations' \
-  --only="DeploymentRecommendation" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-deploymentrecommendation --filetype=svg
+rake docs:update_figures
 ```
-
