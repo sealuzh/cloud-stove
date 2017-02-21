@@ -6,7 +6,8 @@ class DependencyConstraint < Constraint
 
   validates_with NoSuchIngredientValidator
 
-  # in the form, only source and target can be set, this ensures that the :ingredient association is also set correctly
+  # Ensures that the `ingredient` association is set correctly because
+  # the UI form only sets source and target
   before_save :attach_source_ingredient
 
   def as_json(options={})
@@ -18,6 +19,7 @@ class DependencyConstraint < Constraint
   end
 
   private
+
     def attach_source_ingredient
       self.ingredient = self.source
     end

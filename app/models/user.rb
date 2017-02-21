@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
 
   scope :admin, -> { where(is_admin: true) }
 
+  # Newly created users obtain the deployment recommendations from the `stove_admin` user
   after_create :seed_user
 
   def self.stove_admin
@@ -54,6 +55,9 @@ class User < ActiveRecord::Base
       end
     end
 
+    # Re-assign deployment recommendation ingredient IDs in `more_attributes` to match
+    # the `all_leafs` IDs of `ingredient`.
+    # Assumption: `all_leafs` follows the same order as `more_attributes['ingredients']`
     def remap_more_attributes(more_attributes, ingredient)
       new_more_attributes = more_attributes
       new_leaf_ids = ingredient.all_leafs.map(&:id)

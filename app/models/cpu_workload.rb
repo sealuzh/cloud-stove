@@ -2,7 +2,6 @@ class CpuWorkload < ActiveRecord::Base
   belongs_to :ingredient
   belongs_to :user
 
-
   before_update do
     self.ingredient.application_root.deployment_recommendations.delete_all
   end

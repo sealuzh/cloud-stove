@@ -37,6 +37,7 @@ class DeploymentRecommendation < Base
   scope :satisfiable, -> { where(status: SATISFIABLE) }
   scope :unsatisfiable, -> { where(status: UNSATISFIABLE) }
 
+  # Constructs the variable resource and ingredient data for the MiniZinc model for a given `provider`
   def construct(provider)
     self.generate_resources_data(provider.id)
     self.generate_ingredients_data(provider.id)
@@ -44,6 +45,7 @@ class DeploymentRecommendation < Base
     self.save!
   end
 
+  # Schedules the MiniZinc evaluation and keeps track of the scheduled job ID
   def schedule_evaluation
     ActiveRecord::Base.transaction do
       job = EvaluateRecommendationJob.perform_later(self)
@@ -52,8 +54,8 @@ class DeploymentRecommendation < Base
     end
   end
 
-  # @pre recommendation must be constructed &&
-  #      providers and resources must already exist
+  # Evaluates the MiniZinc model using the constructed resources and ingredient data
+  # @pre recommendation must be constructed
   def evaluate
     self.status = EVALUATING
     self.save!
@@ -132,6 +134,10 @@ class DeploymentRecommendation < Base
     !result.include?(UNSATISFIABLE_MSG)
   end
 
+  # Transforms the ordered resource code strings for ingredients into a mappings hash:
+  # [ingredient id] => [resource code]
+  # Example: ingredient_resource_mapping(["79526981", "79526981", "4044876983"])
+  # {3=>79526981, 4=>79526981, 5=>4044876983}
   def ingredient_resource_mapping(ingredient_resources)
     ingredient_ids = self.ingredient.all_leafs.map(&:id)
     resource_codes = ingredient_resources.map(&:to_i)
@@ -176,7 +182,7 @@ class DeploymentRecommendation < Base
   end
 
   # NOTICE: Currently, these transfer costs are only a heuristic and
-  # do not reflect actual tranfer cost from real cloud providers
+  # do not reflect actual transfer cost from real cloud providers
   def transfer_costs(resources)
     Matrix.build(resources.count, resources.count) do |row, col|
       if resources[row].region_code == resources[col].region_code
@@ -250,7 +256,9 @@ class DeploymentRecommendation < Base
     end
   end
 
-  # Returns a flattened Ingredients to Resources mapping array
+  # Returns a flattened Boolean matrix (i.e., as array of [true|false]) determining
+  # which resources are allowed for which ingredients following the
+  # preferred region constraint
   def preferred_regions(ingredient, provider_id)
     resource_region_codes = filtered_resources(provider_id).map(&:region_code)
     region_areas = ingredient.region_constraints
