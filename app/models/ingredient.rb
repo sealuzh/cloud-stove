@@ -74,6 +74,9 @@ class Ingredient < Base
     end
   end
 
+  # @param `num_users_list` [Array] list of number of simultaneous users to generate recommendations
+  # @param `opts` [Hash] construct option (defaults)
+  # * `perform_later` [Boolean] whether the construction is scheduled asynchronously  (true)
   def construct_recommendations(num_users_list, args = {perform_later: true})
     providers = self.provider_constraint.providers rescue [nil]
     num_users_list.each do |num_users|
@@ -103,7 +106,7 @@ class Ingredient < Base
       leaf.scaling_workload.to_constraint(num_users)
     end
   rescue => e
-    raise 'Missing a workload definition for a leaf ingredient. ' + e.message
+    raise 'Missing a workload definition for a leaf ingredient: ' + e.message
   end
 
   # Lists all region areas present in the model
@@ -170,6 +173,7 @@ class Ingredient < Base
     constraint_hash
   end
 
+  # Entirely claims an ingredient for a new users (i.e. recursively and including all attachements)
   def assign_user!(new_user)
     self.user = new_user
     self.children.each do |child|
@@ -206,6 +210,8 @@ class Ingredient < Base
     self.save!
     self
   end
+
+  ## Create workloads with sensible defaults where non-existing to support ingredients without workloads (e.g., avoid data migration)
 
   def scaling_workload
     super || create_scaling_workload(scale_ingredient: true, user_id: user_id)

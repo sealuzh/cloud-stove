@@ -108,6 +108,10 @@ way, there will always be a reasonably current backup of your work in the
 upstream repository, and the whole team can get a feel on what others are
 working on.
 
+### Gemfile on Windows
+
+Heroku ignores Gemfiles that are created on Windows. This might lead to unpredictable build failures. So far, we only committed `Gemfile.lock` changes on non-Windows machines. Refer to [Heroku Dev Center](https://devcenter.heroku.com/articles/bundler-windows-gemfile) for other options how to mitigate this problem.
+
 ## Tips and Tricks
 
 * Continuous test execution and live reload:

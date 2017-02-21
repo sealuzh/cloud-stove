@@ -85,6 +85,15 @@ A provider updater is a background job that initiates fetching and parsing of pr
 
 *Note:* There is no versioning mechanism for stored provider resources. Only the current state of provider offerings should be stored. To preserve resource states when deployment recommendations are generated, recommendations store the generated MiniZinc data files on creation.
 
+#### Resource and Region Codes
+
+The following codes were introduced to reliably identify individual resources even when the resources have to updated (or regenerated) by the provider crawlers:
+
+* `resource_code := deterministic_hash(resource_code, resource_name)`
+* `region_code := deterministic_hash(provider_name, region_name)`
+
+Thus, a resource is identified by the composite keys: `provider_name`, `region_name`, `resource_name`.
+
 ### Deployment Recommendations
 
 ![deployment recommendations](images/erd-deploymentrecommendation.svg)
@@ -114,6 +123,18 @@ To seed the database with sensible defaults, we slightly extend the Rails seeds 
 
 To ease the creation of idempotent seed records, we provide the `ActiveRecord::Relation#seed_with!` method (available only for seeds, see `db/seeds.rb`) that will search for a seed record using the given attributes and then yield the found (or created) record to the given block. See it in use, e.g. in `db/seeds/ingredient_kanban_board.rb`.
 
+## Serialization
+
+JSON serialization of Rails models are defined in the `as_json` methods within the models such as:
+
+```ruby
+def as_json(options={})
+  hash = super
+  hash[:id] = self.id
+  ...
+  hash
+end
+```
 
 ## Authentication
 
@@ -1033,30 +1054,8 @@ Fetch all stored provider resources and their pricing data.
 
 ---
 
-Update the figures in this guide using the following commands:
+Update the figures in this guide using the following command:
 
 ```shell
-bundle exec erd --notation=uml --polymorphism=true --inheritance \
-  --attributes=false --exclude="User,Delayed::Backend::ActiveRecord::Job" \
-  --filename=./docs/images/erd --filetype=svg
-bundle exec erd --notation=uml --title='Ingredients' --only="Ingredient" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-ingredient --filetype=svg
-bundle exec erd --notation=uml --title='Ingredients and Constraints' \
-  --only="Ingredient,Constraint,DependencyConstraint,CpuConstraint,RamConstraint,PreferredRegionAreaConstraint,ProviderConstraint,ScalingConstraint" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-ingredient-constraint --filetype=svg
-bundle exec erd --notation=uml --title='Ingredients and Workloads' \
-  --only="Ingredient,CpuWorkload,RamWorkload,TrafficWorkload,ScalingWorkload" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-ingredient-workload --filetype=svg
-bundle exec erd --notation=uml --title='Providers and Resources' \
-  --only="Provider,Resource" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-provider-resource --filetype=svg
-bundle exec erd --notation=uml --title='Deployment Recommendations' \
-  --only="DeploymentRecommendation" \
-  --inheritance --polymorphism --attributes=foreign_keys,content \
-  --filename=./docs/images/erd-deploymentrecommendation --filetype=svg
+rake docs:update_figures
 ```
-

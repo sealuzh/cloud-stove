@@ -20,7 +20,7 @@ For new accounts, we create a sample Ruby on Rails application with Delayed Job 
 
 ### Predefined Application Templates
 
-The Cloud Stove comes with a number of predefined application templates so users can quickly start to generate deployment recommendations for common scenarios. Currently, there are three n-tier Web app templates available at http://app.thestove.io/templates:
+The Cloud Stove comes with some predefined application templates so users can quickly start to generate deployment recommendations for common scenarios. Currently, there are three n-tier Web app templates available at http://app.thestove.io/templates:
 
 * Ruby on Rails application with PostgreSQL Backend
 * Python Django application with PostgreSQL Backend
@@ -62,15 +62,15 @@ On the application detail screen, you see an overview of currently active constr
 
 As you see in the image above, the Rails app server interacts with the database master and slave components, and the worker only interacts with the database master. 
 
-Suppose we want to model interaction between the job worker and the database slave components. To add this interaction as a dependency constraint, click the 'Delayed Job Workers' component to show the component detail screen. Then, hit 'Edit' on the bottom of the page. On the edit form, you can see and modify all data stored about this component. Towards the bottom of the page, click the 'Add Dependency Constraint' link.
+Suppose we want to model the interaction between the job worker and the database slave components. To add this interaction as a dependency constraint, click the 'Delayed Job Workers' component to show the component detail screen. Then, hit 'Edit' on the bottom of the page. On the edit form, you can see and modify all data stored about this component. Towards the bottom of the page, click the 'Add Dependency Constraint' link.
 
 ![add dependency constraint](images/backend-add-dependency.png)
 
-Select the desired target component from the dropdown box and hit 'Save'. You can now go back to the application overview by clicking 'Application Root' at the bottom of the page to inspect the dependency constraint you just created. 
+Select the desired target component from the drop-down box and hit 'Save'. You can now go back to the application overview by clicking 'Application Root' at the bottom of the page to inspect the dependency constraint you just created. 
 
 #### Customizing Templates
 
-Currently, regular users cannot modify templates. You can, however instantiate a template and modify the created application as described above.
+Currently, regular users cannot modify templates. However, you can instantiate a template and modify the created application as described above.
 
 ## Workload Modeling
 
@@ -86,14 +86,29 @@ At the top of the recommendations view, you see a graph with an overview of all 
 
 ![recommendations graph](images/recommendations-graph.png)
 
-The graph will be populated with a small number of recommendations for the generated sample application. Please note that if you modified any of the workload parameter in the previous step, you might not see any recommendations yet.
+The graph will be populated with a small number of recommendations for the generated sample application. Please note that if you modified any of the workload parameters in the previous step, you might not see any recommendations yet.
 
 Below the graph, you find the form to generate new recommendations.
 
 ![new recommendations](images/recommendations-form.png)
 
-Enter the desired number of users you want to generate deployment recommendations for and hit the 'generate' button. After a couple of seconds, the new recommendations should show up in the overview graph and the recommendations list.
+Enter the desired number of users you want to generate deployment recommendations for and hit the 'Generate Recommendation' button. After a couple of seconds, the new recommendations show up in the overview graph and the recommendations list.
 
 ![recommendations list](images/recommendations-list.png)
 
 If you click on a recommendation in the list, you see a detailed description of the generated deployment recommendation next to the recommendation list (or below, depending on your browser window size). Here you can easily identify cost drivers for your application deployment and get a feel for how much each component will cost in production.
+
+
+## Pricing Overview
+
+The [pricing overview](https://app.thestove.io/pricing) ![pricing](images/nav-pricing-overview.png) allows to filter and sort the compute resources. Use the dropdowns to filter by region and provider. Click on individual columns (e.g., *Memory (GB)*) to toggle sorting between ascending and descending.
+
+![pricing overview](images/pricing-overview.png)
+
+### Updating Provider Data
+
+Notice: Currently, provider data can only be updated in the backend by the admin user.
+
+Login in the [backend](http://api.thestove.io) as `admin@thestove.io` and navigate to [/providers](http://api.thestove.io/providers). Use the `Update Provider Data` button to run all provider crawler and update their pricing information. Whenever you have updated the provider data, the admin user might hold outdated seeds. Therefore, you might want to hit the `Update Admin Recommendation Seeds` to regenerate these outdated recommendations. You can always check the status of these jobs under [/jobs](http://api.thestove.io/jobs).
+
+![update providers](images/backend-update-providers.png)

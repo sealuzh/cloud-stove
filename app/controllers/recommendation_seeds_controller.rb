@@ -9,7 +9,7 @@ class RecommendationSeedsController < ApplicationController
     end
   rescue => e
     respond_to do |format|
-      format.html { redirect_to :back, error: 'Error while scheduling admin deployment recommendation seeds."!' }
+      format.html { redirect_to :back, error: "Error while scheduling admin deployment recommendation seeds: #{e.message}" }
     end
   end
 end

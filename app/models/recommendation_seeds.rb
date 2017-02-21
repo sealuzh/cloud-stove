@@ -1,8 +1,11 @@
+# Provides utilities to update the recommendations of the admin user.
+# These recommendations are used to seed newly created users.
 class RecommendationSeeds
   # NOTICE: The Rails app of the admin user is used to seed newly created users
   def self.update_admin_recommendations
     admin_user = User.stove_admin
-    rails_app = Ingredient.where(name: 'Rails Application with PostgreSQL Backend', user: admin_user, is_template: false).first
+    rails_app = Ingredient.where(name: 'Rails Application with PostgreSQL Backend',
+                                 user: admin_user, is_template: false).first
     self.update_recommendations(rails_app)
   end
 

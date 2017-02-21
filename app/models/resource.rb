@@ -26,7 +26,7 @@ class Resource < Base
 
   # Assuming that a resource is identified by the composite key:
   # 1) `region_code` (provider_name + region_name)
-  # 2) region `name`
+  # 2) resource `name`
   def derive_resource_code
     resource_string = self.region_code.to_s + self.name.to_s
     deterministic_hash(resource_string)
