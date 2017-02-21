@@ -6,7 +6,8 @@
 
 The [Cloud Stove](https://thestove.io) gives users deployment recommendations for their cloud applications. Application instances are derived from generic blueprints and enriched with the specific characteristics and requirements of the application to be deployed. Blueprints are generic application scaffolds that represent different application architectures to capture relevant differences in overall deployment strategies. Deployment recommendations are created by optimizing the use of available provider offerings with respect to the captured application specifications and requirements.
 
-Frontend: <https://github.com/inz/cloud-stove-ui>
+* Frontend: <https://github.com/inz/cloud-stove-ui>
+* Docs: <https://docs.thestove.io/>
 
 ## Getting Started
 
@@ -14,7 +15,7 @@ You can access the current stable Cloud Stove release at [app.thestove.io](https
 
 ## Contributing to the Cloud Stove
 
-Want to help make Cloud Stove better with your contribution? Great! Check out the [contribution guide](./CONTRIBUTING.md) for information on how to get your development environment up and running, and start contributing to the Stove.
+Want to help make Cloud Stove better with your contribution? Great! Check out the [contribution guide](./CONTRIBUTING.md) for information on how to get your development environment up and running, and start contributing to the Stove. Furthermore, the architecture and API is described in the [developer guide](./docs/Developer_Guide.md).
 
 ## CI & Deployment
 
@@ -58,6 +59,7 @@ As you can see, you will need API keys for Digital Ocean, Microsoft Azure, and A
 
 An admin user with the email `admin@thestove.io` and the password `admin` is created while seeding the database.
 Change the default password with the rake task:
+
 ```shell
 rake user:update_admin[new_password]
 ```
