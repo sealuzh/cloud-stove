@@ -114,6 +114,18 @@ To seed the database with sensible defaults, we slightly extend the Rails seeds 
 
 To ease the creation of idempotent seed records, we provide the `ActiveRecord::Relation#seed_with!` method (available only for seeds, see `db/seeds.rb`) that will search for a seed record using the given attributes and then yield the found (or created) record to the given block. See it in use, e.g. in `db/seeds/ingredient_kanban_board.rb`.
 
+## Serialization
+
+JSON serialization of Rails models are defined in the `as_json` methods within the models such as:
+
+```ruby
+def as_json(options={})
+  hash = super
+  hash[:id] = self.id
+  ...
+  hash
+end
+```
 
 ## Authentication
 
