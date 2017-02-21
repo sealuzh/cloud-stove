@@ -1,4 +1,4 @@
-class TrafficWorkload < ActiveRecord::Base
+class TrafficWorkload < Workload
   belongs_to :ingredient
   belongs_to :user
 

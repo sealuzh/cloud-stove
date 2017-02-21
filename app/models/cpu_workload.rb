@@ -1,10 +1,6 @@
-class CpuWorkload < ActiveRecord::Base
+class CpuWorkload < Workload
   belongs_to :ingredient
   belongs_to :user
-
-  before_update do
-    self.ingredient.application_root.deployment_recommendations.delete_all
-  end
 
   def to_constraint(num_users)
     self.ingredient.cpu_constraint.destroy if self.ingredient.cpu_constraint.present?
