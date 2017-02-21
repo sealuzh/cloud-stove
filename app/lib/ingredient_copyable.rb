@@ -34,6 +34,7 @@ module IngredientCopyable
     fail 'Ingredient must be a non-template.' if self.is_template
   end
 
+  # Create a recursive copy of the ingredient tree by taking care of user and dependencies.
   # @param `opts` [Hash] copy option (defaults)
   # * `template` [Boolean] whether the copied ingredients  (self.is_template)
   # * `instance` [Boolean] whether to instantiate by setting the template relationship (false)
@@ -53,6 +54,9 @@ module IngredientCopyable
     copy_root.reload
   end
 
+  # Re-establish dependencies for copied (sub)tree.
+  # Links to the original ingredient if the source or target is outside the subtree.
+  # @param `copies` [Hash] the mapping from original ingredients to newly created copies: [original] => [copy]
   def remap_dependencies(copies)
     dependency_constraints = self.all_dependency_constraints
     dependency_constraints.each do |dependency_constraint|
@@ -64,7 +68,12 @@ module IngredientCopyable
     end
   end
 
+  # Recursively copies an ingredient tree. Does NOT take care of user or dependencies!
   # @param `copies` [Hash] the mapping from original ingredients to newly created copies: [original] => [copy]
+  # Create a recursive copy of the ingredient tree by taking care of user and dependencies.
+  # @param `opts` [Hash] copy option (defaults)
+  # * `template` [Boolean] whether the copied ingredients  (self.is_template)
+  # * `instance` [Boolean] whether to instantiate by setting the template relationship (false)
   def deep_dup_rec(opts, copies = {})
     copy = self.dup
     copy.cpu_constraint = self.cpu_constraint.dup if self.cpu_constraint.present?
