@@ -174,11 +174,10 @@ class DeploymentRecommendation < Base
   end
 
   def filtered_resources(provider_id)
-    if provider_id
-      Resource.where(provider_id: provider_id).region_area(self.ingredient.preferred_region_areas).compute.sort_by(&:id)
-    else
-      Resource.region_area(self.ingredient.preferred_region_areas).compute.sort_by(&:id)
-    end
+    resources = Resource.compute
+    resources = resources.where(provider_id: provider_id) if provider_id
+    resources = resources.region_area(self.ingredient.preferred_region_areas)
+    resources.order(:id)
   end
 
   # NOTICE: Currently, these transfer costs are only a heuristic and
