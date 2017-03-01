@@ -70,4 +70,4 @@ Planning and development of the Cloud Stove is coordinated using GitHub [wiki](h
 
 In the [Cloud Stove Roadmap](https://github.com/inz/cloud-stove/wiki/Roadmap), we discuss upcoming features and define milestones and issues to implement them.
 
-Daily communication and coordination happens in our [Slack team](https://slack.thestove.io/).
+Daily communication and coordination happens in `#cloud-stove` at the [s.e.a.l. Slack](https://cloudguysseal.slack.com/).
