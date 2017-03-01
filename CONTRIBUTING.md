@@ -64,13 +64,13 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
 
 - You should now be able to access the backend at http://localhost:5000
 
-- To set up the front check out the front end [contribution guide](https://github.com/inz/cloud-stove-ui/blob/master/CONTRIBUTING.md)
+- To set up the front check out the front end [contribution guide](https://github.com/sealuzh/cloud-stove-ui/blob/master/CONTRIBUTING.md)
 
 ## Making Changes
 
-* [Fork](https://github.com/inz/cloud-stove/fork) the project
+* [Fork](https://github.com/sealuzh/cloud-stove/fork) the project
 
-* Pick a story from the backlog in the [List of issues](https://github.com/inz/cloud-stove/issues) and assign it to yourself.
+* Pick a story from the backlog in the [List of issues](https://github.com/sealuzh/cloud-stove/issues) and assign it to yourself.
 
 * Create a topic branch for your changes.
 
@@ -97,11 +97,11 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
     This should set the correct environment for the newly started `spring` process.
 
   * If tests fail with `Cannot access include directory .../share/minizinc/or-tools/`, make sure that the first MiniZinc binary in the `PATH` points to the *or-tools* distribution and not to any other MiniZinc implementation.
-  * The wiki has further [troubleshooting tips](https://github.com/inz/cloud-stove/wiki#troubleshooting).
+  * The wiki has further [troubleshooting tips](https://github.com/sealuzh/cloud-stove/wiki#troubleshooting).
 
 * Make sure that your code always has good test coverage.
 
-* Push your topic branch and [submit a pull request](https://github.com/inz/cloud-stove/compare). To keep our project history clean, always rebase your changes onto master.
+* Push your topic branch and [submit a pull request](https://github.com/sealuzh/cloud-stove/compare). To keep our project history clean, always rebase your changes onto master.
 
 You should also periodically push your topic branches during development. That
 way, there will always be a reasonably current backup of your work in the

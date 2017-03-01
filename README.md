@@ -6,7 +6,7 @@
 
 The [Cloud Stove](https://thestove.io) gives users deployment recommendations for their cloud applications. Application instances are derived from generic blueprints and enriched with the specific characteristics and requirements of the application to be deployed. Blueprints are generic application scaffolds that represent different application architectures to capture relevant differences in overall deployment strategies. Deployment recommendations are created by optimizing the use of available provider offerings with respect to the captured application specifications and requirements.
 
-* Frontend: <https://github.com/inz/cloud-stove-ui>
+* Frontend: <https://github.com/sealuzh/cloud-stove-ui>
 * Docs: <https://docs.thestove.io/>
 
 ## Getting Started
@@ -33,7 +33,7 @@ The app uses the [rake-deploy-tasks](https://github.com/gunpowderlabs/buildpack-
 
 ### Self-hosted Deployment
 
-The recommended way to deploy Cloud Stove is with [Heroku](https://heroku.com). You can deploy the app using their `free` dynos and the free PostgreSQL plan for test installations. To run the application, you will need one `web` dyno for the Rails application, a `worker` dyno to run background jobs, and an additional `web` dyno (probably deployed as separate application) for the AngularJS [frontend](https://github.com/inz/cloud-stove-ui). For production deployments, you should move to paid dynos to prevent your application from sleeping once your free dyno hours are spent.
+The recommended way to deploy Cloud Stove is with [Heroku](https://heroku.com). You can deploy the app using their `free` dynos and the free PostgreSQL plan for test installations. To run the application, you will need one `web` dyno for the Rails application, a `worker` dyno to run background jobs, and an additional `web` dyno (probably deployed as separate application) for the AngularJS [frontend](https://github.com/sealuzh/cloud-stove-ui). For production deployments, you should move to paid dynos to prevent your application from sleeping once your free dyno hours are spent.
 
 To get started quickly, deploy the Cloud Stove using the button below:
 
@@ -66,8 +66,8 @@ rake user:update_admin[new_password]
 
 ## Communication & Organization
 
-Planning and development of the Cloud Stove is coordinated using GitHub [wiki](https://github.com/inz/cloud-stove/wiki), [issues](https://github.com/inz/cloud-stove/issues), [milestones](https://github.com/inz/cloud-stove/milestones), and [pull requests](https://github.com/inz/cloud-stove/pulls). 
+Planning and development of the Cloud Stove is coordinated using GitHub [wiki](https://github.com/sealuzh/cloud-stove/wiki), [issues](https://github.com/sealuzh/cloud-stove/issues), [milestones](https://github.com/sealuzh/cloud-stove/milestones), and [pull requests](https://github.com/sealuzh/cloud-stove/pulls). 
 
-In the [Cloud Stove Roadmap](https://github.com/inz/cloud-stove/wiki/Roadmap), we discuss upcoming features and define milestones and issues to implement them.
+In the [Cloud Stove Roadmap](https://github.com/sealuzh/cloud-stove/wiki/Roadmap), we discuss upcoming features and define milestones and issues to implement them.
 
 Daily communication and coordination happens in `#cloud-stove` at the [s.e.a.l. Slack](https://cloudguysseal.slack.com/).
