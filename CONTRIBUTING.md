@@ -35,7 +35,7 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
 
   Linux:
   ```shell
-  curl -sSL https://github.com/inz/minizinc-dist/releases/download/minizinc-2.0.13_or-tools-v2016-06/minizinc-2.0.13_or-tools-v2016-06-linux64-vendor.tar.gz | tar xz -
+  curl -sSL https://github.com/inz/minizinc-dist/releases/download/minizinc-2.0.13_or-tools-v2016-06/minizinc-2.0.13_or-tools-v2016-06-linux64-vendor.tar.gz | tar -xz
   ```
 
   Windows (64 bit only):
