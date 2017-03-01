@@ -41,6 +41,8 @@ class IngredientsControllerTest < ActionController::TestCase
     post :create, ingredient: child_attr
     assert_response :error
     assert_equal 'Parent ingredient belongs to another user.', json_response['errors']['parent_user_mismatch'][0]
+    # Invalid child ingredient must not be saved !
+    assert_equal [], Ingredient.where(name: child_attr[:name], body: child_attr[:body])
   end
 
   ## Admin only actions

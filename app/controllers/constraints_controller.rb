@@ -18,6 +18,7 @@ class ConstraintsController < ApplicationController
 
   def create
     @constraint = deserialize_to_constraint
+    @constraint.ingredient.destroy_all_app_recommendations if @constraint.is_a?(DependencyConstraint)
     respond_to do |format|
       if @constraint.save!
         format.html
