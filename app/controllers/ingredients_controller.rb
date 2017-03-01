@@ -122,7 +122,7 @@ class IngredientsController < ApplicationController
   def create
     @ingredients = current_user.ingredients
     @ingredient = Ingredient.new(user: current_user)
-    @ingredient.update_attributes(ingredient_params)
+    @ingredient.assign_attributes(ingredient_params)
 
     respond_to do |format|
       if @ingredient.save(context: :user_check) # Perform same parent user validation here
@@ -137,7 +137,7 @@ class IngredientsController < ApplicationController
 
   def update
     @ingredients = current_user.ingredients
-    @ingredient.update_attributes(ingredient_params)
+    @ingredient.assign_attributes(ingredient_params)
 
     respond_to do |format|
       if @ingredient.save(context: :user_check)
