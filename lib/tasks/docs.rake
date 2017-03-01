@@ -14,7 +14,7 @@ namespace :docs do
         --filename=./docs/images/erd-ingredient-constraint --filetype=svg \
         --orientation=vertical
       bundle exec erd --notation=uml --title="Ingredients and Workloads" \
-        --only="Ingredient,CpuWorkload,RamWorkload,TrafficWorkload,ScalingWorkload" \
+        --only="Ingredient,Workload,CpuWorkload,RamWorkload,TrafficWorkload,ScalingWorkload" \
         --inheritance --polymorphism --attributes=foreign_keys,content \
         --filename=./docs/images/erd-ingredient-workload --filetype=svg \
         --orientation=vertical

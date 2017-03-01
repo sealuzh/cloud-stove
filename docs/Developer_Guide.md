@@ -46,6 +46,8 @@ All application and component properties and interactions that will later influe
 * **{PreferredRegionAreaConstraint}**: Deployment recommendations for applications and individual components can be constrained to certain geographical regions using this constraint. Currently, the following regions are supported: EU, US (North America), Asia-Pacific, South America. More regions will be added as providers open data centers in other regions.
 * **{ProviderConstraint}**: This constraint allows you to restrict recommendations to a given set of cloud providers. The list of allowed providers is stored as a serialized array of provider ids.
 
+Constraints are implemented as [single table inheritance (STI)](http://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html).
+
 Constraints are always attached to an ingredient. By default, a constraint applies only to the ingredient it is attached to. However, provider and region area constraints also apply all children of an ingredient.
 
 Except for dependency constraints, there are not many reasons to directly create constraints for components. Usually, constraints are generated as part of a deployment scenario that is derived from modeled workloads.
@@ -61,7 +63,7 @@ Workloads are at the core of the deployment scenario analysis in the Cloud Stove
 * **{ScalingWorkload}**: With this basic scaling workload, components can be constrained to vertical scaling or allowed to horizontally scale across an arbitrary number of instances. Set `scale_ingredient` accordingly.
 * **{TrafficWorkload}**: Using the traffic workload, users can model the expected number and size of customer requests the application should be able to serve. The three parameters represent the size of a typical application response (`request_size_kb`), the average number of customer requests per session (`requests_per_visit`), and the expected number of user sessions over a month (`visits_per_month`). We plan to use this data to generate traffic cost estimations along with deployment recommendations.
 
-
+*Note:* The {Workload} base class implements common workload behavior but has no active record bindings.
 
 ### Providers and Resources
 
