@@ -65,6 +65,10 @@ class Ingredient < Base
     self.parent.nil?
   end
 
+  def destroy_all_app_recommendations
+    self.application_root.deployment_recommendations.destroy_all
+  end
+
   def schedule_recommendation_jobs(num_users_list)
     fail 'Recommendations can only be generated for root ingredients!' unless self.application_root?
     ActiveRecord::Base.transaction do

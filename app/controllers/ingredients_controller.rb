@@ -123,6 +123,7 @@ class IngredientsController < ApplicationController
     @ingredients = current_user.ingredients
     @ingredient = Ingredient.new(user: current_user)
     @ingredient.assign_attributes(ingredient_params)
+    @ingredient.destroy_all_app_recommendations
 
     respond_to do |format|
       if @ingredient.save(context: :user_check) # Perform same parent user validation here
