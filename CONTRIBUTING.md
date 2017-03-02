@@ -9,7 +9,7 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
 * Clone the Cloud Stove repository
 
   ```shell
-  git clone git@github.com:inz/cloud-stove.git
+  git clone https://github.com/inz/cloud-stove-ui
   cd cloud-stove
   ```
 
@@ -18,7 +18,21 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
   - If you're using rbenv, run  `rbenv install $(cat .ruby-version)`.
   - For RVM, run `rvm install $(cat .ruby-version)`.
 
-- Install `phantomjs` for headless UI tests: http://phantomjs.org/download.html (`brew install phantomjs`)
+- Install `phantomjs` for headless UI tests (integration tests fail without phantomjs): http://phantomjs.org/download.html
+
+  macOS:
+  ```shell
+  brew install phantomjs
+  ```
+
+  Linux:
+  ```shell
+  export PHANTOMJS_FILE=phantomjs-2.1.1-linux-x86_64
+  export PHANTOMJS_URL=https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOMJS_FILE.tar.bz2
+  export PHANTOMJS_DIR=/usr/local/share
+  curl -sSL $PHANTOMJS_URL | tar -xj -C $PHANTOMJS_DIR
+  ln -s $PHANTOMJS_DIR/$PHANTOMJS_FILE/bin/phantomjs /usr/local/bin/phantomjs
+  ```
 
 - Set up dependencies and database for the Rails app:
 
@@ -46,7 +60,7 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
   Add `vendor/minizinc/bin` to your `PATH`:
 
   ```shell
-  export PATH=$PWD/cloud-stove/vendor/minizinc/bin:$PATH
+  export PATH=$PWD/vendor/minizinc/bin:$PATH
   ```
 
 - Start the Rails server and job worker
@@ -57,9 +71,9 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
   # In another terminal, start the worker job
   rake jobs:work
 
-  # Alternatively, you can launch the app using foreman
+  # Alternatively, you can launch both simultaneously using foreman
   gem install foreman
-  foreman start # Foreman will start both, the Rails app and the workers.
+  foreman start
   ```
 
 - You should now be able to access the backend at http://localhost:5000
