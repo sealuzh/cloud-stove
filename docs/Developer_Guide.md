@@ -107,7 +107,7 @@ When creating a new deployment recommendation, the current state of the applicat
 ### Using different optimizer backends
 Since the Cloud Stove uses on MiniZinc to represent optimization problems, you can easily change optimization tools as long as there is a MiniZinc binding. 
 
-To use a different optimizer, you want to add the FlatZinc interpreter binaries to the `vendor/minizinc/bin` directory, and place the included MiniZinc library files in `vendor/minzinc/share/minizinc/<interpreter-name>`. For details on how to prepare a suitable MiniZinc distribution, check out the combined [MiniZinc/or-tools distribution](https://github.com/inz/minizinc-dist) that we use for the Cloud Stove. The `release` script shows how to combine a basic MiniZinc distribution with a third party optimization tool.
+To use a different optimizer, you want to add the FlatZinc interpreter binaries to the `vendor/minizinc/bin` directory, and place the included MiniZinc library files in `vendor/minizinc/share/minizinc/<interpreter-name>`. For details on how to prepare a suitable MiniZinc distribution, check out the combined [MiniZinc/or-tools distribution](https://github.com/inz/minizinc-dist) that we use for the Cloud Stove. The `release` script shows how to combine a basic MiniZinc distribution with a third party optimization tool.
 
 To actually invoke another optimizer when generating recommendations, change the MiniZinc command in {DeploymentRecommendation#evaluate}. For instance, to generate recommendations using the included G12 optimizer, change  `command` to:
 
