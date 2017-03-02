@@ -1,0 +1,27 @@
+# Secrets
+.env
+
+# Ruby
+log
+db/*.sqlite3
+
+# Platform-specific MiniZinc distribution
+vendor/minizinc
+
+# IDEs and editors
+.idea
+.vscode
+
+# System Files
+.DS_Store
+
+# Build Files
+.wercker
+
+# Generated documentation, documentation in general
+doc
+docs
+
+# Misc
+tmp
+coverage
