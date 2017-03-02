@@ -94,6 +94,12 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
 	docker run -p 3000:3000 cloud-stove
 	```
 
+3. Login with an interactive shell
+
+	```shell
+	docker run --rm -it cloud-stove /bin/bash
+	```
+
 ## Making Changes
 
 * [Fork](https://github.com/sealuzh/cloud-stove/fork) the project
