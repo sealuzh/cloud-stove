@@ -9,7 +9,7 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
 * Clone the Cloud Stove repository
 
   ```shell
-  git clone https://github.com/inz/cloud-stove-ui
+  git clone git@github.com:sealuzh/cloud-stove.git
   cd cloud-stove
   ```
 
