@@ -80,6 +80,20 @@ Currently, the Cloud Stove is split across two repositories: the backend Rails a
 
 - To set up the front check out the front end [contribution guide](https://github.com/sealuzh/cloud-stove-ui/blob/master/CONTRIBUTING.md)
 
+## Run Development Environment with Docker
+
+1. Build the image
+
+	```shell
+	docker build -t cloud-stove .
+	```
+
+2. Start the container
+
+	```shell
+	docker run -p 3000:3000 cloud-stove
+	```
+
 ## Making Changes
 
 * [Fork](https://github.com/sealuzh/cloud-stove/fork) the project
